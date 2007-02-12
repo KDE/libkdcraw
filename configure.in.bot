@@ -1,0 +1,19 @@
+dnl Put here things to be done at the very end - telling users
+dnl about additional packages to install.
+
+echo ""
+echo "-- libkdcraw configure results -------------------"
+
+if test "x$have_lcms" != "xyes"; then
+  echo "-- lcms found..................... NO"
+  echo ""
+  echo "libkdcraw needs Lcms library. You need to install the lcms development package."
+  echo "Lcms website is at http://www.littlecms.com"
+  echo ""
+  all_tests=bad
+else
+  echo "-- lcms found..................... YES"
+fi
+
+
+
