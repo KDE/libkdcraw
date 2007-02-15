@@ -3,7 +3,7 @@
  * Date   : 2006-12-09
  * Description : Raw decoding settings
  *
- * Copyright 2006 by Gilles Caulier
+ * Copyright 2006-2007 by Gilles Caulier
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +21,14 @@
 #ifndef RAW_DECODING_SETTINGS_H
 #define RAW_DECODING_SETTINGS_H
 
-// Qt Includes.
+// Local includes.
+
+#include "libkdcraw_export.h"
 
 namespace KDcrawIface
 {
 
-class RawDecodingSettings
+class LIBKDCRAW_EXPORT RawDecodingSettings
 {
 
 public:

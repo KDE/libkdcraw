@@ -32,6 +32,7 @@
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"
+#include "dcrawinfocontainer.h"
 
 class QCustomEvent;
 
@@ -50,11 +51,11 @@ public:  // Fast non cancelable methods.
 
     /** Get the embedded preview image in RAW file
     */
-    bool loadDcrawPreview(QImage& image, const QString& path);
+    static bool loadDcrawPreview(QImage& image, const QString& path);
 
-    /** Get the camera model witch have taken RAW file
+    /** Get the camera settings witch have taken RAW file
     */ 
-    bool rawFileIdentify(QString& identify, const QString& path);
+    static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
 public:
 
