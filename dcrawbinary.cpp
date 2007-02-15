@@ -51,8 +51,6 @@ public:
     QString version;
 };
 
-DcrawBinary *DcrawBinary::m_instance = 0;
-
 DcrawBinary::DcrawBinary()
            : QObject()
 {
@@ -61,20 +59,7 @@ DcrawBinary::DcrawBinary()
 
 DcrawBinary::~DcrawBinary()
 {
-    m_instance = 0;
     delete d;
-}
-
-DcrawBinary *DcrawBinary::instance()
-{
-    if (!m_instance)
-        m_instance = new DcrawBinary;
-    return m_instance;
-}
-
-void DcrawBinary::cleanUp()
-{
-    delete m_instance;
 }
 
 void DcrawBinary::checkSystem()
@@ -119,7 +104,7 @@ QString DcrawBinary::version() const
     return d->version;
 }
 
-QString DcrawBinary::internalVersion() const
+QString DcrawBinary::internalVersion()
 {
     // The version of dcraw include with this library. 
     // Look into dcraw/dcraw.c implementation.

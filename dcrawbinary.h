@@ -19,15 +19,15 @@
  *
  * ============================================================ */
 
-#ifndef DCRAWBINARY_H
-#define DCRAWBINARY_H
+#ifndef DCRAW_BINARY_H
+#define DCRAW_BINARY_H
 
 // Qt includes.
 
 #include <qstring.h>
 #include <qobject.h>
 
-// Digikam Includes.
+// Local Includes.
 
 #include "libkdcraw_export.h"
 
@@ -44,14 +44,12 @@ class LIBKDCRAW_EXPORT DcrawBinary : public QObject
 
 public:
 
-    static DcrawBinary *instance();
-    static void cleanUp();
+    static const char *path();
+    static QString internalVersion();
 
-    const char *path();
-    bool        isAvailable() const;
-    QString     internalVersion() const;
-    QString     version() const;
-    bool        versionIsRight() const;
+    bool           isAvailable() const;
+    QString        version() const;
+    bool           versionIsRight() const;
 
     void checkSystem();
     void checkReport();
@@ -67,11 +65,9 @@ private:
 
 private:
 
-    DcrawBinaryPriv    *d;
-
-    static DcrawBinary *m_instance;
+    DcrawBinaryPriv *d;
 };
 
 } // namespace KDcrawIface
 
-#endif  // DCRAWBINARY_H
+#endif  // DCRAW_BINARY_H
