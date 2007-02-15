@@ -1,7 +1,7 @@
 /* ============================================================
  * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
  * Date   : 2005-11-06
- * Description : RAW file extensions list supported by 
+ * Description : list of RAW file extensions supported by 
  *               dcraw program.
  * 
  * Copyright 2005-2007 by Gilles Caulier
