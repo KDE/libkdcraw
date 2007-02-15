@@ -463,25 +463,24 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
     return true;
 }
 
-bool DcrawIface::decodeHalfRAWImage(const QString& filePath, QString& destPath,
-                                    RawDecodingSettings rawDecodingSettings)
+QByteArray DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings)
 {
-    d->rawDecodingSettings = rawDecodingSettings;
+    d->rawDecodingSettings                    = rawDecodingSettings;
     d->rawDecodingSettings.halfSizeColorImage = true;
     d->rawDecodingSettings.outputFileFormat   = RawDecodingSettings::PPM;
-    return (loadFromDcraw(filePath, destPath));
+    return (loadFromDcraw(filePath));
 }
 
-bool DcrawIface::decodeRAWImage(const QString& filePath, QString& destPath,
-                                RawDecodingSettings rawDecodingSettings)
+QByteArray DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings)
 {
-    d->rawDecodingSettings = rawDecodingSettings;
-    return (loadFromDcraw(filePath, destPath));
+    d->rawDecodingSettings                  = rawDecodingSettings;
+    d->rawDecodingSettings.outputFileFormat = RawDecodingSettings::PPM;
+    return (loadFromDcraw(filePath));
 }
 
 // ----------------------------------------------------------------------------------
 
-bool DcrawIface::loadFromDcraw(const QString& filePath, QString& destPath)
+QByteArray DcrawIface::loadFromDcraw(const QString& filePath)
 {
     d->filePath   = filePath;
     d->running    = true;
@@ -508,303 +507,16 @@ bool DcrawIface::loadFromDcraw(const QString& filePath, QString& destPath)
     {
         delete [] d->data;
         d->data = 0;
-        return false;
+        return QByteArray();
     }
 
-/*
-    // -- Use a QImage instance to write IPTC preview and Exif thumbnail -------
-
-    QImage img(d->width, d->height, 32);
-    uchar* dptr = img.bits();
-    uchar* sptr = d->data;
-
-    // Set RGB color components.
-    for (int i = 0 ; i < d->width * d->height ; i++)
-    {
-        dptr[0] = sptr[2];
-        dptr[1] = sptr[1];
-        dptr[2] = sptr[0];
-        dptr[3] = 0xFF;
-        dptr += 4;
-        sptr += 3;
-    }
-
-    QImage iptcPreview   = img.scale(800, 600, QImage::ScaleMin);
-    QImage exifThumbnail = iptcPreview.scale(160, 120, QImage::ScaleMin);
-
-    // -- Write image data into destination file -------------------------------
-
-    QByteArray ICCColorProfile = getICCProfilFromFile(d->rawDecodingSettings.outputColorSpace);
-    QString soft = QString("Kipi Raw Converter v.%1").arg(kipiplugins_version);
-    QFileInfo fi(filePath);
-    destPath = fi.dirPath(true) + QString("/") + ".kipi-rawconverter-tmp-" 
-                                + QString::number(::time(0));
-
-    switch(d->rawDecodingSettings.outputFileFormat)
-    {
-        case RawDecodingSettings::JPEG:
-        {
-            FILE* f = 0;
-            f = fopen(QFile::encodeName(destPath), "wb");
-    
-            if (!f) 
-            {
-                kdDebug( 51000 ) << "Failed to open JPEG file for writing"
-                                 << endl;
-                delete [] d->data;
-                d->data = 0;
-                return false;
-            }
-    
-            struct jpeg_compress_struct cinfo;
-            struct jpeg_error_mgr       jerr;
-    
-            int      row_stride;
-            JSAMPROW row_pointer[1];
-
-            // Init JPEG compressor.    
-            cinfo.err = jpeg_std_error(&jerr);
-            jpeg_create_compress(&cinfo);
-            jpeg_stdio_dest(&cinfo, f);
-            cinfo.image_width      = d->width;
-            cinfo.image_height     = d->height;
-            cinfo.input_components = 3;
-            cinfo.in_color_space   = JCS_RGB;
-            jpeg_set_defaults(&cinfo);
-            // B.K.O #130996: set horizontal and vertical Subsampling factor 
-            // to 1 for a best quality of color picture compression. 
-            cinfo.comp_info[0].h_samp_factor = 1;
-            cinfo.comp_info[0].v_samp_factor = 1; 
-            jpeg_set_quality(&cinfo, 100, true);
-            jpeg_start_compress(&cinfo, true);
-
-            // Write ICC color profil.
-            if (!ICCColorProfile.isEmpty())
-                write_icc_profile (&cinfo, (JOCTET *)ICCColorProfile.data(), ICCColorProfile.size());
-
-            // Write image data
-            row_stride = cinfo.image_width * 3;
-            while (!d->cancel && (cinfo.next_scanline < cinfo.image_height))
-            {
-                row_pointer[0] = d->data + (cinfo.next_scanline * row_stride);
-                jpeg_write_scanlines(&cinfo, row_pointer, 1);
-            }
-            
-            jpeg_finish_compress(&cinfo);
-            fclose(f);
-
-            // Metadata restoration and update.
-            KExiv2Iface::KExiv2 exiv2Iface;
-            exiv2Iface.load(filePath);
-            exiv2Iface.setImageProgramId(QString("Kipi Raw Converter"), QString(kipiplugins_version));
-            exiv2Iface.setImageDimensions(QSize(d->width, d->height));
-            exiv2Iface.setExifThumbnail(exifThumbnail);
-            exiv2Iface.setExifTagString("Exif.Image.DocumentName", fi.fileName());
-            exiv2Iface.save(destPath);
-            break;
-        }
-        case RawDecodingSettings::PNG:
-        {
-            FILE* f = 0;
-            f = fopen(QFile::encodeName(destPath), "wb");
-    
-            if (!f) 
-            {
-                kdDebug( 51000 ) << "Failed to open PNG file for writing"
-                                 << endl;
-                delete [] d->data;
-                d->data = 0;
-                return false;
-            }
-    
-            png_color_8 sig_bit;
-            png_bytep   row_ptr;
-            png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-            png_infop info_ptr  = png_create_info_struct(png_ptr);
-            png_init_io(png_ptr, f);
-            png_set_IHDR(png_ptr, info_ptr, d->width, d->height, 8, 
-                        PNG_COLOR_TYPE_RGB,        PNG_INTERLACE_NONE, 
-                        PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-            sig_bit.red   = 8;
-            sig_bit.green = 8;
-            sig_bit.blue  = 8;
-            sig_bit.alpha = 8;
-            png_set_sBIT(png_ptr, info_ptr, &sig_bit);
-            png_set_compression_level(png_ptr, 9);
-
-            // Write ICC profil.
-            if (!ICCColorProfile.isEmpty())
-            {
-                png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, 
-                             ICCColorProfile.data(), ICCColorProfile.size());
-            }    
-
-            QString libpngver(PNG_HEADER_VERSION_STRING);
-            libpngver.replace('\n', ' ');
-            soft.append(QString(" (%1)").arg(libpngver));
-            png_text text;
-            text.key  = "Software";
-            text.text = (char *)soft.ascii();
-            text.compression = PNG_TEXT_COMPRESSION_zTXt;
-            png_set_text(png_ptr, info_ptr, &(text), 1);
-
-            // Metadata restoration and update.
-            KExiv2Iface::KExiv2 exiv2Iface;
-            exiv2Iface.load(filePath);
-            exiv2Iface.setImageProgramId(QString("Kipi Raw Converter"), QString(kipiplugins_version));
-            exiv2Iface.setImageDimensions(QSize(d->width, d->height));
-            exiv2Iface.setExifThumbnail(exifThumbnail);
-            exiv2Iface.setImagePreview(iptcPreview);
-            exiv2Iface.setExifTagString("Exif.Image.DocumentName", fi.fileName());
-
-            // Store Exif data.
-            QByteArray ba = exiv2Iface.getExif();
-            const uchar ExifHeader[] = {0x45, 0x78, 0x69, 0x66, 0x00, 0x00};
-            QByteArray profile = QByteArray(ba.size() + sizeof(ExifHeader));
-            memcpy(profile.data(), ExifHeader, sizeof(ExifHeader));
-            memcpy(profile.data()+sizeof(ExifHeader), ba.data(), ba.size());
-            writeRawProfile(png_ptr, info_ptr, "exif", profile.data(), (png_uint_32) profile.size());
-
-            // Store Iptc data.
-            QByteArray ba2 = exiv2Iface.getIptc();
-            writeRawProfile(png_ptr, info_ptr, "iptc", ba2.data(), (png_uint_32) ba2.size());
-
-            png_write_info(png_ptr, info_ptr);
-            png_set_shift(png_ptr, &sig_bit);
-            png_set_packing(png_ptr);
-            unsigned char* ptr = d->data;
-    
-            for (int y = 0; !d->cancel && (y < d->height); y++)
-            {
-                row_ptr = (png_bytep) ptr;
-                png_write_rows(png_ptr, &row_ptr, 1);
-                ptr += (d->width * 3);
-            }
-    
-            png_write_end(png_ptr, info_ptr);
-            png_destroy_write_struct(&png_ptr, (png_infopp) & info_ptr);
-            png_destroy_info_struct(png_ptr, (png_infopp) & info_ptr);
-            fclose(f);
-            break;
-        }
-        case RawDecodingSettings::TIFF:
-        {
-            TIFF          *tif=0;
-            unsigned char *data=0;
-            int            y;
-            int            w;
-            
-            tif = TIFFOpen(QFile::encodeName(destPath), "wb");
-    
-            if (!tif) 
-            {
-                kdDebug( 51000 ) << "Failed to open TIFF file for writing"
-                                 << endl;
-                delete [] d->data;
-                d->data = 0;
-                return false;
-            }
-    
-            TIFFSetField(tif, TIFFTAG_IMAGEWIDTH,      d->width);
-            TIFFSetField(tif, TIFFTAG_IMAGELENGTH,     d->height);
-            TIFFSetField(tif, TIFFTAG_ORIENTATION,     ORIENTATION_TOPLEFT);
-            TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE,   8);
-            TIFFSetField(tif, TIFFTAG_PLANARCONFIG,    PLANARCONFIG_CONTIG);
-            TIFFSetField(tif, TIFFTAG_COMPRESSION,     COMPRESSION_ADOBE_DEFLATE);
-            TIFFSetField(tif, TIFFTAG_ZIPQUALITY,      9);
-            // NOTE : this tag values aren't defined in libtiff 3.6.1. '2' is PREDICTOR_HORIZONTAL.
-            //        Use horizontal differencing for images which are
-            //        likely to be continuous tone. The TIFF spec says that this
-            //        usually leads to better compression.
-            //        See this url for more details:
-            //        http://www.awaresystems.be/imaging/tiff/tifftags/predictor.html
-            TIFFSetField(tif, TIFFTAG_PREDICTOR,       2); 
-            TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 3);
-            TIFFSetField(tif, TIFFTAG_PHOTOMETRIC,     PHOTOMETRIC_RGB);
-            w = TIFFScanlineSize(tif);
-            TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP,    TIFFDefaultStripSize(tif, 0));
-
-
-            // Metadata restoration and update.
-            KExiv2Iface::KExiv2 exiv2Iface;
-            exiv2Iface.load(filePath);
-            exiv2Iface.setImageProgramId(QString("Kipi Raw Converter"), QString(kipiplugins_version));
-            exiv2Iface.setImageDimensions(QSize(d->width, d->height));
-            exiv2Iface.setExifThumbnail(exifThumbnail);
-            exiv2Iface.setImagePreview(iptcPreview);
-            exiv2Iface.setExifTagString("Exif.Image.DocumentName", fi.fileName());
-
-            // Store Exif data.
-            // TODO
-
-            // Store Iptc data.
-            QByteArray ba2 = exiv2Iface.getIptc(true);
-#if defined(TIFFTAG_PHOTOSHOP)
-            TIFFSetField (tif, TIFFTAG_PHOTOSHOP,      (uint32)ba2.size(), (uchar *)ba2.data());
-#endif
-
-            QString libtiffver(TIFFLIB_VERSION_STR);
-            libtiffver.replace('\n', ' ');
-            soft.append(QString(" ( %1 )").arg(libtiffver));
-            TIFFSetField(tif, TIFFTAG_SOFTWARE,        (const char*)soft.ascii());
-
-            // Write ICC profil.
-            if (!ICCColorProfile.isEmpty())
-            {
-#if defined(TIFFTAG_ICCPROFILE)    
-                TIFFSetField(tif, TIFFTAG_ICCPROFILE, (uint32)ICCColorProfile.size(), 
-                             (uchar *)ICCColorProfile.data());
-#endif      
-            }    
-
-            // Write image data
-            for (y = 0; !d->cancel && (y < d->height); y++)
-            {
-                data = d->data + (y * d->width * 3);
-                TIFFWriteScanline(tif, data, y, 0);
-            }
-    
-            TIFFClose(tif);
-            break;
-        }
-        case RawDecodingSettings::PPM:
-        {
-            FILE* f = fopen(QFile::encodeName(destPath), "wb");
-            if (!f) 
-            {
-                kdDebug( 51000 ) << "Failed to open ppm file for writing"
-                                 << endl;
-                delete [] d->data;
-                d->data = 0;
-                return false;
-            }
-    
-            fprintf(f, "P6\n%d %d\n255\n", d->width, d->height);
-            fwrite(d->data, 1, d->width*d->height*3, f);
-            fclose(f);
-            break;
-        }
-        default:
-        {
-            kdDebug( 51000 ) << "Invalid output file format"
-                             << endl;
-            delete [] d->data;
-            d->data = 0;
-            return false;
-        }
-    }
-*/    
+    QByteArray imageData(d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3));
+    memcpy(imageData.data(), d->data, imageData.size());
 
     delete [] d->data;
     d->data = 0;
 
-    if (d->cancel)
-    {
-        ::remove(QFile::encodeName(destPath));
-        return false;
-    }
-
-    return true;
+    return imageData;
 }
 
 void DcrawIface::customEvent(QCustomEvent *)

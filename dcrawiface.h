@@ -69,21 +69,17 @@ public: // Cancelable methods to extract RAW data. dcraw decoding can take a whi
     */
     void cancel();
 
-    /** Extract a small size of decode RAW data in 8 bits/color/pixels 
-        using sRGB color space.
+    /** Extract a small size of decode RAW data using 'rawDecodingSettings' settings.
     */
-    bool decodeHalfRAWImage(const QString& filePath, QString& destPath,
-                            RawDecodingSettings rawDecodingSettings);
+    QByteArray decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings);
 
-    /** Extract a full size of RAW data in 8 bits/color/pixels using 
-        sRGB color space.
+    /** Extract a full size of RAW data using 'rawDecodingSettings' settings.
     */
-    bool decodeRAWImage(const QString& filePath, QString& destPath,
-                        RawDecodingSettings rawDecodingSettings);
+    QByteArray decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings);
 
 private:
 
-    bool loadFromDcraw(const QString& filePath, QString& destPath);
+    QByteArray loadFromDcraw(const QString& filePath);
     void startProcess();
 
     virtual void customEvent(QCustomEvent *);
