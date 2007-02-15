@@ -47,22 +47,26 @@ class LIBKDCRAW_EXPORT DcrawIface : public QObject
 {
     Q_OBJECT
 
-public:  // Fast non cancelable methods.
-
-    /** Get the embedded preview image in RAW file
-    */
-    static bool loadDcrawPreview(QImage& image, const QString& path);
-
-    /** Get the camera settings witch have taken RAW file
-    */ 
-    static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
-
 public:
 
     DcrawIface();
     ~DcrawIface();
 
-public: // Cancelable methods to extract RAW data. dcraw decoding can take a while.
+/** Fast and non cancelable methods witch do not require a class instance to run.*/
+public:  
+
+    /** Get the embedded preview image from RAW pictures.
+    */
+    static bool loadDcrawPreview(QImage& image, const QString& path);
+
+    /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h 
+        for more details.
+    */ 
+    static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
+
+/** Cancelable methods to extract RAW data witch require a class instance to run. 
+    RAW pictures decoding can take a while.*/
+public: 
 
     /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
         in a separate thread.
@@ -87,8 +91,8 @@ private:
 private slots:
 
     void slotProcessExited(KProcess *);
-    void slotReceivedStdout(KProcess *, char *buffer, int buflen);
-    void slotReceivedStderr(KProcess *, char *buffer, int buflen);
+    void slotReceivedStdout(KProcess *, char *, int);
+    void slotReceivedStderr(KProcess *, char *, int);
     void slotContinueQuery();
 
 private:
