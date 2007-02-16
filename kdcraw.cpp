@@ -67,7 +67,6 @@ public:
 
     KDcrawPriv()
     {
-        cancel     = false;
         running    = false;
         normalExit = false;
         process    = 0;
@@ -79,7 +78,6 @@ public:
         rgbmax     = 0;
     }
 
-    bool                 cancel;
     bool                 running;
     bool                 normalExit;
 
@@ -105,6 +103,7 @@ public:
 
 KDcraw::KDcraw()
 {
+    m_cancel = false;
     d = new KDcrawPriv;
 }
 
@@ -116,7 +115,7 @@ KDcraw::~KDcraw()
 
 void KDcraw::cancel()
 {
-    d->cancel = true;
+    m_cancel = true;
 }
 
 bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
@@ -484,7 +483,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, int &
     d->filePath   = filePath;
     d->running    = true;
     d->normalExit = false;
-    d->cancel     = false;
+    m_cancel     = false;
     d->process    = 0;
     d->data       = 0;
     d->dataPos    = 0;
@@ -496,13 +495,13 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, int &
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
     // And we waiting for dcraw, is running...
-    while (d->running && !d->cancel)
+    while (d->running && !m_cancel)
     {
         QMutexLocker lock(&d->mutex);
         d->condVar.wait(&d->mutex, 10);
     }
 
-    if (!d->normalExit || d->cancel)
+    if (!d->normalExit || m_cancel)
     {
         delete [] d->data;
         d->data = 0;
@@ -541,7 +540,7 @@ void KDcraw::slotContinueQuery()
 {
     // this is called from the timer
 
-    if (d->cancel)
+    if (m_cancel)
     {
         d->process->kill();
         d->process->wait();
@@ -551,7 +550,7 @@ void KDcraw::slotContinueQuery()
 
 void KDcraw::startProcess()
 {
-    if (d->cancel)
+    if (m_cancel)
     {
         d->running    = false;
         d->normalExit = false;

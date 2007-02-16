@@ -97,6 +97,10 @@ private slots:
     void slotReceivedStderr(KProcess *, char *, int);
     void slotContinueQuery();
 
+protected:
+    
+    bool m_cancel;
+
 private:
 
     KDcrawPriv *d;
