@@ -44,17 +44,31 @@ class LIBKDCRAW_EXPORT DcrawBinary : public QObject
 
 public:
 
+    /** Standard conctructor. Run checkSystem() automaticly. */ 
     DcrawBinary();
     ~DcrawBinary();
 
+    /** Return the RAW decoding program name. */ 
     static const char *path();
+
+    /** Return the RAW decoding program version included in this library. */ 
     static QString internalVersion();
 
-    bool           isAvailable() const;
-    QString        version() const;
-    bool           versionIsRight() const;
+    /** Return 'true' if RAW decoding program have be found in your system. */ 
+    bool isAvailable() const;
 
+    /** Return the RAW decoding program version found in your system. */ 
+    QString version() const;
+
+    /** Return 'true' if RAW decoding program version found in your system is 
+        the same than the version provided by this library. */ 
+    bool versionIsRight() const;
+
+    /** Check your system to see if RAW decoding program is available. */ 
     void checkSystem();
+
+    /** Report any errors on a message box if RAW decoding program detection 
+        on your system failed. */ 
     void checkReport();
 
 private slots:

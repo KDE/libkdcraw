@@ -55,6 +55,7 @@ DcrawBinary::DcrawBinary()
            : QObject()
 {
     d = new DcrawBinaryPriv;
+    checkSystem();
 }
 
 DcrawBinary::~DcrawBinary()
