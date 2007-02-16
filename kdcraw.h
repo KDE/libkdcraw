@@ -41,16 +41,16 @@ class KProcess;
 namespace KDcrawIface
 {
 
-class DcrawIfacePriv;
+class KDcrawPriv;
 
-class LIBKDCRAW_EXPORT DcrawIface : public QObject
+class LIBKDCRAW_EXPORT KDcraw : public QObject
 {
     Q_OBJECT
 
 public:
 
-    DcrawIface();
-    ~DcrawIface();
+    KDcraw();
+    ~KDcraw();
 
 /** Fast and non cancelable methods witch do not require a class instance to run.*/
 public:  
@@ -97,7 +97,7 @@ private slots:
 
 private:
 
-    DcrawIfacePriv *d;
+    KDcrawPriv *d;
 };
 
 }  // namespace KDcrawIface

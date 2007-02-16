@@ -55,17 +55,17 @@ extern "C"
 
 #include "rawfiles.h"
 #include "dcrawbinary.h"
-#include "dcrawiface.h"
-#include "dcrawiface.moc"
+#include "kdcraw.h"
+#include "kdcraw.moc"
 
 namespace KDcrawIface
 {
 
-class DcrawIfacePriv
+class KDcrawPriv
 {
 public:
 
-    DcrawIfacePriv()
+    KDcrawPriv()
     {
         cancel     = false;
         running    = false;
@@ -103,23 +103,23 @@ public:
     RawDecodingSettings rawDecodingSettings;
 };
 
-DcrawIface::DcrawIface()
+KDcraw::KDcraw()
 {
-    d = new DcrawIfacePriv;
+    d = new KDcrawPriv;
 }
 
-DcrawIface::~DcrawIface()
+KDcraw::~KDcraw()
 {
     cancel();
     delete d;
 }
 
-void DcrawIface::cancel()
+void KDcraw::cancel()
 {
     d->cancel = true;
 }
 
-bool DcrawIface::loadDcrawPreview(QImage& image, const QString& path)
+bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
 {
     FILE       *f=NULL;
     QByteArray  imgData;
@@ -229,7 +229,7 @@ bool DcrawIface::loadDcrawPreview(QImage& image, const QString& path)
     return false;
 }
 
-bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
+bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 {
     FILE       *f=NULL;
     QByteArray  txtData;
@@ -462,7 +462,7 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
     return true;
 }
 
-bool DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+bool KDcraw::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                                     QByteArray &imageData)
 {
     d->rawDecodingSettings                    = rawDecodingSettings;
@@ -470,7 +470,7 @@ bool DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings
     return (loadFromDcraw(filePath, imageData));
 }
 
-bool DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+bool KDcraw::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                                 QByteArray &imageData)
 {
     d->rawDecodingSettings                  = rawDecodingSettings;
@@ -479,7 +479,7 @@ bool DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings raw
 
 // ----------------------------------------------------------------------------------
 
-bool DcrawIface::loadFromDcraw(const QString& filePath, QByteArray &imageData)
+bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData)
 {
     d->filePath   = filePath;
     d->running    = true;
@@ -519,7 +519,7 @@ bool DcrawIface::loadFromDcraw(const QString& filePath, QByteArray &imageData)
     return true;
 }
 
-void DcrawIface::customEvent(QCustomEvent *)
+void KDcraw::customEvent(QCustomEvent *)
 {
     // KProcess (because of QSocketNotifier) is not reentrant.
     // We must only use it from the main thread.
@@ -535,7 +535,7 @@ void DcrawIface::customEvent(QCustomEvent *)
     }
 }
 
-void DcrawIface::slotContinueQuery()
+void KDcraw::slotContinueQuery()
 {
     // this is called from the timer
 
@@ -547,7 +547,7 @@ void DcrawIface::slotContinueQuery()
     }
 }
 
-void DcrawIface::startProcess()
+void KDcraw::startProcess()
 {
     if (d->cancel)
     {
@@ -647,7 +647,7 @@ void DcrawIface::startProcess()
     }
 }
 
-void DcrawIface::slotProcessExited(KProcess *)
+void KDcraw::slotProcessExited(KProcess *)
 {
     // set variables, clean up, wake up loader thread
 
@@ -661,7 +661,7 @@ void DcrawIface::slotProcessExited(KProcess *)
     d->condVar.wakeAll();
 }
 
-void DcrawIface::slotReceivedStdout(KProcess *, char *buffer, int buflen)
+void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 {
     if (!d->data)
     {
@@ -724,7 +724,7 @@ void DcrawIface::slotReceivedStdout(KProcess *, char *buffer, int buflen)
     d->dataPos += buflen;
 }
 
-void DcrawIface::slotReceivedStderr(KProcess *, char *buffer, int buflen)
+void KDcraw::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 {
     QCString message(buffer, buflen);
     qDebug("RAW decoding StdErr: %s", (const char*)message);
