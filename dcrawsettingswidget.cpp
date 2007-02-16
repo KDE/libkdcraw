@@ -1,5 +1,5 @@
 /* ============================================================
- * Authors: Gilles Caulier <caulier dot gilles at kdemail dot net>
+ * Authors: Gilles Caulier <caulier dot gilles at gmail dot com>
  * Date   : 2006-09-13
  * Description : dcraw settings widgets
  *
@@ -280,8 +280,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent)
 
     settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, 11, 11, 0, 0); 
     settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 11, 11, 1, 2);
-    
-    //settingsBoxLayout->setColStretch(0, 10);
     
     // ---------------------------------------------------------------
 
