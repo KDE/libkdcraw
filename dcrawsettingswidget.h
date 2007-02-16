@@ -25,8 +25,9 @@
 
 #include <qgroupbox.h>
 
-// Local includes.
+// Local Includes.
 
+#include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"
 
 namespace KDcrawIface
@@ -34,7 +35,7 @@ namespace KDcrawIface
 
 class DcrawSettingsWidgetPriv;
 
-class DcrawSettingsWidget : public QGroupBox
+class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QGroupBox
 {
     Q_OBJECT
     
@@ -52,7 +53,8 @@ public:
     double brightness();
     double sigmaDomain();
     double sigmaRange();
-    RawDecodingSettings::DecodingQuality quality();
+
+    RawDecodingSettings::DecodingQuality  quality();
     RawDecodingSettings::OutputColorSpace outputColorSpace();
 
     void   setCameraWB(bool b);

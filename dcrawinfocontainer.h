@@ -26,10 +26,14 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
+// Local Includes.
+
+#include "libkdcraw_export.h"
+
 namespace KDcrawIface
 {
 
-class DcrawInfoContainer
+class LIBKDCRAW_EXPORT DcrawInfoContainer
 {
 
 public:
