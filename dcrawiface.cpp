@@ -79,26 +79,26 @@ public:
         rgbmax     = 0;
     }
 
-    bool                cancel;
-    bool                running;
-    bool                normalExit;
+    bool                 cancel;
+    bool                 running;
+    bool                 normalExit;
 
-    uchar              *data;
+    uchar               *data;
     
-    int                 dataPos;
-    int                 width;
-    int                 height;
-    int                 rgbmax;
+    int                  dataPos;
+    int                  width;
+    int                  height;
+    int                  rgbmax;
 
-    QString             filePath;
+    QString              filePath;
 
-    QMutex              mutex;
+    QMutex               mutex;
     
-    QWaitCondition      condVar;
+    QWaitCondition       condVar;
 
-    QTimer             *queryTimer;
+    QTimer              *queryTimer;
     
-    KProcess           *process;
+    KProcess            *process;
 
     RawDecodingSettings rawDecodingSettings;
 };
@@ -312,7 +312,6 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
         make.remove(0, makeHeader.length());
         identify.make = make;
     }
-
 
     // Extract Camera Model.
     QString modelHeader("Model: ");
@@ -625,9 +624,9 @@ void DcrawIface::startProcess()
     }
 
     *d->process << "-o";
-    *d->process << QString::number( d->rawDecodingSettings.outputColorSpace );
+    *d->process << QString::number(d->rawDecodingSettings.outputColorSpace);
 
-    *d->process << QFile::encodeName( d->filePath );
+    *d->process << QFile::encodeName(d->filePath);
 
     QString args;
     for (uint i = 0 ; i < d->process->args().count(); i++)
