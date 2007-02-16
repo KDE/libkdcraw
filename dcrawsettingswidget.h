@@ -23,7 +23,7 @@
 
 // Qt includes.
 
-#include <qgroupbox.h>
+#include <qwidget.h>
 
 // Local Includes.
 
@@ -35,13 +35,13 @@ namespace KDcrawIface
 
 class DcrawSettingsWidgetPriv;
 
-class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QGroupBox
+class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QWidget
 {
     Q_OBJECT
     
 public:
 
-    DcrawSettingsWidget(QWidget *parent, const QString& dcrawVersion);
+    DcrawSettingsWidget(QWidget *parent);
     ~DcrawSettingsWidget();
 
     bool   useCameraWB();
@@ -75,6 +75,7 @@ private slots:
 
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
+    void processDcrawURL(const QString&);
 
 private:
 
