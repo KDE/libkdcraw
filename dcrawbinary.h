@@ -44,6 +44,9 @@ class LIBKDCRAW_EXPORT DcrawBinary : public QObject
 
 public:
 
+    DcrawBinary();
+    ~DcrawBinary();
+
     static const char *path();
     static QString internalVersion();
 
@@ -57,11 +60,6 @@ public:
 private slots:
 
     void slotReadStderrFromDcraw(KProcess*, char*, int);
-
-private:
-
-    DcrawBinary();
-    ~DcrawBinary();
 
 private:
 
