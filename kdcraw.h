@@ -19,8 +19,8 @@
  *
  * ============================================================ */
 
-#ifndef DCRAW_IFACE_H
-#define DCRAW_IFACE_H
+#ifndef KDCRAW_H
+#define KDCRAW_H
 
 // Qt Includes.
 
@@ -108,4 +108,4 @@ private:
 
 }  // namespace KDcrawIface
 
-#endif /* DCRAW_IFACE_H */
+#endif /* KDCRAW_H */
