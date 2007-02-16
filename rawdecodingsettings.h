@@ -33,6 +33,7 @@ class LIBKDCRAW_EXPORT RawDecodingSettings
 
 public:
 
+    /** RAW decoding Interpolation methods */
     enum DecodingQuality 
     {
         BILINEAR = 0,
@@ -40,6 +41,7 @@ public:
         AHD      = 3
     };
 
+    /** Output RGB color space used to decoded image */ 
     enum OutputColorSpace 
     {
         RAWCOLOR = 0,
@@ -49,6 +51,7 @@ public:
         PROPHOTO
     };
 
+    /** Standard constructor with default settings */
     RawDecodingSettings()
     {
         sixteenBitsImage        = false;
@@ -68,7 +71,29 @@ public:
         halfSizeColorImage      = false;
     };
     
+
+    /** Standard destructor */
     ~RawDecodingSettings(){};
+
+    /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
+    void optimizeTimeLoading(void)
+    {
+        sixteenBitsImage        = true;
+        enableNoiseReduction    = false;
+        NRSigmaDomain           = 2.0;
+        NRSigmaRange            = 4.0;
+
+        brightness              = 1.0;
+        RAWQuality              = BILINEAR;
+        outputColorSpace        = SRGB;
+
+        RGBInterpolate4Colors   = false;
+        SuperCCDsecondarySensor = false;
+        unclipColors            = 0;
+        cameraColorBalance      = true;
+        automaticColorBalance   = true;
+        halfSizeColorImage      = true;
+    };
 
 public:
 
