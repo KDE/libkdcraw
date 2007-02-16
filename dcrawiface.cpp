@@ -463,24 +463,26 @@ bool DcrawIface::rawFileIdentify(DcrawInfoContainer& identify, const QString& pa
     return true;
 }
 
-QByteArray DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings)
+bool DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+                                    QByteArray &imageData)
 {
     d->rawDecodingSettings                    = rawDecodingSettings;
     d->rawDecodingSettings.halfSizeColorImage = true;
     d->rawDecodingSettings.outputFileFormat   = RawDecodingSettings::PPM;
-    return (loadFromDcraw(filePath));
+    return (loadFromDcraw(filePath, imageData));
 }
 
-QByteArray DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings)
+bool DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+                                QByteArray &imageData)
 {
     d->rawDecodingSettings                  = rawDecodingSettings;
     d->rawDecodingSettings.outputFileFormat = RawDecodingSettings::PPM;
-    return (loadFromDcraw(filePath));
+    return (loadFromDcraw(filePath, imageData));
 }
 
 // ----------------------------------------------------------------------------------
 
-QByteArray DcrawIface::loadFromDcraw(const QString& filePath)
+bool DcrawIface::loadFromDcraw(const QString& filePath, QByteArray &imageData)
 {
     d->filePath   = filePath;
     d->running    = true;
@@ -496,9 +498,9 @@ QByteArray DcrawIface::loadFromDcraw(const QString& filePath)
     // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
+    // And we waiting for dcraw, is running...
     while (d->running && !d->cancel)
     {
-        // Waiting for dcraw, is running
         QMutexLocker lock(&d->mutex);
         d->condVar.wait(&d->mutex, 10);
     }
@@ -507,16 +509,17 @@ QByteArray DcrawIface::loadFromDcraw(const QString& filePath)
     {
         delete [] d->data;
         d->data = 0;
-        return QByteArray();
+        return false;
     }
 
-    QByteArray imageData(d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3));
+    // Copy decoded image data to byte array.
+    imageData = QByteArray(d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3));
     memcpy(imageData.data(), d->data, imageData.size());
 
     delete [] d->data;
     d->data = 0;
 
-    return imageData;
+    return true;
 }
 
 void DcrawIface::customEvent(QCustomEvent *)

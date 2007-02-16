@@ -75,15 +75,15 @@ public:
 
     /** Extract a small size of decode RAW data using 'rawDecodingSettings' settings.
     */
-    QByteArray decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings);
+    bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, QByteArray &imageData);
 
     /** Extract a full size of RAW data using 'rawDecodingSettings' settings.
     */
-    QByteArray decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings);
+    bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, QByteArray &imageData);
 
 private:
 
-    QByteArray loadFromDcraw(const QString& filePath);
+    bool loadFromDcraw(const QString& filePath, QByteArray &imageData);
     void startProcess();
 
     virtual void customEvent(QCustomEvent *);
