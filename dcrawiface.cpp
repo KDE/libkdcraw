@@ -468,7 +468,6 @@ bool DcrawIface::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings
 {
     d->rawDecodingSettings                    = rawDecodingSettings;
     d->rawDecodingSettings.halfSizeColorImage = true;
-    d->rawDecodingSettings.outputFileFormat   = RawDecodingSettings::PPM;
     return (loadFromDcraw(filePath, imageData));
 }
 
@@ -476,7 +475,6 @@ bool DcrawIface::decodeRAWImage(const QString& filePath, RawDecodingSettings raw
                                 QByteArray &imageData)
 {
     d->rawDecodingSettings                  = rawDecodingSettings;
-    d->rawDecodingSettings.outputFileFormat = RawDecodingSettings::PPM;
     return (loadFromDcraw(filePath, imageData));
 }
 

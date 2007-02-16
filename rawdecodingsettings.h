@@ -33,14 +33,6 @@ class LIBKDCRAW_EXPORT RawDecodingSettings
 
 public:
 
-    enum OutputFormat 
-    {
-        JPEG = 0,
-        TIFF,
-        PPM,
-        PNG
-    };
-
     enum DecodingQuality 
     {
         BILINEAR = 0,
@@ -59,8 +51,6 @@ public:
 
     RawDecodingSettings()
     {
-        outputFileFormat        = PNG;
-
         sixteenBitsImage        = false;
         enableNoiseReduction    = false;
         NRSigmaDomain           = 2.0;
@@ -81,11 +71,6 @@ public:
     ~RawDecodingSettings(){};
 
 public:
-
-    /** The file format used to convert RAW data. See OutputFormat values 
-        for details. 
-    */
-    OutputFormat outputFileFormat;
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
     */
