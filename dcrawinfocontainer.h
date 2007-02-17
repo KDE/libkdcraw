@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qdatetime.h>
+#include <qsize.h>
 
 // Local Includes.
 
