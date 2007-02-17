@@ -51,16 +51,30 @@ public:
     QString version;
 };
 
+DcrawBinary *DcrawBinary::m_instance = 0;
+
 DcrawBinary::DcrawBinary()
            : QObject()
 {
     d = new DcrawBinaryPriv;
-    checkSystem();
 }
 
 DcrawBinary::~DcrawBinary()
 {
+    m_instance = 0;
     delete d;
+}
+
+DcrawBinary *DcrawBinary::instance()
+{
+    if (!m_instance)
+        m_instance = new DcrawBinary;
+    return m_instance;
+}
+
+void DcrawBinary::cleanUp()
+{
+    delete m_instance;
 }
 
 void DcrawBinary::checkSystem()

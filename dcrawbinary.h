@@ -44,9 +44,8 @@ class LIBKDCRAW_EXPORT DcrawBinary : public QObject
 
 public:
 
-    /** Standard conctructor. Run checkSystem() automaticly. */ 
-    DcrawBinary();
-    ~DcrawBinary();
+    static DcrawBinary *instance();
+    static void cleanUp();
 
     /** Return the RAW decoding program name. */ 
     static const char *path();
@@ -77,7 +76,14 @@ private slots:
 
 private:
 
-    DcrawBinaryPriv *d;
+    DcrawBinary();
+    ~DcrawBinary();
+
+private:
+
+    static DcrawBinary *m_instance;
+
+    DcrawBinaryPriv    *d;
 };
 
 } // namespace KDcrawIface
