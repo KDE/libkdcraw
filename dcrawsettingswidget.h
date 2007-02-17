@@ -41,9 +41,10 @@ class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QWidget
     
 public:
 
-    DcrawSettingsWidget(QWidget *parent);
+    DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption=false, bool outputColorSpaceOption=true);
     ~DcrawSettingsWidget();
 
+    bool   sixteenBits();
     bool   useCameraWB();
     bool   useAutoColorBalance();
     bool   useFourColor();
@@ -57,6 +58,7 @@ public:
     RawDecodingSettings::DecodingQuality  quality();
     RawDecodingSettings::OutputColorSpace outputColorSpace();
 
+    void   setSixteenBits(bool b);
     void   setCameraWB(bool b);
     void   setAutoColorBalance(bool b);
     void   setFourColor(bool b);
