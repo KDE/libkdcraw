@@ -462,23 +462,24 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 }
 
 bool KDcraw::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
-                                QByteArray &imageData, int &width, int &height)
+                                QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
     d->rawDecodingSettings                    = rawDecodingSettings;
     d->rawDecodingSettings.halfSizeColorImage = true;
-    return (loadFromDcraw(filePath, imageData, width, height));
+    return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
 bool KDcraw::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
-                            QByteArray &imageData, int &width, int &height)
+                            QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
     d->rawDecodingSettings = rawDecodingSettings;
-    return (loadFromDcraw(filePath, imageData, width, height));
+    return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
 // ----------------------------------------------------------------------------------
 
-bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, int &width, int &height)
+bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
+                           int &width, int &height, int &rgbmax)
 {
     d->filePath   = filePath;
     d->running    = true;
@@ -511,6 +512,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, int &
     // Copy decoded image data to byte array.
     width     = d->width;
     height    = d->height;
+    rgbmax    = d->rgbmax;
     imageData = QByteArray(d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3));
     memcpy(imageData.data(), d->data, imageData.size());
 
