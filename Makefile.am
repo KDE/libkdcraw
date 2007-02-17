@@ -11,7 +11,7 @@ libkdcraw_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -version-info 0:1:0 -no-und
 libkdcraw_la_LIBADD  = $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT)
 
 libkdcrawinclude_HEADERS = rawdecodingsettings.h kdcraw.h dcrawbinary.h dcrawsettingswidget.h \
-                           dcrawinfocontainer.h libkdcraw_export.h version.h 
+                           dcrawinfocontainer.h rawfiles.h libkdcraw_export.h version.h 
 
 libkdcrawincludedir = $(includedir)/libkdcraw
 
