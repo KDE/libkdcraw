@@ -476,18 +476,22 @@ bool KDcraw::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDeco
     return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
-bool KDcraw::checkToCancelRawDecodingLoop()
+bool KDcraw::checkToCancelWaitingData()
 {
     return m_cancel;
 }
 
-void KDcraw::setPseudoProgress(double)
+bool KDcraw::checkToCancelRecievingData()
+{
+    return m_cancel;
+}
+
+void KDcraw::setWaitingDataProgress(double)
 {
 }
 
-int KDcraw::setProgress(int)
+void KDcraw::setRecievingDataProgress(double)
 {
-    return 0;
 }
 
 // ----------------------------------------------------------------------------------
@@ -529,7 +533,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // is waiting for the process to finish, but the main thread is waiting
     // for the thread to finish and no KProcess events are delivered.
     // Remove when porting to Qt4.
-    while (d->running && !checkToCancelRawDecodingLoop())
+    while (d->running && !checkToCancelRecievingData())
     {
         if (m_dataPos == 0)
         {
@@ -544,19 +548,20 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
             double part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
 
-            setPseudoProgress(0.5*part);
+            // While we waiting to recieve data, progress from 0% to 40%
+            setWaitingDataProgress(0.4*part);
         }
         else if (m_dataPos > checkpoint)
         {
-            // While receiving data, progress from 90% to 95%
+            // While receiving data, progress from 40% to 70%
             int imageSize = d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3);
-            checkpoint += setProgress(imageSize); 
+            checkpoint += (int)(imageSize / (20 * 0.3));
+            setRecievingDataProgress(0.4 + 0.3*(((float)m_dataPos)/((float)imageSize))); 
         }
 
         QMutexLocker lock(&d->mutex);
         d->condVar.wait(&d->mutex, 10);
     }
-
 
     if (!d->normalExit || m_cancel)
     {
@@ -598,7 +603,7 @@ void KDcraw::slotContinueQuery()
 {
     // this is called from the timer
 
-    if (m_cancel)
+    if (checkToCancelWaitingData())
     {
         d->process->kill();
         d->process->wait();

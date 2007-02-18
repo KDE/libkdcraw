@@ -91,20 +91,27 @@ protected:
 
 protected:
 
-    /** Re-implement this method to control the cancelisation of RAW decoding with 
-        your propers envirronement. By default, this method check if m_cancel is true.
+    /** Re-implement this method to control the cancelisation of loop witch wait data 
+        from RAW decoding process with your propers envirronement. 
+        By default, this method check if m_cancel is true.
     */
-    virtual bool checkToCancelRawDecodingLoop();
+    virtual bool checkToCancelWaitingData();
+
+    /** Re-implement this method to control the cancelisation of loop witch recieve data 
+        from RAW decoding process with your propers envirronement. 
+        By default, this method check if m_cancel is true.
+    */
+    virtual bool checkToCancelRecievingData();
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
-        internal loop without feedback) with your propers envirronement. By default, this method do nothing.
+        internal loop without feedback) with your propers environnement. By default, this method do nothing.
     */
-    virtual void setPseudoProgress(double value);
+    virtual void setWaitingDataProgress(double value);
 
     /** Re-implement this method to control the progress value during RAW decoding (when dcraw return data)
-        with your propers envirronement. By default, this method return 0.
+        with your propers environnement. By default, this method do nothing.
     */
-    virtual int setProgress(int imageSize);
+    virtual void setRecievingDataProgress(double value);
 
 private:
 
