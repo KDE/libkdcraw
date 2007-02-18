@@ -34,6 +34,7 @@ extern "C"
 
 #include <cstdlib>
 #include <cstdio>
+#include <cmath>
 
 // Qt Includes.
 
@@ -480,6 +481,15 @@ bool KDcraw::checkToCancelRawDecodingLoop()
     return m_cancel;
 }
 
+void KDcraw::setPseudoProgress(double)
+{
+}
+
+int KDcraw::setProgress(int)
+{
+    return 0;
+}
+
 // ----------------------------------------------------------------------------------
 
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
@@ -499,12 +509,54 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // trigger startProcess and loop to wait dcraw decoding
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
-    // And we waiting for dcraw, is running...
+    // The time from starting dcraw to when it first outputs something takes
+    // much longer than the time while it outputs the data and the time while
+    // we process the data.
+    // We do not have progress information for this, but it is much more promising to the user
+    // if there is progress which does not stay at a fixed value.
+    // So we make up some progress (0% - 90%), using the file size as an indicator how long it might take.
+    QTime dcrawStartTime = QTime::currentTime();
+    int fileSize         = QFileInfo(filePath).size();
+    
+    // This is the magic number that describes how fast the function grows
+    // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
+    // So this is a number that works well on my computer.
+    double K50         = 3000.0*fileSize;
+    int checkpointTime = 0;
+    int checkpoint     = 0;
+
+    // The shuttingDown is a hack needed to prevent hanging when this KProcess-based loader
+    // is waiting for the process to finish, but the main thread is waiting
+    // for the thread to finish and no KProcess events are delivered.
+    // Remove when porting to Qt4.
     while (d->running && !checkToCancelRawDecodingLoop())
     {
+        if (m_dataPos == 0)
+        {
+            int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
+            if (elapsedMsecs > checkpointTime)
+                checkpointTime += 300;
+    
+            // What we do here is a sigmoidal curve, it starts slowly,
+            // then grows more rapidly, slows down again and
+            // get asymptotically closer to the maximum.
+            // (this is the Hill Equation, 2.8 the Hill Coefficient, to pour some blood in this)
+            double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
+            double part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
+
+            setPseudoProgress(0.5*part);
+        }
+        else if (m_dataPos > checkpoint)
+        {
+            // While receiving data, progress from 90% to 95%
+            int imageSize = d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            checkpoint += setProgress(imageSize); 
+        }
+
         QMutexLocker lock(&d->mutex);
         d->condVar.wait(&d->mutex, 10);
     }
+
 
     if (!d->normalExit || m_cancel)
     {

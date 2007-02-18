@@ -73,11 +73,6 @@ public:
     */
     void cancel();
 
-    /** Re-implement this method to control the cancelisation of RAW decoding with 
-        your propers envirronement. By default, this method check if m_cancel is true.
-    */
-    virtual bool checkToCancelRawDecodingLoop();
-
     /** Extract a small size of decode RAW data using 'rawDecodingSettings' settings.
     */
     bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
@@ -87,6 +82,29 @@ public:
     */
     bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                         QByteArray &imageData, int &width, int &height, int &rgbmax);
+
+protected:
+    
+    bool m_cancel;
+
+    int  m_dataPos;
+
+protected:
+
+    /** Re-implement this method to control the cancelisation of RAW decoding with 
+        your propers envirronement. By default, this method check if m_cancel is true.
+    */
+    virtual bool checkToCancelRawDecodingLoop();
+
+    /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
+        internal loop without feedback) with your propers envirronement. By default, this method do nothing.
+    */
+    virtual void setPseudoProgress(double value);
+
+    /** Re-implement this method to control the progress value during RAW decoding (when dcraw return data)
+        with your propers envirronement. By default, this method return 0.
+    */
+    virtual int setProgress(int imageSize);
 
 private:
 
@@ -102,12 +120,6 @@ private slots:
     void slotReceivedStdout(KProcess *, char *, int);
     void slotReceivedStderr(KProcess *, char *, int);
     void slotContinueQuery();
-
-protected:
-    
-    bool m_cancel;
-
-    int  m_dataPos;
 
 private:
 
