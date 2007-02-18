@@ -89,6 +89,9 @@ protected:
 
     int  m_dataPos;
 
+
+    RawDecodingSettings m_rawDecodingSettings;
+
 protected:
 
     /** Re-implement this method to control the cancelisation of loop witch wait data 

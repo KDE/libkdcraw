@@ -96,15 +96,13 @@ public:
     QTimer              *queryTimer;
     
     KProcess            *process;
-
-    RawDecodingSettings rawDecodingSettings;
 };
 
 KDcraw::KDcraw()
 {
+    d = new KDcrawPriv;
     m_dataPos = 0;
     m_cancel  = false;
-    d = new KDcrawPriv;
 }
 
 KDcraw::~KDcraw()
@@ -464,15 +462,15 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 bool KDcraw::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                                 QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
-    d->rawDecodingSettings                    = rawDecodingSettings;
-    d->rawDecodingSettings.halfSizeColorImage = true;
+    m_rawDecodingSettings                    = rawDecodingSettings;
+    m_rawDecodingSettings.halfSizeColorImage = true;
     return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
 bool KDcraw::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                             QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
-    d->rawDecodingSettings = rawDecodingSettings;
+    m_rawDecodingSettings = rawDecodingSettings;
     return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
@@ -554,7 +552,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         else if (m_dataPos > checkpoint)
         {
             // While receiving data, progress from 40% to 70%
-            int imageSize = d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3);
+            int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += (int)(imageSize / (20 * 0.3));
             setRecievingDataProgress(0.4 + 0.3*(((float)m_dataPos)/((float)imageSize))); 
         }
@@ -574,7 +572,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     width     = d->width;
     height    = d->height;
     rgbmax    = d->rgbmax;
-    imageData = QByteArray(d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3));
+    imageData = QByteArray(d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3));
     memcpy(imageData.data(), d->data, imageData.size());
 
     delete [] d->data;
@@ -653,42 +651,42 @@ void KDcraw::startProcess()
     *d->process << DcrawBinary::path();
     *d->process << "-c";
 
-    if (d->rawDecodingSettings.sixteenBitsImage)
+    if (m_rawDecodingSettings.sixteenBitsImage)
         *d->process << "-4";
 
-    if (d->rawDecodingSettings.halfSizeColorImage)
+    if (m_rawDecodingSettings.halfSizeColorImage)
         *d->process << "-h";
 
-    if (d->rawDecodingSettings.cameraColorBalance)
+    if (m_rawDecodingSettings.cameraColorBalance)
         *d->process << "-w";
 
-    if (d->rawDecodingSettings.automaticColorBalance)
+    if (m_rawDecodingSettings.automaticColorBalance)
         *d->process << "-a";
 
-    if (d->rawDecodingSettings.RGBInterpolate4Colors)
+    if (m_rawDecodingSettings.RGBInterpolate4Colors)
         *d->process << "-f";
 
-    if (d->rawDecodingSettings.SuperCCDsecondarySensor)
+    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
         *d->process << "-s";
 
     *d->process << "-H";
-    *d->process << QString::number(d->rawDecodingSettings.unclipColors);
+    *d->process << QString::number(m_rawDecodingSettings.unclipColors);
 
     *d->process << "-b";
-    *d->process << QString::number(d->rawDecodingSettings.brightness);
+    *d->process << QString::number(m_rawDecodingSettings.brightness);
 
     *d->process << "-q";
-    *d->process << QString::number(d->rawDecodingSettings.RAWQuality);
+    *d->process << QString::number(m_rawDecodingSettings.RAWQuality);
 
-    if (d->rawDecodingSettings.enableNoiseReduction)
+    if (m_rawDecodingSettings.enableNoiseReduction)
     {
         *d->process << "-B";
-        *d->process << QString::number(d->rawDecodingSettings.NRSigmaDomain);
-        *d->process << QString::number(d->rawDecodingSettings.NRSigmaRange);
+        *d->process << QString::number(m_rawDecodingSettings.NRSigmaDomain);
+        *d->process << QString::number(m_rawDecodingSettings.NRSigmaRange);
     }
 
     *d->process << "-o";
-    *d->process << QString::number(d->rawDecodingSettings.outputColorSpace);
+    *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
 
     *d->process << QFile::encodeName(d->filePath);
 
@@ -779,7 +777,7 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         buflen -= i;
 
         // allocate buffer
-        d->data    = new uchar[d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
+        d->data    = new uchar[d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
         m_dataPos = 0;
     }
 
