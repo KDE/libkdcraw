@@ -476,6 +476,11 @@ bool KDcraw::decodeRAWImage(const QString& filePath, RawDecodingSettings rawDeco
     return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
 }
 
+bool KDcraw::checkToCancelRawDecodingLoop()
+{
+    return m_cancel;
+}
+
 // ----------------------------------------------------------------------------------
 
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
@@ -484,7 +489,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     d->filePath   = filePath;
     d->running    = true;
     d->normalExit = false;
-    m_cancel     = false;
+    m_cancel      = false;
     d->process    = 0;
     d->data       = 0;
     d->dataPos    = 0;
@@ -496,7 +501,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     QApplication::postEvent(this, new QCustomEvent(QEvent::User));
 
     // And we waiting for dcraw, is running...
-    while (d->running && !m_cancel)
+    while (d->running && !checkToCancelRawDecodingLoop())
     {
         QMutexLocker lock(&d->mutex);
         d->condVar.wait(&d->mutex, 10);

@@ -73,6 +73,11 @@ public:
     */
     void cancel();
 
+    /** Re-implement this method to control the cancelisation of RAW decoding with 
+        your propers envirronement. By default, this method check if m_cancel is true.
+    */
+    virtual bool checkToCancelRawDecodingLoop();
+
     /** Extract a small size of decode RAW data using 'rawDecodingSettings' settings.
     */
     bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
