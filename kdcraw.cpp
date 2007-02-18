@@ -459,6 +459,8 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     return true;
 }
 
+// ----------------------------------------------------------------------------------
+
 bool KDcraw::decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
                                 QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
@@ -492,8 +494,6 @@ void KDcraw::setRecievingDataProgress(double)
 {
 }
 
-// ----------------------------------------------------------------------------------
-
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
                            int &width, int &height, int &rgbmax)
 {
@@ -516,7 +516,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // we process the data.
     // We do not have progress information for this, but it is much more promising to the user
     // if there is progress which does not stay at a fixed value.
-    // So we make up some progress (0% - 90%), using the file size as an indicator how long it might take.
+    // So we make up some progress (0% - 40%), using the file size as an indicator how long it might take.
     QTime dcrawStartTime = QTime::currentTime();
     int fileSize         = QFileInfo(filePath).size();
     

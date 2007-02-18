@@ -97,6 +97,17 @@ protected:
     /** Re-implement this method to control the cancelisation of loop witch wait data 
         from RAW decoding process with your propers envirronement. 
         By default, this method check if m_cancel is true.
+
+        NOTE: RAW decoding is divided to 3 stages : 
+
+              1-demosaising from dcraw. no progress feedback is available. We using a pseudo 
+                progress value. You can control this stage using checkToCancelWaitingData() and 
+                setWaitingDataProgress() methods.
+
+              2-decoding data reception from dcraw. You can control this stage using 
+                checkToCancelRecievingData() and setRecievingDataProgress() methods. 
+    
+              3-storage decoded data in your application using the QByteArray container.
     */
     virtual bool checkToCancelWaitingData();
 
@@ -108,11 +119,13 @@ protected:
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
         internal loop without feedback) with your propers environnement. By default, this method do nothing.
+        Progress value average for this stage is 0%-n%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
     virtual void setWaitingDataProgress(double value);
 
     /** Re-implement this method to control the progress value during RAW decoding (when dcraw return data)
         with your propers environnement. By default, this method do nothing.
+        Progress value average for this stage is n%-70%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
     virtual void setRecievingDataProgress(double value);
 
