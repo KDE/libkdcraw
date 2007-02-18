@@ -524,6 +524,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
     // So this is a number that works well on my computer.
     double K50         = 3000.0*fileSize;
+    double part        = 0;
     int checkpointTime = 0;
     int checkpoint     = 0;
 
@@ -544,7 +545,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             // get asymptotically closer to the maximum.
             // (this is the Hill Equation, 2.8 the Hill Coefficient, to pour some blood in this)
             double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
-            double part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
+            part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
 
             // While we waiting to recieve data, progress from 0% to 40%
             setWaitingDataProgress(0.4*part);
@@ -552,9 +553,10 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         else if (m_dataPos > checkpoint)
         {
             // While receiving data, progress from 40% to 70%
+            double delta = 0.3 + 0.4 - 0.4*part;
             int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
-            checkpoint += (int)(imageSize / (20 * 0.3));
-            setRecievingDataProgress(0.4 + 0.3*(((float)m_dataPos)/((float)imageSize))); 
+            checkpoint += (int)(imageSize / (20 * delta));
+            setRecievingDataProgress(0.4*part + delta * (((float)m_dataPos)/((float)imageSize))); 
         }
 
         QMutexLocker lock(&d->mutex);
