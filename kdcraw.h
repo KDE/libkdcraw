@@ -107,6 +107,8 @@ protected:
     
     bool m_cancel;
 
+    int  m_dataPos;
+
 private:
 
     KDcrawPriv *d;

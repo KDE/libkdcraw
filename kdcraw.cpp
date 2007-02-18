@@ -72,7 +72,6 @@ public:
         process    = 0;
         queryTimer = 0;
         data       = 0;
-        dataPos    = 0;
         width      = 0;
         height     = 0;
         rgbmax     = 0;
@@ -83,7 +82,6 @@ public:
 
     uchar               *data;
     
-    int                  dataPos;
     int                  width;
     int                  height;
     int                  rgbmax;
@@ -103,7 +101,8 @@ public:
 
 KDcraw::KDcraw()
 {
-    m_cancel = false;
+    m_dataPos = 0;
+    m_cancel  = false;
     d = new KDcrawPriv;
 }
 
@@ -486,13 +485,13 @@ bool KDcraw::checkToCancelRawDecodingLoop()
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
                            int &width, int &height, int &rgbmax)
 {
+    m_cancel      = false;
+    m_dataPos     = 0;
     d->filePath   = filePath;
     d->running    = true;
     d->normalExit = false;
-    m_cancel      = false;
     d->process    = 0;
     d->data       = 0;
-    d->dataPos    = 0;
     d->width      = 0;
     d->height     = 0;
     d->rgbmax     = 0;
@@ -724,12 +723,12 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 
         // allocate buffer
         d->data    = new uchar[d->width * d->height * (d->rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
-        d->dataPos = 0;
+        m_dataPos = 0;
     }
 
     // copy data to buffer
-    memcpy(d->data + d->dataPos, buffer, buflen);
-    d->dataPos += buflen;
+    memcpy(d->data + m_dataPos, buffer, buflen);
+    m_dataPos += buflen;
 }
 
 void KDcraw::slotReceivedStderr(KProcess *, char *buffer, int buflen)
