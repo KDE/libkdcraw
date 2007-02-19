@@ -343,7 +343,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                    "stretch the image to its correct aspect ratio. In any "
                                                    "case, this option guarantees that each output pixel "
                                                    "corresponds to one RAW pixel.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
+    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
 
     // ---------------------------------------------------------------
 
@@ -358,7 +358,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                "Specify specific black point value of ouput image.<p>"));
     settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);    
     settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);    
-    //settingsBoxLayout2->setRowStretch(2, 10);   
+    settingsBoxLayout2->setRowStretch(2, 10);   
 
     insertTab(d->advSettings, i18n("Advanced"));
     
