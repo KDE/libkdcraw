@@ -15,6 +15,9 @@ METASOURCES = AUTO
 
 bin_PROGRAMS = kdcraw
 
+# The manual page of binary program.
+man_MANS = kdcraw.1
+
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
 # In fact, dcraw.c use lcms.h witch use the "inline" keyword witch do not exist in pure C 
 # implementation. The -Dinline option please compiler to see inline with this option.
@@ -26,3 +29,5 @@ kdcraw_CFLAGS = -Dinline= -w
 kdcraw_SOURCES = dcraw.c
 
 kdcraw_LDFLAGS = $(all_libraries) $(LIBJPEG) $(LCMS_LIBS) 
+
+
