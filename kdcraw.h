@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2006-12-09
- * Description : dcraw program interface
+ * Description : a tread-safe dcraw program interface
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
@@ -49,47 +49,76 @@ class LIBKDCRAW_EXPORT KDcraw : public QObject
 
 public:
 
+    /** Standard constructor. */
     KDcraw();
+
+    /** Standard destructor. */
     ~KDcraw();
 
-/** Fast and non cancelable methods witch do not require a class instance to run.*/
 public:  
 
-    /** Get the embedded preview image from RAW pictures.
+    /** Get the embedded preview image from RAW pictures. This is a fast and non cancelable 
+        method witch do not require a class instance to run.
     */
     static bool loadDcrawPreview(QImage& image, const QString& path);
 
     /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h 
-        for more details.
+        for more details. This is a fast and non cancelable method witch do not require 
+        a class instance to run.
     */ 
     static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
-/** Cancelable methods to extract RAW data witch require a class instance to run. 
-    RAW pictures decoding can take a while.*/
 public: 
+
+    /** Extract a small size of decode RAW data from 'filePath' picture file using 
+        'rawDecodingSettings' settings. This is a cancelable method witch require 
+        a class instance to run because RAW pictures decoding can take a while.
+
+        This method return:
+
+            - A byte array container ('imageData') with picture data. Pixels order is RGB. 
+              Color depth can be 8 or 16. In 8 bits you can acces to color component 
+              using (uchar*), in 16 bits using (ushort*).
+
+            - Size size of image in number of pixels ('width' and 'height').
+            - The max average of RGB components from decoded picture.
+            - 'false' is returned if decoding failed, else 'true'.  
+    */
+    bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+                            QByteArray &imageData, int &width, int &height, int &rgbmax);
+
+    /** Extract a full size of RAW data from 'filePath' picture file using 
+        'rawDecodingSettings' settings. This is a cancelable method witch require 
+        a class instance to run because RAW pictures decoding can take a while.
+        
+        This method return:
+
+            - A byte array container ('imageData') with picture data. Pixels order is RGB. 
+              Color depth can be 8 or 16. In 8 bits you can acces to color component 
+              using (uchar*), in 16 bits using (ushort*).
+
+            - Size size of image in number of pixels ('width' and 'height').
+            - The max average of RGB components from decoded picture. 
+            - 'false' is returned if decoding failed, else 'true'.  
+    */
+    bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+                        QByteArray &imageData, int &width, int &height, int &rgbmax);
 
     /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
         in a separate thread.
     */
     void cancel();
 
-    /** Extract a small size of decode RAW data using 'rawDecodingSettings' settings.
-    */
-    bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
-                            QByteArray &imageData, int &width, int &height, int &rgbmax);
-
-    /** Extract a full size of RAW data using 'rawDecodingSettings' settings.
-    */
-    bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
-                        QByteArray &imageData, int &width, int &height, int &rgbmax);
-
 protected:
     
-    bool m_cancel;
+    /** Used internally to cancel RAW decoding operation. Normally, you don't need to use it 
+        directly, excepted if you derivated this class. Usual way is to use cancel() method 
+    */
+    bool                m_cancel;
 
-    int  m_dataPos;
-
-
+    /** The settings container used to perform RAW pictures decoding. See 'rawdecodingsetting.h' 
+        for details.
+    */
     RawDecodingSettings m_rawDecodingSettings;
 
 protected:

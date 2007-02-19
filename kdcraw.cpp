@@ -2,7 +2,7 @@
  * Authors: Gilles Caulier <caulier dot gilles at gmail dot com> 
  *          Marcel Wiesweg <marcel.wiesweg@gmx.de>
  * Date   : 2006-12-09
- * Description : dcraw program interface
+ * Description : a tread-safe dcraw program interface
  *
  * Copyright 2006-2007 by Gilles Caulier and Marcel Wiesweg
  *
@@ -76,6 +76,7 @@ public:
         width      = 0;
         height     = 0;
         rgbmax     = 0;
+        dataPos    = 0;
     }
 
     bool                 running;
@@ -83,6 +84,8 @@ public:
 
     uchar               *data;
     
+
+    int                  dataPos;
     int                  width;
     int                  height;
     int                  rgbmax;
@@ -101,7 +104,6 @@ public:
 KDcraw::KDcraw()
 {
     d = new KDcrawPriv;
-    m_dataPos = 0;
     m_cancel  = false;
 }
 
@@ -498,7 +500,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
                            int &width, int &height, int &rgbmax)
 {
     m_cancel      = false;
-    m_dataPos     = 0;
+    d->dataPos     = 0;
     d->filePath   = filePath;
     d->running    = true;
     d->normalExit = false;
@@ -534,7 +536,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // Remove when porting to Qt4.
     while (d->running && !checkToCancelRecievingData())
     {
-        if (m_dataPos == 0)
+        if (d->dataPos == 0)
         {
             int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
             if (elapsedMsecs > checkpointTime)
@@ -550,13 +552,13 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             // While we waiting to recieve data, progress from 0% to 40%
             setWaitingDataProgress(0.4*part);
         }
-        else if (m_dataPos > checkpoint)
+        else if (d->dataPos > checkpoint)
         {
             // While receiving data, progress from 40% to 70%
             double delta = 0.3 + 0.4 - 0.4*part;
             int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += (int)(imageSize / (20 * delta));
-            setRecievingDataProgress(0.4*part + delta * (((float)m_dataPos)/((float)imageSize))); 
+            setRecievingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize))); 
         }
 
         QMutexLocker lock(&d->mutex);
@@ -780,12 +782,12 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 
         // allocate buffer
         d->data    = new uchar[d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
-        m_dataPos = 0;
+        d->dataPos = 0;
     }
 
     // copy data to buffer
-    memcpy(d->data + m_dataPos, buffer, buflen);
-    m_dataPos += buflen;
+    memcpy(d->data + d->dataPos, buffer, buflen);
+    d->dataPos += buflen;
 }
 
 void KDcraw::slotReceivedStderr(KProcess *, char *buffer, int buflen)
