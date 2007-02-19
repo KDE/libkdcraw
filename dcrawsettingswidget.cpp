@@ -118,6 +118,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QGridLayout* settingsBoxLayout = new QGridLayout(d->stdSettings, 11, 2, KDialog::spacingHint());
 
     // ---------------------------------------------------------------
+
+    int line = 0;
     
     d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), d->stdSettings);
     QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enabled, all RAW files will be decoded to 16-bit "
@@ -130,9 +132,16 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 0);
     
     if (sixteenBitsOption)
+    {
         d->sixteenBitsImage->show();
+        line = 1;
+    }
     else
+    {
         d->sixteenBitsImage->hide();
+    }
+
+    // ---------------------------------------------------------------
 
     d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), d->stdSettings);
     QWhatsThis::add(d->fourColorCheckBox, i18n("<p><b>Interpolate RGB as four colors</b><p>"
@@ -145,7 +154,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                           "To resume, this option blurs the image "
                                           "a little, but it eliminates false 2x2 mesh patterns "
                                           "with VNG quality method or mazes with AHD quality method."));
-    settingsBoxLayout->addMultiCellWidget(d->fourColorCheckBox, 1, 1, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->fourColorCheckBox, line, line, 0, 0);    
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -153,11 +163,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                   .arg(DcrawBinary::internalVersion()), d->stdSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     QToolTip::add(dcrawVersion, i18n("Visit dcraw project website"));
-
-    if (sixteenBitsOption)
-        settingsBoxLayout->addMultiCellWidget(dcrawVersion, 0, 0, 2, 2);
-    else
-        settingsBoxLayout->addMultiCellWidget(dcrawVersion, 1, 1, 2, 2);
+    settingsBoxLayout->addMultiCellWidget(dcrawVersion, 0, 0, 2, 2);
 
     // ---------------------------------------------------------------
 
@@ -167,7 +173,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                          "The default is to use fixed daylight values, "
                                          "calculated from sample images. "
                                          "If this can't be found, reverts to the default."));
-    settingsBoxLayout->addMultiCellWidget(d->cameraWBCheckBox, 2, 2, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->cameraWBCheckBox, line, line, 0, 2);    
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -176,7 +183,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                   "The default is to use a fixed color balance "
                                                   "based on a white card photographed "
                                                   "in sunlight.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->autoColorBalanceCheckBox, 3, 3, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->autoColorBalanceCheckBox, line, line, 0, 2);    
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -192,8 +200,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                              "shades of pink<p>"
                                              "<b>Reconstruct</b>: reconstruct highlights using a "
                                              "level value."));
-    settingsBoxLayout->addMultiCellWidget(d->unclipColorLabel, 4, 4, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->unclipColorComboBox, 4, 4, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->unclipColorLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->unclipColorComboBox, line, line, 1, 2);    
+    line++;
 
     d->reconstructLabel   = new QLabel(i18n("Level:"), d->stdSettings);
     d->reconstructSpinBox = new KIntNumInput(d->stdSettings);
@@ -201,8 +210,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add(d->reconstructSpinBox, i18n("<p><b>Level</b><p>"
                                                "Specify the reconstruct highlights level of ouput image. "
                                                "Low value favor whites and high value favor colors."));
-    settingsBoxLayout->addMultiCellWidget(d->reconstructLabel, 5, 5, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->reconstructSpinBox, 5, 5, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->reconstructLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->reconstructSpinBox, line, line, 1, 2);    
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -213,8 +223,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add(d->brightnessSpinBox, i18n("<p><b>Brighness</b><p>"
                                                "Specify the brightness level of ouput image."
                                                "The default value is 1.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->brightnessLabel, 6, 6, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->brightnessSpinBox, 6, 6, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->brightnessLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->brightnessSpinBox, line, line, 1, 2);    
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -241,8 +252,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->RAWQualityLabel, 7, 7, 0, 0); 
-    settingsBoxLayout->addMultiCellWidget(d->RAWQualityComboBox, 7, 7, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityLabel, line, line, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityComboBox, line, line, 1, 2);
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -251,7 +263,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                      "Toggle bilateral filter to smooth noise while "
                      "preserving edges. This option can be use to reduce low noise. The pictures edges "
                      "are preserved because it is applied in CIELab color space instead of RGB.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, 8, 8, 0, 2);
+    settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, line, line, 0, 2);
+    line++;
 
     d->NRSigmaDomain = new KDoubleNumInput(d->stdSettings);
     d->NRSigmaDomain->setValue(2.0);
@@ -261,8 +274,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add( d->NRSigmaDomain, i18n("<p><b>Domain</b><p>"
                                        "Set here the noise reduction Sigma Domain in units of pixels. "
                                        "The default value is 2.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomainlabel, 9, 9, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomain, 9, 9, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomainlabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomain, line, line, 1, 2);
+    line++;
 
     d->NRSigmaRange = new KDoubleNumInput(d->stdSettings);
     d->NRSigmaRange->setValue(4.0);
@@ -272,8 +286,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add( d->NRSigmaRange, i18n("<p><b>Range</b><p>"
                                            "Set here the noise reduction Sigma Range in units of "
                                            "CIELab colorspace. The default value is 4.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRangelabel, 10, 10, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRange, 10, 10, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRangelabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRange, line, line, 1, 2);
+    line++;
 
     // ---------------------------------------------------------------
 
@@ -300,8 +315,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Kodak, that offers an especially large gamut designed for use with "
                 "photographic output in mind."));
 
-    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, 11, 11, 0, 0); 
-    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 11, 11, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, line, line, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, line, line, 1, 2);
 
     if (outputColorSpaceOption)
     {
