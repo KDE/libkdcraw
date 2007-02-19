@@ -21,9 +21,9 @@
 #ifndef DCRAW_SETTINGS_WIDGET_H
 #define DCRAW_SETTINGS_WIDGET_H
 
-// Qt includes.
+// KDE includes.
 
-#include <qwidget.h>
+#include <ktabwidget.h>
 
 // Local Includes.
 
@@ -35,7 +35,7 @@ namespace KDcrawIface
 
 class DcrawSettingsWidgetPriv;
 
-class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QWidget
+class LIBKDCRAW_EXPORT DcrawSettingsWidget : public KTabWidget
 {
     Q_OBJECT
     
@@ -44,7 +44,7 @@ public:
     DcrawSettingsWidget(QWidget *parent, 
                         bool sixteenBitsOption=false, 
                         bool outputColorSpaceOption=true, 
-                        bool dontStretchPixelsOption=false);
+                        bool showAdvancedOptions=false);
     ~DcrawSettingsWidget();
 
     bool   sixteenBits();
