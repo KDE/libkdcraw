@@ -230,7 +230,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->blackPointCheckBox = new QCheckBox(i18n("Black point"), this);
     QWhatsThis::add( d->blackPointCheckBox, i18n("<p><b>Black point</b><p>"
                                             "Use a specific black point value to decode RAW pictures. "
-                                            "If you leave off this option, the Black Point value will be "
+                                            "If you set this option off, the Black Point value will be "
                                             "automaticly computed.<p>"));
     d->blackPointSpinBox = new KIntNumInput(this);
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
