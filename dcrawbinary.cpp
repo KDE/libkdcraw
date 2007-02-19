@@ -131,7 +131,7 @@ bool DcrawBinary::versionIsRight() const
     if (d->version.isNull() || !isAvailable())
         return false;
 
-    if (d->version.toFloat() == internalVersion().toFloat())
+    if (d->version.toFloat() < internalVersion().toFloat())
         return true;
 
     return false;
