@@ -1,4 +1,4 @@
-SUBDIRS = dcraw 
+SUBDIRS = dcraw icons 
 METASOURCES = AUTO
 
 INCLUDES= $(all_includes)
