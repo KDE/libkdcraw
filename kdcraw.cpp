@@ -637,6 +637,7 @@ void KDcraw::startProcess()
 
     // run dcraw with options:
     // -c : write to stdout
+    // -v : verboze mode.
     //
     // -4 : 16bit ppm output
     //
@@ -654,6 +655,7 @@ void KDcraw::startProcess()
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
+    *d->process << "-v";
 
     if (m_rawDecodingSettings.sixteenBitsImage)
         *d->process << "-4";
