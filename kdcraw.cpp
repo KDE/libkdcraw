@@ -681,6 +681,8 @@ void KDcraw::startProcess()
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
     // -h : Output a half-size color image. Twice as fast as -q 0.
+    // -b : set Brightness value.
+    // -k : set Black Point value.
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
@@ -710,6 +712,12 @@ void KDcraw::startProcess()
     *d->process << "-b";
     *d->process << QString::number(m_rawDecodingSettings.brightness);
 
+    if (m_rawDecodingSettings.enableBlackPoint)
+    {
+        *d->process << "-k";
+        *d->process << QString::number(m_rawDecodingSettings.blackPoint);
+    }
+
     *d->process << "-q";
     *d->process << QString::number(m_rawDecodingSettings.RAWQuality);
 
@@ -727,7 +735,10 @@ void KDcraw::startProcess()
 
     QString args;
     for (uint i = 0 ; i < d->process->args().count(); i++)
+    {
         args.append(d->process->args()[i]);
+        args.append(QString(" "));
+    }
 
     qDebug("Running RAW decoding command: %s", args.ascii());
 

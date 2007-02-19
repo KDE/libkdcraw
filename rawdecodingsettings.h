@@ -56,10 +56,12 @@ public:
     {
         sixteenBitsImage        = false;
         enableNoiseReduction    = false;
+        enableBlackPoint        = false;
         NRSigmaDomain           = 2.0;
         NRSigmaRange            = 4.0;
 
         brightness              = 1.0;
+        blackPoint              = 0;
         RAWQuality              = BILINEAR;
         outputColorSpace        = SRGB;
 
@@ -80,10 +82,12 @@ public:
     {
         sixteenBitsImage        = true;
         enableNoiseReduction    = false;
+        enableBlackPoint        = false;
         NRSigmaDomain           = 2.0;
         NRSigmaRange            = 4.0;
 
         brightness              = 1.0;
+        blackPoint              = 0;
         RAWQuality              = BILINEAR;
         outputColorSpace        = SRGB;
 
@@ -158,6 +162,14 @@ public:
     /** Brightness of output image. 
     */
     float brightness;   
+
+    /** Set on the black point setting to decode RAW image.
+    */
+    bool  enableBlackPoint;
+
+    /** Black Point value of output image. 
+    */
+    int blackPoint;   
 
     /** The output color space used to decoded RAW data. See OutputColorSpace 
         values for details. 

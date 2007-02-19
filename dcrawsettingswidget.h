@@ -53,8 +53,10 @@ public:
     bool   useFourColor();
     bool   useDontStretchPixels();
     bool   useNoiseReduction();
+    bool   useBlackPoint();
     int    unclipColor();
     double brightness();
+    int    blackPoint();
     double sigmaDomain();
     double sigmaRange();
 
@@ -67,8 +69,10 @@ public:
     void   setFourColor(bool b);
     void   setDontStretchPixels(bool b);
     void   setNoiseReduction(bool b);
+    void   setUseBlackPoint(bool b);
     void   setUnclipColor(int v);
     void   setBrightness(double b);
+    void   setBlackPoint(int b);
     void   setSigmaDomain(double b);
     void   setSigmaRange(double b);
     void   setQuality(RawDecodingSettings::DecodingQuality q);

@@ -56,6 +56,8 @@ public:
         fourColorCheckBox         = 0;
         brightnessLabel           = 0;
         brightnessSpinBox         = 0;
+        blackPointCheckBox        = 0;
+        blackPointSpinBox         = 0;
         autoColorBalanceCheckBox  = 0;
         unclipColorLabel          = 0;
         dontStretchPixelsCheckBox = 0;
@@ -85,6 +87,7 @@ public:
     QComboBox       *unclipColorComboBox;
     QComboBox       *outputColorSpaceComboBox;
 
+    QCheckBox       *blackPointCheckBox;
     QCheckBox       *sixteenBitsImage;
     QCheckBox       *cameraWBCheckBox;
     QCheckBox       *fourColorCheckBox;
@@ -93,7 +96,8 @@ public:
     QCheckBox       *enableNoiseReduction;
 
     KIntNumInput    *reconstructSpinBox;
-
+    KIntNumInput    *blackPointSpinBox;
+ 
     KDoubleNumInput *brightnessSpinBox;
     KDoubleNumInput *NRSigmaDomain;
     KDoubleNumInput *NRSigmaRange;
@@ -104,7 +108,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                    : QWidget(parent)
 {
     d = new DcrawSettingsWidgetPriv;
-    QGridLayout* settingsBoxLayout = new QGridLayout(this, 12, 2, KDialog::spacingHint());
+    QGridLayout* settingsBoxLayout = new QGridLayout(this, 13, 2, KDialog::spacingHint());
 
     // ---------------------------------------------------------------
     
@@ -223,6 +227,20 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
+    d->blackPointCheckBox = new QCheckBox(i18n("Black point"), this);
+    QWhatsThis::add( d->blackPointCheckBox, i18n("<p><b>Black point</b><p>"
+                                            "Use a specific black point value to decode RAW pictures. "
+                                            "If you leave off this option, the Black Point value will be "
+                                            "automaticly computed.<p>"));
+    d->blackPointSpinBox = new KIntNumInput(this);
+    d->blackPointSpinBox->setRange(0, 1000, 1, true);
+    QWhatsThis::add(d->blackPointSpinBox, i18n("<p><b>Black point value</b><p>"
+                                               "Specify specific black point value of ouput image.<p>"));
+    settingsBoxLayout->addMultiCellWidget(d->blackPointCheckBox, 8, 8, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->blackPointSpinBox, 8, 8, 1, 2);    
+
+    // ---------------------------------------------------------------
+
     d->RAWQualityLabel    = new QLabel(i18n("Quality (interpolation):"), this);
     d->RAWQualityComboBox = new QComboBox( false, this );
     d->RAWQualityComboBox->insertItem( i18n("Bilinear"), 0 );
@@ -246,8 +264,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->RAWQualityLabel, 8, 8, 0, 0); 
-    settingsBoxLayout->addMultiCellWidget(d->RAWQualityComboBox, 8, 8, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityLabel, 9, 9, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityComboBox, 9, 9, 1, 2);
 
     // ---------------------------------------------------------------
 
@@ -256,7 +274,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                      "Toggle bilateral filter to smooth noise while "
                      "preserving edges. This option can be use to reduce low noise. The pictures edges "
                      "are preserved because it is applied in CIELab color space instead of RGB.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, 9, 9, 0, 2);
+    settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, 10, 10, 0, 2);
 
     d->NRSigmaDomain = new KDoubleNumInput(this);
     d->NRSigmaDomain->setValue(2.0);
@@ -266,8 +284,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add( d->NRSigmaDomain, i18n("<p><b>Domain</b><p>"
                                        "Set here the noise reduction Sigma Domain in units of pixels. "
                                        "The default value is 2.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomainlabel, 10, 10, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomain, 10, 10, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomainlabel, 11, 11, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomain, 11, 11, 1, 2);
 
     d->NRSigmaRange = new KDoubleNumInput(this);
     d->NRSigmaRange->setValue(4.0);
@@ -277,8 +295,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add( d->NRSigmaRange, i18n("<p><b>Range</b><p>"
                                            "Set here the noise reduction Sigma Range in units of "
                                            "CIELab colorspace. The default value is 4.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRangelabel, 11, 11, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRange, 11, 11, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRangelabel, 12, 12, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRange, 12, 12, 1, 2);
 
     // ---------------------------------------------------------------
 
@@ -305,8 +323,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Kodak, that offers an especially large gamut designed for use with "
                 "photographic output in mind."));
 
-    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, 12, 12, 0, 0); 
-    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 12, 12, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, 13, 13, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 13, 13, 1, 2);
 
     if (outputColorSpaceOption)
     {
@@ -326,6 +344,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SLOT(slotNoiseReductionToggled(bool)));
+
+    connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
+            d->blackPointSpinBox, SLOT(setEnabled(bool)));
 
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
@@ -350,6 +371,8 @@ void DcrawSettingsWidget::setDefaultSettings()
     setDontStretchPixels(false);
     setNoiseReduction(false);
     setBrightness(1.0);
+    setUseBlackPoint(false);
+    setBlackPoint(0);
     setSigmaDomain(2.0);
     setSigmaRange(4.0);
     setQuality(RawDecodingSettings::BILINEAR); 
@@ -422,6 +445,16 @@ bool DcrawSettingsWidget::useDontStretchPixels()
 double DcrawSettingsWidget::brightness()
 {
     return d->brightnessSpinBox->value();
+}
+
+bool DcrawSettingsWidget::useBlackPoint()
+{
+    return d->blackPointCheckBox->isChecked();
+}
+
+int DcrawSettingsWidget::blackPoint()
+{
+    return d->blackPointSpinBox->value();
 }
 
 void DcrawSettingsWidget::setCameraWB(bool b)
@@ -507,6 +540,17 @@ void DcrawSettingsWidget::setDontStretchPixels(bool b)
 void DcrawSettingsWidget::setBrightness(double b)
 {
     d->brightnessSpinBox->setValue(b);
+}
+
+void DcrawSettingsWidget::setBlackPoint(int b)
+{
+    d->blackPointSpinBox->setValue(b);
+}
+
+void DcrawSettingsWidget::setUseBlackPoint(bool b)
+{
+    d->blackPointCheckBox->setChecked(b);
+    d->blackPointSpinBox->setEnabled(b);
 }
 
 void DcrawSettingsWidget::setSigmaDomain(double b)
