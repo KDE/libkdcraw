@@ -303,7 +303,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     }
 
     // Extract Camera Maker.
-    QString makeHeader("Make: ");
+    QString makeHeader("Camera: ");
     pos = dcrawInfo.find(makeHeader);
     if (pos != -1)
     {
@@ -320,6 +320,16 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         QString model = dcrawInfo.mid(pos).section('\n', 0, 0);
         model.remove(0, modelHeader.length());
         identify.model = model;
+    }
+
+    // Extract DNG Version.
+    QString DNGVersionHeader("DNG Version: ");
+    pos = dcrawInfo.find(DNGVersionHeader);
+    if (pos != -1)
+    {
+        QString DNGVersion = dcrawInfo.mid(pos).section('\n', 0, 0);
+        DNGVersion.remove(0, DNGVersionHeader.length());
+        identify.DNGVersion = DNGVersion;
     }
 
     // Extract ISO Speed.
@@ -423,6 +433,16 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
             identify.hasSecondaryPixel = false;
     }
 
+    // Extract Pixel Aspect Ratio.
+    QString aspectRatioHeader("Pixel Aspect Ratio: ");
+    pos = dcrawInfo.find(aspectRatioHeader);
+    if (pos != -1)
+    {
+        QString aspectRatio = dcrawInfo.mid(pos).section('\n', 0, 0);
+        aspectRatio.remove(0, aspectRatioHeader.length());
+        identify.pixelAspectRatio = aspectRatio.toFloat();
+    }
+
     // Extract Raw Colors.
     QString rawColorsHeader("Raw colors: ");
     pos = dcrawInfo.find(rawColorsHeader);
@@ -431,6 +451,16 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         QString rawColors = dcrawInfo.mid(pos).section('\n', 0, 0);
         rawColors.remove(0, rawColorsHeader.length());
         identify.rawColors = rawColors.toInt();
+    }
+
+    // Extract Filter Pattern.
+    QString filterHeader("Filter pattern: ");
+    pos = dcrawInfo.find(filterHeader);
+    if (pos != -1)
+    {
+        QString filter = dcrawInfo.mid(pos).section('\n', 0, 0);
+        filter.remove(0, filterHeader.length());
+        identify.filterPattern = filter;
     }
 
     // Extract Daylight Multipliers.
@@ -645,9 +675,8 @@ void KDcraw::startProcess()
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
     // -n : Don't clip colors
-    // -s : Use secondary pixels (Fuji Super CCD SR only)
-    // -q : Use simple bilinear interpolation for quick results. Warning: this option require arguments 
-    //      depending dcraw version (look below)
+    // -j : Do not stretch the image to its correct aspect ratio.
+    // -q : Use an interpolation method.
     // -B : Use bilateral filter to smooth noise while preserving edges.
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
@@ -672,8 +701,8 @@ void KDcraw::startProcess()
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
         *d->process << "-f";
 
-    if (m_rawDecodingSettings.SuperCCDsecondarySensor)
-        *d->process << "-s";
+    if (m_rawDecodingSettings.DontStretchPixels)
+        *d->process << "-j";
 
     *d->process << "-H";
     *d->process << QString::number(m_rawDecodingSettings.unclipColors);

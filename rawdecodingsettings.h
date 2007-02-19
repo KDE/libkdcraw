@@ -64,7 +64,7 @@ public:
         outputColorSpace        = SRGB;
 
         RGBInterpolate4Colors   = false;
-        SuperCCDsecondarySensor = false;
+        DontStretchPixels       = false;
         unclipColors            = 0;
         cameraColorBalance      = true;
         automaticColorBalance   = true;
@@ -88,7 +88,7 @@ public:
         outputColorSpace        = SRGB;
 
         RGBInterpolate4Colors   = false;
-        SuperCCDsecondarySensor = false;
+        DontStretchPixels       = false;
         unclipColors            = 0;
         cameraColorBalance      = true;
         automaticColorBalance   = true;
@@ -121,10 +121,11 @@ public:
     */
     bool  RGBInterpolate4Colors;
 
-    /** For Fuji Super CCD SR cameras, use the secondary sensors. In effect 
-        underexposing the image by four stops to reveal detail in the highlights. 
+    /** For cameras with non-square pixels, do not stretch the image to its 
+        correct aspect ratio. In any case, this option guarantees that each 
+        output pixel corresponds to one RAW pixel. 
     */
-    bool  SuperCCDsecondarySensor;
+    bool  DontStretchPixels;
     
     /** Unclip Highlight color level: 
         0   = Clip all highlights to solid white.

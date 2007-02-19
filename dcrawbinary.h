@@ -72,7 +72,7 @@ public:
 
 private slots:
 
-    void slotReadStderrFromDcraw(KProcess*, char*, int);
+    void slotReadStdoutFromDcraw(KProcess*, char*, int);
 
 private:
 

@@ -83,19 +83,19 @@ void DcrawBinary::checkSystem()
     process.clearArguments();
     process << path();    
 
-    connect(&process, SIGNAL(receivedStderr(KProcess *, char*, int)),
-            this, SLOT(slotReadStderrFromDcraw(KProcess*, char*, int)));
+    connect(&process, SIGNAL(receivedStdout(KProcess *, char*, int)),
+            this, SLOT(slotReadStdoutFromDcraw(KProcess*, char*, int)));
 
-    d->available = process.start(KProcess::Block, KProcess::Stderr);
+    d->available = process.start(KProcess::Block, KProcess::Stdout);
 }
 
-void DcrawBinary::slotReadStderrFromDcraw(KProcess*, char* buffer, int buflen)
+void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 {
-    // The dcraw ouput look like this : Raw Photo Decoder "dcraw" v8.30...
-    QString dcrawHeader("Raw Photo Decoder \"dcraw\" v");
+    // The dcraw ouput look like this : Raw photo decoder "dcraw" v8.54...
+    QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
-    QString stdErr    = QString::fromLocal8Bit(buffer, buflen);
-    QString firstLine = stdErr.section('\n', 1, 1);    
+    QString stdout    = QString::fromLocal8Bit(buffer, buflen);
+    QString firstLine = stdout.section('\n', 1, 1);    
 
     if (firstLine.startsWith(dcrawHeader))
     {
@@ -123,7 +123,7 @@ QString DcrawBinary::internalVersion()
 {
     // The version of dcraw include with this library. 
     // Look into dcraw/dcraw.c implementation.
-    return QString("8.41");   
+    return QString("8.54");   
 }
 
 bool DcrawBinary::versionIsRight() const

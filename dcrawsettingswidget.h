@@ -41,14 +41,17 @@ class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QWidget
     
 public:
 
-    DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption=false, bool outputColorSpaceOption=true);
+    DcrawSettingsWidget(QWidget *parent, 
+                        bool sixteenBitsOption=false, 
+                        bool outputColorSpaceOption=true, 
+                        bool dontStretchPixelsOption=false);
     ~DcrawSettingsWidget();
 
     bool   sixteenBits();
     bool   useCameraWB();
     bool   useAutoColorBalance();
     bool   useFourColor();
-    bool   useSecondarySensor();
+    bool   useDontStretchPixels();
     bool   useNoiseReduction();
     int    unclipColor();
     double brightness();
@@ -62,7 +65,7 @@ public:
     void   setCameraWB(bool b);
     void   setAutoColorBalance(bool b);
     void   setFourColor(bool b);
-    void   setSecondarySensor(bool b);
+    void   setDontStretchPixels(bool b);
     void   setNoiseReduction(bool b);
     void   setUnclipColor(int v);
     void   setBrightness(double b);

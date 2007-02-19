@@ -51,26 +51,26 @@ public:
 
     DcrawSettingsWidgetPriv()
     {
-        sixteenBitsImage         = 0;
-        cameraWBCheckBox         = 0;
-        fourColorCheckBox        = 0;
-        brightnessLabel          = 0;
-        brightnessSpinBox        = 0;
-        autoColorBalanceCheckBox = 0;
-        unclipColorLabel         = 0;
-        secondarySensorCheckBox  = 0;
-        RAWQualityComboBox       = 0;
-        RAWQualityLabel          = 0;
-        enableNoiseReduction     = 0;
-        NRSigmaDomain            = 0;
-        NRSigmaRange             = 0;
-        NRSigmaRangelabel        = 0;
-        NRSigmaDomainlabel       = 0;
-        unclipColorComboBox      = 0;
-        reconstructLabel         = 0;
-        reconstructSpinBox       = 0;
-        outputColorSpaceLabel    = 0;
-        outputColorSpaceComboBox = 0;
+        sixteenBitsImage          = 0;
+        cameraWBCheckBox          = 0;
+        fourColorCheckBox         = 0;
+        brightnessLabel           = 0;
+        brightnessSpinBox         = 0;
+        autoColorBalanceCheckBox  = 0;
+        unclipColorLabel          = 0;
+        dontStretchPixelsCheckBox = 0;
+        RAWQualityComboBox        = 0;
+        RAWQualityLabel           = 0;
+        enableNoiseReduction      = 0;
+        NRSigmaDomain             = 0;
+        NRSigmaRange              = 0;
+        NRSigmaRangelabel         = 0;
+        NRSigmaDomainlabel        = 0;
+        unclipColorComboBox       = 0;
+        reconstructLabel          = 0;
+        reconstructSpinBox        = 0;
+        outputColorSpaceLabel     = 0;
+        outputColorSpaceComboBox  = 0;
     }
 
     QLabel          *brightnessLabel;
@@ -89,7 +89,7 @@ public:
     QCheckBox       *cameraWBCheckBox;
     QCheckBox       *fourColorCheckBox;
     QCheckBox       *autoColorBalanceCheckBox;
-    QCheckBox       *secondarySensorCheckBox;
+    QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
 
     KIntNumInput    *reconstructSpinBox;
@@ -99,7 +99,8 @@ public:
     KDoubleNumInput *NRSigmaRange;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, bool outputColorSpaceOption)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
+                                         bool outputColorSpaceOption, bool dontStretchPixelsOption)
                    : QWidget(parent)
 {
     d = new DcrawSettingsWidgetPriv;
@@ -168,14 +169,19 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    d->secondarySensorCheckBox = new QCheckBox(i18n("Use Super-CCD secondary sensors"), this);
-    QWhatsThis::add( d->secondarySensorCheckBox, i18n("<p><b>Use Super CCD secondary sensors</b><p>"
-                                                 "For Fuji Super CCD SR cameras, use the "
-                                                 "secondary sensors, in effect underexposing "
-                                                 "the image by four stops to reveal "
-                                                 "detail in the highlights. For all other camera "
-                                                 "types this option is ignored.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->secondarySensorCheckBox, 4, 4, 0, 2);   
+    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Don't stretch or rotate pixels"), this);
+    QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Don't stretch or rotate pixels</b><p>"
+                                                   "For Fuji Super CCD cameras, show the image tilted 45 "
+                                                   "degrees. For cameras with non-square pixels, do not "
+                                                   "stretch the image to its correct aspect ratio. In any "
+                                                   "case, this option guarantees that each output pixel "
+                                                   "corresponds to one RAW pixel.<p>"));
+    settingsBoxLayout->addMultiCellWidget(d->dontStretchPixelsCheckBox, 4, 4, 0, 2);   
+
+    if (dontStretchPixelsOption)
+        d->dontStretchPixelsCheckBox->show();
+    else
+        d->dontStretchPixelsCheckBox->hide();
 
     // ---------------------------------------------------------------
 
@@ -341,7 +347,7 @@ void DcrawSettingsWidget::setDefaultSettings()
     setAutoColorBalance(true);
     setFourColor(false);
     setUnclipColor(0);
-    setSecondarySensor(false);
+    setDontStretchPixels(false);
     setNoiseReduction(false);
     setBrightness(1.0);
     setSigmaDomain(2.0);
@@ -408,9 +414,9 @@ int DcrawSettingsWidget::unclipColor()
     }
 }
 
-bool DcrawSettingsWidget::useSecondarySensor()
+bool DcrawSettingsWidget::useDontStretchPixels()
 {
-    return d->secondarySensorCheckBox->isChecked();
+    return d->dontStretchPixelsCheckBox->isChecked();
 }
 
 double DcrawSettingsWidget::brightness()
@@ -493,9 +499,9 @@ void DcrawSettingsWidget::setUnclipColor(int v)
     slotUnclipColorActivated(d->unclipColorComboBox->currentItem());
 }
 
-void DcrawSettingsWidget::setSecondarySensor(bool b)
+void DcrawSettingsWidget::setDontStretchPixels(bool b)
 {
-    d->secondarySensorCheckBox->setChecked(b);
+    d->dontStretchPixelsCheckBox->setChecked(b);
 }
 
 void DcrawSettingsWidget::setBrightness(double b)

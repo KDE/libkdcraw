@@ -45,6 +45,7 @@ public:
         exposureTime      = -1.0;
         aperture          = -1.0;
         focalLength       = -1.0;
+        pixelAspectRatio  = 1.0;    // Default value. This can be unavailable (depending of camera model).
         rawColors         = -1;
         hasIccProfile     = false;
         isDecodable       = false;
@@ -60,13 +61,17 @@ public:
     
     bool isEmpty()
     {
-        if ( model.isEmpty()      && 
-             exposureTime == -1.0 && 
-             aperture     == -1.0 && 
-             focalLength  == -1.0 && 
-             sensitivity  == -1   && 
-             rawColors    == -1   &&
-             !dateTime.isValid()  && 
+        if ( make.isEmpty()          &&
+             model.isEmpty()         &&
+             filterPattern.isEmpty() &&
+             DNGVersion.isEmpty()    &&
+             exposureTime == -1.0    && 
+             aperture     == -1.0    && 
+             focalLength  == -1.0    && 
+             pixelAspectRatio == 1.0 &&
+             sensitivity  == -1      && 
+             rawColors    == -1      &&
+             !dateTime.isValid()     && 
              !imageSize.isValid() )
             return true;
         else
@@ -84,12 +89,16 @@ public:
     float     exposureTime;       // ==> 1/exposureTime = exposure time in seconds.
     float     aperture;           // ==> Aperture value in APEX.
     float     focalLength;        // ==> Focal Length value in mm.
+    float     pixelAspectRatio;   // The pixel Aspect Ratio if != 1.0. 
+                                  // NOTE: if == 1.0, dcraw do not show this value.
 
     double    daylightMult[3];    // White color balance settings.
     double    cameraMult[4];
 
     QString   make;               // The camera maker.
     QString   model;              // The camera model.
+    QString   filterPattern;      // The demosaising filter pattern.
+    QString   DNGVersion;         // The DNG version. NOTE: only show with DNG RAW files.
 
     QDateTime dateTime;           // Date & time when have been taken the picture.
 
