@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libkdcraw
 Description: KDE interface library for dcraw command line program to decode RAW picture files 
 Requires:
-Version: 0.1.0
+Version: 0.1.0-beta1+svn
 Libs: -L${libdir} -lkdcraw
 Cflags: -I${includedir}
