@@ -553,7 +553,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     int fileSize         = QFileInfo(filePath).size();
     
     // This is the magic number that describes how fast the function grows
-    // It _should_ be dependent on how fast the computer is, but we dont have this piece of information
+    // It _should_ be dependent on how fast the computer is, but we do not have this piece of information
     // So this is a number that works well on my computer.
     double K50         = 3000.0*fileSize;
     double part        = 0;
@@ -579,7 +579,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
             part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
 
-            // While we waiting to recieve data, progress from 0% to 40%
+            // While we waiting to receive data, progress from 0% to 40%
             setWaitingDataProgress(0.4*part);
         }
         else if (d->dataPos > checkpoint)

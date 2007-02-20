@@ -77,7 +77,7 @@ public:
         This method return:
 
             - A byte array container ('imageData') with picture data. Pixels order is RGB. 
-              Color depth can be 8 or 16. In 8 bits you can acces to color component 
+              Color depth can be 8 or 16. In 8 bits you can access to color component 
               using (uchar*), in 16 bits using (ushort*).
 
             - Size size of image in number of pixels ('width' and 'height').
@@ -94,7 +94,7 @@ public:
         This method return:
 
             - A byte array container ('imageData') with picture data. Pixels order is RGB. 
-              Color depth can be 8 or 16. In 8 bits you can acces to color component 
+              Color depth can be 8 or 16. In 8 bits you can access to color component 
               using (uchar*), in 16 bits using (ushort*).
 
             - Size size of image in number of pixels ('width' and 'height').
@@ -140,20 +140,20 @@ protected:
     */
     virtual bool checkToCancelWaitingData();
 
-    /** Re-implement this method to control the cancelisation of loop witch recieve data 
-        from RAW decoding process with your propers envirronement. 
+    /** Re-implement this method to control the cancelisation of the loop which receives data 
+        from RAW decoding process with your proper environment. 
         By default, this method check if m_cancel is true.
     */
     virtual bool checkToCancelRecievingData();
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
-        internal loop without feedback) with your propers environnement. By default, this method do nothing.
+        internal loop without feedback) with your proper environment. By default, this method do nothing.
         Progress value average for this stage is 0%-n%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
     virtual void setWaitingDataProgress(double value);
 
     /** Re-implement this method to control the progress value during RAW decoding (when dcraw return data)
-        with your propers environnement. By default, this method do nothing.
+        with your proper environment. By default, this method do nothing.
         Progress value average for this stage is n%-70%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
     virtual void setRecievingDataProgress(double value);

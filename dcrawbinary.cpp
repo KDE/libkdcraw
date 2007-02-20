@@ -43,7 +43,7 @@ public:
     DcrawBinaryPriv()
     {
         available = false;
-        version   = QString::null;
+        version = QString::null;
     }
 
     bool    available;
@@ -91,7 +91,7 @@ void DcrawBinary::checkSystem()
 
 void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 {
-    // The dcraw ouput look like this : Raw photo decoder "dcraw" v8.54...
+    // The dcraw output looks like this : Raw photo decoder "dcraw" v8.54...
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
     QString stdout    = QString::fromLocal8Bit(buffer, buflen);
@@ -151,7 +151,7 @@ void DcrawBinary::checkReport()
                           "to handle any Raw images. "
                           "Please check the installation of libkdcraw package on your computer.")
                           .arg(path()),
-                     QString::null,
+                     QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
         return;
@@ -169,7 +169,7 @@ void DcrawBinary::checkReport()
                           "Please check the installation of libkdcraw package on your computer.")
                           .arg(path())
                           .arg(version()),
-                     QString::null,
+                     QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
     }

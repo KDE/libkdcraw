@@ -219,7 +219,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->reconstructSpinBox = new KIntNumInput(d->stdSettings);
     d->reconstructSpinBox->setRange(0, 7, 1, true);
     QWhatsThis::add(d->reconstructSpinBox, i18n("<p><b>Level</b><p>"
-                                               "Specify the reconstruct highlights level of ouput image. "
+                                               "Specify the reconstruct highlights level of output image. "
                                                "Low value favor whites and high value favor colors."));
     settingsBoxLayout->addMultiCellWidget(d->reconstructLabel, line, line, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->reconstructSpinBox, line, line, 1, 2);    
@@ -232,7 +232,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->brightnessSpinBox->setPrecision(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
     QWhatsThis::add(d->brightnessSpinBox, i18n("<p><b>Brighness</b><p>"
-                                               "Specify the brightness level of ouput image."
+                                               "Specify the brightness level of output image."
                                                "The default value is 1.0.<p>"));
     settingsBoxLayout->addMultiCellWidget(d->brightnessLabel, line, line, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->brightnessSpinBox, line, line, 1, 2);    
@@ -362,11 +362,11 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add( d->blackPointCheckBox, i18n("<p><b>Black point</b><p>"
                                             "Use a specific black point value to decode RAW pictures. "
                                             "If you set this option off, the Black Point value will be "
-                                            "automaticly computed.<p>"));
+                                            "automatically computed.<p>"));
     d->blackPointSpinBox = new KIntNumInput(d->advSettings);
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
     QWhatsThis::add(d->blackPointSpinBox, i18n("<p><b>Black point value</b><p>"
-                                               "Specify specific black point value of ouput image.<p>"));
+                                               "Specify specific black point value of output image.<p>"));
     settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);    
     settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);    
 
