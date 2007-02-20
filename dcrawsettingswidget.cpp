@@ -183,7 +183,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                          "Use the camera's custom white-balance settings. "
                                          "The default is to use fixed daylight values, "
                                          "calculated from sample images. "
-                                         "If this can't be found, reverts to the default."));
+                                         "If this can not be found, reverts to the default."));
     settingsBoxLayout->addMultiCellWidget(d->cameraWBCheckBox, line, line, 0, 2);    
     line++;
 
@@ -347,8 +347,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->advSettings                  = new QWidget(this);
     QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings, 7, 2, KDialog::spacingHint());
 
-    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Don't stretch or rotate pixels"), d->advSettings);
-    QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Don't stretch or rotate pixels</b><p>"
+    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->advSettings);
+    QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Do not stretch or rotate pixels</b><p>"
                                                    "For Fuji Super CCD cameras, show the image tilted 45 "
                                                    "degrees. For cameras with non-square pixels, do not "
                                                    "stretch the image to its correct aspect ratio. In any "

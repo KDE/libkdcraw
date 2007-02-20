@@ -161,7 +161,7 @@ void DcrawBinary::checkReport()
     {
         KMessageBox::information(
                      kapp->activeWindow(),
-                     i18n("<qt><p><b>%1</b> executable isn't up to date:<br> "
+                     i18n("<qt><p><b>%1</b> executable is not up to date:<br> "
                           "The version %2 of this binary program have been found on your computer. "
                           "This version is too old to run properly. "
                           "You can continue, but you will not be able "
