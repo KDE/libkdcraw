@@ -27,6 +27,7 @@
 #include <qwhatsthis.h>
 #include <qstring.h>
 #include <qtooltip.h>
+#include <qtabbar.h>
 
 // KDE includes.
 
@@ -113,6 +114,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                    : KTabWidget(parent)
 {
     d = new DcrawSettingsWidgetPriv;
+    setMargin(0);
 
     d->stdSettings                 = new QWidget(this);
     QGridLayout* settingsBoxLayout = new QGridLayout(d->stdSettings, 11, 2, KDialog::spacingHint());
@@ -363,7 +365,10 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     insertTab(d->advSettings, i18n("Advanced"));
     
     if (!showAdvancedOptions)
+    {
         removePage(d->advSettings);
+        setTabBarHidden(true);
+    }
 
     // ---------------------------------------------------------------
 
