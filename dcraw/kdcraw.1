@@ -1,7 +1,7 @@
 .\"
-.\" Man page for dcraw
+.\" Man page for kdcraw
 .\"
-.\" Copyright (c) 2006 by David Coffin
+.\" Copyright (c) 2006 by David Coffin dcoffin a cybercom o net
 .\"
 .\" You may distribute without restriction.
 .\"
@@ -9,15 +9,15 @@
 .\" dcoffin a cybercom o net
 .\" http://www.cybercom.net/~dcoffin
 .\"
-.TH dcraw 1 "December 21, 2006"
+.TH kdcraw 1 "December 21, 2006"
 .LO 1
 .SH NAME
-dcraw - command-line decoder for raw digital photos
+kdcraw - command-line decoder for raw digital photos
 .SH SYNOPSIS
-.B dcraw
+.B kdcraw
 [\fIOPTION\fR]... [\fIFILE\fR]...
 .SH DESCRIPTION
-.B dcraw
+.B kdcraw
 decodes raw photos, displays metadata, and extracts thumbnails.
 .SH OPTIONS
 .TP
@@ -39,13 +39,13 @@ was set to Universal Time.
 .B -i
 Identify files but don't decode them.
 Exit status is 0 if
-.B dcraw
+.B kdcraw
 can decode the last file, 1 if it can't.
 .B -i -v
 shows metadata.
 .TP
 .B ""
-.B dcraw
+.B kdcraw
 cannot decode JPEG files!!
 .TP
 .B -d
@@ -86,7 +86,7 @@ to start.
 .TP
 .B -b brightness
 By default,
-.B dcraw
+.B kdcraw
 writes 8-bit PGM/PPM/PAM with a BT.709 gamma curve and a
 99th-percentile white point.  If the result is too light or
 too dark,
@@ -108,7 +108,7 @@ Set the black point.  Default depends on the camera.
 .B -K darkframe.pgm
 Subtract a dark frame from the raw data.  To generate a
 dark frame, shoot a raw photo with no light and do
-.BR dcraw\ -D\ -4\ -j\ -t\ 0 .
+.BR kdcraw\ -D\ -4\ -j\ -t\ 0 .
 .TP
 .B -a
 Automatic color balance.  The default is to use a fixed
@@ -121,7 +121,7 @@ If this can't be found, print a warning and revert to the default.
 .B -r mul0 mul1 mul2 mul3
 Specify your own raw color balance.  These multipliers can be cut
 and pasted from the output of
-.BR dcraw\ -v .
+.BR kdcraw\ -v .
 .TP
 .B -H 0
 Clip all highlights to solid white (default).
@@ -175,7 +175,7 @@ Use the ICC profile embedded in the raw photo.
 .TP
 .B -t [0-7,90,180,270]
 Flip the output image.  By default,
-.B dcraw
+.B kdcraw
 applies the flip specified by the camera.
 .B -t 0
 disables all flipping.
@@ -201,7 +201,7 @@ are silently ignored.
 .TP
 \:./.badpixels, ../.badpixels, ../../.badpixels, ...
 List of your camera's dead pixels, so that
-.B dcraw
+.B kdcraw
 can interpolate around them.  Each line specifies the column,
 row, and UNIX time of death for one pixel.  For example:
 .sp 1
@@ -211,7 +211,7 @@ row, and UNIX time of death for one pixel.  For example:
 .fi
 .sp 1
 These coordinates are before any cropping or rotation, so use
-.B dcraw -j -t 0
+.B kdcraw -j -t 0
 to locate dead pixels.
 .SH "SEE ALSO"
 .BR pgm (5),
