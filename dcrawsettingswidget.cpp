@@ -434,25 +434,55 @@ void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)
     d->NRSigmaDomainlabel->setEnabled(b);
 }
 
+// ---------------------------------------------------------------
+
 bool DcrawSettingsWidget::sixteenBits()
 {
     return d->sixteenBitsImage->isChecked();
 }
+
+void DcrawSettingsWidget::setSixteenBits(bool b)
+{
+    d->sixteenBitsImage->setChecked(b);
+}
+
+// ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::useCameraWB()
 {
     return d->cameraWBCheckBox->isChecked();
 }
 
+void DcrawSettingsWidget::setCameraWB(bool b)
+{
+    d->cameraWBCheckBox->setChecked(b);
+}
+
+// ---------------------------------------------------------------
+
 bool DcrawSettingsWidget::useAutoColorBalance()
 {
     return d->autoColorBalanceCheckBox->isChecked();
 }
 
+void DcrawSettingsWidget::setAutoColorBalance(bool b)
+{
+    d->autoColorBalanceCheckBox->setChecked(b);
+}
+
+// ---------------------------------------------------------------
+
 bool DcrawSettingsWidget::useFourColor()
 {
     return d->fourColorCheckBox->isChecked();
 }
+
+void DcrawSettingsWidget::setFourColor(bool b)
+{
+    d->fourColorCheckBox->setChecked(b);
+}
+
+// ---------------------------------------------------------------
 
 int DcrawSettingsWidget::unclipColor()
 {
@@ -468,82 +498,6 @@ int DcrawSettingsWidget::unclipColor()
             return d->reconstructSpinBox->value()+2;
             break;
     }
-}
-
-bool DcrawSettingsWidget::useDontStretchPixels()
-{
-    return d->dontStretchPixelsCheckBox->isChecked();
-}
-
-double DcrawSettingsWidget::brightness()
-{
-    return d->brightnessSpinBox->value();
-}
-
-bool DcrawSettingsWidget::useBlackPoint()
-{
-    return d->blackPointCheckBox->isChecked();
-}
-
-int DcrawSettingsWidget::blackPoint()
-{
-    return d->blackPointSpinBox->value();
-}
-
-void DcrawSettingsWidget::setCameraWB(bool b)
-{
-    d->cameraWBCheckBox->setChecked(b);
-}
-
-RawDecodingSettings::DecodingQuality DcrawSettingsWidget::quality()
-{
-    switch(d->RAWQualityComboBox->currentItem())
-    {
-        case 1:
-            return RawDecodingSettings::VNG;
-            break;
-        case 2:
-            return RawDecodingSettings::AHD;
-            break;
-        default:    
-            return RawDecodingSettings::BILINEAR;
-            break;
-    }
-}
-
-RawDecodingSettings::OutputColorSpace DcrawSettingsWidget::outputColorSpace()
-{
-    return (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentItem());
-}
-
-bool DcrawSettingsWidget::useNoiseReduction()
-{
-    return d->enableNoiseReduction->isChecked();
-}
-
-double DcrawSettingsWidget::sigmaDomain()
-{
-    return d->NRSigmaDomain->value();
-}
-
-double DcrawSettingsWidget::sigmaRange()
-{
-    return d->NRSigmaRange->value();
-}
-
-void DcrawSettingsWidget::setSixteenBits(bool b)
-{
-    d->sixteenBitsImage->setChecked(b);
-}
-
-void DcrawSettingsWidget::setAutoColorBalance(bool b)
-{
-    d->autoColorBalanceCheckBox->setChecked(b);
-}
-
-void DcrawSettingsWidget::setFourColor(bool b)
-{
-    d->fourColorCheckBox->setChecked(b);
 }
 
 void DcrawSettingsWidget::setUnclipColor(int v)
@@ -565,9 +519,23 @@ void DcrawSettingsWidget::setUnclipColor(int v)
     slotUnclipColorActivated(d->unclipColorComboBox->currentItem());
 }
 
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useDontStretchPixels()
+{
+    return d->dontStretchPixelsCheckBox->isChecked();
+}
+
 void DcrawSettingsWidget::setDontStretchPixels(bool b)
 {
     d->dontStretchPixelsCheckBox->setChecked(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::brightness()
+{
+    return d->brightnessSpinBox->value();
 }
 
 void DcrawSettingsWidget::setBrightness(double b)
@@ -575,9 +543,11 @@ void DcrawSettingsWidget::setBrightness(double b)
     d->brightnessSpinBox->setValue(b);
 }
 
-void DcrawSettingsWidget::setBlackPoint(int b)
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useBlackPoint()
 {
-    d->blackPointSpinBox->setValue(b);
+    return d->blackPointCheckBox->isChecked();
 }
 
 void DcrawSettingsWidget::setUseBlackPoint(bool b)
@@ -586,14 +556,34 @@ void DcrawSettingsWidget::setUseBlackPoint(bool b)
     d->blackPointSpinBox->setEnabled(b);
 }
 
-void DcrawSettingsWidget::setSigmaDomain(double b)
+// ---------------------------------------------------------------
+
+int DcrawSettingsWidget::blackPoint()
 {
-    d->NRSigmaDomain->setValue(b);
+    return d->blackPointSpinBox->value();
 }
 
-void DcrawSettingsWidget::setSigmaRange(double b)
+void DcrawSettingsWidget::setBlackPoint(int b)
 {
-    d->NRSigmaRange->setValue(b);
+    d->blackPointSpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+RawDecodingSettings::DecodingQuality DcrawSettingsWidget::quality()
+{
+    switch(d->RAWQualityComboBox->currentItem())
+    {
+        case 1:
+            return RawDecodingSettings::VNG;
+            break;
+        case 2:
+            return RawDecodingSettings::AHD;
+            break;
+        default:    
+            return RawDecodingSettings::BILINEAR;
+            break;
+    }
 }
 
 void DcrawSettingsWidget::setQuality(RawDecodingSettings::DecodingQuality q)
@@ -612,15 +602,53 @@ void DcrawSettingsWidget::setQuality(RawDecodingSettings::DecodingQuality q)
     }
 }
 
+// ---------------------------------------------------------------
+
+RawDecodingSettings::OutputColorSpace DcrawSettingsWidget::outputColorSpace()
+{
+    return (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentItem());
+}
+
 void DcrawSettingsWidget::setOutputColorSpace(RawDecodingSettings::OutputColorSpace c)
 {
     d->outputColorSpaceComboBox->setCurrentItem((int)c);
+}
+
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useNoiseReduction()
+{
+    return d->enableNoiseReduction->isChecked();
 }
 
 void DcrawSettingsWidget::setNoiseReduction(bool b)
 {
     d->enableNoiseReduction->setChecked(b);
     slotNoiseReductionToggled(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::sigmaDomain()
+{
+    return d->NRSigmaDomain->value();
+}
+
+void DcrawSettingsWidget::setSigmaDomain(double b)
+{
+    d->NRSigmaDomain->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::sigmaRange()
+{
+    return d->NRSigmaRange->value();
+}
+
+void DcrawSettingsWidget::setSigmaRange(double b)
+{
+    d->NRSigmaRange->setValue(b);
 }
 
 } // NameSpace KDcrawIface
