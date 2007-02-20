@@ -683,6 +683,7 @@ void KDcraw::startProcess()
     // -h : Output a half-size color image. Twice as fast as -q 0.
     // -b : set Brightness value.
     // -k : set Black Point value.
+    // -r : set Raw Color Balance Multipliers.
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
@@ -716,6 +717,15 @@ void KDcraw::startProcess()
     {
         *d->process << "-k";
         *d->process << QString::number(m_rawDecodingSettings.blackPoint);
+    }
+
+    if (m_rawDecodingSettings.enableColorMultipliers)
+    {
+        *d->process << "-r";
+        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[0], 'f', 5);
+        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[1], 'f', 5);
+        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[2], 'f', 5);
+        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[3], 'f', 5);
     }
 
     *d->process << "-q";

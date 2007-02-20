@@ -59,6 +59,11 @@ public:
     int    blackPoint();
     double sigmaDomain();
     double sigmaRange();
+    bool   useColorMultipliers();
+    double colorMultiplier1();
+    double colorMultiplier2();
+    double colorMultiplier3();
+    double colorMultiplier4();
 
     RawDecodingSettings::DecodingQuality  quality();
     RawDecodingSettings::OutputColorSpace outputColorSpace();
@@ -77,11 +82,17 @@ public:
     void   setSigmaRange(double b);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
+    void   setUseColorMultipliers(bool b);
+    void   setcolorMultiplier1(double b);
+    void   setcolorMultiplier2(double b);
+    void   setcolorMultiplier3(double b);
+    void   setcolorMultiplier4(double b);
 
     void   setDefaultSettings();
 
 private slots:
 
+    void slotColorMultToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
     void processDcrawURL(const QString&);

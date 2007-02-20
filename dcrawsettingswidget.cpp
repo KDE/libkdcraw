@@ -76,6 +76,11 @@ public:
         outputColorSpaceComboBox  = 0;
         stdSettings               = 0;
         advSettings               = 0;
+        colorMultCheckBox         = 0;
+        colorMult1SpinBox         = 0;
+        colorMult2SpinBox         = 0;
+        colorMult3SpinBox         = 0;
+        colorMult4SpinBox         = 0;
     }
 
     QWidget         *stdSettings;
@@ -93,6 +98,7 @@ public:
     QComboBox       *unclipColorComboBox;
     QComboBox       *outputColorSpaceComboBox;
 
+    QCheckBox       *colorMultCheckBox;
     QCheckBox       *blackPointCheckBox;
     QCheckBox       *sixteenBitsImage;
     QCheckBox       *cameraWBCheckBox;
@@ -104,6 +110,10 @@ public:
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
  
+    KDoubleNumInput *colorMult1SpinBox;
+    KDoubleNumInput *colorMult2SpinBox;
+    KDoubleNumInput *colorMult3SpinBox;
+    KDoubleNumInput *colorMult4SpinBox;
     KDoubleNumInput *brightnessSpinBox;
     KDoubleNumInput *NRSigmaDomain;
     KDoubleNumInput *NRSigmaRange;
@@ -336,7 +346,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     // ---------------------------------------------------------------
 
     d->advSettings                  = new QWidget(this);
-    QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings, 2, 2, KDialog::spacingHint());
+    QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings, 7, 2, KDialog::spacingHint());
 
     d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Don't stretch or rotate pixels"), d->advSettings);
     QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Don't stretch or rotate pixels</b><p>"
@@ -360,8 +370,34 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                "Specify specific black point value of ouput image.<p>"));
     settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);    
     settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);    
-    settingsBoxLayout2->setRowStretch(2, 10);   
 
+    // ---------------------------------------------------------------
+
+    d->colorMultCheckBox = new QCheckBox(i18n("Color balance multipliers"), d->advSettings);
+
+    d->colorMult1SpinBox = new KDoubleNumInput(d->advSettings);
+    d->colorMult1SpinBox->setPrecision(5);
+    d->colorMult1SpinBox->setRange(0.00001, 1.0, 0.01, true);
+
+    d->colorMult2SpinBox = new KDoubleNumInput(d->advSettings);
+    d->colorMult2SpinBox->setPrecision(5);
+    d->colorMult2SpinBox->setRange(0.00001, 1.0, 0.01, true);
+
+    d->colorMult3SpinBox = new KDoubleNumInput(d->advSettings);
+    d->colorMult3SpinBox->setPrecision(5);
+    d->colorMult3SpinBox->setRange(0.00001, 1.0, 0.01, true);
+
+    d->colorMult4SpinBox = new KDoubleNumInput(d->advSettings);
+    d->colorMult4SpinBox->setPrecision(5);
+    d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
+
+    settingsBoxLayout->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 0, 2);    
+
+    settingsBoxLayout2->setRowStretch(7, 10);   
     insertTab(d->advSettings, i18n("Advanced"));
     
     if (!showAdvancedOptions)
@@ -380,6 +416,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
+
+    connect(d->colorMultCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotColorMultToggled(bool)));
 
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
@@ -406,6 +445,11 @@ void DcrawSettingsWidget::setDefaultSettings()
     setBrightness(1.0);
     setUseBlackPoint(false);
     setBlackPoint(0);
+    setUseColorMultipliers(false);
+    setcolorMultiplier1(1.0);
+    setcolorMultiplier2(1.0);
+    setcolorMultiplier3(1.0);
+    setcolorMultiplier4(1.0);
     setSigmaDomain(2.0);
     setSigmaRange(4.0);
     setQuality(RawDecodingSettings::BILINEAR); 
@@ -432,6 +476,14 @@ void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)
     d->NRSigmaRange->setEnabled(b);
     d->NRSigmaRangelabel->setEnabled(b);
     d->NRSigmaDomainlabel->setEnabled(b);
+}
+
+void DcrawSettingsWidget::slotColorMultToggled(bool b)
+{
+    d->colorMult1SpinBox->setEnabled(b);
+    d->colorMult2SpinBox->setEnabled(b);
+    d->colorMult3SpinBox->setEnabled(b);
+    d->colorMult4SpinBox->setEnabled(b);
 }
 
 // ---------------------------------------------------------------
@@ -649,6 +701,67 @@ double DcrawSettingsWidget::sigmaRange()
 void DcrawSettingsWidget::setSigmaRange(double b)
 {
     d->NRSigmaRange->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useColorMultipliers()
+{
+    return d->colorMultCheckBox->isChecked();
+}
+
+void DcrawSettingsWidget::setUseColorMultipliers(bool b)
+{
+    d->colorMultCheckBox->setChecked(b);
+    slotColorMultToggled(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::colorMultiplier1()
+{
+    return d->colorMult1SpinBox->value();
+}
+
+void DcrawSettingsWidget::setcolorMultiplier1(double b)
+{
+    d->colorMult1SpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::colorMultiplier2()
+{
+    return d->colorMult2SpinBox->value();
+}
+
+void DcrawSettingsWidget::setcolorMultiplier2(double b)
+{
+    d->colorMult2SpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::colorMultiplier3()
+{
+    return d->colorMult3SpinBox->value();
+}
+
+void DcrawSettingsWidget::setcolorMultiplier3(double b)
+{
+    d->colorMult3SpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::colorMultiplier4()
+{
+    return d->colorMult4SpinBox->value();
+}
+
+void DcrawSettingsWidget::setcolorMultiplier4(double b)
+{
+    d->colorMult4SpinBox->setValue(b);
 }
 
 } // NameSpace KDcrawIface

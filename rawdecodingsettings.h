@@ -54,23 +54,29 @@ public:
     /** Standard constructor with default settings */
     RawDecodingSettings()
     {
-        sixteenBitsImage        = false;
-        enableNoiseReduction    = false;
-        enableBlackPoint        = false;
-        NRSigmaDomain           = 2.0;
-        NRSigmaRange            = 4.0;
+        sixteenBitsImage           = false;
+        enableNoiseReduction       = false;
+        enableBlackPoint           = false;
+        NRSigmaDomain              = 2.0;
+        NRSigmaRange               = 4.0;
 
-        brightness              = 1.0;
-        blackPoint              = 0;
-        RAWQuality              = BILINEAR;
-        outputColorSpace        = SRGB;
+        brightness                 = 1.0;
+        blackPoint                 = 0;
+        RAWQuality                 = BILINEAR;
+        outputColorSpace           = SRGB;
 
-        RGBInterpolate4Colors   = false;
-        DontStretchPixels       = false;
-        unclipColors            = 0;
-        cameraColorBalance      = true;
-        automaticColorBalance   = true;
-        halfSizeColorImage      = false;
+        RGBInterpolate4Colors      = false;
+        DontStretchPixels          = false;
+        unclipColors               = 0;
+        cameraColorBalance         = true;
+        automaticColorBalance      = true;
+        halfSizeColorImage         = false;
+
+        enableColorMultipliers     = false;
+        colorBalanceMultipliers[0] = 0.0;
+        colorBalanceMultipliers[1] = 0.0;
+        colorBalanceMultipliers[2] = 0.0;
+        colorBalanceMultipliers[3] = 0.0;
     };
     
 
@@ -80,56 +86,62 @@ public:
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
     void optimizeTimeLoading(void)
     {
-        sixteenBitsImage        = true;
-        enableNoiseReduction    = false;
-        enableBlackPoint        = false;
-        NRSigmaDomain           = 2.0;
-        NRSigmaRange            = 4.0;
+        sixteenBitsImage           = true;
+        enableNoiseReduction       = false;
+        enableBlackPoint           = false;
+        NRSigmaDomain              = 2.0;
+        NRSigmaRange               = 4.0;
 
-        brightness              = 1.0;
-        blackPoint              = 0;
-        RAWQuality              = BILINEAR;
-        outputColorSpace        = SRGB;
+        brightness                 = 1.0;
+        blackPoint                 = 0;
+        RAWQuality                 = BILINEAR;
+        outputColorSpace           = SRGB;
 
-        RGBInterpolate4Colors   = false;
-        DontStretchPixels       = false;
-        unclipColors            = 0;
-        cameraColorBalance      = true;
-        automaticColorBalance   = true;
-        halfSizeColorImage      = true;
+        RGBInterpolate4Colors      = false;
+        DontStretchPixels          = false;
+        unclipColors               = 0;
+        cameraColorBalance         = true;
+        automaticColorBalance      = true;
+        halfSizeColorImage         = true;
+
+        enableColorMultipliers     = false;
+        colorBalanceMultipliers[0] = 0.0;
+        colorBalanceMultipliers[1] = 0.0;
+        colorBalanceMultipliers[2] = 0.0;
+        colorBalanceMultipliers[3] = 0.0;
     };
 
 public:
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
     */
-    bool  sixteenBitsImage;    
+    bool sixteenBitsImage;    
 
     /** Half-size color image decoding (twice as fast as "enableRAWQuality"). 
         Use this option to reduce time loading to render histogram for example, 
         no to render an image to screen. 
     */
-    bool  halfSizeColorImage;
+    bool halfSizeColorImage;
 
     /**  Use the color balance specified by the camera. If this can't be found, 
          reverts to the default. 
     */
-    bool  cameraColorBalance;
+    bool cameraColorBalance;
     
     /** Automatic color balance. The default is to use a fixed color balance 
         based on a white card photographed in sunlight. 
     */
-    bool  automaticColorBalance;
+    bool automaticColorBalance;
     
     /** RAW file decoding using RGB interpolation as four colors. 
     */
-    bool  RGBInterpolate4Colors;
+    bool RGBInterpolate4Colors;
 
     /** For cameras with non-square pixels, do not stretch the image to its 
         correct aspect ratio. In any case, this option guarantees that each 
         output pixel corresponds to one RAW pixel. 
     */
-    bool  DontStretchPixels;
+    bool DontStretchPixels;
     
     /** Unclip Highlight color level: 
         0   = Clip all highlights to solid white.
@@ -137,7 +149,7 @@ public:
         2-9 = Reconstruct highlights. Low numbers favor whites; high numbers 
               favor colors.
     */
-    int   unclipColors;
+    int unclipColors;
 
     /** RAW quality decoding factor value. See DecodingQuality values 
         for details. 
@@ -149,7 +161,7 @@ public:
         edges. sigma_domain is in units of pixels, while sigma_range is in units 
         of CIELab colorspace. 
     */
-    bool  enableNoiseReduction;
+    bool enableNoiseReduction;
 
     /** Noise reduction sigma domain value. 
     */
@@ -165,7 +177,7 @@ public:
 
     /** Set on the black point setting to decode RAW image.
     */
-    bool  enableBlackPoint;
+    bool enableBlackPoint;
 
     /** Black Point value of output image. 
     */
@@ -175,6 +187,13 @@ public:
         values for details. 
     */
     OutputColorSpace outputColorSpace;
+
+    /** Set on the Raw color balance multipliers settings to decode RAW image.
+    */
+    bool enableColorMultipliers;
+
+    /** Raw color balance multipliers used with option '-r'. */
+    double colorBalanceMultipliers[4];
 };
 
 }  // namespace KDcrawIface
