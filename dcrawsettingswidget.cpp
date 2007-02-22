@@ -276,7 +276,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     line++;
 
     d->NRThresholdSpinBox = new KIntNumInput(d->stdSettings);
-    d->NRThresholdSpinBox->setRange(100, 1000, 1, true);
+    d->NRThresholdSpinBox->setRange(10, 1000, 1, true);
     d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
     QWhatsThis::add( d->NRThresholdSpinBox, i18n("<p><b>Threshold</b><p>"
                      "Set here the noise reduction threshold value to use."));
