@@ -471,6 +471,10 @@ void DcrawSettingsWidget::slotColorMultToggled(bool b)
     d->colorMult2SpinBox->setEnabled(b);
     d->colorMult3SpinBox->setEnabled(b);
     d->colorMult4SpinBox->setEnabled(b);
+    d->colorMult1Label->setEnabled(b);
+    d->colorMult2Label->setEnabled(b);
+    d->colorMult3Label->setEnabled(b);
+    d->colorMult4Label->setEnabled(b);
 }
 
 // ---------------------------------------------------------------
