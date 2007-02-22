@@ -89,6 +89,10 @@ public:
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
+    QLabel          *colorMult1Label;
+    QLabel          *colorMult2Label;
+    QLabel          *colorMult3Label;
+    QLabel          *colorMult4Label;
 
     QComboBox       *RAWQualityComboBox;
     QComboBox       *unclipColorComboBox;
@@ -353,27 +357,35 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->colorMultCheckBox = new QCheckBox(i18n("Color balance multipliers"), d->advSettings);
 
+    d->colorMult1Label   = new QLabel(i18n("Multiplier 1:"), d->advSettings);
     d->colorMult1SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult1SpinBox->setPrecision(5);
     d->colorMult1SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
+    d->colorMult2Label   = new QLabel(i18n("Multiplier 2:"), d->advSettings);
     d->colorMult2SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult2SpinBox->setPrecision(5);
     d->colorMult2SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
+    d->colorMult3Label   = new QLabel(i18n("Multiplier 3:"), d->advSettings);
     d->colorMult3SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult3SpinBox->setPrecision(5);
     d->colorMult3SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
+    d->colorMult4Label   = new QLabel(i18n("Multiplier 4:"), d->advSettings);
     d->colorMult4SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult4SpinBox->setPrecision(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
     settingsBoxLayout->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 0, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 0, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 0, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult2Label, 4, 4, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult3Label, 5, 5, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);    
 
     settingsBoxLayout2->setRowStretch(7, 10);   
     insertTab(d->advSettings, i18n("Advanced"));
