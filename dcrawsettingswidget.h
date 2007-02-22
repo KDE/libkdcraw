@@ -56,8 +56,7 @@ public:
     int    unclipColor();
     double brightness();
     int    blackPoint();
-    double sigmaDomain();
-    double sigmaRange();
+    int    NRThreshold();
     bool   useColorMultipliers();
     double colorMultiplier1();
     double colorMultiplier2();
@@ -77,8 +76,7 @@ public:
     void   setUnclipColor(int v);
     void   setBrightness(double b);
     void   setBlackPoint(int b);
-    void   setSigmaDomain(double b);
-    void   setSigmaRange(double b);
+    void   setNRThreshold(int b);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
     void   setUseColorMultipliers(bool b);

@@ -54,22 +54,21 @@ public:
     RawDecodingSettings()
     {
         sixteenBitsImage           = false;
-        enableNoiseReduction       = false;
-        enableBlackPoint           = false;
-        NRSigmaDomain              = 2.0;
-        NRSigmaRange               = 4.0;
-
         brightness                 = 1.0;
-        blackPoint                 = 0;
         RAWQuality                 = BILINEAR;
         outputColorSpace           = SRGB;
-
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
         unclipColors               = 0;
         cameraColorBalance         = true;
         automaticColorBalance      = true;
         halfSizeColorImage         = false;
+
+        enableBlackPoint           = false;
+        blackPoint                 = 0;
+
+        enableNoiseReduction       = false;
+        NRThreshold                = 100;
 
         enableColorMultipliers     = false;
         colorBalanceMultipliers[0] = 0.0;
@@ -86,22 +85,21 @@ public:
     void optimizeTimeLoading(void)
     {
         sixteenBitsImage           = true;
-        enableNoiseReduction       = false;
-        enableBlackPoint           = false;
-        NRSigmaDomain              = 2.0;
-        NRSigmaRange               = 4.0;
-
         brightness                 = 1.0;
-        blackPoint                 = 0;
         RAWQuality                 = BILINEAR;
         outputColorSpace           = SRGB;
-
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
         unclipColors               = 0;
         cameraColorBalance         = true;
         automaticColorBalance      = true;
         halfSizeColorImage         = true;
+
+        enableBlackPoint           = false;
+        blackPoint                 = 0;
+
+        enableNoiseReduction       = false;
+        NRThreshold                = 100;
 
         enableColorMultipliers     = false;
         colorBalanceMultipliers[0] = 0.0;
@@ -155,21 +153,15 @@ public:
     */
     DecodingQuality RAWQuality;
 
-    /** RAW file decoding using bilateral filter to reduce noise. This is '-B 
-        sigma_domain sigma_range' dcraw option to smooth noise while preserving 
-        edges. sigma_domain is in units of pixels, while sigma_range is in units 
-        of CIELab colorspace. 
+    /** Use wavelets to erase noise while preserving real detail. 
     */
     bool enableNoiseReduction;
 
-    /** Noise reduction sigma domain value. 
+    /** Noise reduction threshold value.  
+        The best threshold should be somewhere between 100 and 1000.
     */
-    float NRSigmaDomain;
+    int NRThreshold;
     
-    /** Noise reduction sigma range value. 
-    */
-    float NRSigmaRange;    
-
     /** Brightness of output image. 
     */
     float brightness;   

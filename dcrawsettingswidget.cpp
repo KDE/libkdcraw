@@ -64,10 +64,8 @@ public:
         RAWQualityComboBox        = 0;
         RAWQualityLabel           = 0;
         enableNoiseReduction      = 0;
-        NRSigmaDomain             = 0;
-        NRSigmaRange              = 0;
-        NRSigmaRangelabel         = 0;
-        NRSigmaDomainlabel        = 0;
+        NRThresholdSpinBox        = 0;
+        NRThresholdLabel          = 0;
         unclipColorComboBox       = 0;
         reconstructLabel          = 0;
         reconstructSpinBox        = 0;
@@ -87,8 +85,7 @@ public:
 
     QLabel          *brightnessLabel;
     QLabel          *RAWQualityLabel;
-    QLabel          *NRSigmaRangelabel;
-    QLabel          *NRSigmaDomainlabel;
+    QLabel          *NRThresholdLabel;
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
@@ -108,14 +105,13 @@ public:
 
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
+    KIntNumInput    *NRThresholdSpinBox;
  
     KDoubleNumInput *colorMult1SpinBox;
     KDoubleNumInput *colorMult2SpinBox;
     KDoubleNumInput *colorMult3SpinBox;
     KDoubleNumInput *colorMult4SpinBox;
     KDoubleNumInput *brightnessSpinBox;
-    KDoubleNumInput *NRSigmaDomain;
-    KDoubleNumInput *NRSigmaRange;
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
@@ -271,34 +267,17 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction"), d->stdSettings);
     QWhatsThis::add( d->enableNoiseReduction, i18n("<p><b>Enable Noise Reduction</b><p>"
-                     "Toggle bilateral filter to smooth noise while "
-                     "preserving edges. This option can be use to reduce low noise. The pictures edges "
-                     "are preserved because it is applied in CIELab color space instead of RGB.<p>"));
+                     "Use wavelets to erase noise while preserving real detail.<p>"));
     settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, line, line, 0, 2);
     line++;
 
-    d->NRSigmaDomain = new KDoubleNumInput(d->stdSettings);
-    d->NRSigmaDomain->setValue(2.0);
-    d->NRSigmaDomain->setPrecision(1);
-    d->NRSigmaDomain->setRange(0.1, 5.0, 0.1);
-    d->NRSigmaDomainlabel = new QLabel(i18n("Domain:"), d->stdSettings);
-    QWhatsThis::add( d->NRSigmaDomain, i18n("<p><b>Domain</b><p>"
-                                       "Set here the noise reduction Sigma Domain in units of pixels. "
-                                       "The default value is 2.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomainlabel, line, line, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaDomain, line, line, 1, 2);
-    line++;
-
-    d->NRSigmaRange = new KDoubleNumInput(d->stdSettings);
-    d->NRSigmaRange->setValue(4.0);
-    d->NRSigmaRange->setPrecision(1);
-    d->NRSigmaRange->setRange(0.1, 5.0, 0.1);
-    d->NRSigmaRangelabel = new QLabel(i18n("Range:"), d->stdSettings);
-    QWhatsThis::add( d->NRSigmaRange, i18n("<p><b>Range</b><p>"
-                                           "Set here the noise reduction Sigma Range in units of "
-                                           "CIELab colorspace. The default value is 4.0.<p>"));
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRangelabel, line, line, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->NRSigmaRange, line, line, 1, 2);
+    d->NRThresholdSpinBox = new KIntNumInput(d->stdSettings);
+    d->NRThresholdSpinBox->setRange(100, 1000, 1, true);
+    d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
+    QWhatsThis::add( d->NRThresholdSpinBox, i18n("<p><b>Threshold</b><p>"
+                     "Set here the noise reduction threshold value to use."));
+    settingsBoxLayout->addMultiCellWidget(d->NRThresholdLabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRThresholdSpinBox, line, line, 1, 2);
     line++;
 
     // ---------------------------------------------------------------
@@ -449,8 +428,7 @@ void DcrawSettingsWidget::setDefaultSettings()
     setcolorMultiplier2(1.0);
     setcolorMultiplier3(1.0);
     setcolorMultiplier4(1.0);
-    setSigmaDomain(2.0);
-    setSigmaRange(4.0);
+    setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR); 
     setOutputColorSpace(RawDecodingSettings::SRGB); 
 }
@@ -471,10 +449,8 @@ void DcrawSettingsWidget::slotUnclipColorActivated(int v)
 
 void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)
 {
-    d->NRSigmaDomain->setEnabled(b);
-    d->NRSigmaRange->setEnabled(b);
-    d->NRSigmaRangelabel->setEnabled(b);
-    d->NRSigmaDomainlabel->setEnabled(b);
+    d->NRThresholdSpinBox->setEnabled(b);
+    d->NRThresholdLabel->setEnabled(b);
 }
 
 void DcrawSettingsWidget::slotColorMultToggled(bool b)
@@ -680,26 +656,14 @@ void DcrawSettingsWidget::setNoiseReduction(bool b)
 
 // ---------------------------------------------------------------
 
-double DcrawSettingsWidget::sigmaDomain()
+int DcrawSettingsWidget::NRThreshold()
 {
-    return d->NRSigmaDomain->value();
+    return d->NRThresholdSpinBox->value();
 }
 
-void DcrawSettingsWidget::setSigmaDomain(double b)
+void DcrawSettingsWidget::setNRThreshold(int b)
 {
-    d->NRSigmaDomain->setValue(b);
-}
-
-// ---------------------------------------------------------------
-
-double DcrawSettingsWidget::sigmaRange()
-{
-    return d->NRSigmaRange->value();
-}
-
-void DcrawSettingsWidget::setSigmaRange(double b)
-{
-    d->NRSigmaRange->setValue(b);
+    d->NRThresholdSpinBox->setValue(b);
 }
 
 // ---------------------------------------------------------------

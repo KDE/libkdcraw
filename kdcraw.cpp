@@ -674,10 +674,9 @@ void KDcraw::startProcess()
     // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
-    // -n : Don't clip colors
+    // -n : Use wavelets to erase noise while preserving real detail. 
     // -j : Do not stretch the image to its correct aspect ratio.
     // -q : Use an interpolation method.
-    // -B : Use bilateral filter to smooth noise while preserving edges.
     // -p : Use the input ICC profiles to define the camera's raw colorspace.
     // -o : Use ICC profiles to define the output colorspace.
     // -h : Output a half-size color image. Twice as fast as -q 0.
@@ -733,9 +732,8 @@ void KDcraw::startProcess()
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
-        *d->process << "-B";
-        *d->process << QString::number(m_rawDecodingSettings.NRSigmaDomain);
-        *d->process << QString::number(m_rawDecodingSettings.NRSigmaRange);
+        *d->process << "-n";
+        *d->process << QString::number(m_rawDecodingSettings.NRThreshold);
     }
 
     *d->process << "-o";

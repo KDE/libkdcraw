@@ -1,7 +1,7 @@
 .\"
-.\" Man page for kdcraw
+.\" Man page for dcraw
 .\"
-.\" Copyright (c) 2006 by David Coffin dcoffin a cybercom o net
+.\" Copyright (c) 2007 by David Coffin
 .\"
 .\" You may distribute without restriction.
 .\"
@@ -9,15 +9,15 @@
 .\" dcoffin a cybercom o net
 .\" http://www.cybercom.net/~dcoffin
 .\"
-.TH kdcraw 1 "December 21, 2006"
+.TH dcraw 1 "February 21, 2007"
 .LO 1
 .SH NAME
-kdcraw - command-line decoder for raw digital photos
+dcraw - command-line decoder for raw digital photos
 .SH SYNOPSIS
-.B kdcraw
+.B dcraw
 [\fIOPTION\fR]... [\fIFILE\fR]...
 .SH DESCRIPTION
-.B kdcraw
+.B dcraw
 decodes raw photos, displays metadata, and extracts thumbnails.
 .SH OPTIONS
 .TP
@@ -39,13 +39,13 @@ was set to Universal Time.
 .B -i
 Identify files but don't decode them.
 Exit status is 0 if
-.B kdcraw
+.B dcraw
 can decode the last file, 1 if it can't.
 .B -i -v
 shows metadata.
 .TP
 .B ""
-.B kdcraw
+.B dcraw
 cannot decode JPEG files!!
 .TP
 .B -d
@@ -74,19 +74,13 @@ Use Adaptive Homogeneity-Directed (AHD) interpolation.
 Interpolate RGB as four colors.  Use this if the output shows
 false 2x2 meshes with VNG or mazes with AHD.
 .TP
-.B -B sigma_domain sigma_range
-Use a bilateral filter to smooth noise while preserving edges.
-.B sigma_domain
-is in units of pixels, while
-.B sigma_range
-is in units of CIELab colorspace.
-Try
-.B -B\ 2\ 4
-to start.
+.B -n noise_threshold
+Use wavelets to erase noise while preserving real detail.
+The best threshold should be somewhere between 100 and 1000.
 .TP
 .B -b brightness
 By default,
-.B kdcraw
+.B dcraw
 writes 8-bit PGM/PPM/PAM with a BT.709 gamma curve and a
 99th-percentile white point.  If the result is too light or
 too dark,
@@ -108,7 +102,7 @@ Set the black point.  Default depends on the camera.
 .B -K darkframe.pgm
 Subtract a dark frame from the raw data.  To generate a
 dark frame, shoot a raw photo with no light and do
-.BR kdcraw\ -D\ -4\ -j\ -t\ 0 .
+.BR dcraw\ -D\ -4\ -j\ -t\ 0 .
 .TP
 .B -a
 Automatic color balance.  The default is to use a fixed
@@ -121,7 +115,7 @@ If this can't be found, print a warning and revert to the default.
 .B -r mul0 mul1 mul2 mul3
 Specify your own raw color balance.  These multipliers can be cut
 and pasted from the output of
-.BR kdcraw\ -v .
+.BR dcraw\ -v .
 .TP
 .B -H 0
 Clip all highlights to solid white (default).
@@ -175,7 +169,7 @@ Use the ICC profile embedded in the raw photo.
 .TP
 .B -t [0-7,90,180,270]
 Flip the output image.  By default,
-.B kdcraw
+.B dcraw
 applies the flip specified by the camera.
 .B -t 0
 disables all flipping.
@@ -201,7 +195,7 @@ are silently ignored.
 .TP
 \:./.badpixels, ../.badpixels, ../../.badpixels, ...
 List of your camera's dead pixels, so that
-.B kdcraw
+.B dcraw
 can interpolate around them.  Each line specifies the column,
 row, and UNIX time of death for one pixel.  For example:
 .sp 1
@@ -211,7 +205,7 @@ row, and UNIX time of death for one pixel.  For example:
 .fi
 .sp 1
 These coordinates are before any cropping or rotation, so use
-.B kdcraw -j -t 0
+.B dcraw -j -t 0
 to locate dead pixels.
 .SH "SEE ALSO"
 .BR pgm (5),
