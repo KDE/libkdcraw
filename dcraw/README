@@ -43,7 +43,7 @@ Compare it to "dcraw-old.c", about:
 -the new options provided to decoding RAW file pictures. The option list is given on the console when kdcraw is invoqued from command line without arguments. Look the indeep description of all options using man page. The DcrawSettingsWidget, RawDecodingSettings, and KDcraw class need to be updated accordinly, especially 
 KDcraw::loadFromDcraw() method.
 
--the new informations provided by -i -v command line options. The KDcraw:: rawFileIdentify() method and the DcrawInfoContainer need to be updated accordinly.
+-the new informations provided by -i -v command line options. The KDcraw::rawFileIdentify() method and the DcrawInfoContainer need to be updated accordinly.
  
 
 4/ Regression tests.
@@ -56,3 +56,5 @@ Recompile libkdcraw, Raw Converter kipi-plugin, and digiKam. All must work fine 
 Remove the "dcraw-old.c" file. Not need to archive it in svn.
 
 
+6/ Update the internal dcraw version number returned by KDcraw::DcrawBinary::InternalVersion() method
+   (Check the "#define VERSION ..." string from dcraw.c).
