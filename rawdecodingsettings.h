@@ -3,7 +3,8 @@
  * Date   : 2006-12-09
  * Description : Raw decoding settings
  *
- * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright 2006-2007 by Gilles Caulier 
+ *           <caulier dot gilles at gmail dot com> 
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -183,7 +184,27 @@ public:
     */
     bool enableColorMultipliers;
 
-    /** Raw color balance multipliers used with option '-r'. */
+    /** Raw color balance multipliers used with option '-r'. Theses values 
+        are applied to the input RAW image in the camera's raw color space.
+        By order multipliers are:  
+
+        - colorBalanceMultipliers[0] = red multiplier.
+        - colorBalanceMultipliers[1] = green1 multiplier.
+        - colorBalanceMultipliers[2] = blue multiplier.
+        - colorBalanceMultipliers[3] = green2 multiplier.
+
+        If green2 is zero, it is assumed to be the same as green1.  Multiplying 
+        all values by a constant has no effect.  Thus all these are the same:
+
+        1.6, 1, 1.2, 1
+        3.2, 2, 2.4, 2
+        3.2, 2, 2.4, 0
+
+        The Bayer pattern in an RGB camera is always:
+
+        [ red  ][green1]
+        [green2][ blue ]
+    */
     double colorBalanceMultipliers[4];
 };
 

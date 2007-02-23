@@ -357,22 +357,22 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->colorMultCheckBox = new QCheckBox(i18n("Color balance multipliers"), d->advSettings);
 
-    d->colorMult1Label   = new QLabel(i18n("Multiplier 1:"), d->advSettings);
+    d->colorMult1Label   = new QLabel(i18n("Red multiplier:"), d->advSettings);
     d->colorMult1SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult1SpinBox->setPrecision(5);
     d->colorMult1SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
-    d->colorMult2Label   = new QLabel(i18n("Multiplier 2:"), d->advSettings);
+    d->colorMult2Label   = new QLabel(i18n("Green 1 multiplier:"), d->advSettings);
     d->colorMult2SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult2SpinBox->setPrecision(5);
     d->colorMult2SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
-    d->colorMult3Label   = new QLabel(i18n("Multiplier 3:"), d->advSettings);
+    d->colorMult3Label   = new QLabel(i18n("Blue multiplier:"), d->advSettings);
     d->colorMult3SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult3SpinBox->setPrecision(5);
     d->colorMult3SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
-    d->colorMult4Label   = new QLabel(i18n("Multiplier 4:"), d->advSettings);
+    d->colorMult4Label   = new QLabel(i18n("Green 2 multiplier:"), d->advSettings);
     d->colorMult4SpinBox = new KDoubleNumInput(d->advSettings);
     d->colorMult4SpinBox->setPrecision(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
