@@ -133,11 +133,11 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     int line = 0;
     
     d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), d->stdSettings);
-    QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enabled, all RAW files will be decoded to 16-bit "
-                                               "color depth using a linear gamma curve. To prevent black "
+    QWhatsThis::add( d->sixteenBitsImage, i18n("<p>If enabled, all RAW files will be decoded in 16-bit "
+                                               "color depth using a linear gamma curve. To prevent dark "
                                                "picture rendering in the editor, it is recommended to use "
                                                "Color Management in this mode.<p>"
-                                               "If disabled, all RAW files will be decoded to 8-bit "
+                                               "If disabled, all RAW files will be decoded in 8-bit "
                                                "color depth with a BT.709 gamma curve and a 99th-percentile "
                                                "white point. This mode is faster than 16-bit decoding."));
     settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 0);
@@ -409,6 +409,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     connect(d->colorMultCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotColorMultToggled(bool)));
 
+    connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
+            this, SLOT(slotsixteenBitsImageToggled(bool)));
+
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
 }
@@ -442,6 +445,12 @@ void DcrawSettingsWidget::setDefaultSettings()
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR); 
     setOutputColorSpace(RawDecodingSettings::SRGB); 
+}
+
+void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
+{
+    d->brightnessLabel->setDisabled(b);
+    d->brightnessSpinBox->setDisabled(b); 
 }
 
 void DcrawSettingsWidget::slotUnclipColorActivated(int v)

@@ -89,6 +89,7 @@ public:
 
 private slots:
 
+    void slotsixteenBitsImageToggled(bool);
     void slotColorMultToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
