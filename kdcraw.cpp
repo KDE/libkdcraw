@@ -638,8 +638,6 @@ void KDcraw::slotContinueQuery()
     if (checkToCancelWaitingData())
     {
         d->process->kill();
-        d->process->wait();
-        d->normalExit = false;
     }
 }
 
