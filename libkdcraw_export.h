@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Laurent Montel
- * Date   : 2005-09-15
+ * Authors     : Laurent Montel
+ * Date        : 2005-09-15
  * Description : dcraw library interface
  *
  * Copyright 2005 by Laurent Montel <montel@kde.org>

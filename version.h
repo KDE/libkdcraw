@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier
- * Date   : 2007-02-12
+ * Authors     : Gilles Caulier
+ * Date        : 2007-02-12
  * Description : libkdcraw release ID header.
  * 
  * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 

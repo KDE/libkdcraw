@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier
- * Date   : 2005-11-06
+ * Authors     : Gilles Caulier
+ * Date        : 2005-11-06
  * Description : list of RAW file extensions supported by 
  *               dcraw program.
  * 

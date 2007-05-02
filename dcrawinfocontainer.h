@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier
- * Date   : 2007-05-02
+ * Authors     : Gilles Caulier
+ * Date        : 2007-05-02
  * Description : RAW file identification information container 
  *
  * Copyright 2007 by Gilles Caulier <caulier dot gilles at gmail dot com>

@@ -1,7 +1,7 @@
 /* ============================================================
- * Authors: Gilles Caulier
- *          Marcel Wiesweg
- * Date   : 2006-04-13
+ * Authors     : Gilles Caulier
+ *               Marcel Wiesweg
+ * Date        : 2006-04-13
  * Description : detection of dcraw binary program
  *
  * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>

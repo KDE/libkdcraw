@@ -1,6 +1,6 @@
 /* ============================================================
- * Authors: Gilles Caulier
- * Date   : 2006-09-13
+ * Authors     : Gilles Caulier
+ * Date        : 2006-09-13
  * Description : dcraw settings widgets
  *
  * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>

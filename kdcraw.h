@@ -1,7 +1,7 @@
 /* ============================================================
- * Authors: Gilles Caulier
- *          Marcel Wiesweg
- * Date   : 2006-12-09
+ * Authors     : Gilles Caulier
+ *               Marcel Wiesweg
+ * Date        : 2006-12-09
  * Description : a tread-safe dcraw program interface
  *
  * Copyright 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
