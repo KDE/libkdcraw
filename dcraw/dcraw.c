@@ -7342,7 +7342,7 @@ int CLASS main (int argc, char **argv)
       printf (_("\nFilename: %s\n"), ifname);
       printf (_("Timestamp: %s"), ctime(&timestamp));
 
-      /* NOTE: LibKdcraw Fix : separate output of "make" and "model" informations.
+      /* NOTE: LibKdcraw Fix : separate output of "make" and "model" information.
       printf (_("Camera: %s %s\n"), make, model);*/
       printf (_("Camera: %s\n"), make);
       printf (_("Model: %s\n"), model);
