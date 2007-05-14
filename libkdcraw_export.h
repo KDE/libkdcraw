@@ -1,9 +1,12 @@
 /* ============================================================
- * Authors     : Laurent Montel
- * Date        : 2005-09-15
- * Description : dcraw library interface
  *
- * Copyright 2005 by Laurent Montel <montel@kde.org>
+ * This file is a part of kipi-plugins project
+ * http://www.kipi-plugins.org
+ *
+ * Date        : 2005-09-15
+ * Description : dcraw program interface for KDE
+ *
+ * Copyright (C) 2005 by Laurent Montel <montel@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -14,7 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * ============================================================ */
 
 #ifndef _LIBKDCRAW_EXPORT_H
