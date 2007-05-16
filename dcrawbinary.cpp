@@ -96,8 +96,8 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
     // The dcraw output looks like this : Raw photo decoder "dcraw" v8.54...
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
-    QString stdout    = QString::fromLocal8Bit(buffer, buflen);
-    QString firstLine = stdout.section('\n', 1, 1);    
+    QString dcrawOut  = QString::fromLocal8Bit(buffer, buflen);
+    QString firstLine = dcrawOut.section('\n', 1, 1);    
 
     if (firstLine.startsWith(dcrawHeader))
     {
