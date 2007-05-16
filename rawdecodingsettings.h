@@ -82,7 +82,7 @@ public:
     
 
     /** Standard destructor */
-    ~RawDecodingSettings(){};
+    virtual ~RawDecodingSettings(){};
 
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
     void optimizeTimeLoading(void)
