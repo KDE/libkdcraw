@@ -41,6 +41,7 @@ class LIBKDCRAW_EXPORT DcrawInfoContainer
 
 public:
 
+    /** Standard constructor */
     DcrawInfoContainer()
     {
         sensitivity       = -1;
@@ -60,7 +61,11 @@ public:
         cameraMult[2]     = 0.0;
         cameraMult[3]     = 0.0;
     };
+
+    /** Standard destructor */
+    virtual ~DcrawInfoContainer(){}
     
+    /** return 'true' if container is empty, else 'false' */    
     bool isEmpty()
     {
         if ( make.isEmpty()          &&
@@ -80,31 +85,47 @@ public:
             return false;
     };
     
-    bool      hasSecondaryPixel;  // True if camera sensor use a secondary pixel.
-    bool      hasIccProfile;      // True if RAW file include an ICC color profile.
-    bool      isDecodable;        // True is RAW file is decodable by dcraw.
+    /** True if camera sensor use a secondary pixel. */
+    bool      hasSecondaryPixel;  
+    /** True if RAW file include an ICC color profile. */
+    bool      hasIccProfile;      
+    /** True is RAW file is decodable by dcraw. */
+    bool      isDecodable;        
 
-    int       rawColors;          // The number of RAW colors.
+    /** The number of RAW colors. */
+    int       rawColors;          
 
-    long      sensitivity;        // The sensitivity in ISO used by camera to take the picture.
+    /** The sensitivity in ISO used by camera to take the picture. */
+    long      sensitivity;        
 
-    float     exposureTime;       // ==> 1/exposureTime = exposure time in seconds.
-    float     aperture;           // ==> Aperture value in APEX.
-    float     focalLength;        // ==> Focal Length value in mm.
-    float     pixelAspectRatio;   // The pixel Aspect Ratio if != 1.0. 
-                                  // NOTE: if == 1.0, dcraw do not show this value.
+    /** ==> 1/exposureTime = exposure time in seconds. */
+    float     exposureTime;       
+    /** ==> Aperture value in APEX. */
+    float     aperture;           
+    /** ==> Focal Length value in mm. */
+    float     focalLength;        
+    /** The pixel Aspect Ratio if != 1.0. NOTE: if == 1.0, dcraw do not show this value. */
+    float     pixelAspectRatio;   
 
-    double    daylightMult[3];    // White color balance settings.
+    /** White color balance settings. */
+    double    daylightMult[3];    
+    /** Camera multipliers used for White Balance adjustements */
     double    cameraMult[4];
 
-    QString   make;               // The camera maker.
-    QString   model;              // The camera model.
-    QString   filterPattern;      // The demosaising filter pattern.
-    QString   DNGVersion;         // The DNG version. NOTE: only show with DNG RAW files.
+    /** The camera maker. */
+    QString   make;               
+    /** The camera model. */
+    QString   model;              
+    /** The demosaising filter pattern. */
+    QString   filterPattern;      
+    /** The DNG version. NOTE: only show with DNG RAW files. */
+    QString   DNGVersion;         
 
-    QDateTime dateTime;           // Date & time when have been taken the picture.
+    /** Date & time when have been taken the picture. */
+    QDateTime dateTime;           
 
-    QSize     imageSize;          // The image dimensions in pixels.
+    /** The image dimensions in pixels. */
+    QSize     imageSize;          
 };
 
 } // namespace KDcrawIface
