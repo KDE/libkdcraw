@@ -55,7 +55,7 @@ public:
     KDcraw();
 
     /** Standard destructor. */
-    ~KDcraw();
+    virtual ~KDcraw();
 
 public:  
 
