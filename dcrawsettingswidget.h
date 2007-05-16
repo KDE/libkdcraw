@@ -47,7 +47,7 @@ public:
                         bool sixteenBitsOption=false, 
                         bool outputColorSpaceOption=true, 
                         bool showAdvancedOptions=false);
-    ~DcrawSettingsWidget();
+    virtual ~DcrawSettingsWidget();
 
     bool   sixteenBits();
     bool   useCameraWB();
