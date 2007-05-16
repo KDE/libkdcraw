@@ -207,6 +207,9 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     QString   rawFilesExt(raw_file_extentions);
     QString ext = fileInfo.extension(false).upper();
 
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.upper().contains(ext))
+        return false;
+
     // Try to use simple RAW extraction method in 8 bits ppm output.
     // -c : write to stdout
     // -h : Half-size color image (3x faster than -q)
