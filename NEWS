@@ -2,9 +2,11 @@
 ------------------------------------------------------------------------
 
 New features
-- API changed: KDcraw destructor is now virtual.
-               Added DcrawSettingsContainer destructor.
-
+- API changed: * KDcraw destructor is now virtual.
+               * Added DcrawSettingsContainer destructor.
+               * Separate embedded JPEG preview extraction and half decoding methods
+                 to get a preview of RAW pictures.
+		 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 145482 : libkdraw compile fails on Cygwin.
 

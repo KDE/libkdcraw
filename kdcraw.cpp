@@ -85,7 +85,6 @@ public:
     bool                 normalExit;
 
     uchar               *data;
-    
 
     int                  dataPos;
     int                  width;
@@ -95,11 +94,11 @@ public:
     QString              filePath;
 
     QMutex               mutex;
-    
+
     QWaitCondition       condVar;
 
     QTimer              *queryTimer;
-    
+
     KProcess            *process;
 };
 
@@ -121,6 +120,16 @@ void KDcraw::cancel()
 }
 
 bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
+{
+    // In first, try to extrcat the embedded JPEG preview. Very fast.
+    bool ret = loadEmbeddedPreview(image, path);
+    if (ret) return true;
+
+    // In second, decode and half size of RAW picture. More slow.
+    return (loadHalfPreview(image, path));
+}
+
+bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 {
     FILE       *f=NULL;
     QByteArray  imgData;
@@ -181,7 +190,24 @@ bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
         }
     }
 
-    // In second, try to use simple RAW extraction method in 8 bits ppm output.
+    return false;
+}
+
+bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
+{
+    FILE       *f=NULL;
+    QByteArray  imgData;
+    const int   MAX_IPC_SIZE = (1024*32);
+    char        buffer[MAX_IPC_SIZE];
+    QFile       file;
+    Q_LONG      len;
+    QCString    command;
+
+    QFileInfo fileInfo(path);
+    QString   rawFilesExt(raw_file_extentions);
+    QString ext = fileInfo.extension(false).upper();
+
+    // Try to use simple RAW extraction method in 8 bits ppm output.
     // -c : write to stdout
     // -h : Half-size color image (3x faster than -q)
     // -a : Use automatic white balance

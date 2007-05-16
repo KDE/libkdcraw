@@ -59,10 +59,20 @@ public:
 
 public:  
 
-    /** Get the embedded preview image from RAW pictures. This is a fast and non cancelable 
-        method witch do not require a class instance to run.
+    /** This is a non cancelable method witch do not require a class instance to run. 
+        It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview(). 
     */
     static bool loadDcrawPreview(QImage& image, const QString& path);
+
+    /** Get the embedded JPEG preview image from RAW picture. This is a fast and non cancelable 
+        This method do not require a class instance to run.
+    */
+    static bool loadEmbeddedPreview(QImage& image, const QString& path);
+
+    /** Get the half decode RAW picture. This is a more slower than loadEmbeddedPreview() method
+        and non cancelable. This method do not require a class instance to run.
+    */
+    static bool loadHalfPreview(QImage& image, const QString& path);
 
     /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h 
         for more details. This is a fast and non cancelable method witch do not require 
@@ -92,7 +102,7 @@ public:
     /** Extract a full size of RAW data from 'filePath' picture file using 
         'rawDecodingSettings' settings. This is a cancelable method witch require 
         a class instance to run because RAW pictures decoding can take a while.
-        
+
         This method return:
 
             - A byte array container ('imageData') with picture data. Pixels order is RGB. 
@@ -112,7 +122,7 @@ public:
     void cancel();
 
 protected:
-    
+
     /** Used internally to cancel RAW decoding operation. Normally, you don't need to use it 
         directly, excepted if you derivated this class. Usual way is to use cancel() method 
     */
@@ -137,7 +147,7 @@ protected:
 
               2-decoding data reception from dcraw. You can control this stage using 
                 checkToCancelRecievingData() and setRecievingDataProgress() methods. 
-    
+
               3-storage decoded data in your application using the QByteArray container.
     */
     virtual bool checkToCancelWaitingData();
