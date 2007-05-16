@@ -2,7 +2,8 @@
 ------------------------------------------------------------------------
 
 New features
-- API changed: KDcraw constructor is now virtual.
+- API changed: KDcraw destructor is now virtual.
+               Added DcrawSettingsContainer destructor.
 
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 145482 : libkdraw compile fails on Cygwin.
