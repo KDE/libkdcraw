@@ -1,3 +1,6 @@
+# Require by dcraw.c implementation.
+KDE4_NO_ENABLE_FINAL(kdraw)
+
 #-- dcraw binary -------------------------------------------------
 
 # libkdcraw use a dedicaced dcraw binary program to run. This is mandatory 
@@ -23,4 +26,3 @@ target_link_libraries(kdcraw jpeg lcms)
 install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})
 install(FILES kdcraw.1 DESTINATION ${MAN_INSTALL_DIR})
 
-#TODO : do not compile dcraw.c with nofinal mode
