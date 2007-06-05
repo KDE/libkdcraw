@@ -1,5 +1,6 @@
 project(libkdcraw)
 
+subdirs(icons)
 subdirs(dcraw)
 
 # DEpencies detection require to compile dcraw.c
