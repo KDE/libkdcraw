@@ -1,7 +1,4 @@
-# Require by dcraw.c implementation.
-KDE4_NO_ENABLE_FINAL(kdraw)
-
-#-- dcraw binary -------------------------------------------------
+#-- dcraw binary for KDE -------------------------------------------------
 
 # libkdcraw use a dedicaced dcraw binary program to run. This is mandatory 
 # since dcraw author have broken the command line options 
@@ -10,6 +7,10 @@ KDE4_NO_ENABLE_FINAL(kdraw)
 # The dcraw.c source code is just a copy of official implementation, but 
 # this one have been completly tested with libkdcraw core. 
 # Note: dcraw project page is http://cybercom.net/~dcoffin
+
+# Require by dcraw.c implementation.
+KDE4_NO_ENABLE_FINAL(kdraw)
+
 
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
 # In fact, dcraw.c use lcms.h witch use the "inline" keyword witch do not exist in pure C 
