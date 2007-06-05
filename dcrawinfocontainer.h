@@ -25,9 +25,9 @@
 
 // QT includes.
 
-#include <qstring.h>
-#include <qdatetime.h>
-#include <qsize.h>
+#include <QString>
+#include <QDateTime>
+#include <QSize>
 
 // Local Includes.
 
