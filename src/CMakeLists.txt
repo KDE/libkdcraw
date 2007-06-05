@@ -1,3 +1,5 @@
+include_directories(${KDE4_INCLUDES} ${QT4_INCLUDES})
+
 set(kdcraw_LIB_SRCS dcrawbinary.cpp kdcraw.cpp dcrawsettingswidget.cpp)
 
 kde4_automoc(${kdcraw_LIB_SRCS})
