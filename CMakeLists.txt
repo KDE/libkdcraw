@@ -3,7 +3,7 @@ project(libkdcraw)
 subdirs(icons)
 subdirs(dcraw)
 
-# DEpencies detection require to compile dcraw.c
+# Depencies detection require to compile dcraw.c
 # Detect Little CMS library properlly with CMake script from 'cmake/modules'
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 find_package(LCMS REQUIRED)

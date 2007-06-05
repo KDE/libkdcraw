@@ -102,7 +102,7 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
     if (firstLine.startsWith(dcrawHeader))
     {
         d->version = firstLine.remove(0, dcrawHeader.length());    
-        qDebug("Found dcraw version: %s", version().ascii());    
+        qDebug("Found dcraw version: %s", version().toAscii().constData());    
     }
 }
 
@@ -141,7 +141,7 @@ bool DcrawBinary::versionIsRight() const
 
 void DcrawBinary::checkReport()
 {
-    QString appName = KGlobal::instance()->aboutData()->programName();
+    QString appName = KGlobal::mainComponent().aboutData()->programName();
 
     if (!isAvailable()) 
     {
