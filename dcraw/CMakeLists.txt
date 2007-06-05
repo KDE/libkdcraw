@@ -23,6 +23,4 @@ target_link_libraries(kdcraw jpeg lcms)
 install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})
 install(FILES kdcraw.1 DESTINATION ${MAN_INSTALL_DIR})
 
-#TODO : 
-# - add install man page
-# - do not compile dcraw.c with nofinal mode
+#TODO : do not compile dcraw.c with nofinal mode
