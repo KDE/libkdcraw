@@ -5,12 +5,12 @@ METASOURCES = AUTO
 
 #-- dcraw binary -------------------------------------------------
 
-# digiKam use a dedicaced dcraw binary program to run. This is mandatory 
+# libkdcraw use a dedicaced dcraw binary program to run. This is mandatory 
 # since dcraw author have broken the command line options 
 # compatibility with the 8.x serie.
 # Also, dcraw is not available like a library.
 # The dcraw.c source code is just a copy of official implementation, but 
-# this one have been completly tested with digiKam core. 
+# this one have been completly tested with libkdcraw core. 
 # Note: dcraw project page is http://cybercom.net/~dcoffin
 
 bin_PROGRAMS = kdcraw
