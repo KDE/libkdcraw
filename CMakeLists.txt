@@ -23,7 +23,7 @@ kde4_automoc(${kdcraw_LIB_SRCS})
 
 kde4_add_library(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
-target_link_libraries(kdcraw ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} lcms)
+target_link_libraries(kdcraw ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} lcms)
 
 set_target_properties(kdcraw PROPERTIES VERSION 2.0.0 SOVERSION 2)
 
