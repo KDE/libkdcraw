@@ -6,7 +6,7 @@
  * Date        : 2005-09-15
  * Description : dcraw program interface for KDE
  *
- * Copyright (C) 2005 by Laurent Montel <montel@kde.org>
+ * Copyright (C) 2005-2007 by Laurent Montel <montel@kde.org>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,14 +23,22 @@
 #ifndef _LIBKDCRAW_EXPORT_H
 #define _LIBKDCRAW_EXPORT_H
 
-#ifdef KDEMACROS_USABLE
 #include <kdemacros.h>
+
+#ifdef Q_WS_WIN
+
+#ifndef LIBKDCRAW_EXPORT
+# ifdef MAKE_KDCRAW_LIB
+#  define LIBKDCRAW_EXPORT KDE_EXPORT
+# else
+#  define LIBKDCRAW_EXPORT KDE_IMPORT
+# endif
 #endif
 
-#ifdef KDE_EXPORT
+#else // not windows
+
 #define LIBKDCRAW_EXPORT KDE_EXPORT
-#else
-#define LIBKDCRAW_EXPORT
+
 #endif
 
 #endif /* _LIBKDCRAW_EXPORT_H */
