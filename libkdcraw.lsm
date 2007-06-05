@@ -1,6 +1,6 @@
 Begin4
 Title: libkdcraw
-Version: 0.1.1
+Version: 0.2.0
 Entered-date: 2007-05-05
 Description: An library to decode RAW picture files using dcraw command line program
 Keywords: kde image raw decode dcraw digikam kipi-plugins
