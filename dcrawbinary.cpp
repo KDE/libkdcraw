@@ -45,7 +45,7 @@ public:
     DcrawBinaryPriv()
     {
         available = false;
-        version = QString::null;
+        version.clear();
     }
 
     bool    available;
