@@ -40,13 +40,14 @@ extern "C"
 
 // Qt Includes.
 
-#include <qfile.h>
-#include <qtimer.h>
-#include <qcstring.h>
-#include <qfileinfo.h>
-#include <qapplication.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
+#include <QEvent>
+#include <QFile>
+#include <QByteArray>
+#include <QTimer>
+#include <QFileInfo>
+#include <QApplication>
+#include <QMutex>
+#include <QWaitCondition>
 
 // KDE includes.
 
@@ -81,25 +82,25 @@ public:
         dataPos    = 0;
     }
 
-    bool                 running;
-    bool                 normalExit;
+    bool            running;
+    bool            normalExit;
 
-    uchar               *data;
+    char           *data;
 
-    int                  dataPos;
-    int                  width;
-    int                  height;
-    int                  rgbmax;
+    int             dataPos;
+    int             width;
+    int             height;
+    int             rgbmax;
 
-    QString              filePath;
+    QString         filePath;
 
-    QMutex               mutex;
+    QMutex          mutex;
 
-    QWaitCondition       condVar;
+    QWaitCondition  condVar;
 
-    QTimer              *queryTimer;
+    QTimer         *queryTimer;
 
-    KProcess            *process;
+    KProcess       *process;
 };
 
 KDcraw::KDcraw()
@@ -136,14 +137,14 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
     QFile       file;
-    Q_LONG      len;
-    QCString    command;
+    qint64      len;
+    QByteArray  command;
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.completeSuffix().toUpper();
 
-    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.upper().contains(ext))
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
     // Try to extract embedded thumbnail using dcraw with options:
@@ -161,9 +162,9 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
     if ( f == NULL )
         return false;
 
-    file.open( IO_ReadOnly,  f );
+    file.open(f, QIODevice::ReadOnly);
 
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
     {
         if ( len == -1 )
         {
@@ -200,14 +201,14 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
     QFile       file;
-    Q_LONG      len;
-    QCString    command;
+    qint64      len;
+    QByteArray  command;
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.completeSuffix().toUpper();
 
-    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.upper().contains(ext))
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
     // Try to use simple RAW extraction method in 8 bits ppm output.
@@ -227,9 +228,9 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if ( f == NULL )
         return false;
 
-    file.open( IO_ReadOnly,  f );
+    file.open(f, QIODevice::ReadOnly);
 
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
     {
         if ( len == -1 )
         {
@@ -266,14 +267,14 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
     QFile       file;
-    Q_LONG      len;
-    QCString    command;
+    qint64      len;
+    QByteArray  command;
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.extension(false).upper();
+    QString ext = fileInfo.completeSuffix().toUpper();
 
-    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.upper().contains(ext))
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
     // Try to get camera maker/model using dcraw with options:
@@ -294,9 +295,9 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         return false;
     }
 
-    file.open( IO_ReadOnly,  f );
+    file.open(f, QIODevice::ReadOnly);
 
-    while ((len = file.readBlock(buffer, MAX_IPC_SIZE)) != 0)
+    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
     {
         if ( len == -1 )
         {
@@ -325,7 +326,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Time Stamp.
     QString timeStampHeader("Timestamp: ");
-    pos = dcrawInfo.find(timeStampHeader);
+    pos = dcrawInfo.indexOf(timeStampHeader);
     if (pos != -1)
     {
         QString timeStamp = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -335,7 +336,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Camera Maker.
     QString makeHeader("Camera: ");
-    pos = dcrawInfo.find(makeHeader);
+    pos = dcrawInfo.indexOf(makeHeader);
     if (pos != -1)
     {
         QString make = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -345,7 +346,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Camera Model.
     QString modelHeader("Model: ");
-    pos = dcrawInfo.find(modelHeader);
+    pos = dcrawInfo.indexOf(modelHeader);
     if (pos != -1)
     {
         QString model = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -355,7 +356,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract DNG Version.
     QString DNGVersionHeader("DNG Version: ");
-    pos = dcrawInfo.find(DNGVersionHeader);
+    pos = dcrawInfo.indexOf(DNGVersionHeader);
     if (pos != -1)
     {
         QString DNGVersion = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -365,7 +366,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract ISO Speed.
     QString isoSpeedHeader("ISO speed: ");
-    pos = dcrawInfo.find(isoSpeedHeader);
+    pos = dcrawInfo.indexOf(isoSpeedHeader);
     if (pos != -1)
     {
         QString isoSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -375,7 +376,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Shutter Speed.
     QString shutterSpeedHeader("Shutter: ");
-    pos = dcrawInfo.find(shutterSpeedHeader);
+    pos = dcrawInfo.indexOf(shutterSpeedHeader);
     if (pos != -1)
     {
         QString shutterSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -390,7 +391,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Aperture.
     QString apertureHeader("Aperture: f/");
-    pos = dcrawInfo.find(apertureHeader);
+    pos = dcrawInfo.indexOf(apertureHeader);
     if (pos != -1)
     {
         QString aperture = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -400,7 +401,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Focal Length.
     QString focalLengthHeader("Focal Length: ");
-    pos = dcrawInfo.find(focalLengthHeader);
+    pos = dcrawInfo.indexOf(focalLengthHeader);
     if (pos != -1)
     {
         QString focalLength = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -412,7 +413,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     // Extract Image Size.
 
     QString imageSizeHeader("Image size:  ");
-    pos = dcrawInfo.find(imageSizeHeader);
+    pos = dcrawInfo.indexOf(imageSizeHeader);
     if (pos != -1)
     {
         QString imageSize = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -425,7 +426,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     // Extract "Has an embedded ICC profile" flag.
 
     QString hasIccProfileHeader("Embedded ICC profile: ");
-    pos = dcrawInfo.find(hasIccProfileHeader);
+    pos = dcrawInfo.indexOf(hasIccProfileHeader);
     if (pos != -1)
     {
         QString hasIccProfile = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -439,7 +440,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     // Extract "Is Decodable" flag.
 
     QString isDecodableHeader("Decodable with dcraw: ");
-    pos = dcrawInfo.find(isDecodableHeader);
+    pos = dcrawInfo.indexOf(isDecodableHeader);
     if (pos != -1)
     {
         QString isDecodable = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -453,7 +454,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     // Extract "Has Secondary Pixel" flag.
 
     QString hasSecondaryPixelHeader("Secondary pixels: ");
-    pos = dcrawInfo.find(hasSecondaryPixelHeader);
+    pos = dcrawInfo.indexOf(hasSecondaryPixelHeader);
     if (pos != -1)
     {
         QString hasSecondaryPixel = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -466,7 +467,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Pixel Aspect Ratio.
     QString aspectRatioHeader("Pixel Aspect Ratio: ");
-    pos = dcrawInfo.find(aspectRatioHeader);
+    pos = dcrawInfo.indexOf(aspectRatioHeader);
     if (pos != -1)
     {
         QString aspectRatio = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -476,7 +477,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Raw Colors.
     QString rawColorsHeader("Raw colors: ");
-    pos = dcrawInfo.find(rawColorsHeader);
+    pos = dcrawInfo.indexOf(rawColorsHeader);
     if (pos != -1)
     {
         QString rawColors = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -486,7 +487,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Filter Pattern.
     QString filterHeader("Filter pattern: ");
-    pos = dcrawInfo.find(filterHeader);
+    pos = dcrawInfo.indexOf(filterHeader);
     if (pos != -1)
     {
         QString filter = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -496,7 +497,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Daylight Multipliers.
     QString daylightMultHeader("Daylight multipliers: ");
-    pos = dcrawInfo.find(daylightMultHeader);
+    pos = dcrawInfo.indexOf(daylightMultHeader);
     if (pos != -1)
     {
         QString daylightMult = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -508,7 +509,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Camera Multipliers.
     QString cameraMultHeader("Camera multipliers: ");
-    pos = dcrawInfo.find(cameraMultHeader);
+    pos = dcrawInfo.indexOf(cameraMultHeader);
     if (pos != -1)
     {
         QString cameraMult = dcrawInfo.mid(pos).section('\n', 0, 0);
@@ -572,7 +573,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     d->rgbmax     = 0;
 
     // trigger startProcess and loop to wait dcraw decoding
-    QApplication::postEvent(this, new QCustomEvent(QEvent::User));
+    QApplication::postEvent(this, new QEvent(QEvent::User));
 
     // The time from starting dcraw to when it first outputs something takes
     // much longer than the time while it outputs the data and the time while
@@ -637,8 +638,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     width     = d->width;
     height    = d->height;
     rgbmax    = d->rgbmax;
-    imageData = QByteArray(d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3));
-    memcpy(imageData.data(), d->data, imageData.size());
+    imageData = QByteArray(d->data, d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3));
 
     delete [] d->data;
     d->data = 0;
@@ -771,13 +771,13 @@ void KDcraw::startProcess()
     *d->process << QFile::encodeName(d->filePath);
 
     QString args;
-    for (uint i = 0 ; i < d->process->args().count(); i++)
+    for (int i = 0 ; i < d->process->args().count(); i++)
     {
         args.append(d->process->args()[i]);
         args.append(QString(" "));
     }
 
-    qDebug("Running RAW decoding command: %s", args.ascii());
+    qDebug("Running RAW decoding command: %s", args.toAscii().constData());
 
     // actually start the process
     if ( !d->process->start(KProcess::NotifyOnExit, 
@@ -819,7 +819,7 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         QString magic = QString::fromAscii(buffer, 2);
         if (magic != "P6") 
         {
-            qWarning("Cannot parse header from RAW decoding: Magic is: %s", magic.ascii());
+            qWarning("Cannot parse header from RAW decoding: Magic is: %s", magic.toAscii().constData());
             d->process->kill();
             return;
         }
@@ -838,8 +838,10 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
             ++i;
         }
 
-        QStringList splitlist = QStringList::split("\n", QString::fromAscii(buffer, i));
-        QStringList sizes     = QStringList::split(" ", splitlist[1]);
+        QString temp = QString::fromAscii(buffer, i);
+        QStringList splitlist = temp.split(QString("\n"));
+        temp = splitlist[1];
+        QStringList sizes = temp.split(QString(" "));
         if (splitlist.size() < 3 || sizes.size() < 2)
         {
             qWarning("Cannot parse header from RAW decoding: Could not split");
@@ -860,7 +862,7 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
         buflen -= i;
 
         // allocate buffer
-        d->data    = new uchar[d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
+        d->data    = new char[d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
         d->dataPos = 0;
     }
 
@@ -871,7 +873,7 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 
 void KDcraw::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 {
-    QCString message(buffer, buflen);
+    QByteArray message(buffer, buflen);
     qDebug("RAW decoding StdErr: %s", (const char*)message);
 }
 
