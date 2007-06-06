@@ -22,7 +22,7 @@ add_definitions("-Dinline= -w")
 
 set(kdcraw_SRCS dcraw.c)
 kde4_add_executable(kdcraw ${kdcraw_SRCS})
-target_link_libraries(kdcraw jpeg lcms)
+target_link_libraries(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
 install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})
 install(FILES kdcraw.1 DESTINATION ${MAN_INSTALL_DIR})
