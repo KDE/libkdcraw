@@ -108,7 +108,8 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 
 const char *DcrawBinary::path()
 {
-    return "kdcraw";
+    // return the kdcraw binary program name + soname of library as suffixe
+    return "kdcraw-2.0.0";
 }
 
 bool DcrawBinary::isAvailable() const
