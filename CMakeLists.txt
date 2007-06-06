@@ -8,6 +8,9 @@ find_package(LCMS REQUIRED)
 # Detect libJPEG
 find_package(JPEG REQUIRED)
 
+set(DCRAW_LIB_VERSION "2.0.0")
+set(DCRAW_LIB_SOVERSION "2")
+
 
 subdirs(icons)
 subdirs(src)

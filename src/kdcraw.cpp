@@ -52,7 +52,7 @@ extern "C"
 // KDE includes.
 
 #include <klocale.h>
-#include <kprocess.h>
+#include <k3process.h>
 #include <kstandarddirs.h>
 
 // Local includes.
@@ -100,7 +100,7 @@ public:
 
     QTimer         *queryTimer;
 
-    KProcess       *process;
+    K3Process       *process;
 };
 
 KDcraw::KDcraw()
@@ -154,7 +154,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
     command  = DcrawBinary::path();
     command += " -c -e ";
-    command += QFile::encodeName( KProcess::quote( path ) );
+    command += QFile::encodeName( K3Process::quote( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
@@ -220,7 +220,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     f=NULL;
     command  = DcrawBinary::path();
     command += " -c -h -w -a ";
-    command += QFile::encodeName( KProcess::quote( path ) );
+    command += QFile::encodeName( K3Process::quote( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
@@ -284,7 +284,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     command  = DcrawBinary::path();
     command += " -c -i -v ";
-    command += QFile::encodeName( KProcess::quote( path ) );
+    command += QFile::encodeName( K3Process::quote( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
@@ -683,16 +683,16 @@ void KDcraw::startProcess()
 
     // create KProcess and build argument list
 
-    d->process = new KProcess;
+    d->process = new K3Process;
 
-    connect(d->process, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotProcessExited(KProcess *)));
+    connect(d->process, SIGNAL(processExited(K3Process *)),
+            this, SLOT(slotProcessExited(K3Process *)));
              
-    connect(d->process, SIGNAL(receivedStdout(KProcess *, char *, int)),
-            this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
+    connect(d->process, SIGNAL(receivedStdout(K3Process *, char *, int)),
+            this, SLOT(slotReceivedStdout(K3Process *, char *, int)));
              
-    connect(d->process, SIGNAL(receivedStderr(KProcess *, char *, int)),
-            this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
+    connect(d->process, SIGNAL(receivedStderr(K3Process *, char *, int)),
+            this, SLOT(slotReceivedStderr(K3Process *, char *, int)));
 
     // run dcraw with options:
     // -c : write to stdout
@@ -780,8 +780,8 @@ void KDcraw::startProcess()
     qDebug("Running RAW decoding command: %s", args.toAscii().constData());
 
     // actually start the process
-    if ( !d->process->start(KProcess::NotifyOnExit, 
-         KProcess::Communication(KProcess::Stdout | KProcess::Stderr)) )
+    if ( !d->process->start(K3Process::NotifyOnExit, 
+         K3Process::Communication(K3Process::Stdout | K3Process::Stderr)) )
     {
         qWarning("Failed to start RAW decoding");
         delete d->process;
@@ -792,7 +792,7 @@ void KDcraw::startProcess()
     }
 }
 
-void KDcraw::slotProcessExited(KProcess *)
+void KDcraw::slotProcessExited(K3Process *)
 {
     // set variables, clean up, wake up loader thread
 
@@ -806,7 +806,7 @@ void KDcraw::slotProcessExited(KProcess *)
     d->condVar.wakeAll();
 }
 
-void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
+void KDcraw::slotReceivedStdout(K3Process *, char *buffer, int buflen)
 {
     if (!d->data)
     {
@@ -871,7 +871,7 @@ void KDcraw::slotReceivedStdout(KProcess *, char *buffer, int buflen)
     d->dataPos += buflen;
 }
 
-void KDcraw::slotReceivedStderr(KProcess *, char *buffer, int buflen)
+void KDcraw::slotReceivedStderr(K3Process *, char *buffer, int buflen)
 {
     QByteArray message(buffer, buflen);
     qDebug("RAW decoding StdErr: %s", (const char*)message);

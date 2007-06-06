@@ -38,7 +38,7 @@
 
 class QCustomEvent;
 
-class KProcess;
+class K3Process;
 
 namespace KDcrawIface
 {
@@ -180,9 +180,9 @@ private:
 
 private slots:
 
-    void slotProcessExited(KProcess *);
-    void slotReceivedStdout(KProcess *, char *, int);
-    void slotReceivedStderr(KProcess *, char *, int);
+    void slotProcessExited(K3Process *);
+    void slotReceivedStdout(K3Process *, char *, int);
+    void slotReceivedStderr(K3Process *, char *, int);
     void slotContinueQuery();
 
 private:

@@ -33,7 +33,7 @@
 
 #include "libkdcraw_export.h"
 
-class KProcess;
+class K3Process;
 
 namespace KDcrawIface
 {
@@ -74,7 +74,7 @@ public:
 
 private slots:
 
-    void slotReadStdoutFromDcraw(KProcess*, char*, int);
+    void slotReadStdoutFromDcraw(K3Process*, char*, int);
 
 private:
 

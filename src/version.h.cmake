@@ -25,6 +25,8 @@
 
 static const char kdcraw_version[] = "0.2.0";
 
+static const char kdcraw_soname[] = "kdcraw-${DCRAW_LIB_VERSION}";
+
 #define KDCRAW_VERSION 0x000200
 
 #endif // KDCRAW_VERSION_H

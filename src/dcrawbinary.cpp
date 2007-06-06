@@ -23,13 +23,13 @@
 
 // KDE includes
 
-#include <kprocess.h>
+#include <k3process.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kaboutdata.h>
-
+#include "version.h"
 // Local includes
 
 #include "dcrawbinary.h"
@@ -81,17 +81,17 @@ void DcrawBinary::cleanUp()
 
 void DcrawBinary::checkSystem()
 {
-    KProcess process;
+    K3Process process;
     process.clearArguments();
     process << path();    
 
-    connect(&process, SIGNAL(receivedStdout(KProcess *, char*, int)),
-            this, SLOT(slotReadStdoutFromDcraw(KProcess*, char*, int)));
+    connect(&process, SIGNAL(receivedStdout(K3Process *, char*, int)),
+            this, SLOT(slotReadStdoutFromDcraw(K3Process*, char*, int)));
 
-    d->available = process.start(KProcess::Block, KProcess::Stdout);
+    d->available = process.start(K3Process::Block, K3Process::Stdout);
 }
 
-void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
+void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
 {
     // The dcraw output looks like this : Raw photo decoder "dcraw" v8.54...
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
@@ -109,7 +109,7 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 const char *DcrawBinary::path()
 {
     // return the kdcraw binary program name + soname of library as suffixe
-    return "kdcraw-2.0.0";
+    return /*"kdcraw-2.0.0"*/kdcraw_soname;
 }
 
 bool DcrawBinary::isAvailable() const
