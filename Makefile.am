@@ -1,4 +1,4 @@
-SUBDIRS = dcraw icons src 
+SUBDIRS = dcraw icons libkdcraw 
 
 libkdcrawpkgconfigdir = $(libdir)/pkgconfig
 libkdcrawpkgconfig_DATA = libkdcraw.pc
