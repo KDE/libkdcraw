@@ -80,6 +80,30 @@ public:
         colorBalanceMultipliers[3] = 0.0;
     };
     
+    /** Compare for equality */
+    bool operator==(const RawDecodingSettings &o) const
+    {
+        return sixteenBitsImage == o.sixteenBitsImage
+            && brightness == o.brightness
+            && RAWQuality == o.RAWQuality
+            && outputColorSpace == o.outputColorSpace
+            && RGBInterpolate4Colors == o.RGBInterpolate4Colors  
+            && DontStretchPixels == o.DontStretchPixels  
+            && unclipColors == o.unclipColors  
+            && cameraColorBalance == o.cameraColorBalance  
+            && automaticColorBalance == o.automaticColorBalance  
+            && halfSizeColorImage == o.halfSizeColorImage  
+            && enableBlackPoint == o.enableBlackPoint  
+            && blackPoint == o.blackPoint  
+            && enableNoiseReduction == o.enableNoiseReduction  
+            && NRThreshold == o.NRThreshold  
+            && enableColorMultipliers == o.enableColorMultipliers  
+            && colorBalanceMultipliers[0] == o.colorBalanceMultipliers[0]  
+            && colorBalanceMultipliers[1] == o.colorBalanceMultipliers[1]  
+            && colorBalanceMultipliers[2] == o.colorBalanceMultipliers[2]  
+            && colorBalanceMultipliers[3] == o.colorBalanceMultipliers[3]  
+          ;
+    };
 
     /** Standard destructor */
     virtual ~RawDecodingSettings(){};
