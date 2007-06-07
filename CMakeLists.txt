@@ -13,7 +13,7 @@ set(DCRAW_LIB_SOVERSION "2")
 
 
 subdirs(icons)
-subdirs(src)
+subdirs(libkdcraw)
 subdirs(dcraw)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
