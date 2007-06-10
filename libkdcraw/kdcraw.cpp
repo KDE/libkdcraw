@@ -142,7 +142,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.completeSuffix().toUpper();
+    QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
@@ -206,7 +206,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.completeSuffix().toUpper();
+    QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
@@ -272,7 +272,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
-    QString ext = fileInfo.completeSuffix().toUpper();
+    QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
