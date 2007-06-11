@@ -456,6 +456,7 @@ void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
 {
     d->brightnessLabel->setDisabled(b);
     d->brightnessSpinBox->setDisabled(b); 
+    emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
 }
 
 void DcrawSettingsWidget::slotUnclipColorActivated(int v)
