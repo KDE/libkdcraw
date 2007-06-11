@@ -90,6 +90,10 @@ public:
 
     void   setDefaultSettings();
 
+signals:
+
+    void signalSixteenBitsImageToggled(bool);
+
 private slots:
 
     void slotsixteenBitsImageToggled(bool);
