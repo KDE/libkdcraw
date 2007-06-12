@@ -14,5 +14,5 @@ set_target_properties(kdcraw PROPERTIES VERSION ${DCRAW_LIB_VERSION} SOVERSION $
 
 install(TARGETS kdcraw DESTINATION ${LIB_INSTALL_DIR})
 
-install(FILES rawdecodingsettings.h kdcraw.h dcrawbinary.h dcrawsettingswidget.h dcrawinfocontainer.h rawfiles.h libkdcraw_export.h version.h DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw)
+install(FILES rawdecodingsettings.h kdcraw.h dcrawbinary.h dcrawsettingswidget.h dcrawinfocontainer.h rawfiles.h libkdcraw_export.h ${CMAKE_CURRENT_BINARY_DIR}/version.h DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw)
 
