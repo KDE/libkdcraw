@@ -1,5 +1,80 @@
 V 0.1.1 - 2007-06-13
 ----------------------------------------------------------------------------
+
+2007-06-12 22:32  ach
+
+	* [r674731] libkdcraw/configure.in.in, libkdcraw/dcraw/Makefile.am,
+	  libkdcraw/libkdcraw/Makefile.am,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  o install the '(dirty) implementation detail' kdcraw into a
+	  directory that depends on the ABI_MAJOR. This allows
+	  several libs with different ABI_MAJOR be installed at the
+	  same time.
+	  o don't install manpage. kdcraw is not for the user
+
+2007-06-12 21:15  anaselli
+
+	* [r674703] libkdcraw/libkdcraw/Makefile.am:
+	  Changed to add libtools version managing into prepare script
+	  (hope this will avoid to forget it)
+
+2007-06-11 12:04  cgilles
+
+	* [r673923] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h:
+	  new signal emit when sixteen bits options is toggled
+
+2007-06-07 15:12  cgilles
+
+	* [r672576] libkdcraw/Makefile.am:
+	  compile
+
+2007-06-07 15:12  cgilles
+
+	* [r672575] libkdcraw/libkdcraw, libkdcraw/src:
+	  compile
+
+2007-06-07 14:52  cgilles
+
+	* [r672567] libkdcraw/Makefile.am, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/src, libkdcraw/src/Makefile.am,
+	  libkdcraw/src/dcrawbinary.cpp, libkdcraw/src/dcrawbinary.h,
+	  libkdcraw/src/dcrawinfocontainer.h,
+	  libkdcraw/src/dcrawsettingswidget.cpp,
+	  libkdcraw/src/dcrawsettingswidget.h, libkdcraw/src/kdcraw.cpp,
+	  libkdcraw/src/kdcraw.h, libkdcraw/src/libkdcraw_export.h,
+	  libkdcraw/src/rawdecodingsettings.h, libkdcraw/src/rawfiles.h,
+	  libkdcraw/src/version.h, libkdcraw/version.h:
+	  libkdcraw from KDE3 branch : move all source code files to "src"
+	  sub dir
+
+2007-06-07 07:00  cgilles
+
+	* [r672447] libkdcraw/rawdecodingsettings.h:
+	  libkdraw from KDE3 branches : patch from Jakob Stergaard to
+	  perform equality test between 2 rawdecoding settings.
+	  CCBUGS: 146464
+
+2007-06-05 09:33  vkrause
+
+	* [r671669] libkdcraw/dcrawbinary.cpp:
+	  compile, this is still Qt3
+
+2007-06-05 09:12  cgilles
+
+	* [r671664] libkdcraw/dcraw/Makefile.am:
+	  digiKam => libkdcraw
+
+2007-06-05 08:20  cgilles
+
+	* [r671639] libkdcraw/dcrawbinary.cpp:
+	  krazy fix
+
 2007-06-12 08:39  mlaurent
 
 	* [r674372] kipi-plugins/wallpaper/plugin_wallpaper.cpp,
@@ -1197,4 +1272,3 @@ V 0.1.1 - 2007-06-13
 	  CCMAIL: marcel.wiesweg@gmx.de, kde-imaging@kde.org,
 	  digikam-devel@kde.org
 
-----------------------------------------------------------------------------
