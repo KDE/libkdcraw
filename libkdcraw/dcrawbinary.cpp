@@ -108,7 +108,7 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 
 const char *DcrawBinary::path()
 {
-    return "kdcraw";
+    return KDCRAW_DIR "/kdcraw";
 }
 
 bool DcrawBinary::isAvailable() const

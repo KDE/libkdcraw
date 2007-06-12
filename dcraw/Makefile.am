@@ -14,9 +14,11 @@ METASOURCES = AUTO
 # Note: dcraw project page is http://cybercom.net/~dcoffin
 
 bin_PROGRAMS = kdcraw
+bindir = $(KDCRAW_DIR)
 
-# The manual page of binary program.
-man_MANS = kdcraw.1
+# The manual page of binary program. (Don't install manpage of a library
+# internal helper app
+#man_MANS = kdcraw.1
 
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
 # In fact, dcraw.c use lcms.h witch use the "inline" keyword witch do not exist in pure C 
