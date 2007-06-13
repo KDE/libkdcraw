@@ -27,6 +27,6 @@ target_link_libraries(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 # the target kdcraw binary programe name add the soname of library as suffixe.
 set_target_properties(kdcraw PROPERTIES OUTPUT_NAME kdcraw-${DCRAW_LIB_VERSION})
 
+# Note: we don't install kcraw man page. It will never used by users.
 install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})
-install(FILES kdcraw.1 DESTINATION ${MAN_INSTALL_DIR})
 
