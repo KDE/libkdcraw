@@ -60,4 +60,4 @@ Remove the "dcraw-old.c" file. Not need to archive it in svn.
    (Check the "#define VERSION ..." string from dcraw.c).
    
 7/ On DCRaw project page (http://cybercom.net/~dcoffin/dcraw), extract the current camera list 
-   supported and update the file "cameralist".
+   supported and update the file "CAMERALIST".
