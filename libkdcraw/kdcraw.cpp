@@ -51,7 +51,6 @@ extern "C"
 
 // KDE includes.
 
-#include <klocale.h>
 #include <k3process.h>
 #include <kstandarddirs.h>
 
