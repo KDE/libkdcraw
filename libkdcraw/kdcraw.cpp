@@ -53,6 +53,7 @@ extern "C"
 
 #include <k3process.h>
 #include <kstandarddirs.h>
+#include <kshell.h>
 
 // Local includes.
 
@@ -153,7 +154,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
     command  = DcrawBinary::path();
     command += " -c -e ";
-    command += QFile::encodeName( K3Process::quote( path ) );
+    command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
@@ -219,7 +220,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     f=NULL;
     command  = DcrawBinary::path();
     command += " -c -h -w -a ";
-    command += QFile::encodeName( K3Process::quote( path ) );
+    command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
@@ -283,7 +284,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     command  = DcrawBinary::path();
     command += " -c -i -v ";
-    command += QFile::encodeName( K3Process::quote( path ) );
+    command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
     f = popen( command.data(), "r" );
