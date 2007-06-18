@@ -1,45 +1,40 @@
-/* ============================================================
- *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
- *
- * Date        : 2005-09-15
- * Description : dcraw program interface for KDE
- *
- * Copyright (C) 2005-2007 by Laurent Montel <montel@kde.org>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+/*  This file is part of the KDE project
+    Copyright (C) 2007 David Faure <faure@kde.org>
 
-#ifndef _LIBKDCRAW_EXPORT_H
-#define _LIBKDCRAW_EXPORT_H
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
 
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#ifndef LIBKDCRAW_EXPORT_H
+#define LIBKDCRAW_EXPORT_H
+
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifdef Q_WS_WIN
-
 #ifndef LIBKDCRAW_EXPORT
-# ifdef MAKE_KDCRAW_LIB
+# if defined(MAKE_KDCRAW_LIB)
+   /* We are building this library */ 
 #  define LIBKDCRAW_EXPORT KDE_EXPORT
 # else
+   /* We are using this library */ 
 #  define LIBKDCRAW_EXPORT KDE_IMPORT
 # endif
 #endif
 
-#else // not windows
-
-#define LIBKDCRAW_EXPORT KDE_EXPORT
+# ifndef LIBKDCRAW_EXPORT_DEPRECATED
+#  define LIBKDCRAW_EXPORT_DEPRECATED KDE_DEPRECATED LIBKDCRAW_EXPORT
+# endif
 
 #endif
-
-#endif /* _LIBKDCRAW_EXPORT_H */
-
