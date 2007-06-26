@@ -53,7 +53,7 @@ public:
     QString version;
 };
 
-DcrawBinary *DcrawBinary::m_instance = 0;
+DcrawBinary *DcrawBinary::m_componentData = 0;
 
 DcrawBinary::DcrawBinary()
            : QObject()
@@ -63,27 +63,27 @@ DcrawBinary::DcrawBinary()
 
 DcrawBinary::~DcrawBinary()
 {
-    m_instance = 0;
+    m_componentData = 0;
     delete d;
 }
 
-DcrawBinary *DcrawBinary::instance()
+DcrawBinary *DcrawBinary::componentData()
 {
-    if (!m_instance)
-        m_instance = new DcrawBinary;
-    return m_instance;
+    if (!m_componentData)
+        m_componentData = new DcrawBinary;
+    return m_componentData;
 }
 
 void DcrawBinary::cleanUp()
 {
-    delete m_instance;
+    delete m_componentData;
 }
 
 void DcrawBinary::checkSystem()
 {
     K3Process process;
     process.clearArguments();
-    process << path();    
+    process << path();
 
     connect(&process, SIGNAL(receivedStdout(K3Process *, char*, int)),
             this, SLOT(slotReadStdoutFromDcraw(K3Process*, char*, int)));
@@ -97,12 +97,12 @@ void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
     QString dcrawOut  = QString::fromLocal8Bit(buffer, buflen);
-    QString firstLine = dcrawOut.section('\n', 1, 1);    
+    QString firstLine = dcrawOut.section('\n', 1, 1);
 
     if (firstLine.startsWith(dcrawHeader))
     {
-        d->version = firstLine.remove(0, dcrawHeader.length());    
-        qDebug("Found dcraw version: %s", version().toAscii().constData());    
+        d->version = firstLine.remove(0, dcrawHeader.length());
+        qDebug("Found dcraw version: %s", version().toAscii().constData());
     }
 }
 
