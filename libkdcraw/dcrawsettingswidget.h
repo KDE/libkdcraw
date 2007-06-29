@@ -100,7 +100,7 @@ private slots:
     void slotColorMultToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
-    void processDcrawURL(const QString&);
+    void processDcrawUrl(const QString&);
 
 private:
 

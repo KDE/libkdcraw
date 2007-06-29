@@ -417,8 +417,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SLOT(slotsixteenBitsImageToggled(bool)));
 
-    connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
-            this, SLOT(processDcrawURL(const QString&)));
+    connect(dcrawVersion, SIGNAL(leftClickedUrl(const QString&)),
+            this, SLOT(processDcrawUrl(const QString&)));
 }
 
 DcrawSettingsWidget::~DcrawSettingsWidget()
@@ -426,7 +426,7 @@ DcrawSettingsWidget::~DcrawSettingsWidget()
     delete d;
 }
 
-void DcrawSettingsWidget::processDcrawURL(const QString& url)
+void DcrawSettingsWidget::processDcrawUrl(const QString& url)
 {
     KToolInvocation::self()->invokeBrowser(url);
 }
