@@ -144,7 +144,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                            "If disabled, all RAW files will be decoded in 8-bit "
                                            "color depth with a BT.709 gamma curve and a 99th-percentile "
                                            "white point. This mode is faster than 16-bit decoding."));
-    settingsBoxLayout->addWidget(d->sixteenBitsImage, 0, 0, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 0);
     
     if (sixteenBitsOption)
     {
@@ -169,7 +169,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                             "To resume, this option blurs the image "
                                             "a little, but it eliminates false 2x2 mesh patterns "
                                             "with VNG quality method or mazes with AHD quality method."));
-    settingsBoxLayout->addWidget(d->fourColorCheckBox, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->fourColorCheckBox, line, line, 0, 0);    
     line++;
 
     // ---------------------------------------------------------------
@@ -178,7 +178,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                   .arg(DcrawBinary::internalVersion()), d->stdSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     dcrawVersion->setToolTip(i18n("Visit dcraw project website"));
-    settingsBoxLayout->addWidget(dcrawVersion, 0, 0, 2, 2);
+    settingsBoxLayout->addMultiCellWidget(dcrawVersion, 0, 0, 2, 2);
 
     // ---------------------------------------------------------------
 
@@ -188,7 +188,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                            "If this can not be found, reverts to the default "
                                            "(which is to use fixed daylight values, "
                                            "calculated from sample images)."));
-    settingsBoxLayout->addWidget(d->cameraWBCheckBox, line, line, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->cameraWBCheckBox, line, line, 0, 2);    
     line++;
 
     // ---------------------------------------------------------------
@@ -197,7 +197,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->autoColorBalanceCheckBox->setWhatsThis(i18n("<p><b>Automatic color balance</b></p>"
                                                    "The default is to use a fixed color balance "
                                                    "based on a white card photographed in sunlight."));
-    settingsBoxLayout->addWidget(d->autoColorBalanceCheckBox, line, line, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->autoColorBalanceCheckBox, line, line, 0, 2);    
     line++;
 
     // ---------------------------------------------------------------
@@ -214,8 +214,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                               "shades of pink<p>"
                                               "<b>Reconstruct</b>: reconstruct highlights using a "
                                               "level value."));
-    settingsBoxLayout->addWidget(d->unclipColorLabel, line, line, 0, 0);    
-    settingsBoxLayout->addWidget(d->unclipColorComboBox, line, line, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->unclipColorLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->unclipColorComboBox, line, line, 1, 2);    
     line++;
 
     d->reconstructLabel   = new QLabel(i18n("Level:"), d->stdSettings);
@@ -224,8 +224,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b><p>"
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
-    settingsBoxLayout->addWidget(d->reconstructLabel, line, line, 0, 0);    
-    settingsBoxLayout->addWidget(d->reconstructSpinBox, line, line, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->reconstructLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->reconstructSpinBox, line, line, 1, 2);    
     line++;
 
     // ---------------------------------------------------------------
@@ -237,8 +237,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
                                             "Specify the brightness level of output image."
                                             "The default value is 1.0 (works in 8-bit mode only).<p>"));
-    settingsBoxLayout->addWidget(d->brightnessLabel, line, line, 0, 0);    
-    settingsBoxLayout->addWidget(d->brightnessSpinBox, line, line, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->brightnessLabel, line, line, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->brightnessSpinBox, line, line, 1, 2);    
     line++;
 
     // ---------------------------------------------------------------
@@ -266,8 +266,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    settingsBoxLayout->addWidget(d->RAWQualityLabel, line, line, 0, 0); 
-    settingsBoxLayout->addWidget(d->RAWQualityComboBox, line, line, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityLabel, line, line, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->RAWQualityComboBox, line, line, 1, 2);
     line++;
 
     // ---------------------------------------------------------------
@@ -275,7 +275,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction"), d->stdSettings);
     d->enableNoiseReduction->setWhatsThis(i18n("<p><b>Enable Noise Reduction</b><p>"
                      "Use wavelets to erase noise while preserving real detail.<p>"));
-    settingsBoxLayout->addWidget(d->enableNoiseReduction, line, line, 0, 2);
+    settingsBoxLayout->addMultiCellWidget(d->enableNoiseReduction, line, line, 0, 2);
     line++;
 
     d->NRThresholdSpinBox = new KIntNumInput(d->stdSettings);
@@ -283,8 +283,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
     d->NRThresholdSpinBox->setWhatsThis(i18n("<p><b>Threshold</b><p>"
                      "Set here the noise reduction threshold value to use."));
-    settingsBoxLayout->addWidget(d->NRThresholdLabel, line, line, 0, 0);
-    settingsBoxLayout->addWidget(d->NRThresholdSpinBox, line, line, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->NRThresholdLabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->NRThresholdSpinBox, line, line, 1, 2);
     line++;
 
     // ---------------------------------------------------------------
@@ -312,8 +312,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Kodak, that offers an especially large gamut designed for use with "
                 "photographic outputs in mind."));
 
-    settingsBoxLayout->addWidget(d->outputColorSpaceLabel, line, line, 0, 0); 
-    settingsBoxLayout->addWidget(d->outputColorSpaceComboBox, line, line, 1, 2);
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceLabel, line, line, 0, 0); 
+    settingsBoxLayout->addMultiCellWidget(d->outputColorSpaceComboBox, line, line, 1, 2);
 
     if (outputColorSpaceOption)
     {
@@ -341,7 +341,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                     "stretch the image to its correct aspect ratio. In any "
                                                     "case, this option guarantees that each output pixel "
                                                     "corresponds to one RAW pixel.<p>"));
-    settingsBoxLayout2->addWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
+    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
 
     // ---------------------------------------------------------------
 
@@ -354,8 +354,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
     d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b><p>"
                                             "Specify specific black point value of the output image.<p>"));
-    settingsBoxLayout2->addWidget(d->blackPointCheckBox, 1, 1, 0, 0);    
-    settingsBoxLayout2->addWidget(d->blackPointSpinBox, 1, 1, 1, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);    
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);    
 
     // ---------------------------------------------------------------
 
@@ -381,15 +381,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->colorMult4SpinBox->setPrecision(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
-    settingsBoxLayout->addWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
-    settingsBoxLayout->addWidget(d->colorMult1Label, 3, 3, 0, 0);    
-    settingsBoxLayout->addWidget(d->colorMult1SpinBox, 3, 3, 1, 2);    
-    settingsBoxLayout->addWidget(d->colorMult2Label, 4, 4, 0, 0);    
-    settingsBoxLayout->addWidget(d->colorMult2SpinBox, 4, 4, 1, 2);    
-    settingsBoxLayout->addWidget(d->colorMult3Label, 5, 5, 0, 0);    
-    settingsBoxLayout->addWidget(d->colorMult3SpinBox, 5, 5, 1, 2);    
-    settingsBoxLayout->addWidget(d->colorMult4Label, 6, 6, 0, 0);    
-    settingsBoxLayout->addWidget(d->colorMult4SpinBox, 6, 6, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult2Label, 4, 4, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult3Label, 5, 5, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);    
+    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);    
 
     settingsBoxLayout2->setRowStretch(7, 10);   
     insertTab(1, d->advSettings, i18n("Advanced"));
