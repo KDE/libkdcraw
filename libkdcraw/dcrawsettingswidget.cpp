@@ -128,7 +128,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 {
     d = new DcrawSettingsWidgetPriv;
 
-    d->stdSettings                 = new QWidget(this);
+    d->stdSettings                 = new QWidget();
     QGridLayout* settingsBoxLayout = new QGridLayout(d->stdSettings);
     settingsBoxLayout->setSpacing(KDialog::spacingHint());
 
@@ -174,7 +174,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    KUrlLabel *dcrawVersion = new KUrlLabel("http://cybercom.net/~dcoffin/dcraw", i18n("dcraw %1")
+    KUrlLabel *dcrawVersion = new KUrlLabel("http://cybercom.net/~dcoffin/dcraw", QString("dcraw %1")
                                   .arg(DcrawBinary::internalVersion()), d->stdSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     dcrawVersion->setToolTip(i18n("Visit dcraw project website"));
@@ -330,7 +330,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    d->advSettings                  = new QWidget(this);
+    d->advSettings                  = new QWidget();
     QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings);
     settingsBoxLayout2->setSpacing(KDialog::spacingHint());
 
@@ -381,15 +381,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->colorMult4SpinBox->setPrecision(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
-    settingsBoxLayout->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult2Label, 4, 4, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 1, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult3Label, 5, 5, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);    
-    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult2Label, 4, 4, 0, 0);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 1, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult3Label, 5, 5, 0, 0);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);    
+    settingsBoxLayout2->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);    
 
     settingsBoxLayout2->setRowStretch(7, 10);   
     insertTab(1, d->advSettings, i18n("Advanced"));
