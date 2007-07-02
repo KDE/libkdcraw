@@ -174,16 +174,9 @@ private:
 
     bool loadFromDcraw(const QString& filePath, QByteArray &imageData, 
                        int &width, int &height, int &rgbmax);
-    void startProcess();
-
-    virtual void customEvent(QCustomEvent *);
-
-private slots:
-
-    void slotProcessExited(K3Process *);
-    void slotReceivedStdout(K3Process *, char *, int);
-    void slotReceivedStderr(K3Process *, char *, int);
-    void slotContinueQuery();
+    bool startProcess();
+    void readData();
+    void readErrorData();
 
 private:
 

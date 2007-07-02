@@ -51,7 +51,7 @@ extern "C"
 
 // KDE includes.
 
-#include <k3process.h>
+#include <kprocess.h>
 #include <kstandarddirs.h>
 #include <kshell.h>
 
@@ -71,8 +71,6 @@ public:
 
     KDcrawPriv()
     {
-        running    = false;
-        normalExit = false;
         process    = 0;
         queryTimer = 0;
         data       = 0;
@@ -81,9 +79,6 @@ public:
         rgbmax     = 0;
         dataPos    = 0;
     }
-
-    bool            running;
-    bool            normalExit;
 
     char           *data;
 
@@ -100,7 +95,7 @@ public:
 
     QTimer         *queryTimer;
 
-    K3Process       *process;
+    KProcess       *process;
 };
 
 KDcraw::KDcraw()
@@ -564,16 +559,14 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     m_cancel      = false;
     d->dataPos     = 0;
     d->filePath   = filePath;
-    d->running    = true;
-    d->normalExit = false;
     d->process    = 0;
     d->data       = 0;
     d->width      = 0;
     d->height     = 0;
     d->rgbmax     = 0;
 
-    // trigger startProcess and loop to wait dcraw decoding
-    QApplication::postEvent(this, new QEvent(QEvent::User));
+    if (!startProcess())
+        return false;
 
     // The time from starting dcraw to when it first outputs something takes
     // much longer than the time while it outputs the data and the time while
@@ -592,18 +585,15 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     int checkpointTime = 0;
     int checkpoint     = 0;
 
-    // The shuttingDown is a hack needed to prevent hanging when this KProcess-based loader
-    // is waiting for the process to finish, but the main thread is waiting
-    // for the thread to finish and no KProcess events are delivered.
-    // Remove when porting to Qt4.
-    while (d->running && !checkToCancelRecievingData())
+    while (d->process->state() == QProcess::Running &&
+           !( (d->dataPos == 0) ? checkToCancelWaitingData() : checkToCancelRecievingData() ) )
     {
         if (d->dataPos == 0)
         {
             int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
             if (elapsedMsecs > checkpointTime)
                 checkpointTime += 300;
-    
+
             // What we do here is a sigmoidal curve, it starts slowly,
             // then grows more rapidly, slows down again and
             // get asymptotically closer to the maximum.
@@ -623,11 +613,24 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             setRecievingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize))); 
         }
 
-        QMutexLocker lock(&d->mutex);
-        d->condVar.wait(&d->mutex, 10);
+        //QMutexLocker lock(&d->mutex);
+        //d->condVar.wait(&d->mutex, 10);
+        d->process->setReadChannel(QProcess::StandardOutput);
+        if (d->process->waitForReadyRead(25))
+            readData();
+        d->process->setReadChannel(QProcess::StandardError);
+        if (d->process->bytesAvailable())
+            readErrorData();
     }
 
-    if (!d->normalExit || m_cancel)
+    if (d->process->state() == QProcess::Running)
+        d->process->kill();
+
+    bool normalExit = d->process->exitStatus() == QProcess::NormalExit && d->process->exitCode() == 0;
+    delete d->process;
+    d->process    = 0;
+
+    if (!normalExit || m_cancel)
     {
         delete [] d->data;
         d->data = 0;
@@ -646,53 +649,16 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     return true;
 }
 
-void KDcraw::customEvent(QCustomEvent *)
+bool KDcraw::startProcess()
 {
-    // KProcess (because of QSocketNotifier) is not reentrant.
-    // We must only use it from the main thread.
-    startProcess();
-
-    // set up timer to call continueQuery at regular intervals
-    if (d->running)
-    {
-        d->queryTimer = new QTimer;
-        connect(d->queryTimer, SIGNAL(timeout()),
-                this, SLOT(slotContinueQuery()));
-        d->queryTimer->start(30);
-    }
-}
-
-void KDcraw::slotContinueQuery()
-{
-    // this is called from the timer
-
     if (checkToCancelWaitingData())
     {
-        d->process->kill();
-    }
-}
-
-void KDcraw::startProcess()
-{
-    if (m_cancel)
-    {
-        d->running    = false;
-        d->normalExit = false;
-        return;
+        return false;
     }
 
     // create KProcess and build argument list
 
-    d->process = new K3Process;
-
-    connect(d->process, SIGNAL(processExited(K3Process *)),
-            this, SLOT(slotProcessExited(K3Process *)));
-             
-    connect(d->process, SIGNAL(receivedStdout(K3Process *, char *, int)),
-            this, SLOT(slotReceivedStdout(K3Process *, char *, int)));
-             
-    connect(d->process, SIGNAL(receivedStderr(K3Process *, char *, int)),
-            this, SLOT(slotReceivedStderr(K3Process *, char *, int)));
+    d->process = new KProcess;
 
     // run dcraw with options:
     // -c : write to stdout
@@ -713,101 +679,95 @@ void KDcraw::startProcess()
     // -k : set Black Point value.
     // -r : set Raw Color Balance Multipliers.
 
-    *d->process << DcrawBinary::path();
-    *d->process << "-c";
-    *d->process << "-v";
+    QStringList args;
+    args << "-c";
+    args << "-v";
 
     if (m_rawDecodingSettings.sixteenBitsImage)
-        *d->process << "-4";
+        args << "-4";
 
     if (m_rawDecodingSettings.halfSizeColorImage)
-        *d->process << "-h";
+        args << "-h";
 
     if (m_rawDecodingSettings.cameraColorBalance)
-        *d->process << "-w";
+        args << "-w";
 
     if (m_rawDecodingSettings.automaticColorBalance)
-        *d->process << "-a";
+        args << "-a";
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
-        *d->process << "-f";
+        args << "-f";
 
     if (m_rawDecodingSettings.DontStretchPixels)
-        *d->process << "-j";
+        args << "-j";
 
-    *d->process << "-H";
-    *d->process << QString::number(m_rawDecodingSettings.unclipColors);
+    args << "-H";
+    args << QString::number(m_rawDecodingSettings.unclipColors);
 
-    *d->process << "-b";
-    *d->process << QString::number(m_rawDecodingSettings.brightness);
+    args << "-b";
+    args << QString::number(m_rawDecodingSettings.brightness);
 
     if (m_rawDecodingSettings.enableBlackPoint)
     {
-        *d->process << "-k";
-        *d->process << QString::number(m_rawDecodingSettings.blackPoint);
+        args << "-k";
+        args << QString::number(m_rawDecodingSettings.blackPoint);
     }
 
     if (m_rawDecodingSettings.enableColorMultipliers)
     {
-        *d->process << "-r";
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[0], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[1], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[2], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[3], 'f', 5);
+        args << "-r";
+        args << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[0], 'f', 5);
+        args << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[1], 'f', 5);
+        args << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[2], 'f', 5);
+        args << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[3], 'f', 5);
     }
 
-    *d->process << "-q";
-    *d->process << QString::number(m_rawDecodingSettings.RAWQuality);
+    args << "-q";
+    args << QString::number(m_rawDecodingSettings.RAWQuality);
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
-        *d->process << "-n";
-        *d->process << QString::number(m_rawDecodingSettings.NRThreshold);
+        args << "-n";
+        args << QString::number(m_rawDecodingSettings.NRThreshold);
     }
 
-    *d->process << "-o";
-    *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
+    args << "-o";
+    args << QString::number(m_rawDecodingSettings.outputColorSpace);
 
-    *d->process << QFile::encodeName(d->filePath);
+    args << QFile::encodeName(d->filePath);
 
-    QString args;
-    for (int i = 0 ; i < d->process->args().count(); i++)
-    {
-        args.append(d->process->args()[i]);
-        args.append(QString(" "));
-    }
+    QString command = QString::fromAscii(DcrawBinary::path());
+    command += args.join(" ");
 
-    qDebug("Running RAW decoding command: %s", args.toAscii().constData());
+    qDebug("Running RAW decoding command: %s", command.toAscii().constData());
 
     // actually start the process
-    if ( !d->process->start(K3Process::NotifyOnExit, 
-         K3Process::Communication(K3Process::Stdout | K3Process::Stderr)) )
+    d->process->setProgram(QString::fromAscii(DcrawBinary::path()), args);
+    d->process->setOutputChannelMode(KProcess::SeparateChannels);
+    d->process->setNextOpenMode(QIODevice::ReadOnly);
+    d->process->start();
+
+    while (d->process->state() == QProcess::Starting)
+    {
+        d->process->waitForStarted(10);
+    }
+
+    if (d->process->state() == QProcess::NotRunning)
     {
         qWarning("Failed to start RAW decoding");
         delete d->process;
         d->process    = 0;
-        d->running    = false;
-        d->normalExit = false;
-        return;
+        return false;
     }
+    return true;
 }
 
-void KDcraw::slotProcessExited(K3Process *)
+void KDcraw::readData()
 {
-    // set variables, clean up, wake up loader thread
+    QByteArray data = d->process->readAll();
+    const char *buffer = data.constData();
+    int buflen = data.length();
 
-    QMutexLocker lock(&d->mutex);
-    d->running    = false;
-    d->normalExit = d->process->normalExit() && d->process->exitStatus() == 0;
-    delete d->process;
-    d->process    = 0;
-    delete d->queryTimer;
-    d->queryTimer = 0;
-    d->condVar.wakeAll();
-}
-
-void KDcraw::slotReceivedStdout(K3Process *, char *buffer, int buflen)
-{
     if (!d->data)
     {
         // first data packet:
@@ -871,9 +831,9 @@ void KDcraw::slotReceivedStdout(K3Process *, char *buffer, int buflen)
     d->dataPos += buflen;
 }
 
-void KDcraw::slotReceivedStderr(K3Process *, char *buffer, int buflen)
+void KDcraw::readErrorData()
 {
-    QByteArray message(buffer, buflen);
+    QByteArray message = d->process->readAllStandardError();
     qDebug("RAW decoding StdErr: %s", (const char*)message);
 }
 
