@@ -1,6 +1,8 @@
 Supported Cameras:
 
 Adobe Digital Negative (DNG) 
+Apple QuickTake 100 
+Apple QuickTake 150 
 AVT F-145C 
 AVT F-201C 
 AVT F-510C 
@@ -11,6 +13,9 @@ Canon PowerShot A5 Zoom
 Canon PowerShot A50 
 Canon PowerShot A610 
 Canon PowerShot A620 
+Canon PowerShot A630 
+Canon PowerShot A640 
+Canon PowerShot A710 IS 
 Canon PowerShot Pro70 
 Canon PowerShot Pro90 IS 
 Canon PowerShot G1 
@@ -40,6 +45,7 @@ Canon EOS D2000C
 Canon EOS-1D 
 Canon EOS-1DS 
 Canon EOS-1D Mark II 
+Canon EOS-1D Mark III 
 Canon EOS-1D Mark II N 
 Canon EOS-1Ds Mark II 
 Casio QV-2000UX 
@@ -47,6 +53,7 @@ Casio QV-3000EX
 Casio QV-3500EX 
 Casio QV-4000 
 Casio QV-5700 
+Casio QV-R41 
 Casio QV-R51 
 Casio QV-R61 
 Casio EX-S100 
@@ -68,6 +75,7 @@ Fuji FinePix F800
 Fuji FinePix F810 
 Fuji FinePix S2Pro 
 Fuji FinePix S3Pro 
+Fuji FinePix S5Pro 
 Fuji FinePix S20Pro 
 Fuji FinePix S5000 
 Fuji FinePix S5100/S5500 
@@ -75,6 +83,7 @@ Fuji FinePix S5200/S5600
 Fuji FinePix S6000fd 
 Fuji FinePix S7000 
 Fuji FinePix S9000/S9500 
+Hasselblad CFV 
 Imacon Ixpress 16-megapixel 
 Imacon Ixpress 22-megapixel 
 Imacon Ixpress 39-megapixel 
@@ -110,6 +119,7 @@ Kodak DCS Pro 14n
 Kodak DCS Pro 14nx 
 Kodak DCS Pro SLR/c 
 Kodak DCS Pro SLR/n 
+Kodak C330 
 Kodak P850 
 Kodak P880 
 Kodak KAI-0340 
@@ -134,6 +144,7 @@ Leica D-LUX2
 Leica D-LUX3 
 Leica V-LUX1 
 Logitech Fotoman Pixtura 
+Mamiya ZD 
 Micron 2010 
 Minolta RD175 
 Minolta DiMAGE 5 
@@ -156,7 +167,9 @@ Nikon D1X
 Nikon D2H 
 Nikon D2Hs 
 Nikon D2X 
+Nikon D2Xs 
 Nikon D40 
+Nikon D40X 
 Nikon D50 
 Nikon D70 
 Nikon D70s 
@@ -196,11 +209,16 @@ Olympus E-20
 Olympus E-300 
 Olympus E-330 
 Olympus E-400 
+Olympus E-410 
 Olympus E-500 
+Olympus E-510 
 Olympus SP310 
 Olympus SP320 
 Olympus SP350 
 Olympus SP500UZ 
+Olympus SP510UZ 
+Olympus SP550UZ 
+Panasonic DMC-FZ8 
 Panasonic DMC-FZ30 
 Panasonic DMC-FZ50 
 Panasonic DMC-L1 
@@ -217,6 +235,7 @@ Pentax K100D
 Pentax Optio S 
 Pentax Optio S4 
 Pentax Optio 33WR 
+Pentax Optio 750Z 
 Phase One LightPhase 
 Phase One H 10 
 Phase One H 20 
@@ -230,9 +249,11 @@ Polaroid x530
 Rollei d530flex 
 RoverShot 3320af 
 Samsung GX-1S 
+Samsung GX-10 
 Sarnoff 4096x5440 
 Sigma SD9 
 Sigma SD10 
+Sigma SD14 
 Sinar 3072x2048 
 Sinar 4080x4080 
 Sinar 4080x5440 

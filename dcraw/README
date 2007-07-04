@@ -16,10 +16,10 @@ Following lines need to be changed in dcraw.c :
 int CLASS main (int argc, char **argv)
 {
 ...
-      /* NOTE: Digikam Fix : separate output of "make" and "model" informations.
-      printf ("Camera: %s %s\n", make, model); */
-      printf ("Camera: %s\n", make);
-      printf ("Model: %s\n", model);
+      /* NOTE: digiKam Fix : separate output of "make" and "model" informations.
+      printf (_("Camera: %s %s\n"), make, model); */
+      printf (_("Camera: %s\n"), make);
+      printf (_("Model: %s\n"), model);
 ...
 }
 
