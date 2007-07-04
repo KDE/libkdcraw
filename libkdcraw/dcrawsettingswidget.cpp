@@ -463,7 +463,7 @@ void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
 
 void DcrawSettingsWidget::slotUnclipColorActivated(int v)
 {
-    if (v == 2)     // Reconstruct Highlight method
+    if (v == 3)     // Reconstruct Highlight method
     {
         d->reconstructLabel->setEnabled(true);
         d->reconstructSpinBox->setEnabled(true);
