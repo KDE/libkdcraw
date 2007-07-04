@@ -9,7 +9,7 @@
 .\" dcoffin a cybercom o net
 .\" http://www.cybercom.net/~dcoffin
 .\"
-.TH dcraw 1 "February 21, 2007"
+.TH dcraw 1 "June 13, 2007"
 .LO 1
 .SH NAME
 dcraw - command-line decoder for raw digital photos
@@ -64,8 +64,11 @@ Output a half-size color image.  Twice as fast as
 .B -q 0
 Use high-speed, low-quality bilinear interpolation.
 .TP
-.B -q 2
+.B -q 1
 Use Variable Number of Gradients (VNG) interpolation.
+.TP
+.B -q 2
+Use Patterned Pixel Grouping (PPG) interpolation.
 .TP
 .B -q 3
 Use Adaptive Homogeneity-Directed (AHD) interpolation.
@@ -104,18 +107,42 @@ Subtract a dark frame from the raw data.  To generate a
 dark frame, shoot a raw photo with no light and do
 .BR dcraw\ -D\ -4\ -j\ -t\ 0 .
 .TP
-.B -a
-Automatic color balance.  The default is to use a fixed
-color balance based on a white card photographed in sunlight.
-.TP
 .B -w
-Use the color balance specified by the camera.
-If this can't be found, print a warning and revert to the default.
+Use the white balance specified by the camera.
+If this is not found, print a warning and use another method.
+.TP
+.B -a
+Calculate the white balance by averaging the entire image.
+.TP
+.B -A left top width height
+Calculate the white balance by averaging a rectangular area.
+First do
+.B dcraw\ -j\ -t\ 0
+and select an area of neutral grey color.
 .TP
 .B -r mul0 mul1 mul2 mul3
-Specify your own raw color balance.  These multipliers can be cut
-and pasted from the output of
+Specify your own raw white balance.
+These multipliers can be cut and pasted from the output of
 .BR dcraw\ -v .
+.TP
+no white balance option
+Use a fixed white balance based on a color chart illuminated
+with a standard D65 lamp.
+.TP
+.BR +M " or " -M
+Use (or don't use) any color matrix from the camera metadata.
+The default is
+.B +M
+if
+.B -w
+is set,
+.B -M
+otherwise.
+This option only affects Olympus, Leaf, and Phase One cameras.
+.TP
+.B -C red_mag blue_mag
+Enlarge the raw red and blue layers by the given factors,
+typically 0.999 to 1.001, to correct chromatic aberration.
 .TP
 .B -H 0
 Clip all highlights to solid white (default).
@@ -123,7 +150,10 @@ Clip all highlights to solid white (default).
 .B -H 1
 Leave highlights unclipped in various shades of pink.
 .TP
-.B -H 2-9
+.B -H 2
+Blend clipped and unclipped values together for a gradual fade to white.
+.TP
+.B -H 3-9
 Reconstruct highlights.  Low numbers favor whites; high numbers
 favor colors.  Try
 .B -H 5
