@@ -194,8 +194,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->autoColorBalanceCheckBox = new QCheckBox(i18n("Automatic color balance"), d->stdSettings);
     QWhatsThis::add( d->autoColorBalanceCheckBox, i18n("<p><b>Automatic color balance</b></p>"
-                                                  "The default is to use a fixed color balance "
-                                                  "based on a white card photographed in sunlight."));
+                                                  "Calculate the white balance by averaging the entire image."));
     settingsBoxLayout->addMultiCellWidget(d->autoColorBalanceCheckBox, line, line, 0, 2);    
     line++;
 
@@ -205,21 +204,23 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->unclipColorComboBox = new QComboBox( false, d->stdSettings );
     d->unclipColorComboBox->insertItem( i18n("Solid white"), 0 );
     d->unclipColorComboBox->insertItem( i18n("Unclip"),      1 );
-    d->unclipColorComboBox->insertItem( i18n("Reconstruct"), 2 );
+    d->unclipColorComboBox->insertItem( i18n("Blend"),       2 );
+    d->unclipColorComboBox->insertItem( i18n("Rebuild"),     3 );
     QWhatsThis::add( d->unclipColorComboBox, i18n("<p><b>Highlights</b><p>"
                                              "Select here the highlight clipping method:<p>"
                                              "<b>Solid white</b>: clip all highlights to solid white<p>"
                                              "<b>Unclip</b>: leave highlights unclipped in various "
                                              "shades of pink<p>"
-                                             "<b>Reconstruct</b>: reconstruct highlights using a "
-                                             "level value."));
+                                             "<b>Blend</b>:Blend clipped and unclipped values together for a gradual fade to white<p>"
+                                             "<b>Rebuild</b>: reconstruct highlights using a "
+                                             "level value"));
     settingsBoxLayout->addMultiCellWidget(d->unclipColorLabel, line, line, 0, 0);    
     settingsBoxLayout->addMultiCellWidget(d->unclipColorComboBox, line, line, 1, 2);    
     line++;
 
     d->reconstructLabel   = new QLabel(i18n("Level:"), d->stdSettings);
     d->reconstructSpinBox = new KIntNumInput(d->stdSettings);
-    d->reconstructSpinBox->setRange(0, 7, 1, true);
+    d->reconstructSpinBox->setRange(0, 6, 1, true);
     QWhatsThis::add(d->reconstructSpinBox, i18n("<p><b>Level</b><p>"
                                                "Specify the reconstruct highlight level. "
                                                "Low values favor whites and high values favor colors."));
@@ -549,8 +550,11 @@ int DcrawSettingsWidget::unclipColor()
         case 1:
             return 1;
             break;
+        case 2:
+            return 2;
+            break;
         default:         // Reconstruct Highlight method
-            return d->reconstructSpinBox->value()+2;
+            return d->reconstructSpinBox->value()+3;
             break;
     }
 }
@@ -565,9 +569,12 @@ void DcrawSettingsWidget::setUnclipColor(int v)
         case 1:
             d->unclipColorComboBox->setCurrentItem(1);
             break;
-        default:         // Reconstruct Highlight method
+        case 2:
             d->unclipColorComboBox->setCurrentItem(2);
-            d->reconstructSpinBox->setValue(v-2);
+            break;
+        default:         // Reconstruct Highlight method
+            d->unclipColorComboBox->setCurrentItem(3);
+            d->reconstructSpinBox->setValue(v-3);
             break;
     }
 

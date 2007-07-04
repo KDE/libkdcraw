@@ -170,7 +170,9 @@ public:
     /** Unclip Highlight color level: 
         0   = Clip all highlights to solid white.
         1   = Leave highlights unclipped in various shades of pink.
-        2-9 = Reconstruct highlights. Low numbers favor whites; high numbers 
+        2   = Blend clipped and unclipped values together for a gradual
+              fade to white.
+        3-9 = Reconstruct highlights. Low numbers favor whites; high numbers
               favor colors.
     */
     int unclipColors;
