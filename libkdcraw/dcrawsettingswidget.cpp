@@ -398,7 +398,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     if (!showAdvancedOptions)
     {
-        removePage(d->advSettings);
+        removeTab(1);
         setTabBarHidden(true);
     }
 
