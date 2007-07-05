@@ -130,6 +130,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->stdSettings                 = new QWidget();
     QGridLayout* settingsBoxLayout = new QGridLayout(d->stdSettings);
+    settingsBoxLayout->setMargin(KDialog::spacingHint());
     settingsBoxLayout->setSpacing(KDialog::spacingHint());
 
     // ---------------------------------------------------------------
@@ -334,7 +335,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->advSettings                  = new QWidget();
     QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings);
-    settingsBoxLayout2->setSpacing(KDialog::spacingHint());
 
     d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->advSettings);
     d->dontStretchPixelsCheckBox->setWhatsThis(i18n("<p><b>Do not stretch or rotate pixels</b><p>"
@@ -343,7 +343,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                     "stretch the image to its correct aspect ratio. In any "
                                                     "case, this option guarantees that each output pixel "
                                                     "corresponds to one RAW pixel.<p>"));
-    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
+
 
     // ---------------------------------------------------------------
 
@@ -356,8 +356,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
     d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b><p>"
                                             "Specify specific black point value of the output image.<p>"));
-    settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);
-    settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);
+
 
     // ---------------------------------------------------------------
 
@@ -383,6 +382,11 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->colorMult4SpinBox->setPrecision(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
+    settingsBoxLayout2->setMargin(KDialog::spacingHint());
+    settingsBoxLayout2->setSpacing(KDialog::spacingHint());
+    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);   
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox, 1, 1, 1, 2);
     settingsBoxLayout2->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);
     settingsBoxLayout2->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);
     settingsBoxLayout2->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);
@@ -392,8 +396,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     settingsBoxLayout2->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);
     settingsBoxLayout2->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);
     settingsBoxLayout2->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);
-
     settingsBoxLayout2->setRowStretch(7, 10);
+
     insertTab(1, d->advSettings, i18n("Advanced"));
 
     if (!showAdvancedOptions)
