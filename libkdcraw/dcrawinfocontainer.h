@@ -116,6 +116,8 @@ public:
     QString   make;               
     /** The camera model. */
     QString   model;              
+    /** The artist name who have picture owner. */
+    QString   owner;       
     /** The demosaising filter pattern. */
     QString   filterPattern;      
     /** The DNG version. NOTE: only show with DNG RAW files. */

@@ -349,6 +349,16 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         identify.model = model;
     }
 
+    // Extract Camera Model.
+    QString ownerHeader("Owner: ");
+    pos = dcrawInfo.indexOf(ownerHeader);
+    if (pos != -1)
+    {
+        QString owner = dcrawInfo.mid(pos).section('\n', 0, 0);
+        owner.remove(0, ownerHeader.length());
+        identify.owner = owner;
+    }
+
     // Extract DNG Version.
     QString DNGVersionHeader("DNG Version: ");
     pos = dcrawInfo.indexOf(DNGVersionHeader);
