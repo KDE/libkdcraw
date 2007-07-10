@@ -4,8 +4,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 
 set(kdcraw_LIB_SRCS dcrawbinary.cpp kdcraw.cpp dcrawsettingswidget.cpp)
 
-kde4_automoc(${kdcraw_LIB_SRCS})
-
 kde4_add_library(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
 target_link_libraries(kdcraw ${KDE4_KDECORE_LIBS} 
