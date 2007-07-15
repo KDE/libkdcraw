@@ -26,9 +26,9 @@
 
 // Qt Includes.
 
-#include <QString>
-#include <QObject>
-#include <QImage>
+#include <QtCore/QString>
+#include <QtCore/QObject>
+#include <QtGui/QImage>
 
 // Local includes.
 

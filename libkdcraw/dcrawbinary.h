@@ -26,8 +26,8 @@
 
 // Qt includes.
 
-#include <QString>
-#include <QObject>
+#include <QtCore/QString>
+#include <QtCore/QObject>
 
 // Local Includes.
 
@@ -72,7 +72,7 @@ public:
         on your system failed. */ 
     void checkReport();
 
-private slots:
+private Q_SLOTS:
 
     void slotReadStdoutFromDcraw(K3Process*, char*, int);
 

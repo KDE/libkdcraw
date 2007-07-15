@@ -90,11 +90,11 @@ public:
 
     void   setDefaultSettings();
 
-signals:
+Q_SIGNALS:
 
     void signalSixteenBitsImageToggled(bool);
 
-private slots:
+private Q_SLOTS:
 
     void slotsixteenBitsImageToggled(bool);
     void slotColorMultToggled(bool);
