@@ -40,6 +40,7 @@ extern "C"
 
 // Qt Includes.
 
+#include <QDebug>
 #include <QEvent>
 #include <QFile>
 #include <QByteArray>
@@ -127,13 +128,7 @@ bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
 
 bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 {
-    FILE       *f=NULL;
     QByteArray  imgData;
-    const int   MAX_IPC_SIZE = (1024*32);
-    char        buffer[MAX_IPC_SIZE];
-    QFile       file;
-    qint64      len;
-    QByteArray  command;
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
@@ -147,41 +142,27 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
     // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
     // Note : this code require at least dcraw version 8.x
 
-    command  = DcrawBinary::path();
-    command += " -c -e ";
-    command += QFile::encodeName( KShell::quoteArg( path ) );
-    qDebug("Running RAW decoding command: %s", (const char*)command);
+    KProcess process;
+    process << DcrawBinary::path();
+    process << "-c" <<  "-e" << path;
 
-    f = popen( command.data(), "r" );
+    qDebug() << "Running RAW decoding command:" << process.program().join(" ");
 
-    if ( f == NULL )
-        return false;
+    process.setOutputChannelMode(KProcess::SeparateChannels);
+    process.setNextOpenMode(QIODevice::ReadOnly);
+    process.start();
 
-    file.open(f, QIODevice::ReadOnly);
-
-    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
+    while (process.waitForReadyRead(-1))
     {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
+        imgData.append(process.readAllStandardOutput());
     }
-
-    file.close();
-    pclose( f );
+    process.waitForFinished();
 
     if ( !imgData.isEmpty() )
     {
         if (image.loadFromData( imgData ))
         {
-            qDebug("Using embedded RAW preview extraction");
+            qDebug() << "Using embedded RAW preview extraction";
             return true;
         }
     }
@@ -191,13 +172,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 {
-    FILE       *f=NULL;
     QByteArray  imgData;
-    const int   MAX_IPC_SIZE = (1024*32);
-    char        buffer[MAX_IPC_SIZE];
-    QFile       file;
-    qint64      len;
-    QByteArray  command;
 
     QFileInfo fileInfo(path);
     QString   rawFilesExt(raw_file_extentions);
@@ -212,36 +187,22 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     // -a : Use automatic white balance
     // -w : Use camera white balance, if possible
 
-    f=NULL;
-    command  = DcrawBinary::path();
-    command += " -c -h -w -a ";
-    command += QFile::encodeName( KShell::quoteArg( path ) );
-    qDebug("Running RAW decoding command: %s", (const char*)command);
+    KProcess process;
+    process << DcrawBinary::path();
+    process << "-c" << "-h" << "-w" << "-a";
+    process << path;
 
-    f = popen( command.data(), "r" );
+    qDebug() << "Running RAW decoding command:" << process.program().join(" ");
 
-    if ( f == NULL )
-        return false;
+    process.setOutputChannelMode(KProcess::SeparateChannels);
+    process.setNextOpenMode(QIODevice::ReadOnly);
+    process.start();
 
-    file.open(f, QIODevice::ReadOnly);
-
-    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
+    while (process.waitForReadyRead(-1))
     {
-        if ( len == -1 )
-        {
-            file.close();
-            return false;
-        }
-        else
-        {
-            int oldSize = imgData.size();
-            imgData.resize( imgData.size() + len );
-            memcpy(imgData.data()+oldSize, buffer, len);
-        }
+        imgData.append(process.readAllStandardOutput());
     }
-
-    file.close();
-    pclose( f );
+    process.waitForFinished();
 
     if ( !imgData.isEmpty() )
     {
