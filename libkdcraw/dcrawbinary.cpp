@@ -152,8 +152,8 @@ void DcrawBinary::checkReport()
                           "This binary program is required to support Raw file formats. "
                           "You can continue, but you will not be able "
                           "to handle any Raw images. "
-                          "Please check the installation of libkdcraw package on your computer.")
-                          .arg(path()),
+                          "Please check the installation of libkdcraw package on your computer.",
+                          path()),
                      QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
@@ -169,9 +169,9 @@ void DcrawBinary::checkReport()
                           "This version is too old to run properly. "
                           "You can continue, but you will not be able "
                           "to handle any Raw images. "
-                          "Please check the installation of libkdcraw package on your computer.")
-                          .arg(path())
-                          .arg(version()),
+                          "Please check the installation of libkdcraw package on your computer.",
+                          path(),
+                          version()),
                      QString(),
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
