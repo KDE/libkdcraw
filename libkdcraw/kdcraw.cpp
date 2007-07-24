@@ -451,6 +451,16 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         identify.rawColors = rawColors.toInt();
     }
 
+    // Extract Raw Images.
+    QString rawImagesHeader("Number of raw images: ");
+    pos = dcrawInfo.indexOf(rawImagesHeader);
+    if (pos != -1)
+    {
+        QString rawImages = dcrawInfo.mid(pos).section('\n', 0, 0);
+        rawImages.remove(0, rawImagesHeader.length());
+        identify.rawImages = rawImages.toInt();
+    }
+
     // Extract Filter Pattern.
     QString filterHeader("Filter pattern: ");
     pos = dcrawInfo.indexOf(filterHeader);

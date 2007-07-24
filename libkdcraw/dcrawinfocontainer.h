@@ -50,6 +50,7 @@ public:
         focalLength       = -1.0;
         pixelAspectRatio  = 1.0;    // Default value. This can be unavailable (depending of camera model).
         rawColors         = -1;
+        rawImages         = -1;
         hasIccProfile     = false;
         isDecodable       = false;
         hasSecondaryPixel = false;
@@ -78,6 +79,7 @@ public:
              pixelAspectRatio == 1.0 &&
              sensitivity  == -1      && 
              rawColors    == -1      &&
+             rawImages    == -1      &&
              !dateTime.isValid()     && 
              !imageSize.isValid() )
             return true;
@@ -94,6 +96,9 @@ public:
 
     /** The number of RAW colors. */
     int       rawColors;          
+    
+    /** The number of RAW images. */
+    int       rawImages;
 
     /** The sensitivity in ISO used by camera to take the picture. */
     long      sensitivity;        
