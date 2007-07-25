@@ -306,7 +306,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>Adobe RGB</b>: this color space is an extended RGB color space, developed by "
                 "Adobe. It is used for photography applications such as advertising "
                 "and fine art.<p>"
-                "<b>Wide Gamut</b>: this color space is is an expanded version of the "
+                "<b>Wide Gamut</b>: this color space is an expanded version of the "
                 "Adobe RGB color space.<p>"
                 "<b>Pro-Photo</b>: this color space is an RGB color space, developed by "
                 "Kodak, that offers an especially large gamut designed for use with "
