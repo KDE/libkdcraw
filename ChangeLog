@@ -1,3 +1,133 @@
+V 0.1.2 - 2007-07-29
+----------------------------------------------------------------------------
+2007-07-25 14:37  cgilles
+
+	* [r692427] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix typo
+
+2007-07-24 12:06  cgilles
+
+	* [r691818] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  fix internal dcraw version
+
+2007-07-24 11:57  cgilles
+
+	* [r691813] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1:
+	  libkdcraw from KDE3 branch :
+	  - update internal dcraw.c implementation from 8.76 to 8.77.
+	  - new cameras RAW file supported : Leaf Aptus 54S and Leaf Aptus
+	  75S
+	  - Binary compatibility respected.
+	  - Changelog from dcraw repository :
+	  * Reject 8-bit grayscale TIFFs.
+	  * Decode raw CINE files, which may exceed 2GB.
+	  * Error-check the "-s" option, and enable "-s all".
+	  * Support camera WB for the Canon EOS-1D and EOS-1DS.
+	  * Use full output range for "-H 2".
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-07-04 07:59  cgilles
+
+	* [r683108] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix unclip color control with reconstruct setting
+
+2007-07-04 07:53  cgilles
+
+	* [r683105] libkdcraw/AUTHORS, libkdcraw/NEWS,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch: update setting widget to new dcraw
+	  8.76.
+
+2007-07-04 07:44  cgilles
+
+	* [r683099] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update
+
+2007-07-04 07:41  cgilles
+
+	* [r683096] libkdcraw/libkdcraw/version.h:
+	  update
+
+2007-07-04 07:41  cgilles
+
+	* [r683095] libkdcraw/libkdcraw.lsm, libkdcraw/libkdcraw.pc.in:
+	  update
+
+2007-07-04 07:40  cgilles
+
+	* [r683094] libkdcraw/dcraw/kdcraw.1:
+	  update man page
+
+2007-07-04 07:39  cgilles
+
+	* [r683093] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/README,
+	  libkdcraw/dcraw/dcraw.c:
+	  libkdcraw from KDE3 branch: update internal dcraw version from
+	  8.60 to 8.76.
+	  
+	  New digital still camera supported are given below :
+	  
+	  Apple QuickTake 100
+	  Apple QuickTake 150
+	  Canon PowerShot A630
+	  Canon PowerShot A640
+	  Canon PowerShot A710 IS
+	  Canon EOS-1D Mark III
+	  Casio QV-R41
+	  Fuji FinePix S5Pro
+	  Hasselblad CFV
+	  Kodak C330
+	  Mamiya ZD
+	  Nikon D2Xs
+	  Nikon D40X
+	  Olympus E-410
+	  Olympus E-510
+	  Olympus SP510UZ
+	  Olympus SP550UZ
+	  Panasonic DMC-FZ8
+	  Pentax Optio 750Z
+	  Samsung GX-10
+	  Sigma SD14
+	  
+	  The current implementation of libkdcraw for KDE3 do not break
+	  binary compatibility. RAW decoding settings still the same. Only
+	  private methods have been fixed, especally the settings widget.
+	  
+	  I will break binary compatibility of libkdcraw with KDE4 port
+	  where i will add new settings like chromatic aberration
+	  correction for ex.
+	  
+	  CCBUGS: 142568
+	  CCMAIL: kde-imaging@kde.org
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: ach@mpe.mpg.de
+	  CCMAIL: boud@valdyas.org
+
+2007-06-13 16:54  cgilles
+
+	* [r674972] libkdcraw/libkdcraw/Makefile.am:
+	  fix broken compilation about moc file
+
+2007-06-13 08:38  cgilles
+
+	* [r674833] libkdcraw/libkdcraw/kdcraw.cpp:
+	  no i18n here
+
+2007-06-13 06:49  cgilles
+
+	* [r674798] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/cameralist:
+	  rename
+
+2007-06-13 06:48  cgilles
+
+	* [r674797] libkdcraw/libkdcraw/Makefile.am:
+	  use CXXFLAGS instead INCLUDES to dispatch -D option suring
+	  compilation
+
+----------------------------------------------------------------------------
 V 0.1.1 - 2007-06-13
 ----------------------------------------------------------------------------
 
