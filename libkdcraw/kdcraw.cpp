@@ -234,12 +234,11 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         return false;
 
     // Try to get camera maker/model using dcraw with options:
-    // -c : write to stdout
     // -i : identify files without decoding them.
     // -v : verbose mode.
 
     command  = DcrawBinary::path();
-    command += " -c -i -v ";
+    command += " -i -v ";
     command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
 
@@ -403,19 +402,12 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
             identify.hasIccProfile = false;
     }
 
-    // Extract "Is Decodable" flag.
+    // Check if picture is decodable
 
-    QString isDecodableHeader("Decodable with dcraw: ");
-    pos = dcrawInfo.indexOf(isDecodableHeader);
+    identify.isDecodable = true;
+    pos = dcrawInfo.indexOf("Cannot decode file");
     if (pos != -1)
-    {
-        QString isDecodable = dcrawInfo.mid(pos).section('\n', 0, 0);
-        isDecodable.remove(0, isDecodableHeader.length());
-        if (isDecodable.contains("yes"))
-            identify.isDecodable = true;
-        else
-            identify.isDecodable = false;
-    }
+        identify.isDecodable = false;
 
     // Extract "Has Secondary Pixel" flag.
 
