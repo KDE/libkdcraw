@@ -35,11 +35,29 @@ class LIBKDCRAW_EXPORT RawDecodingSettings
 
 public:
 
-    /** RAW decoding Interpolation methods */
+    /** RAW decoding Interpolation methods
+
+        Bilinear: use high-speed but low-quality bilinear
+                  interpolation (default - for slow computer). In this method,
+                  the red value of a non-red pixel is computed as the average of
+                  the adjacent red pixels, and similar for blue and green.
+        VNG:      use Variable Number of Gradients interpolation.
+                  This method computes gradients near the pixel of interest and uses
+                  the lower gradients (representing smoother and more similar parts
+                  of the image) to make an estimate.
+        PPG:      use Patterned Pixel Grouping interpolation.
+                  Pixel Grouping uses assumptions about natural scenery in making estimates.
+                  It has fewer color artifacts on natural images than the Variable Number of
+                  Gradients method.
+        AHD:      use Adaptive Homogeneity-Directed interpolation.
+                  This method selects the direction of interpolation so as to
+                  maximize a homogeneity metric, thus typically minimizing color artifacts.
+    */
     enum DecodingQuality 
     {
         BILINEAR = 0,
-        VNG      = 2,
+        VNG      = 1,
+        PPG      = 2,
         AHD      = 3
     };
 
@@ -79,7 +97,7 @@ public:
         colorBalanceMultipliers[2] = 0.0;
         colorBalanceMultipliers[3] = 0.0;
     };
-    
+
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const
     {
@@ -139,25 +157,25 @@ public:
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
     */
-    bool sixteenBitsImage;    
+    bool sixteenBitsImage;
 
     /** Half-size color image decoding (twice as fast as "enableRAWQuality"). 
         Use this option to reduce time loading to render histogram for example, 
-        no to render an image to screen. 
+        no to render an image to screen.
     */
     bool halfSizeColorImage;
 
     /**  Use the color balance specified by the camera. If this can't be found, 
-         reverts to the default. 
+         reverts to the default.
     */
     bool cameraColorBalance;
-    
+
     /** Automatic color balance. The default is to use a fixed color balance 
-        based on a white card photographed in sunlight. 
+        based on a white card photographed in sunlight.
     */
     bool automaticColorBalance;
-    
-    /** RAW file decoding using RGB interpolation as four colors. 
+
+    /** RAW file decoding using RGB interpolation as four colors.
     */
     bool RGBInterpolate4Colors;
 
@@ -166,7 +184,7 @@ public:
         output pixel corresponds to one RAW pixel. 
     */
     bool DontStretchPixels;
-    
+
     /** Unclip Highlight color level:
         0   = Clip all highlights to solid white.
         1   = Leave highlights unclipped in various shades of pink.
@@ -178,7 +196,7 @@ public:
     int unclipColors;
 
     /** RAW quality decoding factor value. See DecodingQuality values 
-        for details. 
+        for details.
     */
     DecodingQuality RAWQuality;
 
@@ -190,10 +208,10 @@ public:
         The best threshold should be somewhere between 100 and 1000.
     */
     int NRThreshold;
-    
+
     /** Brightness of output image. 
     */
-    float brightness;   
+    float brightness;
 
     /** Set on the black point setting to decode RAW image.
     */
@@ -201,7 +219,7 @@ public:
 
     /** Black Point value of output image. 
     */
-    int blackPoint;   
+    int blackPoint;
 
     /** The output color space used to decoded RAW data. See OutputColorSpace 
         values for details. 

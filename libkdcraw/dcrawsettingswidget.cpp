@@ -114,7 +114,7 @@ public:
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
- 
+
     KDoubleNumInput *colorMult1SpinBox;
     KDoubleNumInput *colorMult2SpinBox;
     KDoubleNumInput *colorMult3SpinBox;
@@ -250,7 +250,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->RAWQualityComboBox = new QComboBox(d->stdSettings);
     d->RAWQualityComboBox->insertItem(0, i18n("Bilinear"));
     d->RAWQualityComboBox->insertItem(1, i18n("VNG"));
-    d->RAWQualityComboBox->insertItem(2, i18n("AHD"));
+    d->RAWQualityComboBox->insertItem(2, i18n("PPG"));
+    d->RAWQualityComboBox->insertItem(3, i18n("AHD"));
     d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality</b><p>"
                 "Select here the demosaicing RAW images decoding "
                 "interpolation method. A demosaicing algorithm is a digital image process used to "
@@ -266,6 +267,10 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "This method computes gradients near the pixel of interest and uses "
                 "the lower gradients (representing smoother and more similar parts "
                 "of the image) to make an estimate.<p>"
+                "<b>PPG</b>: use Patterned Pixel Grouping interpolation. "
+                "Pixel Grouping uses assumptions about natural scenery in making estimates. "
+                "It has fewer color artifacts on natural images than the Variable Number of "
+                "Gradients method.<p>"
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
@@ -647,6 +652,9 @@ RawDecodingSettings::DecodingQuality DcrawSettingsWidget::quality()
             return RawDecodingSettings::VNG;
             break;
         case 2:
+            return RawDecodingSettings::PPG;
+            break;
+        case 3:
             return RawDecodingSettings::AHD;
             break;
         default:
@@ -662,8 +670,11 @@ void DcrawSettingsWidget::setQuality(RawDecodingSettings::DecodingQuality q)
         case RawDecodingSettings::VNG:
             d->RAWQualityComboBox->setCurrentIndex(1);
             break;
-        case RawDecodingSettings::AHD:
+        case RawDecodingSettings::PPG:
             d->RAWQualityComboBox->setCurrentIndex(2);
+            break;
+        case RawDecodingSettings::AHD:
+            d->RAWQualityComboBox->setCurrentIndex(3);
             break;
         default:
             d->RAWQualityComboBox->setCurrentIndex(0);
