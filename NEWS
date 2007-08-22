@@ -6,7 +6,7 @@ Port to CMake/KDE4/QT4
 ------------------------------------------------------------------------
 
 New features
-- updated internal dcraw from 8.60 to 8.77. API unchanged. BIC respected.
+- updated internal dcraw from 8.60 to 8.77. API changed.
 
 0.1.1
 ------------------------------------------------------------------------
