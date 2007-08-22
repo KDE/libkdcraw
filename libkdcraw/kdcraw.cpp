@@ -651,6 +651,7 @@ bool KDcraw::startProcess()
     // -b : set Brightness value.
     // -k : set Black Point value.
     // -r : set Raw Color Balance Multipliers.
+    // -C : set Correct chromatic aberration correction.
 
     QStringList args;
     args << "-c";
@@ -702,6 +703,13 @@ bool KDcraw::startProcess()
     {
         args << "-n";
         args << QString::number(m_rawDecodingSettings.NRThreshold);
+    }
+
+    if (m_rawDecodingSettings.enableCACorrection)
+    {
+        args << "-C";
+        args << QString::number(m_rawDecodingSettings.caMultiplier[0], 'f', 5);
+        args << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
     }
 
     args << "-o";

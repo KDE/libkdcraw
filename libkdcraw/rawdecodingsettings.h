@@ -91,6 +91,10 @@ public:
         enableNoiseReduction       = false;
         NRThreshold                = 100;
 
+        enableCACorrection         = false;
+        caMultiplier[0]            = 1.0;
+        caMultiplier[1]            = 1.0;
+
         enableColorMultipliers     = false;
         colorBalanceMultipliers[0] = 0.0;
         colorBalanceMultipliers[1] = 0.0;
@@ -115,6 +119,9 @@ public:
             && blackPoint == o.blackPoint  
             && enableNoiseReduction == o.enableNoiseReduction  
             && NRThreshold == o.NRThreshold  
+            && enableCACorrection == o.enableCACorrection
+            && caMultiplier[0] == o.caMultiplier[0]
+            && caMultiplier[1] == o.caMultiplier[1]
             && enableColorMultipliers == o.enableColorMultipliers  
             && colorBalanceMultipliers[0] == o.colorBalanceMultipliers[0]  
             && colorBalanceMultipliers[1] == o.colorBalanceMultipliers[1]  
@@ -145,6 +152,10 @@ public:
 
         enableNoiseReduction       = false;
         NRThreshold                = 100;
+
+        enableCACorrection         = false;
+        caMultiplier[0]            = 1.0;
+        caMultiplier[1]            = 1.0;
 
         enableColorMultipliers     = false;
         colorBalanceMultipliers[0] = 0.0;
@@ -208,6 +219,16 @@ public:
         The best threshold should be somewhere between 100 and 1000.
     */
     int NRThreshold;
+
+    /** Use red and blue layer magnification to reduce chromatic aberrations
+    */
+    bool enableCACorrection;
+
+    /** Magnification factor for Red and Blue layers
+        - caMultiplier[0] = red multiplier
+        - caMultiplier[1] = blue multiplier
+    */
+    double caMultiplier[2];
 
     /** Brightness of output image. 
     */

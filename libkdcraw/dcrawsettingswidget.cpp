@@ -70,6 +70,11 @@ public:
         enableNoiseReduction      = 0;
         NRThresholdSpinBox        = 0;
         NRThresholdLabel          = 0;
+        enableCACorrection        = 0;
+        caRedMultSpinBox          = 0;
+        caBlueMultSpinBox         = 0;
+        caRedMultLabel            = 0;
+        caBlueMultLabel           = 0;
         unclipColorComboBox       = 0;
         reconstructLabel          = 0;
         reconstructSpinBox        = 0;
@@ -90,6 +95,8 @@ public:
     QLabel          *brightnessLabel;
     QLabel          *RAWQualityLabel;
     QLabel          *NRThresholdLabel;
+    QLabel          *caRedMultLabel;
+    QLabel          *caBlueMultLabel;
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
@@ -110,11 +117,14 @@ public:
     QCheckBox       *autoColorBalanceCheckBox;
     QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
+    QCheckBox       *enableCACorrection;
 
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
 
+    KDoubleNumInput *caRedMultSpinBox;
+    KDoubleNumInput *caBlueMultSpinBox;
     KDoubleNumInput *colorMult1SpinBox;
     KDoubleNumInput *colorMult2SpinBox;
     KDoubleNumInput *colorMult3SpinBox;
@@ -297,6 +307,36 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
+    d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->stdSettings);
+    d->enableCACorrection->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
+                     "Enlarge the raw red and blue layers by the given factors, "
+                     "typically 0.999 to 1.001, to correct chromatic aberration.<p>"));
+    settingsBoxLayout->addWidget(d->enableCACorrection, line, 0, 1, 3);
+    line++;
+
+    d->caRedMultLabel   = new QLabel(i18n("Red multiplier:"), d->stdSettings);
+    d->caRedMultSpinBox = new KDoubleNumInput(d->stdSettings);
+    d->caRedMultSpinBox->setPrecision(5);
+    d->caRedMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
+    d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red multiplier</b><p>"
+                     "Set here the magnification factor of the red layer"));
+
+    d->caBlueMultLabel   = new QLabel(i18n("Blue multiplier:"), d->stdSettings);
+    d->caBlueMultSpinBox = new KDoubleNumInput(d->stdSettings);
+    d->caBlueMultSpinBox->setPrecision(5);
+    d->caBlueMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
+    d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
+                     "Set here the magnification factor of the blue layer"));
+    
+    settingsBoxLayout->addWidget(d->caRedMultLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->caRedMultSpinBox, line, 1, 1, 2);
+    line++;
+    settingsBoxLayout->addWidget(d->caBlueMultLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->caBlueMultSpinBox, line, 1, 1, 2);
+    line++;
+
+    // ---------------------------------------------------------------
+
     d->outputColorSpaceLabel    = new QLabel(i18n("Color space:"), d->stdSettings);
     d->outputColorSpaceComboBox = new QComboBox( d->stdSettings );
     d->outputColorSpaceComboBox->insertItem(0, i18n("Raw (linear)"));
@@ -419,6 +459,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SLOT(slotNoiseReductionToggled(bool)));
 
+    connect(d->enableCACorrection, SIGNAL(toggled(bool)),
+            this, SLOT(slotCACorrectionToggled(bool)));
+
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
 
@@ -450,6 +493,9 @@ void DcrawSettingsWidget::setDefaultSettings()
     setUnclipColor(0);
     setDontStretchPixels(false);
     setNoiseReduction(false);
+    setUseCACorrection(false);
+    setcaRedMultiplier(1.0);
+    setcaBlueMultiplier(1.0);
     setBrightness(1.0);
     setUseBlackPoint(false);
     setBlackPoint(0);
@@ -488,6 +534,14 @@ void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)
 {
     d->NRThresholdSpinBox->setEnabled(b);
     d->NRThresholdLabel->setEnabled(b);
+}
+
+void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
+{
+    d->caRedMultSpinBox->setEnabled(b);
+    d->caBlueMultSpinBox->setEnabled(b);
+    d->caRedMultLabel->setEnabled(b);
+    d->caBlueMultLabel->setEnabled(b);
 }
 
 void DcrawSettingsWidget::slotColorMultToggled(bool b)
@@ -717,6 +771,43 @@ int DcrawSettingsWidget::NRThreshold()
 void DcrawSettingsWidget::setNRThreshold(int b)
 {
     d->NRThresholdSpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useCACorrection()
+{
+    return d->enableCACorrection->isChecked();
+}
+
+void DcrawSettingsWidget::setUseCACorrection(bool b)
+{
+    d->enableCACorrection->setChecked(b);
+    slotCACorrectionToggled(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::caRedMultiplier()
+{
+    return d->caRedMultSpinBox->value();
+}
+
+void DcrawSettingsWidget::setcaRedMultiplier(double b)
+{
+    d->caRedMultSpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+double DcrawSettingsWidget::caBlueMultiplier()
+{
+    return d->caBlueMultSpinBox->value();
+}
+
+void DcrawSettingsWidget::setcaBlueMultiplier(double b)
+{
+    d->caBlueMultSpinBox->setValue(b);
 }
 
 // ---------------------------------------------------------------
