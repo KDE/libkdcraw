@@ -309,7 +309,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         identify.model = model;
     }
 
-    // Extract Camera Model.
+    // Extract Picture Owner.
     QString ownerHeader("Owner: ");
     pos = dcrawInfo.indexOf(ownerHeader);
     if (pos != -1)
