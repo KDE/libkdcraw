@@ -64,8 +64,8 @@ public:
 
     /** Standard destructor */
     virtual ~DcrawInfoContainer(){}
-    
-    /** return 'true' if container is empty, else 'false' */    
+
+    /** return 'true' if container is empty, else 'false' */
     bool isEmpty()
     {
         if ( make.isEmpty()          &&
@@ -84,48 +84,50 @@ public:
         else
             return false;
     };
-    
+
     /** True if camera sensor use a secondary pixel. */
-    bool      hasSecondaryPixel;  
+    bool      hasSecondaryPixel;
     /** True if RAW file include an ICC color profile. */
-    bool      hasIccProfile;      
+    bool      hasIccProfile;
     /** True is RAW file is decodable by dcraw. */
-    bool      isDecodable;        
+    bool      isDecodable;
 
     /** The number of RAW colors. */
-    int       rawColors;          
+    int       rawColors;
 
     /** The sensitivity in ISO used by camera to take the picture. */
-    long      sensitivity;        
+    long      sensitivity;
 
     /** ==> 1/exposureTime = exposure time in seconds. */
-    float     exposureTime;       
+    float     exposureTime;
     /** ==> Aperture value in APEX. */
-    float     aperture;           
+    float     aperture;
     /** ==> Focal Length value in mm. */
-    float     focalLength;        
+    float     focalLength;
     /** The pixel Aspect Ratio if != 1.0. NOTE: if == 1.0, dcraw do not show this value. */
-    float     pixelAspectRatio;   
+    float     pixelAspectRatio;
 
     /** White color balance settings. */
-    double    daylightMult[3];    
+    double    daylightMult[3];
     /** Camera multipliers used for White Balance adjustements */
     double    cameraMult[4];
 
     /** The camera maker. */
-    QString   make;               
+    QString   make;
     /** The camera model. */
-    QString   model;              
+    QString   model;
+    /** The artist name who have picture owner. */
+    QString   owner;
     /** The demosaising filter pattern. */
-    QString   filterPattern;      
-    /** The DNG version. NOTE: only show with DNG RAW files. */
-    QString   DNGVersion;         
+    QString   filterPattern;
+    /** The DNG version. NOTE: its only show with DNG RAW files. */
+    QString   DNGVersion;
 
     /** Date & time when have been taken the picture. */
-    QDateTime dateTime;           
+    QDateTime dateTime;
 
     /** The image dimensions in pixels. */
-    QSize     imageSize;          
+    QSize     imageSize;
 };
 
 } // namespace KDcrawIface
