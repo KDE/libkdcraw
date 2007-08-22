@@ -713,6 +713,7 @@ void KDcraw::startProcess()
     // -b : set Brightness value.
     // -k : set Black Point value.
     // -r : set Raw Color Balance Multipliers.
+    // -C : set Correct chromatic aberration correction.
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
