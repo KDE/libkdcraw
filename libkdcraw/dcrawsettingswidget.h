@@ -55,11 +55,14 @@ public:
     bool   useFourColor();
     bool   useDontStretchPixels();
     bool   useNoiseReduction();
+    bool   useCACorrection();
     bool   useBlackPoint();
     int    unclipColor();
     double brightness();
     int    blackPoint();
     int    NRThreshold();
+    double caRedMultiplier();
+    double caBlueMultiplier();
     bool   useColorMultipliers();
     double colorMultiplier1();
     double colorMultiplier2();
@@ -75,11 +78,14 @@ public:
     void   setFourColor(bool b);
     void   setDontStretchPixels(bool b);
     void   setNoiseReduction(bool b);
+    void   setUseCACorrection(bool b);
     void   setUseBlackPoint(bool b);
     void   setUnclipColor(int v);
     void   setBrightness(double b);
     void   setBlackPoint(int b);
     void   setNRThreshold(int b);
+    void   setcaRedMultiplier(double b);
+    void   setcaBlueMultiplier(double b);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
     void   setUseColorMultipliers(bool b);
@@ -100,6 +106,7 @@ private slots:
     void slotColorMultToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
+    void slotCACorrectionToggled(bool);
     void processDcrawURL(const QString&);
 
 private:

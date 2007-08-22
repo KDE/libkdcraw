@@ -766,6 +766,13 @@ void KDcraw::startProcess()
         *d->process << QString::number(m_rawDecodingSettings.NRThreshold);
     }
 
+    if (m_rawDecodingSettings.enableCACorrection)
+    {
+        *d->process << "-C";
+        *d->process << QString::number(m_rawDecodingSettings.caMultiplier[0], 'f', 5);
+        *d->process << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
+    }
+
     *d->process << "-o";
     *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
 
