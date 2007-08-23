@@ -23,8 +23,8 @@
 #ifndef DCRAW_INFO_H
 #define DCRAW_INFO_H
 
-static const char dcraw_program_version[] = "8.77";
+static const char dcraw_program_version[] = "${DCRAW_PROGRAM_VERSION}";
 
-static const char dcraw_program_dir[] = "/opt/kde4/lib/libkdcraw2/kdcraw";
+static const char dcraw_program_dir[] = "${DCRAW_PROGRAM_DIR}";
 
 #endif // DCRAW_INFO_H
