@@ -18,15 +18,17 @@ KDE4_NO_ENABLE_FINAL(kdraw)
 # Note : using -std-c99 instead -std=iso9899:1990 is not possible because some compiler 
 # do not support it.
 # Thanks to Andras Mantia for this tip.
-add_definitions("-Dinline= -w")
+ADD_DEFINITIONS("-Dinline= -w")
 
-set(kdcraw_SRCS dcraw.c)
-kde4_add_executable(kdcraw ${kdcraw_SRCS})
-target_link_libraries(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
+SET(kdcraw_SRCS dcraw.c)
+KDE4_ADD_EXECUTABLE(kdcraw ${kdcraw_SRCS})
+TARGET_LINK_LIBRARIES(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
 # the target kdcraw binary programe name add the soname of library as suffixe.
-set_target_properties(kdcraw PROPERTIES OUTPUT_NAME kdcraw)
+SET_TARGET_PROPERTIES(kdcraw PROPERTIES OUTPUT_NAME kdcraw)
 
 # Note: we don't install kcraw man page. It will never used by users.
-install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})
+# The kdcraw program is installled in install dir of library to able 
+# to install more than one version at the same time on the same computer.
+INSTALL(TARGETS kdcraw DESTINATION ${DCRAW_PROGRAM_DIR})
 
