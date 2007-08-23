@@ -1,22 +1,42 @@
-project(libkdcraw)
+PROJECT(libkdcraw)
+
+# =======================================================
+# Informations to update before to release this library.
+
+# Library API version
+SET(DCRAW_LIB_MAJOR_VERSION "2")
+SET(DCRAW_LIB_MINOR_VERSION "0")
+SET(DCRAW_LIB_PATCH_VERSION "0")
+
+# dcraw.c version include with this library. 
+# Look into dcraw/dcraw.c implementation for details.
+SET(DCRAW_PROGRAM_VERSION "8.77")
+
+# =======================================================
+
+# Set env. variables accordinly
+
+SET(DCRAW_PROGRAM_DIR "${LIB_INSTALL_DIR}/libkdcraw${DCRAW_LIB_MAJOR_VERSION}/kdcraw")
+
+SET(DCRAW_LIB_VERSION_INFO "${DCRAW_LIB_MAJOR_VERSION}:${DCRAW_LIB_MINOR_VERSION}:${DCRAW_LIB_PATCH_VERSION}")
+SET(DCRAW_LIB_SOVERSION ${DCRAW_LIB_MAJOR_VERSION})
+
+SET(DCRAW_LIB_VERSION_STRING "${DCRAW_LIB_MAJOR_VERSION}.${DCRAW_LIB_MINOR_VERSION}.${DCRAW_LIB_PATCH_VERSION}")
+SET(DCRAW_LIB_VERSION_ID "0x000${DCRAW_LIB_MAJOR_VERSION}${DCRAW_LIB_MINOR_VERSION}${DCRAW_LIB_PATCH_VERSION}")
 
 # Depencies detection require to compile dcraw.c
 # Detect Little CMS library properlly with CMake script from 'cmake/modules'
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
-find_package(LCMS REQUIRED)
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+FIND_PACKAGE(LCMS REQUIRED)
 
 # Detect libJPEG
-find_package(JPEG REQUIRED)
+FIND_PACKAGE(JPEG REQUIRED)
 
-set(DCRAW_LIB_VERSION "2.0.0")
-set(DCRAW_LIB_SOVERSION "2")
+SUBDIRS(icons)
+SUBDIRS(libkdcraw)
+SUBDIRS(dcraw)
 
-
-subdirs(icons)
-subdirs(libkdcraw)
-subdirs(dcraw)
-
-if(NOT WIN32)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif(NOT WIN32)
+IF(NOT WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+ENDIF(NOT WIN32)

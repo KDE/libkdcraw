@@ -25,7 +25,7 @@ kde4_add_executable(kdcraw ${kdcraw_SRCS})
 target_link_libraries(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
 # the target kdcraw binary programe name add the soname of library as suffixe.
-set_target_properties(kdcraw PROPERTIES OUTPUT_NAME kdcraw-${DCRAW_LIB_VERSION})
+set_target_properties(kdcraw PROPERTIES OUTPUT_NAME kdcraw)
 
 # Note: we don't install kcraw man page. It will never used by users.
 install(TARGETS kdcraw DESTINATION ${BIN_INSTALL_DIR})

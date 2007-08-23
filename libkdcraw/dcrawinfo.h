@@ -20,11 +20,11 @@
  *
  * ============================================================ */
 
-#ifndef KDCRAW_VERSION_H
-#define KDCRAW_VERSION_H
+#ifndef DCRAW_INFO_H
+#define DCRAW_INFO_H
 
-static const char kdcraw_version[] = "${DCRAW_LIB_VERSION_STRING}";
+static const char dcraw_program_version[] = "8.77";
 
-#define KDCRAW_VERSION ${DCRAW_LIB_VERSION_ID}
+static const char dcraw_program_dir[] = "/opt/kde4/lib/libkdcraw2/kdcraw";
 
-#endif // KDCRAW_VERSION_H
+#endif // DCRAW_INFO_H

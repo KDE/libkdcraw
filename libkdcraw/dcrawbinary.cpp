@@ -29,9 +29,11 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kaboutdata.h>
-#include "version.h"
+
 // Local includes
 
+#include "version.h"
+#include "dcrawinfo.h"
 #include "dcrawbinary.h"
 #include "dcrawbinary.moc"
 
@@ -93,7 +95,7 @@ void DcrawBinary::checkSystem()
 
 void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
 {
-    // The dcraw output looks like this : Raw photo decoder "dcraw" v8.54...
+    // The dcraw output looks like this : Raw photo decoder "dcraw" v8.77...
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
     QString dcrawOut  = QString::fromLocal8Bit(buffer, buflen);
@@ -109,7 +111,7 @@ void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
 const char *DcrawBinary::path()
 {
     // return the kdcraw binary program name + soname of library as suffixe
-    return /*"kdcraw-2.0.0"*/kdcraw_soname;
+    return dcraw_program_dir;
 }
 
 bool DcrawBinary::isAvailable() const
@@ -124,9 +126,8 @@ QString DcrawBinary::version() const
 
 QString DcrawBinary::internalVersion()
 {
-    // The version of dcraw include with this library. 
-    // Look into dcraw/dcraw.c implementation.
-    return QString("8.77");   
+    // The version of dcraw include with this library.
+    return QString(dcraw_program_version);
 }
 
 bool DcrawBinary::versionIsRight() const
