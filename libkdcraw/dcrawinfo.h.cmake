@@ -25,6 +25,6 @@
 
 static const char dcraw_program_version[] = "${DCRAW_PROGRAM_VERSION}";
 
-static const char dcraw_program_dir[] = "${DCRAW_PROGRAM_DIR}";
+static const char dcraw_program_path[] = "${DCRAW_PROGRAM_DIR}/kdcraw";
 
 #endif // DCRAW_INFO_H

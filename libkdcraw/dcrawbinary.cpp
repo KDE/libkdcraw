@@ -111,7 +111,7 @@ void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
 const char *DcrawBinary::path()
 {
     // return the kdcraw binary program name + soname of library as suffixe
-    return dcraw_program_dir;
+    return dcraw_program_path;
 }
 
 bool DcrawBinary::isAvailable() const
