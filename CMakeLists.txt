@@ -5,9 +5,9 @@ PROJECT(libkdcraw)
 
 # Library version history:
 # API      BIN
-# 0.1.0 => 1.0.0
-# 0.1.1 => 1.1.0
-# 0.1.2 => 1.2.0
+# 0.1.0 => 0.1.0
+# 0.1.1 => 1.0.0
+# 0.1.2 => 1.1.0
 # 0.2.0 => 2.0.0
 
 # Library API version
