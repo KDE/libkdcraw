@@ -55,7 +55,7 @@ public:
     QString version;
 };
 
-DcrawBinary *DcrawBinary::m_componentData = 0;
+DcrawBinary *DcrawBinary::m_instance = 0;
 
 DcrawBinary::DcrawBinary()
            : QObject()
@@ -65,20 +65,20 @@ DcrawBinary::DcrawBinary()
 
 DcrawBinary::~DcrawBinary()
 {
-    m_componentData = 0;
+    m_instance = 0;
     delete d;
 }
 
-DcrawBinary *DcrawBinary::componentData()
+DcrawBinary *DcrawBinary::instance()
 {
-    if (!m_componentData)
-        m_componentData = new DcrawBinary;
-    return m_componentData;
+    if (!m_instance)
+        m_instance = new DcrawBinary;
+    return m_instance;
 }
 
 void DcrawBinary::cleanUp()
 {
-    delete m_componentData;
+    delete m_instance;
 }
 
 void DcrawBinary::checkSystem()

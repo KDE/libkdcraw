@@ -46,7 +46,7 @@ class LIBKDCRAW_EXPORT DcrawBinary : public QObject
 
 public:
 
-    static DcrawBinary *componentData();
+    static DcrawBinary *instance();
     static void cleanUp();
 
     /** Return the RAW decoding program name. */ 
@@ -83,7 +83,7 @@ private:
 
 private:
 
-    static DcrawBinary *m_componentData;
+    static DcrawBinary *m_instance;
 
     DcrawBinaryPriv    *d;
 };
