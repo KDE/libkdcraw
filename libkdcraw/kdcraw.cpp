@@ -513,7 +513,7 @@ bool KDcraw::checkToCancelWaitingData()
     return m_cancel;
 }
 
-bool KDcraw::checkToCancelRecievingData()
+bool KDcraw::checkToCancelReceivingData()
 {
     return m_cancel;
 }
@@ -522,7 +522,7 @@ void KDcraw::setWaitingDataProgress(double)
 {
 }
 
-void KDcraw::setRecievingDataProgress(double)
+void KDcraw::setReceivingDataProgress(double)
 {
 }
 
@@ -559,7 +559,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     int checkpoint     = 0;
 
     while (d->process->state() == QProcess::Running &&
-           !( (d->dataPos == 0) ? checkToCancelWaitingData() : checkToCancelRecievingData() ) )
+           !( (d->dataPos == 0) ? checkToCancelWaitingData() : checkToCancelReceivingData() ) )
     {
         if (d->dataPos == 0)
         {
@@ -583,7 +583,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             double delta = 0.3 + 0.4 - 0.4*part;
             int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
             checkpoint += (int)(imageSize / (20 * delta));
-            setRecievingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize))); 
+            setReceivingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize)));
         }
 
         //QMutexLocker lock(&d->mutex);

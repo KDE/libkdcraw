@@ -156,7 +156,7 @@ protected:
         from RAW decoding process with your proper environment. 
         By default, this method check if m_cancel is true.
     */
-    virtual bool checkToCancelRecievingData();
+    virtual bool checkToCancelReceivingData();
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
         internal loop without feedback) with your proper environment. By default, this method do nothing.
@@ -168,7 +168,7 @@ protected:
         with your proper environment. By default, this method do nothing.
         Progress value average for this stage is n%-70%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
-    virtual void setRecievingDataProgress(double value);
+    virtual void setReceivingDataProgress(double value);
 
 private:
 
