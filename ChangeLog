@@ -1,5 +1,65 @@
-V 0.1.2 - 2007-07-29
+V 0.1.2 - 2007-09-07
 ----------------------------------------------------------------------------
+2007-09-04 21:03  cgilles
+
+	* [r708412] libkdcraw/AUTHORS:
+	  fix email
+
+2007-09-04 09:57  cgilles
+
+	* [r708249] libkdcraw/AUTHORS:
+	  Add Guillaume as contributor
+
+2007-08-24 08:10  cgilles
+
+	* [r704175] libkdcraw/configure.in.in:
+	  fix ABI number for next release
+
+2007-08-23 11:07  cgilles
+
+	* [r703805] libkdcraw/configure.in.in:
+	  fix release number
+
+2007-08-22 13:58  cgilles
+
+	* [r703433] libkdcraw/libkdcraw/kdcraw.cpp:
+	  add comment
+
+2007-08-22 13:23  cgilles
+
+	* [r703414] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch : patch from Guillaume Castagnino
+	  about to support new chromatic aberration reduction options
+	  provided by dcraw 8.77
+	  CCBUGS: 148561
+	  CCMAIL: casta@xwing.info
+
+2007-08-22 04:33  cgilles
+
+	* [r703160] libkdcraw/libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp:
+	  libkdcraw from KDE3 branch : like BC is broken with future
+	  release, i backport "Picture Owner" extraction code from KDE4
+	  provided by new dcraw 8.77
+
+2007-08-20 09:59  cgilles
+
+	* [r702272] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix option
+
+2007-08-20 09:39  cgilles
+
+	* [r702258] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch : patch from Guillaume Castagnino
+	  about to handle RAW decoding quality settings properlly since
+	  dcraw 8.73 include a new interpolation method named PPG
+	  CCMAIL: kde-imaging@kde.org
+	  CCMAIL: casta@xwing.info
+
 2007-07-25 14:37  cgilles
 
 	* [r692427] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:

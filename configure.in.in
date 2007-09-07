@@ -5,8 +5,8 @@ AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 # Library API version
 # -----------------------------------------------------------------
 
-ABI_MAJOR=1
-VERSION_INFO="1:1:0"
+ABI_MAJOR=2
+VERSION_INFO= "2:0:0"
 
 AC_SUBST(ABI_MAJOR)
 AC_SUBST(VERSION_INFO)
