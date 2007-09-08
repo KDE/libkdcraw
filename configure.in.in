@@ -6,7 +6,7 @@ AC_CHECK_PROG(PKGCONFIGFOUND, pkg-config,[yes])
 # -----------------------------------------------------------------
 
 ABI_MAJOR=2
-VERSION_INFO= "2:0:0"
+VERSION_INFO="2:0:0"
 
 AC_SUBST(ABI_MAJOR)
 AC_SUBST(VERSION_INFO)
