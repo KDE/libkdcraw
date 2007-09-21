@@ -9,7 +9,7 @@
 # Note: dcraw project page is http://cybercom.net/~dcoffin
 
 # Require by dcraw.c implementation.
-KDE4_NO_ENABLE_FINAL(kdraw)
+KDE4_NO_ENABLE_FINAL(kdcraw)
 
 
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
