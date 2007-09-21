@@ -49,7 +49,6 @@ SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_
 
 # Depencies detection require to compile dcraw.c
 # Detect Little CMS library properlly with CMake script from 'cmake/modules'
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 FIND_PACKAGE(LCMS REQUIRED)
 
 # Detect libJPEG
