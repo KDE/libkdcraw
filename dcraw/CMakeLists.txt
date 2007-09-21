@@ -21,14 +21,14 @@ KDE4_NO_ENABLE_FINAL(kdcraw)
 ADD_DEFINITIONS("-Dinline= -w")
 
 SET(kdcraw_SRCS dcraw.c)
-KDE4_ADD_EXECUTABLE(kdcraw ${kdcraw_SRCS})
-TARGET_LINK_LIBRARIES(kdcraw ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
+KDE4_ADD_EXECUTABLE(kdcraw_bin ${kdcraw_SRCS})
+TARGET_LINK_LIBRARIES(kdcraw_bin ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
 # the target kdcraw binary programe name add the soname of library as suffixe.
-SET_TARGET_PROPERTIES(kdcraw PROPERTIES OUTPUT_NAME kdcraw)
+SET_TARGET_PROPERTIES(kdcraw_bin PROPERTIES OUTPUT_NAME kdcraw)
 
 # Note: we don't install kcraw man page. It will never used by users.
 # The kdcraw program is installled in install dir of library to able 
 # to install more than one version at the same time on the same computer.
-INSTALL(TARGETS kdcraw DESTINATION ${DCRAW_PROGRAM_DIR})
+INSTALL(TARGETS kdcraw_bin DESTINATION ${DCRAW_PROGRAM_DIR})
 
