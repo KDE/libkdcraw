@@ -8,7 +8,7 @@ SET(kdcraw_LIB_SRCS dcrawbinary.cpp kdcraw.cpp dcrawsettingswidget.cpp)
 
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdcraw ${KDE4_KDECORE_LIBS} 
+TARGET_LINK_LIBRARIES(kdcraw ${KDE4_KDE3SUPPORT_LIBS} 
                              ${KDE4_KDEUI_LIBS} 
                              ${QT_QT3SUPPORT_LIBRARY}
                      )
