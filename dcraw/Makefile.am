@@ -26,7 +26,7 @@ bindir = $(KDCRAW_DIR)
 # Note : using -std-c99 instead -std=iso9899:1990 is not possible because some compiler 
 # do not support it.
 # Thanks to Andras Mantia for this tip.
-kdcraw_CFLAGS = -Dinline= -w
+kdcraw_CFLAGS = -Dinline= -w $(all_includes)
 
 kdcraw_SOURCES = dcraw.c
 
