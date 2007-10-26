@@ -36,9 +36,7 @@
 #include "rawdecodingsettings.h"
 #include "dcrawinfocontainer.h"
 
-class QCustomEvent;
 
-class K3Process;
 
 namespace KDcrawIface
 {
