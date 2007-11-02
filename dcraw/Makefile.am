@@ -32,4 +32,7 @@ kdcraw_SOURCES = dcraw.c
 
 kdcraw_LDFLAGS = $(all_libraries) $(LIBJPEG) $(LCMS_LIBS) 
 
+#Install Camera list supported by dcraw
+cameralistdir = $(KDCRAW_DIR)
+cameralist_DATA = CAMERALIST
 
