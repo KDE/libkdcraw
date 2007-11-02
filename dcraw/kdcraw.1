@@ -77,10 +77,9 @@ Use Adaptive Homogeneity-Directed (AHD) interpolation.
 Interpolate RGB as four colors.  Use this if the output shows
 false 2x2 meshes with VNG or mazes with AHD.
 .TP
-.B -m
-After interpolation, clean up color artifacts 
-by repeatedly applying a 3x3 median filter to the R-G and B-G 
-channels.
+.B -m number_of_passes
+After interpolation, clean up color artifacts by repeatedly
+applying a 3x3 median filter to the R-G and B-G channels.
 .TP
 .B -n noise_threshold
 Use wavelets to erase noise while preserving real detail.
@@ -167,10 +166,6 @@ as a compromise.  If that's not good enough, do
 cut out the non-white highlights, and paste them into an image
 generated with
 .BR -H\ 3 .
-.TP
-.B -m
-Same as
-.BR -o\ 0 .
 .TP
 .B -o [0-5]
 Select the output colorspace when the
