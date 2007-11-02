@@ -56,7 +56,7 @@ Recompile libkdcraw, Raw Converter kipi-plugin, and digiKam. All must work fine 
 Remove the "dcraw-old.c" file. Not need to archive it in svn.
 
 
-6/ Update the internal dcraw version number returned by KDcraw::DcrawBinary::InternalVersion() method
+6/ Update the internal dcraw version number hosted by libkdcraw/CMakeLists.txt. This value is returned by KDcraw::DcrawBinary::InternalVersion() method
    (Check the "#define VERSION ..." string from dcraw.c).
    
 7/ On DCRaw project page (http://cybercom.net/~dcoffin/dcraw), extract the current camera list 
