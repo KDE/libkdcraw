@@ -377,7 +377,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Image Size.
 
-    QString imageSizeHeader("Full size:   ");
+    QString imageSizeHeader("Image size:  ");
     pos = dcrawInfo.indexOf(imageSizeHeader);
     if (pos != -1)
     {
@@ -386,6 +386,32 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         int width  = imageSize.section(" x ", 0, 0).toInt();
         int height = imageSize.section(" x ", 1, 1).toInt();
         identify.imageSize = QSize(width, height);
+    }
+
+    // Extract Full RAW image Size.
+
+    QString fullSizeHeader("Full size:   ");
+    pos = dcrawInfo.indexOf(fullSizeHeader);
+    if (pos != -1)
+    {
+        QString fullSize = dcrawInfo.mid(pos).section('\n', 0, 0);
+        fullSize.remove(0, fullSizeHeader.length());
+        int width  = fullSize.section(" x ", 0, 0).toInt();
+        int height = fullSize.section(" x ", 1, 1).toInt();
+        identify.fullSize = QSize(width, height);
+    }
+
+    // Extract Output image Size.
+
+    QString outputSizeHeader("Output size: ");
+    pos = dcrawInfo.indexOf(outputSizeHeader);
+    if (pos != -1)
+    {
+        QString outputSize = dcrawInfo.mid(pos).section('\n', 0, 0);
+        outputSize.remove(0, outputSizeHeader.length());
+        int width  = outputSize.section(" x ", 0, 0).toInt();
+        int height = outputSize.section(" x ", 1, 1).toInt();
+        identify.outputSize = QSize(width, height);
     }
 
     // Extract Thumb Size.

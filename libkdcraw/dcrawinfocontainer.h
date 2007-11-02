@@ -82,6 +82,8 @@ public:
              rawImages    == -1      &&
              !dateTime.isValid()     && 
              !imageSize.isValid()    &&
+             !fullSize.isValid()     &&
+             !outputSize.isValid()   &&
              !thumbSize.isValid() )
             return true;
         else
@@ -137,6 +139,12 @@ public:
     
     /** The thumb dimensions in pixels. */
     QSize     thumbSize;
+
+    /** The full RAW image dimensions in pixels. */
+    QSize     fullSize;
+
+    /** The output dimensions in pixels. */
+    QSize     outputSize;
 };
 
 } // namespace KDcrawIface
