@@ -32,3 +32,6 @@ SET_TARGET_PROPERTIES(kdcraw_bin PROPERTIES OUTPUT_NAME kdcraw)
 # to install more than one version at the same time on the same computer.
 INSTALL(TARGETS kdcraw_bin DESTINATION ${DCRAW_PROGRAM_DIR})
 
+# Install Camera list supported by dcraw.
+INSTALL(FILES CAMERALIST DESTINATION ${DCRAW_PROGRAM_DIR})
+
