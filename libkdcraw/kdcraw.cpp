@@ -377,7 +377,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
     // Extract Image Size.
 
-    QString imageSizeHeader("Image size:  ");
+    QString imageSizeHeader("Full size:   ");
     pos = dcrawInfo.indexOf(imageSizeHeader);
     if (pos != -1)
     {
@@ -386,6 +386,19 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         int width  = imageSize.section(" x ", 0, 0).toInt();
         int height = imageSize.section(" x ", 1, 1).toInt();
         identify.imageSize = QSize(width, height);
+    }
+
+    // Extract Thumb Size.
+
+    QString thumbSizeHeader("Thumb size:  ");
+    pos = dcrawInfo.indexOf(thumbSizeHeader);
+    if (pos != -1)
+    {
+        QString thumbSize = dcrawInfo.mid(pos).section('\n', 0, 0);
+        thumbSize.remove(0, thumbSizeHeader.length());
+        int width  = thumbSize.section(" x ", 0, 0).toInt();
+        int height = thumbSize.section(" x ", 1, 1).toInt();
+        identify.thumbSize = QSize(width, height);
     }
 
     // Extract "Has an embedded ICC profile" flag.
