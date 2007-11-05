@@ -233,7 +233,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->reconstructLabel   = new QLabel(i18n("Level:"), d->stdSettings);
     d->reconstructSpinBox = new KIntNumInput(d->stdSettings);
-    d->reconstructSpinBox->setRange(0, 6, 1, true);
+    d->reconstructSpinBox->setRange(0, 6, 1);
+    d->reconstructSpinBox->setSliderEnabled(true);
     d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b><p>"
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
@@ -245,7 +246,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->stdSettings);
     d->brightnessSpinBox = new KDoubleNumInput(d->stdSettings);
-    d->brightnessSpinBox->setPrecision(2);
+    d->brightnessSpinBox->setDecimals(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
     d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
                                             "Specify the brightness level of output image."
@@ -297,7 +298,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     line++;
 
     d->NRThresholdSpinBox = new KIntNumInput(d->stdSettings);
-    d->NRThresholdSpinBox->setRange(10, 1000, 1, true);
+    d->NRThresholdSpinBox->setRange(10, 1000, 1);
+    d->NRThresholdSpinBox->setSliderEnabled(true);
     d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
     d->NRThresholdSpinBox->setWhatsThis(i18n("<p><b>Threshold</b><p>"
                      "Set here the noise reduction threshold value to use."));
@@ -316,14 +318,14 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->caRedMultLabel   = new QLabel(i18n("Red multiplier:"), d->stdSettings);
     d->caRedMultSpinBox = new KDoubleNumInput(d->stdSettings);
-    d->caRedMultSpinBox->setPrecision(5);
+    d->caRedMultSpinBox->setDecimals(5);
     d->caRedMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
     d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red multiplier</b><p>"
                      "Set here the magnification factor of the red layer"));
 
     d->caBlueMultLabel   = new QLabel(i18n("Blue multiplier:"), d->stdSettings);
     d->caBlueMultSpinBox = new KDoubleNumInput(d->stdSettings);
-    d->caBlueMultSpinBox->setPrecision(5);
+    d->caBlueMultSpinBox->setDecimals(5);
     d->caBlueMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
     d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
                      "Set here the magnification factor of the blue layer"));
@@ -398,7 +400,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                              "If you set this option to off, the Black Point value will be "
                                              "automatically computed.<p>"));
     d->blackPointSpinBox = new KIntNumInput(d->advSettings);
-    d->blackPointSpinBox->setRange(0, 1000, 1, true);
+    d->blackPointSpinBox->setRange(0, 1000, 1);
+    d->blackPointSpinBox->setSliderEnabled(true);
     d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b><p>"
                                             "Specify specific black point value of the output image.<p>"));
 
@@ -409,22 +412,22 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->colorMult1Label   = new QLabel(i18n("Red multiplier:"), d->advSettings);
     d->colorMult1SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult1SpinBox->setPrecision(5);
+    d->colorMult1SpinBox->setDecimals(5);
     d->colorMult1SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
     d->colorMult2Label   = new QLabel(i18n("Green 1 multiplier:"), d->advSettings);
     d->colorMult2SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult2SpinBox->setPrecision(5);
+    d->colorMult2SpinBox->setDecimals(5);
     d->colorMult2SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
     d->colorMult3Label   = new QLabel(i18n("Blue multiplier:"), d->advSettings);
     d->colorMult3SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult3SpinBox->setPrecision(5);
+    d->colorMult3SpinBox->setDecimals(5);
     d->colorMult3SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
     d->colorMult4Label   = new QLabel(i18n("Green 2 multiplier:"), d->advSettings);
     d->colorMult4SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult4SpinBox->setPrecision(5);
+    d->colorMult4SpinBox->setDecimals(5);
     d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
 
     settingsBoxLayout2->setMargin(KDialog::spacingHint());
