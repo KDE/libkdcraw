@@ -8101,8 +8101,8 @@ int CLASS main (int argc, char **argv)
     if (identify_only && verbose && make[0]) {
       printf (_("\nFilename: %s\n"), ifname);
       printf (_("Timestamp: %s"), ctime(&timestamp));
-      printf (_("Camera: %s %s\n"), make);
-      printf (_("Model: %s %s\n"), model);
+      printf (_("Camera: %s\n"), make);
+      printf (_("Model: %s\n"), model);
       if (artist[0])
 	printf (_("Owner: %s\n"), artist);
       if (dng_version) {
