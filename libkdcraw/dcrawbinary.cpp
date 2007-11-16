@@ -88,8 +88,6 @@ void DcrawBinary::cleanUp()
 
 void DcrawBinary::checkSystem()
 {
-    supportedCamera();
-
     K3Process process;
     process.clearArguments();
     process << path();
