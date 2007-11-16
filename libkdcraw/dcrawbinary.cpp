@@ -21,9 +21,14 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <QFileInfo>
+
 // KDE includes
 
 #include <k3process.h>
+#include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -83,6 +88,8 @@ void DcrawBinary::cleanUp()
 
 void DcrawBinary::checkSystem()
 {
+    supportedCamera();
+
     K3Process process;
     process.clearArguments();
     process << path();
@@ -177,6 +184,24 @@ void DcrawBinary::checkReport()
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
     }
+}
+
+QStringList DcrawBinary::supportedCamera()
+{
+    QFileInfo fi(path());
+    QFile file(fi.path() + QString("/CAMERALIST"));
+    if ( !file.open(QIODevice::ReadOnly) ) 
+        return QStringList();
+    
+    QByteArray data;
+    data.resize(file.size());
+    QDataStream stream( &file );
+    stream.readRawData(data.data(), data.size());
+    file.close();
+
+    QString tmp(data);
+    QStringList list = tmp.split('\n');
+    return list;
 }
 
 }  // namespace KDcrawIface

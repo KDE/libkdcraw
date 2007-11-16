@@ -72,6 +72,8 @@ public:
         on your system failed. */ 
     void checkReport();
 
+    QStringList supportedCamera();
+
 private Q_SLOTS:
 
     void slotReadStdoutFromDcraw(K3Process*, char*, int);
