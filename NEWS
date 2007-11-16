@@ -1,3 +1,15 @@
+0.1.3
+------------------------------------------------------------------------
+- updated dcraw to 8.80
+  new cameras: Hasselblad H3D, Olympus E-3, Canon EOS 40D, Canon PowerShot G9,
+               Canon EOS-1Ds Mark III, AVT F-080C, Nikon D3, Nikon D300,
+               Nikon Coolpix S6, Panasonic DMC-FZ18, Sony DSLR-A700
+
+  -m number_of_passes
+     After interpolation, clean up color artifacts by repeatedly applying a 3x3
+     median filter to the R-G and B-G channels.
+  - Licence : is GPL compatible again == less wories)
+
 0.1.2
 ------------------------------------------------------------------------
 
@@ -13,7 +25,7 @@ New features
                * Added DcrawSettingsContainer destructor.
                * Separate embedded JPEG preview extraction and half decoding methods
                  to get a preview of RAW pictures.
-		 
+
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 145482 : libkdraw compile fails on Cygwin.
 
