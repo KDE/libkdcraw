@@ -36,8 +36,6 @@
 #include "rawdecodingsettings.h"
 #include "dcrawinfocontainer.h"
 
-
-
 namespace KDcrawIface
 {
 
