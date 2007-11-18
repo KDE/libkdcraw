@@ -13,6 +13,8 @@ AC_SUBST(VERSION_INFO)
 
 KDCRAW_DIR="\$(libdir)/libkdcraw\$(ABI_MAJOR)"
 AC_SUBST(KDCRAW_DIR)
+# AM_PROG_CC_C_O to avoid that automake complains for it
+AM_PROG_CC_C_O
 
 # -----------------------------------------------------------------
 # lcms check
