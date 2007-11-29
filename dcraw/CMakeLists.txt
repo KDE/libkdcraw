@@ -10,7 +10,7 @@
 
 # Require by dcraw.c implementation.
 KDE4_NO_ENABLE_FINAL(kdcraw)
-
+INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
 
 # This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
 # In fact, dcraw.c use lcms.h witch use the "inline" keyword witch do not exist in pure C 
