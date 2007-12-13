@@ -27,7 +27,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QWhatsThis>
-#include <QString>
 #include <QToolTip>
 #include <QTabBar>
 
