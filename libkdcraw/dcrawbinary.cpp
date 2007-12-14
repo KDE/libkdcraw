@@ -13,7 +13,7 @@
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
  * either version 2, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -83,7 +83,7 @@ void DcrawBinary::checkSystem()
 {
     KProcess process;
     process.clearArguments();
-    process << path();    
+    process << path();
 
     connect(&process, SIGNAL(receivedStdout(KProcess *, char*, int)),
             this, SLOT(slotReadStdoutFromDcraw(KProcess*, char*, int)));
@@ -97,12 +97,12 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
     QString dcrawOut  = QString::fromLocal8Bit(buffer, buflen);
-    QString firstLine = dcrawOut.section('\n', 1, 1);    
+    QString firstLine = dcrawOut.section('\n', 1, 1);
 
     if (firstLine.startsWith(dcrawHeader))
     {
-        d->version = firstLine.remove(0, dcrawHeader.length());    
-        qDebug("Found dcraw version: %s", version().ascii());    
+        d->version = firstLine.remove(0, dcrawHeader.length());
+        qDebug("Found dcraw version: %s", version().ascii());
     }
 }
 
@@ -123,9 +123,9 @@ QString DcrawBinary::version() const
 
 QString DcrawBinary::internalVersion()
 {
-    // The version of dcraw include with this library. 
+    // The version of dcraw include with this library.
     // Look into dcraw/dcraw.c implementation.
-    return QString("8.80");
+    return QString("8.81");
 }
 
 bool DcrawBinary::versionIsRight() const
@@ -143,7 +143,7 @@ void DcrawBinary::checkReport()
 {
     QString appName = KGlobal::instance()->aboutData()->programName();
 
-    if (!isAvailable()) 
+    if (!isAvailable())
     {
         KMessageBox::information(
                      kapp->activeWindow(),
@@ -159,7 +159,7 @@ void DcrawBinary::checkReport()
         return;
     }
 
-    if (!versionIsRight()) 
+    if (!versionIsRight())
     {
         KMessageBox::information(
                      kapp->activeWindow(),

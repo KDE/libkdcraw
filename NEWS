@@ -1,5 +1,8 @@
 0.1.3
 ------------------------------------------------------------------------
+- updated dcraw to 8.81
+  new cameras: Canon G7, Fuji FinePix S9100/S9600, Olympus SP560UZ, Panasonic DMC-L10
+
 - updated dcraw to 8.80
   new cameras: Hasselblad H3D, Olympus E-3, Canon EOS 40D, Canon PowerShot G9,
                Canon EOS-1Ds Mark III, AVT F-080C, Nikon D3, Nikon D300,
