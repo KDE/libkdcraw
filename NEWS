@@ -1,6 +1,10 @@
 0.2.0
 ------------------------------------------------------------------------
 Port to CMake/KDE4/QT4
+- updated dcraw to 8.81
+  new cameras: Canon G7, Fuji FinePix S9100/S9600, Olympus SP560UZ, Panasonic DMC-L10
+
+
 
 0.1.2
 ------------------------------------------------------------------------
@@ -17,7 +21,7 @@ New features
                * Added DcrawSettingsContainer destructor.
                * Separate embedded JPEG preview extraction and half decoding methods
                  to get a preview of RAW pictures.
-		 
+
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 145482 : libkdraw compile fails on Cygwin.
 
