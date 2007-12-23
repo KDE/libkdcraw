@@ -1,3 +1,91 @@
+V 0.1.3 - 2007-12-23
+----------------------------------------------------------------------------
+2007-12-14 14:09  cgilles
+
+	* [r748435] libkdcraw/libkdcraw/version.h:
+	  fix new version
+
+2007-12-14 08:17  gkulzer
+
+	* [r748345] libkdcraw/dcraw/CAMERALIST:
+	  clean-up list
+
+2007-12-14 07:57  gkulzer
+
+	* [r748333] libkdcraw/NEWS, libkdcraw/dcraw/CAMERALIST,
+	  libkdcraw/dcraw/README, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1, libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update dcraw to 8.81. Interface stays compatible, regression
+	  testing done. 4 cameras added. Additional parameter -W to not
+	  adjust brightness
+
+2007-11-16 14:59  gkulzer
+
+	* [r737564] libkdcraw/NEWS:
+	  dcraw update to 8.80
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-11-16 14:48  gkulzer
+
+	* [r737563] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update dcraw to version 8.80
+
+2007-11-14 10:22  cgilles
+
+	* [r736540] libkdcraw/dcraw/dcraw.c:
+	  fix double "%s"
+
+2007-11-02 14:13  gkulzer
+
+	* [r732003] libkdcraw/dcraw/kdcraw.1:
+	  man page update
+
+2007-11-02 11:58  cgilles
+
+	* [r731957] libkdcraw/dcraw/Makefile.am:
+	  polish
+
+2007-11-02 11:44  cgilles
+
+	* [r731953] libkdcraw/libkdcraw.lsm, libkdcraw/libkdcraw.pc.in:
+	  upgrate libkdcraw version
+
+2007-11-02 11:44  cgilles
+
+	* [r731952] libkdcraw/dcraw/Makefile.am:
+	  install CAMERALIST on kdcraw bin folder
+
+2007-11-02 11:33  cgilles
+
+	* [r731948] libkdcraw/dcraw/dcraw.c:
+	  separate Make ans Model informations from identify command line
+
+2007-11-02 10:46  gkulzer
+
+	* [r731936] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1, libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  dcraw update to version 8.78
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-10-21 10:34  hasso
+
+	* [r727627] libkdcraw/configure.in.in, libkdcraw/dcraw/Makefile.am:
+	  Make it to find the lcms from nonstandard places provided by user
+	  via
+	  --with-extra-* flags. Fixes detecting lcms installed from pkgsrc
+	  package
+	  system.
+
+2007-09-07 22:02  vfuoglio
+
+	* [r709600] libkdcraw/ChangeLog, libkdcraw/configure.in.in,
+	  libkdcraw/libkdcraw.lsm, prepare_libkdcraw.rb:
+	  Preparing libkdcraw 0.1.2 release
+	  
+	  SNV_SILENT:
+
+----------------------------------------------------------------------------
 V 0.1.2 - 2007-09-07
 ----------------------------------------------------------------------------
 2007-09-04 21:03  cgilles
