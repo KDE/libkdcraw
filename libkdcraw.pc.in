@@ -7,6 +7,6 @@ Name: libkdcraw
 Description: KDE interface library for dcraw command line program to decode RAW picture files 
 URL: http://www.kipi-plugins.org
 Requires:
-Version: 0.1.3
+Version: 0.1.4
 Libs: -L${libdir} -lkdcraw
 Cflags: -I${includedir}

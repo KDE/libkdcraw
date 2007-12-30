@@ -55,6 +55,7 @@ extern "C"
 
 // Local includes.
 
+#include "version.h"
 #include "rawfiles.h"
 #include "dcrawbinary.h"
 #include "kdcraw.h"
@@ -99,6 +100,7 @@ public:
     QTimer              *queryTimer;
 
     KProcess            *process;
+
 };
 
 KDcraw::KDcraw()
@@ -111,6 +113,11 @@ KDcraw::~KDcraw()
 {
     cancel();
     delete d;
+}
+
+QString KDcraw::version()
+{
+  return QString(kdcraw_version);
 }
 
 void KDcraw::cancel()
