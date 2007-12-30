@@ -55,6 +55,9 @@ public:
 
 public:  
 
+    /** Return a string version of libkdcraw release */
+    static QString version();
+
     /** This is a non cancelable method witch do not require a class instance to run. 
         It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview(). 
     */
