@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "rawfiles.h"
 #include "dcrawbinary.h"
 #include "dcrawbinary.moc"
 
@@ -113,6 +114,11 @@ void DcrawBinary::slotReadStdoutFromDcraw(KProcess*, char* buffer, int buflen)
 const char *DcrawBinary::path()
 {
     return KDCRAW_DIR "/kdcraw";
+}
+
+const char *DcrawBinary::rawFiles()
+{
+    return raw_file_extentions;
 }
 
 bool DcrawBinary::isAvailable() const

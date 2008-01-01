@@ -52,6 +52,9 @@ public:
     /** Return the RAW decoding program name. */ 
     static const char *path();
 
+    /** Return the string of all RAW file type mime supported. */ 
+    const char *rawFiles();
+
     /** Return the RAW decoding program version included in this library. */ 
     static QString internalVersion();
 
