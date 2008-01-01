@@ -38,6 +38,7 @@
 // Local includes
 
 #include "version.h"
+#include "rawfiles.h"
 #include "dcrawinfo.h"
 #include "dcrawbinary.h"
 #include "dcrawbinary.moc"
@@ -117,6 +118,11 @@ const char *DcrawBinary::path()
 {
     // return the kdcraw binary program name + soname of library as suffixe
     return dcraw_program_path;
+}
+
+const char *DcrawBinary::rawFiles()
+{
+    return raw_file_extentions;
 }
 
 bool DcrawBinary::isAvailable() const
