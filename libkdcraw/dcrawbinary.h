@@ -72,6 +72,9 @@ public:
         on your system failed. */ 
     void checkReport();
 
+    /** Provide a list of supported RAW Camera name. */ 
+    QStringList supportedCamera();
+
 private slots:
 
     void slotReadStdoutFromDcraw(KProcess*, char*, int);

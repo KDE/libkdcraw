@@ -21,6 +21,10 @@
  *
  * ============================================================ */
 
+// Qt includes.
+
+#include <qfileinfo.h>
+
 // KDE includes
 
 #include <kprocess.h>
@@ -175,6 +179,24 @@ void DcrawBinary::checkReport()
                      i18n("Do not show this message again"),
                      KMessageBox::Notify | KMessageBox::AllowLink);
     }
+}
+
+QStringList DcrawBinary::supportedCamera()
+{
+    QFileInfo fi(path());
+    QFile file(fi.dirPath() + QString("/CAMERALIST"));
+    if ( !file.open(IO_ReadOnly) ) 
+        return QStringList();
+    
+    QByteArray data;
+    data.resize(file.size());
+    QDataStream stream( &file );
+    stream.readRawBytes(data.data(), data.size());
+    file.close();
+
+    QString tmp(data);
+    QStringList list = QStringList::split('\n', tmp);
+    return list;
 }
 
 }  // namespace KDcrawIface
