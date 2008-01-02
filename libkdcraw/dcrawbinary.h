@@ -27,22 +27,18 @@
 // Qt includes.
 
 #include <QtCore/QString>
-#include <QtCore/QObject>
 
 // Local Includes.
 
 #include "libkdcraw_export.h"
-
-class K3Process;
 
 namespace KDcrawIface
 {
 
 class DcrawBinaryPriv;
 
-class LIBKDCRAW_EXPORT DcrawBinary : public QObject
+class LIBKDCRAW_EXPORT DcrawBinary
 {
-    Q_OBJECT
 
 public:
 
@@ -77,10 +73,6 @@ public:
 
     /** Provide a list of supported RAW Camera name. */ 
     QStringList supportedCamera();
-
-private Q_SLOTS:
-
-    void slotReadStdoutFromDcraw(K3Process*, char*, int);
 
 private:
 

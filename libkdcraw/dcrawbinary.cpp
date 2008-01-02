@@ -23,11 +23,11 @@
 
 // Qt includes.
 
+#include <QProcess>
 #include <QFileInfo>
 
 // KDE includes
 
-#include <k3process.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
@@ -41,7 +41,6 @@
 #include "rawfiles.h"
 #include "dcrawinfo.h"
 #include "dcrawbinary.h"
-#include "dcrawbinary.moc"
 
 namespace KDcrawIface
 {
@@ -64,7 +63,6 @@ public:
 DcrawBinary *DcrawBinary::m_instance = 0;
 
 DcrawBinary::DcrawBinary()
-           : QObject()
 {
     d = new DcrawBinaryPriv;
 }
@@ -89,22 +87,14 @@ void DcrawBinary::cleanUp()
 
 void DcrawBinary::checkSystem()
 {
-    K3Process process;
-    process.clearArguments();
-    process << path();
+    QProcess process;
+    process.start(path());
+    d->available = process.waitForFinished();
 
-    connect(&process, SIGNAL(receivedStdout(K3Process *, char*, int)),
-            this, SLOT(slotReadStdoutFromDcraw(K3Process*, char*, int)));
-
-    d->available = process.start(K3Process::Block, K3Process::Stdout);
-}
-
-void DcrawBinary::slotReadStdoutFromDcraw(K3Process*, char* buffer, int buflen)
-{
     // The dcraw output looks like this : Raw photo decoder "dcraw" v8.77...
     QString dcrawHeader("Raw photo decoder \"dcraw\" v");
 
-    QString dcrawOut  = QString::fromLocal8Bit(buffer, buflen);
+    QString dcrawOut(process.readAll());
     QString firstLine = dcrawOut.section('\n', 1, 1);
 
     if (firstLine.startsWith(dcrawHeader))
