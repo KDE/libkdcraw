@@ -26,4 +26,7 @@
 
 static const char raw_file_extentions[] = "*.bay *.bmq *.cr2 *.crw *.cs1 *.dc2 *.dcr *.dng *.erf *.fff *.hdr *.k25 *.kdc *.mdc *.mos *.mrw *.nef *.orf *.pef *.pxn *.raf *.raw *.rdc *.sr2 *.srf *.x3f *.arw";
 
+// increment this number whenever you change the above string
+static const int raw_file_extensions_version = 1;
+
 #endif // RAW_FILES_H

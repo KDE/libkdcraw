@@ -115,6 +115,17 @@ const char *DcrawBinary::rawFiles()
     return raw_file_extentions;
 }
 
+QStringList DcrawBinary::rawFilesList()
+{
+    QString string = QString::fromLatin1(rawFiles());
+    return string.remove("*.").split(' ');
+}
+
+int DcrawBinary::rawFilesVersion()
+{
+    return raw_file_extensions_version;
+}
+
 bool DcrawBinary::isAvailable() const
 {
     return d->available;

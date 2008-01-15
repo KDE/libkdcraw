@@ -51,6 +51,15 @@ public:
     /** Return the string of all RAW file type mime supported. */
     static const char *rawFiles();
 
+    /** Return the list of all RAW file type mime supported,
+        as a QStringList, without wildcard and suffix dot.  */
+    static QStringList rawFilesList();
+
+    /** Returns a version number for the list of supported RAW file types.
+        This version is incremented if the list of supported formats has changed
+        between library releases. */
+    static int rawFilesVersion();
+
     /** Return the RAW decoding program version included in this library. */ 
     static QString internalVersion();
 
