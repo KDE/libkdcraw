@@ -135,7 +135,7 @@ QString DcrawBinary::internalVersion()
 {
     // The version of dcraw include with this library.
     // Look into dcraw/dcraw.c implementation.
-    return QString("8.81");
+    return QString("8.82");
 }
 
 bool DcrawBinary::versionIsRight() const
