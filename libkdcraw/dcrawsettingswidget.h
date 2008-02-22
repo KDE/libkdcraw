@@ -6,7 +6,9 @@
  * Date        : 2006-09-13
  * Description : dcraw settings widgets
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,8 +52,8 @@ public:
     virtual ~DcrawSettingsWidget();
 
     bool   sixteenBits();
-    bool   useCameraWB();
-    bool   useAutoColorBalance();
+    int    customWhiteBalance();
+    double customWhiteBalanceGreen();
     bool   useFourColor();
     bool   useDontStretchPixels();
     bool   useNoiseReduction();
@@ -63,18 +65,16 @@ public:
     int    NRThreshold();
     double caRedMultiplier();
     double caBlueMultiplier();
-    bool   useColorMultipliers();
-    double colorMultiplier1();
-    double colorMultiplier2();
-    double colorMultiplier3();
-    double colorMultiplier4();
 
+    RawDecodingSettings::WhiteBalance     whiteBalance();
     RawDecodingSettings::DecodingQuality  quality();
     RawDecodingSettings::OutputColorSpace outputColorSpace();
 
     void   setSixteenBits(bool b);
     void   setCameraWB(bool b);
-    void   setAutoColorBalance(bool b);
+    void   setWhiteBalance(RawDecodingSettings::WhiteBalance v);
+    void   setCustomWhiteBalance(int v);
+    void   setCustomWhiteBalanceGreen(double v);
     void   setFourColor(bool b);
     void   setDontStretchPixels(bool b);
     void   setNoiseReduction(bool b);
@@ -88,11 +88,6 @@ public:
     void   setcaBlueMultiplier(double b);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
-    void   setUseColorMultipliers(bool b);
-    void   setcolorMultiplier1(double b);
-    void   setcolorMultiplier2(double b);
-    void   setcolorMultiplier3(double b);
-    void   setcolorMultiplier4(double b);
 
     void   setDefaultSettings();
 
@@ -102,8 +97,8 @@ signals:
 
 private slots:
 
+    void slotWhiteBalanceToggled(int);
     void slotsixteenBitsImageToggled(bool);
-    void slotColorMultToggled(bool);
     void slotUnclipColorActivated(int);
     void slotNoiseReductionToggled(bool);
     void slotCACorrectionToggled(bool);

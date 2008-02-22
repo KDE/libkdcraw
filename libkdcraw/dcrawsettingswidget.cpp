@@ -6,7 +6,9 @@
  * Date        : 2006-09-13
  * Description : dcraw settings widgets
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,43 +56,45 @@ public:
 
     DcrawSettingsWidgetPriv()
     {
-        sixteenBitsImage          = 0;
-        cameraWBCheckBox          = 0;
-        fourColorCheckBox         = 0;
-        brightnessLabel           = 0;
-        brightnessSpinBox         = 0;
-        blackPointCheckBox        = 0;
-        blackPointSpinBox         = 0;
-        autoColorBalanceCheckBox  = 0;
-        unclipColorLabel          = 0;
-        dontStretchPixelsCheckBox = 0;
-        RAWQualityComboBox        = 0;
-        RAWQualityLabel           = 0;
-        enableNoiseReduction      = 0;
-        NRThresholdSpinBox        = 0;
-        NRThresholdLabel          = 0;
-        enableCACorrection        = 0;
-        caRedMultSpinBox          = 0;
-        caBlueMultSpinBox         = 0;
-        caRedMultLabel            = 0;
-        caBlueMultLabel           = 0;
-        unclipColorComboBox       = 0;
-        reconstructLabel          = 0;
-        reconstructSpinBox        = 0;
-        outputColorSpaceLabel     = 0;
-        outputColorSpaceComboBox  = 0;
-        stdSettings               = 0;
-        advSettings               = 0;
-        colorMultCheckBox         = 0;
-        colorMult1SpinBox         = 0;
-        colorMult2SpinBox         = 0;
-        colorMult3SpinBox         = 0;
-        colorMult4SpinBox         = 0;
+        sixteenBitsImage               = 0;
+        fourColorCheckBox              = 0;
+        brightnessLabel                = 0;
+        brightnessSpinBox              = 0;
+        blackPointCheckBox             = 0;
+        blackPointSpinBox              = 0;
+        whiteBalanceComboBox           = 0;
+        whiteBalanceLabel              = 0;
+        customWhiteBalanceSpinBox      = 0;
+        customWhiteBalanceLabel        = 0;
+        customWhiteBalanceGreenSpinBox = 0;
+        customWhiteBalanceGreenLabel   = 0;
+        unclipColorLabel               = 0;
+        dontStretchPixelsCheckBox      = 0;
+        RAWQualityComboBox             = 0;
+        RAWQualityLabel                = 0;
+        enableNoiseReduction           = 0;
+        NRThresholdSpinBox             = 0;
+        NRThresholdLabel               = 0;
+        enableCACorrection             = 0;
+        caRedMultSpinBox               = 0;
+        caBlueMultSpinBox              = 0;
+        caRedMultLabel                 = 0;
+        caBlueMultLabel                = 0;
+        unclipColorComboBox            = 0;
+        reconstructLabel               = 0;
+        reconstructSpinBox             = 0;
+        outputColorSpaceLabel          = 0;
+        outputColorSpaceComboBox       = 0;
+        stdSettings                    = 0;
+        advSettings                    = 0;
     }
 
     QWidget         *stdSettings;
     QWidget         *advSettings;
 
+    QLabel          *whiteBalanceLabel;
+    QLabel          *customWhiteBalanceLabel;
+    QLabel          *customWhiteBalanceGreenLabel;
     QLabel          *brightnessLabel;
     QLabel          *RAWQualityLabel;
     QLabel          *NRThresholdLabel;
@@ -99,35 +103,28 @@ public:
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
-    QLabel          *colorMult1Label;
-    QLabel          *colorMult2Label;
-    QLabel          *colorMult3Label;
-    QLabel          *colorMult4Label;
 
+    QComboBox       *whiteBalanceComboBox;
     QComboBox       *RAWQualityComboBox;
     QComboBox       *unclipColorComboBox;
     QComboBox       *outputColorSpaceComboBox;
 
-    QCheckBox       *colorMultCheckBox;
     QCheckBox       *blackPointCheckBox;
     QCheckBox       *sixteenBitsImage;
-    QCheckBox       *cameraWBCheckBox;
     QCheckBox       *fourColorCheckBox;
-    QCheckBox       *autoColorBalanceCheckBox;
+    QCheckBox       *customWhiteBalanceCheckBox;
     QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
     QCheckBox       *enableCACorrection;
 
+    KIntNumInput    *customWhiteBalanceSpinBox;
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
 
+    KDoubleNumInput *customWhiteBalanceGreenSpinBox;
     KDoubleNumInput *caRedMultSpinBox;
     KDoubleNumInput *caBlueMultSpinBox;
-    KDoubleNumInput *colorMult1SpinBox;
-    KDoubleNumInput *colorMult2SpinBox;
-    KDoubleNumInput *colorMult3SpinBox;
-    KDoubleNumInput *colorMult4SpinBox;
     KDoubleNumInput *brightnessSpinBox;
 };
 
@@ -191,21 +188,41 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    d->cameraWBCheckBox = new QCheckBox(i18n("Use camera white balance"), d->stdSettings);
-    QWhatsThis::add(d->cameraWBCheckBox, i18n("<p><b>Use camera white balance</b><p>"
-                                         "Use the camera's custom white-balance settings. "
-                                         "If this can not be found, reverts to the default "
-                                         "(which is to use fixed daylight values, "
-                                         "calculated from sample images)."));
-    settingsBoxLayout->addMultiCellWidget(d->cameraWBCheckBox, line, line, 0, 2);    
+    d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->stdSettings);
+    d->whiteBalanceComboBox = new QComboBox( false, d->stdSettings );
+    d->whiteBalanceComboBox->insertItem( i18n("Default D65 White Balance"), 0 );
+    d->whiteBalanceComboBox->insertItem( i18n("Camera White Walance"),      1 );
+    d->whiteBalanceComboBox->insertItem( i18n("Automatic White Balance"),   2 );
+    d->whiteBalanceComboBox->insertItem( i18n("Manual White balance"),      3 );
+    QWhatsThis::add( d->whiteBalanceComboBox, i18n("<p><b>White Balance</b><p>"
+                                             "Configure the raw white balance :<p>"
+                                             "<b>Default D65 White Balance</b>: Use a standard daylight D65 white balance (dcraw defaults)<p>"
+                                             "<b>Camera White Walance</b>: Use the white balance specified by the camera"
+                                             "If not available, reverts to default neutral white balance<p>"
+                                             "<b>Automatic White Balance</b>: Calculates an automatic white balance"
+                                             "averaging the entire image<p>"
+                                             "<b>Manual White balance</b>: Set a custom temperature and green level values"));
+    settingsBoxLayout->addMultiCellWidget(d->whiteBalanceLabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->whiteBalanceComboBox, line, line, 1, 2);
     line++;
 
-    // ---------------------------------------------------------------
+    d->customWhiteBalanceSpinBox = new KIntNumInput(d->stdSettings);
+    d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10, true);
+    d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->stdSettings);
+    QWhatsThis::add( d->customWhiteBalanceSpinBox, i18n("<p><b>Temperature</b><p>"
+                     "Set here the color temperature."));
+    settingsBoxLayout->addMultiCellWidget(d->customWhiteBalanceLabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->customWhiteBalanceSpinBox, line, line, 1, 2);
+    line++;
 
-    d->autoColorBalanceCheckBox = new QCheckBox(i18n("Automatic color balance"), d->stdSettings);
-    QWhatsThis::add( d->autoColorBalanceCheckBox, i18n("<p><b>Automatic color balance</b></p>"
-                                                  "Calculate the white balance by averaging the entire image."));
-    settingsBoxLayout->addMultiCellWidget(d->autoColorBalanceCheckBox, line, line, 0, 2);    
+    d->customWhiteBalanceGreenSpinBox = new KDoubleNumInput(d->stdSettings);
+    d->customWhiteBalanceGreenSpinBox->setPrecision(2);
+    d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01, true);
+    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->stdSettings);
+    QWhatsThis::add( d->customWhiteBalanceGreenSpinBox, i18n("<p>Set here the green component to set magenta color "
+                                                             "cast removal level."));
+    settingsBoxLayout->addMultiCellWidget(d->customWhiteBalanceGreenLabel, line, line, 0, 0);
+    settingsBoxLayout->addMultiCellWidget(d->customWhiteBalanceGreenSpinBox, line, line, 1, 2);
     line++;
 
     // ---------------------------------------------------------------
@@ -403,38 +420,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    d->colorMultCheckBox = new QCheckBox(i18n("Color balance multipliers"), d->advSettings);
-
-    d->colorMult1Label   = new QLabel(i18n("Red multiplier:"), d->advSettings);
-    d->colorMult1SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult1SpinBox->setPrecision(5);
-    d->colorMult1SpinBox->setRange(0.00001, 1.0, 0.01, true);
-
-    d->colorMult2Label   = new QLabel(i18n("Green 1 multiplier:"), d->advSettings);
-    d->colorMult2SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult2SpinBox->setPrecision(5);
-    d->colorMult2SpinBox->setRange(0.00001, 1.0, 0.01, true);
-
-    d->colorMult3Label   = new QLabel(i18n("Blue multiplier:"), d->advSettings);
-    d->colorMult3SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult3SpinBox->setPrecision(5);
-    d->colorMult3SpinBox->setRange(0.00001, 1.0, 0.01, true);
-
-    d->colorMult4Label   = new QLabel(i18n("Green 2 multiplier:"), d->advSettings);
-    d->colorMult4SpinBox = new KDoubleNumInput(d->advSettings);
-    d->colorMult4SpinBox->setPrecision(5);
-    d->colorMult4SpinBox->setRange(0.00001, 1.0, 0.01, true);
-
-    settingsBoxLayout->addMultiCellWidget(d->colorMultCheckBox, 2, 2, 0, 2);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult1Label, 3, 3, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult1SpinBox, 3, 3, 1, 2);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult2Label, 4, 4, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult2SpinBox, 4, 4, 1, 2);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult3Label, 5, 5, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult3SpinBox, 5, 5, 1, 2);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult4Label, 6, 6, 0, 0);
-    settingsBoxLayout->addMultiCellWidget(d->colorMult4SpinBox, 6, 6, 1, 2);
-
     settingsBoxLayout2->setRowStretch(7, 10);
     insertTab(d->advSettings, i18n("Advanced"));
 
@@ -443,11 +428,14 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
         removePage(d->advSettings);
         setTabBarHidden(true);
     }
-
+    
     // ---------------------------------------------------------------
 
     connect(d->unclipColorComboBox, SIGNAL(activated(int)),
             this, SLOT(slotUnclipColorActivated(int)));
+
+    connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotWhiteBalanceToggled(int)));
 
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SLOT(slotNoiseReductionToggled(bool)));
@@ -457,9 +445,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
-
-    connect(d->colorMultCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotColorMultToggled(bool)));
 
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SLOT(slotsixteenBitsImageToggled(bool)));
@@ -480,8 +465,9 @@ void DcrawSettingsWidget::processDcrawURL(const QString& url)
 
 void DcrawSettingsWidget::setDefaultSettings()
 {
-    setCameraWB(true);
-    setAutoColorBalance(true);
+    setWhiteBalance(RawDecodingSettings::CAMERA);
+    setCustomWhiteBalance(6500);
+    setCustomWhiteBalanceGreen(1.0);
     setFourColor(false);
     setUnclipColor(0);
     setDontStretchPixels(false);
@@ -492,11 +478,6 @@ void DcrawSettingsWidget::setDefaultSettings()
     setBrightness(1.0);
     setUseBlackPoint(false);
     setBlackPoint(0);
-    setUseColorMultipliers(false);
-    setcolorMultiplier1(1.0);
-    setcolorMultiplier2(1.0);
-    setcolorMultiplier3(1.0);
-    setcolorMultiplier4(1.0);
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR);
     setOutputColorSpace(RawDecodingSettings::SRGB);
@@ -507,6 +488,24 @@ void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
     d->brightnessLabel->setDisabled(b);
     d->brightnessSpinBox->setDisabled(b); 
     emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
+}
+
+void DcrawSettingsWidget::slotWhiteBalanceToggled(int v)
+{
+    if (v == 3)
+    {
+        d->customWhiteBalanceSpinBox->setEnabled(true);
+        d->customWhiteBalanceGreenSpinBox->setEnabled(true);
+        d->customWhiteBalanceLabel->setEnabled(true);
+        d->customWhiteBalanceGreenLabel->setEnabled(true);
+    }
+    else
+    {
+        d->customWhiteBalanceSpinBox->setEnabled(false);
+        d->customWhiteBalanceGreenSpinBox->setEnabled(false);
+        d->customWhiteBalanceLabel->setEnabled(false);
+        d->customWhiteBalanceGreenLabel->setEnabled(false);
+    }
 }
 
 void DcrawSettingsWidget::slotUnclipColorActivated(int v)
@@ -537,18 +536,6 @@ void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
     d->caBlueMultLabel->setEnabled(b);
 }
 
-void DcrawSettingsWidget::slotColorMultToggled(bool b)
-{
-    d->colorMult1SpinBox->setEnabled(b);
-    d->colorMult2SpinBox->setEnabled(b);
-    d->colorMult3SpinBox->setEnabled(b);
-    d->colorMult4SpinBox->setEnabled(b);
-    d->colorMult1Label->setEnabled(b);
-    d->colorMult2Label->setEnabled(b);
-    d->colorMult3Label->setEnabled(b);
-    d->colorMult4Label->setEnabled(b);
-}
-
 // ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::sixteenBits()
@@ -563,26 +550,68 @@ void DcrawSettingsWidget::setSixteenBits(bool b)
 
 // ---------------------------------------------------------------
 
-bool DcrawSettingsWidget::useCameraWB()
+RawDecodingSettings::WhiteBalance DcrawSettingsWidget::whiteBalance()
 {
-    return d->cameraWBCheckBox->isChecked();
+    switch(d->whiteBalanceComboBox->currentItem())
+    {
+        case 1:
+            return RawDecodingSettings::CAMERA;
+            break;
+        case 2:
+            return RawDecodingSettings::AUTO;
+            break;
+        case 3:
+            return RawDecodingSettings::CUSTOM;
+            break;
+        default:
+            return RawDecodingSettings::NONE;
+            break;
+    }
 }
 
-void DcrawSettingsWidget::setCameraWB(bool b)
+void DcrawSettingsWidget::setWhiteBalance(RawDecodingSettings::WhiteBalance v)
 {
-    d->cameraWBCheckBox->setChecked(b);
+    switch(v)
+    {
+        case RawDecodingSettings::CAMERA:
+            d->whiteBalanceComboBox->setCurrentItem(1);
+            break;
+        case RawDecodingSettings::AUTO:
+            d->whiteBalanceComboBox->setCurrentItem(2);
+            break;
+        case RawDecodingSettings::CUSTOM:
+            d->whiteBalanceComboBox->setCurrentItem(3);
+            break;
+        default:
+            d->whiteBalanceComboBox->setCurrentItem(0);
+            break;
+    }
+    slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentItem());
+}
+
+
+// ---------------------------------------------------------------
+
+int DcrawSettingsWidget::customWhiteBalance()
+{
+    return d->customWhiteBalanceSpinBox->value();
+}
+
+void DcrawSettingsWidget::setCustomWhiteBalance(int v)
+{
+    d->customWhiteBalanceSpinBox->setValue(v);
 }
 
 // ---------------------------------------------------------------
 
-bool DcrawSettingsWidget::useAutoColorBalance()
+double DcrawSettingsWidget::customWhiteBalanceGreen()
 {
-    return d->autoColorBalanceCheckBox->isChecked();
+    return d->customWhiteBalanceGreenSpinBox->value();
 }
 
-void DcrawSettingsWidget::setAutoColorBalance(bool b)
+void DcrawSettingsWidget::setCustomWhiteBalanceGreen(double v)
 {
-    d->autoColorBalanceCheckBox->setChecked(b);
+    d->customWhiteBalanceGreenSpinBox->setValue(v);
 }
 
 // ---------------------------------------------------------------
@@ -801,67 +830,6 @@ double DcrawSettingsWidget::caBlueMultiplier()
 void DcrawSettingsWidget::setcaBlueMultiplier(double b)
 {
     d->caBlueMultSpinBox->setValue(b);
-}
-
-// ---------------------------------------------------------------
-
-bool DcrawSettingsWidget::useColorMultipliers()
-{
-    return d->colorMultCheckBox->isChecked();
-}
-
-void DcrawSettingsWidget::setUseColorMultipliers(bool b)
-{
-    d->colorMultCheckBox->setChecked(b);
-    slotColorMultToggled(b);
-}
-
-// ---------------------------------------------------------------
-
-double DcrawSettingsWidget::colorMultiplier1()
-{
-    return d->colorMult1SpinBox->value();
-}
-
-void DcrawSettingsWidget::setcolorMultiplier1(double b)
-{
-    d->colorMult1SpinBox->setValue(b);
-}
-
-// ---------------------------------------------------------------
-
-double DcrawSettingsWidget::colorMultiplier2()
-{
-    return d->colorMult2SpinBox->value();
-}
-
-void DcrawSettingsWidget::setcolorMultiplier2(double b)
-{
-    d->colorMult2SpinBox->setValue(b);
-}
-
-// ---------------------------------------------------------------
-
-double DcrawSettingsWidget::colorMultiplier3()
-{
-    return d->colorMult3SpinBox->value();
-}
-
-void DcrawSettingsWidget::setcolorMultiplier3(double b)
-{
-    d->colorMult3SpinBox->setValue(b);
-}
-
-// ---------------------------------------------------------------
-
-double DcrawSettingsWidget::colorMultiplier4()
-{
-    return d->colorMult4SpinBox->value();
-}
-
-void DcrawSettingsWidget::setcolorMultiplier4(double b)
-{
-    d->colorMult4SpinBox->setValue(b);
 }
 
 } // NameSpace KDcrawIface

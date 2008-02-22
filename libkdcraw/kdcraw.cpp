@@ -6,8 +6,9 @@
  * Date        : 2006-12-09
  * Description : a tread-safe dcraw program interface
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2006-2007 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * NOTE: Do not use kdDebug() in this implementation because 
  *       it will be multithreaded. Use qDebug() instead. 
@@ -732,12 +733,6 @@ void KDcraw::startProcess()
     if (m_rawDecodingSettings.halfSizeColorImage)
         *d->process << "-h";
 
-    if (m_rawDecodingSettings.cameraColorBalance)
-        *d->process << "-w";
-
-    if (m_rawDecodingSettings.automaticColorBalance)
-        *d->process << "-a";
-
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
         *d->process << "-f";
 
@@ -756,13 +751,90 @@ void KDcraw::startProcess()
         *d->process << QString::number(m_rawDecodingSettings.blackPoint);
     }
 
-    if (m_rawDecodingSettings.enableColorMultipliers)
+    switch (m_rawDecodingSettings.whiteBalance)
     {
-        *d->process << "-r";
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[0], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[1], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[2], 'f', 5);
-        *d->process << QString::number(m_rawDecodingSettings.colorBalanceMultipliers[3], 'f', 5);
+        case RawDecodingSettings::NONE:
+            break;
+        case RawDecodingSettings::CAMERA:
+            *d->process << "-w";
+            break;
+        case RawDecodingSettings::AUTO:
+            *d->process << "-a";
+            break;
+        case RawDecodingSettings::CUSTOM:
+            /* Convert between Temperature and RGB.
+             */
+            double T;
+            double RGB[3];
+            double xD, yD, X, Y, Z;
+            DcrawInfoContainer identify;
+
+            T = m_rawDecodingSettings.customWhiteBalance;
+
+            /* Here starts the code picked and adapted from ufraw (0.12.1)
+               to convert Temperature + green multiplier to RGB multipliers
+            */
+            /* Convert between Temperature and RGB.
+             * Base on information from http://www.brucelindbloom.com/
+             * The fit for D-illuminant between 4000K and 12000K are from CIE
+             * The generalization to 2000K < T < 4000K and the blackbody fits
+             * are my own and should be taken with a grain of salt.
+             */
+            const double XYZ_to_RGB[3][3] = {
+                { 3.24071,  -0.969258,  0.0556352 },
+                {-1.53726,  1.87599,    -0.203996 },
+                {-0.498571, 0.0415557,  1.05707 } };
+            // Fit for CIE Daylight illuminant
+            if (T <= 4000)
+            {
+                xD = 0.27475e9/(T*T*T) - 0.98598e6/(T*T) + 1.17444e3/T + 0.145986;
+            }
+            else if (T <= 7000)
+            {
+                xD = -4.6070e9/(T*T*T) + 2.9678e6/(T*T) + 0.09911e3/T + 0.244063;
+            }
+            else
+            {
+                xD = -2.0064e9/(T*T*T) + 1.9018e6/(T*T) + 0.24748e3/T + 0.237040;
+            }
+            yD = -3*xD*xD + 2.87*xD - 0.275;
+
+            X = xD/yD;
+            Y = 1;
+            Z = (1-xD-yD)/yD;
+            RGB[0] = X*XYZ_to_RGB[0][0] + Y*XYZ_to_RGB[1][0] + Z*XYZ_to_RGB[2][0];
+            RGB[1] = X*XYZ_to_RGB[0][1] + Y*XYZ_to_RGB[1][1] + Z*XYZ_to_RGB[2][1];
+            RGB[2] = X*XYZ_to_RGB[0][2] + Y*XYZ_to_RGB[1][2] + Z*XYZ_to_RGB[2][2];
+            /* End of the code picked to ufraw
+            */
+
+            RGB[1] = RGB[1] / m_rawDecodingSettings.customWhiteBalanceGreen;
+
+            /* By default, decraw override his default D65 WB
+               We need to keep it as a basis : if not, colors with some
+               DSLR will have a high dominant of color that will lead to
+               a completly wrong WB
+            */
+            if (rawFileIdentify (identify, d->filePath))
+            {
+                RGB[0] = identify.daylightMult[0] / RGB[0];
+                RGB[1] = identify.daylightMult[1] / RGB[1];
+                RGB[2] = identify.daylightMult[2] / RGB[2];
+            }
+            else
+            {
+                RGB[0] = 1.0 / RGB[0];
+                RGB[1] = 1.0 / RGB[1];
+                RGB[2] = 1.0 / RGB[2];
+                qDebug("Warning: cannot get daylight multipliers");
+            }
+
+            *d->process << "-r";
+            *d->process << QString::number(RGB[0], 'f', 5);
+            *d->process << QString::number(RGB[1], 'f', 5);
+            *d->process << QString::number(RGB[2], 'f', 5);
+            *d->process << QString::number(RGB[1], 'f', 5);
+            break;
     }
 
     *d->process << "-q";

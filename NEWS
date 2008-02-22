@@ -1,11 +1,11 @@
 0.1.4
 ------------------------------------------------------------------------
 - updated dcraw to 8.82
+  new cameras: Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
+  no new options introduced.
 
-NEW camera support:
-Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
-no new options introduced
-
+Bugs fixed from B.K.O (http://bugs.kde.org):
+001 ==> 142055 : Which whitebalance is used.
 
 0.1.3
 ------------------------------------------------------------------------
