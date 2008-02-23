@@ -6,7 +6,9 @@
  * Date        : 2006-12-09
  * Description : Raw decoding settings
  *
- * Copyright (C) 2006-2007 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +63,20 @@ public:
         AHD      = 3
     };
 
+    /** White balances alternatives
+        NONE:     no white balance used : dcraw reverts to standard daylight D65 WB
+        CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not
+        AUTO:     Averages an auto WB on the entire image
+        CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors)
+    */
+    enum WhiteBalance
+    {
+        NONE    = 0,
+        CAMERA  = 1,
+        AUTO    = 2,
+        CUSTOM  = 3
+    };
+
     /** Output RGB color space used to decoded image */ 
     enum OutputColorSpace 
     {
@@ -81,8 +97,10 @@ public:
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
         unclipColors               = 0;
-        cameraColorBalance         = true;
-        automaticColorBalance      = true;
+        whiteBalance               = CAMERA;
+        customWhiteBalance         = 6500;
+        customWhiteBalanceGreen    = 1.0;
+
         halfSizeColorImage         = false;
 
         enableBlackPoint           = false;
@@ -94,12 +112,6 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
-
-        enableColorMultipliers     = false;
-        colorBalanceMultipliers[0] = 0.0;
-        colorBalanceMultipliers[1] = 0.0;
-        colorBalanceMultipliers[2] = 0.0;
-        colorBalanceMultipliers[3] = 0.0;
     };
 
     /** Compare for equality */
@@ -109,24 +121,20 @@ public:
             && brightness == o.brightness
             && RAWQuality == o.RAWQuality
             && outputColorSpace == o.outputColorSpace
-            && RGBInterpolate4Colors == o.RGBInterpolate4Colors  
-            && DontStretchPixels == o.DontStretchPixels  
-            && unclipColors == o.unclipColors  
-            && cameraColorBalance == o.cameraColorBalance  
-            && automaticColorBalance == o.automaticColorBalance  
-            && halfSizeColorImage == o.halfSizeColorImage  
-            && enableBlackPoint == o.enableBlackPoint  
-            && blackPoint == o.blackPoint  
-            && enableNoiseReduction == o.enableNoiseReduction  
-            && NRThreshold == o.NRThreshold  
+            && RGBInterpolate4Colors == o.RGBInterpolate4Colors
+            && DontStretchPixels == o.DontStretchPixels
+            && unclipColors == o.unclipColors
+            && whiteBalance == o.whiteBalance
+            && customWhiteBalance == o.customWhiteBalance
+            && customWhiteBalanceGreen == o.customWhiteBalanceGreen
+            && halfSizeColorImage == o.halfSizeColorImage
+            && enableBlackPoint == o.enableBlackPoint
+            && blackPoint == o.blackPoint
+            && enableNoiseReduction == o.enableNoiseReduction
+            && NRThreshold == o.NRThreshold
             && enableCACorrection == o.enableCACorrection
             && caMultiplier[0] == o.caMultiplier[0]
             && caMultiplier[1] == o.caMultiplier[1]
-            && enableColorMultipliers == o.enableColorMultipliers  
-            && colorBalanceMultipliers[0] == o.colorBalanceMultipliers[0]  
-            && colorBalanceMultipliers[1] == o.colorBalanceMultipliers[1]  
-            && colorBalanceMultipliers[2] == o.colorBalanceMultipliers[2]  
-            && colorBalanceMultipliers[3] == o.colorBalanceMultipliers[3]  
           ;
     };
 
@@ -143,8 +151,9 @@ public:
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
         unclipColors               = 0;
-        cameraColorBalance         = true;
-        automaticColorBalance      = true;
+        whiteBalance               = CAMERA;
+        customWhiteBalance         = 6500;
+        customWhiteBalanceGreen    = 1.0;
         halfSizeColorImage         = true;
 
         enableBlackPoint           = false;
@@ -156,12 +165,6 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
-
-        enableColorMultipliers     = false;
-        colorBalanceMultipliers[0] = 0.0;
-        colorBalanceMultipliers[1] = 0.0;
-        colorBalanceMultipliers[2] = 0.0;
-        colorBalanceMultipliers[3] = 0.0;
     };
 
 public:
@@ -176,15 +179,14 @@ public:
     */
     bool halfSizeColorImage;
 
-    /**  Use the color balance specified by the camera. If this can't be found, 
-         reverts to the default.
+    /** White balance type to use. See WhiteBalance values for detail
     */
-    bool cameraColorBalance;
+    WhiteBalance whiteBalance;
 
-    /** Automatic color balance. The default is to use a fixed color balance 
-        based on a white card photographed in sunlight.
+    /** The temperature and the green multiplier of the custom white balance
     */
-    bool automaticColorBalance;
+    int customWhiteBalance;
+    double customWhiteBalanceGreen;
 
     /** RAW file decoding using RGB interpolation as four colors.
     */
@@ -246,33 +248,6 @@ public:
         values for details. 
     */
     OutputColorSpace outputColorSpace;
-
-    /** Set on the Raw color balance multipliers settings to decode RAW image.
-    */
-    bool enableColorMultipliers;
-
-    /** Raw color balance multipliers used with option '-r'. Theses values 
-        are applied to the input RAW image in the camera's raw color space.
-        By order multipliers are:  
-
-        - colorBalanceMultipliers[0] = red multiplier.
-        - colorBalanceMultipliers[1] = green1 multiplier.
-        - colorBalanceMultipliers[2] = blue multiplier.
-        - colorBalanceMultipliers[3] = green2 multiplier.
-
-        If green2 is zero, it is assumed to be the same as green1.  Multiplying 
-        all values by a constant has no effect.  Thus all these are the same:
-
-        1.6, 1, 1.2, 1
-        3.2, 2, 2.4, 2
-        3.2, 2, 2.4, 0
-
-        The Bayer pattern in an RGB camera is always:
-
-        [ red  ][green1]
-        [green2][ blue ]
-    */
-    double colorBalanceMultipliers[4];
 };
 
 }  // namespace KDcrawIface
