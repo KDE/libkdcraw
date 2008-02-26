@@ -1,9 +1,6 @@
 0.2.0
 ------------------------------------------------------------------------
 Port to CMake/KDE4/QT4
-- updated dcraw to 8.81
-  new cameras: Canon G7, Fuji FinePix S9100/S9600, Olympus SP560UZ, Panasonic DMC-L10
-
 
 
 0.1.2
