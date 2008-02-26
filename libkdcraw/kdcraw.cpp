@@ -60,7 +60,6 @@ extern "C"
 // Local includes.
 
 #include "version.h"
-#include "rawfiles.h"
 #include "dcrawbinary.h"
 #include "kdcraw.h"
 #include "kdcraw.moc"
