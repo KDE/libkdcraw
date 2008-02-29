@@ -1,3 +1,96 @@
+V 0.1.4 - 2008-02-29
+----------------------------------------------------------------------------
+2008-02-26 07:01  cgilles
+
+	* [r779443] libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h,
+	  libkdcraw/libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp, libkdcraw/libkdcraw/rawfiles.h,
+	  libkdcraw/libkdcraw/version.h:
+	  polish
+
+2008-02-26 06:59  cgilles
+
+	* [r779442] libkdcraw/libkdcraw/kdcraw.cpp:
+	  polish
+
+2008-02-22 14:24  vfuoglio
+
+	* [r778103] kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/batchdialog.h,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.h, libkdcraw/NEWS,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp, libkdcraw/libkdcraw/kdcraw.h,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  White balance with RAW files improvements (related to bug
+	  #142055).
+	  
+	  Patches by Guillaume Castagnino.
+	  
+	  CCMAIL : kde-imaging@kde.org
+	  CCMAIL : casta@xwing.info
+	  CCMAIL : caulier.gilles@gmail.com
+
+2008-02-07 13:23  cgilles
+
+	* [r772001] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  fix dcraw release
+
+2008-02-07 12:57  gkulzer
+
+	* [r771991] libkdcraw/NEWS:
+	  update to 8.82
+	  no new options, just renameing of -k black ro -k darkness
+	  4 new cameras:
+	  Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
+	  CCMAIL: caulier.gilles@gmail.com
+
+2008-02-07 12:56  gkulzer
+
+	* [r771990] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1:
+	  update to 8.82
+	  no new options, just renameing of -k black ro -k darkness
+	  4 new cameras:
+	  Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
+	  CCMAIL: caulier.gilles@gmail.com
+
+2008-01-01 20:40  cgilles
+
+	* [r755552] libkdcraw/libkdcraw/dcrawbinary.h:
+	  static method
+
+2008-01-01 20:03  cgilles
+
+	* [r755539] kipi-plugins/imageviewer/texture.cpp,
+	  kipi-plugins/jpeglossless/utils.cpp,
+	  kipi-plugins/printwizard/tphoto.cpp,
+	  kipi-plugins/rawconverter/plugin_rawconverter.cpp,
+	  kipi-plugins/sendimages/sendimages.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h:
+	  new method to get raw files extension string depending of the
+	  libkdcraw version installled on computer.
+
+2008-01-01 09:36  cgilles
+
+	* [r755359] libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h:
+	  new method backported from KDE4 to get list of supported RAW
+	  camera
+
+2007-12-30 22:04  anaselli
+
+	* [r754876] libkdcraw/configure.in.in, libkdcraw/libkdcraw.lsm,
+	  libkdcraw/libkdcraw.pc.in, libkdcraw/libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw/kdcraw.h:
+	  Breakage of the year, new static method version() has been added
+	  
+	  CCMAIL: kde-imaging@kde.org
+
+----------------------------------------------------------------------------
 V 0.1.3 - 2007-12-23
 ----------------------------------------------------------------------------
 2007-12-14 14:09  cgilles
