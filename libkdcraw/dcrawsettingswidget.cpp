@@ -191,15 +191,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->stdSettings);
     d->whiteBalanceComboBox = new QComboBox( false, d->stdSettings );
     d->whiteBalanceComboBox->insertItem( i18n("Default D65 White Balance"), 0 );
-    d->whiteBalanceComboBox->insertItem( i18n("Camera White Walance"),      1 );
+    d->whiteBalanceComboBox->insertItem( i18n("Camera White Balance"),      1 );
     d->whiteBalanceComboBox->insertItem( i18n("Automatic White Balance"),   2 );
     d->whiteBalanceComboBox->insertItem( i18n("Manual White balance"),      3 );
     QWhatsThis::add( d->whiteBalanceComboBox, i18n("<p><b>White Balance</b><p>"
                                              "Configure the raw white balance :<p>"
                                              "<b>Default D65 White Balance</b>: Use a standard daylight D65 white balance (dcraw defaults)<p>"
-                                             "<b>Camera White Walance</b>: Use the white balance specified by the camera"
+                                             "<b>Camera White Balance</b>: Use the white balance specified by the camera. "
                                              "If not available, reverts to default neutral white balance<p>"
-                                             "<b>Automatic White Balance</b>: Calculates an automatic white balance"
+                                             "<b>Automatic White Balance</b>: Calculates an automatic white balance "
                                              "averaging the entire image<p>"
                                              "<b>Manual White balance</b>: Set a custom temperature and green level values"));
     settingsBoxLayout->addMultiCellWidget(d->whiteBalanceLabel, line, line, 0, 0);
