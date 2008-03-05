@@ -1,6 +1,7 @@
 Adobe Digital Negative (DNG) 
 Apple QuickTake 100 
 Apple QuickTake 150 
+Apple QuickTake 200 
 AVT F-080C 
 AVT F-145C 
 AVT F-201C 
@@ -10,10 +11,13 @@ Canon PowerShot 600
 Canon PowerShot A5 
 Canon PowerShot A5 Zoom 
 Canon PowerShot A50 
+Canon PowerShot A460 (CHDK hack) 
+Canon PowerShot A530 (CHDK hack) 
 Canon PowerShot A610 (CHDK hack) 
 Canon PowerShot A620 (CHDK hack) 
 Canon PowerShot A630 (CHDK hack) 
 Canon PowerShot A640 (CHDK hack) 
+Canon PowerShot A650 (CHDK hack) 
 Canon PowerShot A710 IS (CHDK hack) 
 Canon PowerShot A720 IS (CHDK hack) 
 Canon PowerShot Pro70 
@@ -89,6 +93,7 @@ Fuji FinePix S6000fd
 Fuji FinePix S7000 
 Fuji FinePix S9000/S9500 
 Fuji FinePix S9100/S9600 
+Fuji IS-1 
 Hasselblad CFV 
 Hasselblad H3D 
 Imacon Ixpress 16-megapixel 
@@ -207,6 +212,7 @@ Nikon E8400
 Nikon E8700 
 Nikon E8800 
 Nikon Coolpix S6 ("DIAG RAW" hack) 
+Nokia N95 
 Olympus C3030Z 
 Olympus C5050Z 
 Olympus C5060WZ 
@@ -247,6 +253,7 @@ Pentax *ist DL2
 Pentax *ist DS 
 Pentax *ist DS2 
 Pentax K10D 
+Pentax K20D 
 Pentax K100D 
 Pentax K100D Super 
 Pentax Optio S 
@@ -283,6 +290,7 @@ Sony DSC-R1
 Sony DSC-V3 
 Sony DSLR-A100 
 Sony DSLR-A200 
+Sony DSLR-A350 
 Sony DSLR-A700 
 Sony XCD-SX910CR 
-STV680 VGA
+STV680 VGA 
