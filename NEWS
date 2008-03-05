@@ -1,5 +1,10 @@
 0.1.4
 ------------------------------------------------------------------------
+- updated dcraw to 8.83
+  new cameras: Apple QuickTake 200, Fuji IS-1, Sony DSLR-A350, Pentax K20D,
+               Nokia N95, Canon PowerShots A460, Canon PowerShots A530, 
+	       Canon PowerShots A650.
+  no new options introduced.
 - updated dcraw to 8.82
   new cameras: Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
   no new options introduced.
