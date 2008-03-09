@@ -1,5 +1,21 @@
-V 0.1.4 - 2008-02-29
+V 0.1.4 - 2008-03-09
 ----------------------------------------------------------------------------
+2008-03-05 10:25  cgilles
+
+	* [r782489] libkdcraw/NEWS:
+	  update
+
+2008-03-05 10:24  cgilles
+
+	* [r782487] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  backport commit #782437 from KDE4
+
+2008-03-02 08:31  cgilles
+
+	* [r781202] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix i18n
+
 2008-02-26 07:01  cgilles
 
 	* [r779443] libkdcraw/libkdcraw/dcrawbinary.cpp,
