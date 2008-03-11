@@ -96,7 +96,7 @@ public:
             - The max average of RGB components from decoded picture.
             - 'false' is returned if decoding failed, else 'true'.  
     */
-    bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+    bool decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                             QByteArray &imageData, int &width, int &height, int &rgbmax);
 
     /** Extract a full size of RAW data from 'filePath' picture file using 
@@ -113,7 +113,7 @@ public:
             - The max average of RGB components from decoded picture. 
             - 'false' is returned if decoding failed, else 'true'.  
     */
-    bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+    bool decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                         QByteArray &imageData, int &width, int &height, int &rgbmax);
 
     /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
