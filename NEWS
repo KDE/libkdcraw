@@ -1,6 +1,12 @@
 0.1.5
 ------------------------------------------------------------------------
 
+- updated dcraw to 8.84
+  new cameras: Canon EOS 450D, Nikon D60, and Fuji S100FS.
+  Copied new matrices from Adobe DNG Converter 4.4.
+  sRAW support in 1.393 broke Fuji DNG files, now fixed.
+  no new options introduced.
+
 Bugs fixed from B.K.O (http://bugs.kde.org):
 001 ==> 
 
