@@ -62,7 +62,7 @@ FIND_PACKAGE(EXPAT REQUIRED)
 SUBDIRS(icons)
 SUBDIRS(libkdcraw)
 SUBDIRS(dcraw)
-SUBDIRS(raw2dng)
+#SUBDIRS(raw2dng)
 SUBDIRS(profiles)
 
 IF(NOT WIN32)
