@@ -12,11 +12,14 @@
 KDE4_NO_ENABLE_FINAL(kdcraw)
 INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
 
-# This line is require to prevent broken compilation with -std=iso9899:1990 gcc option.
-# In fact, dcraw.c use lcms.h witch use the "inline" keyword witch do not exist in pure C 
-# implementation. The -Dinline option please compiler to see inline with this option.
-# Note : using -std-c99 instead -std=iso9899:1990 is not possible because some compiler 
-# do not support it.
+# This line is required to prevent broken compilation with the
+# -std=iso9899:1990 gcc option.
+# In fact, dcraw.c use lcms.h which use the "inline" keyword, which do not
+# exist in pure C implementations. The -Dinline= option simply defines inline
+# to nothing at all.
+# 
+# Note : using -std-c99 instead -std=iso9899:1990 is not possible because some
+# compilers do not support it.
 # Thanks to Andras Mantia for this tip.
 ADD_DEFINITIONS("-Dinline= -w")
 
