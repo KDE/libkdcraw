@@ -1,0 +1,1661 @@
+V 0.1.4 - 2008-03-09
+----------------------------------------------------------------------------
+2008-03-05 10:25  cgilles
+
+	* [r782489] libkdcraw/NEWS:
+	  update
+
+2008-03-05 10:24  cgilles
+
+	* [r782487] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  backport commit #782437 from KDE4
+
+2008-03-02 08:31  cgilles
+
+	* [r781202] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix i18n
+
+2008-02-26 07:01  cgilles
+
+	* [r779443] libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h,
+	  libkdcraw/libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp, libkdcraw/libkdcraw/rawfiles.h,
+	  libkdcraw/libkdcraw/version.h:
+	  polish
+
+2008-02-26 06:59  cgilles
+
+	* [r779442] libkdcraw/libkdcraw/kdcraw.cpp:
+	  polish
+
+2008-02-22 14:24  vfuoglio
+
+	* [r778103] kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/batchdialog.h,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.h, libkdcraw/NEWS,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp, libkdcraw/libkdcraw/kdcraw.h,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  White balance with RAW files improvements (related to bug
+	  #142055).
+	  
+	  Patches by Guillaume Castagnino.
+	  
+	  CCMAIL : kde-imaging@kde.org
+	  CCMAIL : casta@xwing.info
+	  CCMAIL : caulier.gilles@gmail.com
+
+2008-02-07 13:23  cgilles
+
+	* [r772001] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  fix dcraw release
+
+2008-02-07 12:57  gkulzer
+
+	* [r771991] libkdcraw/NEWS:
+	  update to 8.82
+	  no new options, just renameing of -k black ro -k darkness
+	  4 new cameras:
+	  Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
+	  CCMAIL: caulier.gilles@gmail.com
+
+2008-02-07 12:56  gkulzer
+
+	* [r771990] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1:
+	  update to 8.82
+	  no new options, just renameing of -k black ro -k darkness
+	  4 new cameras:
+	  Sony DSLR-A200, Sony DSLR-A700, Sony XCD-SX910CR, STV680 VGA
+	  CCMAIL: caulier.gilles@gmail.com
+
+2008-01-01 20:40  cgilles
+
+	* [r755552] libkdcraw/libkdcraw/dcrawbinary.h:
+	  static method
+
+2008-01-01 20:03  cgilles
+
+	* [r755539] kipi-plugins/imageviewer/texture.cpp,
+	  kipi-plugins/jpeglossless/utils.cpp,
+	  kipi-plugins/printwizard/tphoto.cpp,
+	  kipi-plugins/rawconverter/plugin_rawconverter.cpp,
+	  kipi-plugins/sendimages/sendimages.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h:
+	  new method to get raw files extension string depending of the
+	  libkdcraw version installled on computer.
+
+2008-01-01 09:36  cgilles
+
+	* [r755359] libkdcraw/libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/libkdcraw/dcrawbinary.h:
+	  new method backported from KDE4 to get list of supported RAW
+	  camera
+
+2007-12-30 22:04  anaselli
+
+	* [r754876] libkdcraw/configure.in.in, libkdcraw/libkdcraw.lsm,
+	  libkdcraw/libkdcraw.pc.in, libkdcraw/libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw/kdcraw.h:
+	  Breakage of the year, new static method version() has been added
+	  
+	  CCMAIL: kde-imaging@kde.org
+
+----------------------------------------------------------------------------
+V 0.1.3 - 2007-12-23
+----------------------------------------------------------------------------
+2007-12-14 14:09  cgilles
+
+	* [r748435] libkdcraw/libkdcraw/version.h:
+	  fix new version
+
+2007-12-14 08:17  gkulzer
+
+	* [r748345] libkdcraw/dcraw/CAMERALIST:
+	  clean-up list
+
+2007-12-14 07:57  gkulzer
+
+	* [r748333] libkdcraw/NEWS, libkdcraw/dcraw/CAMERALIST,
+	  libkdcraw/dcraw/README, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1, libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update dcraw to 8.81. Interface stays compatible, regression
+	  testing done. 4 cameras added. Additional parameter -W to not
+	  adjust brightness
+
+2007-11-16 14:59  gkulzer
+
+	* [r737564] libkdcraw/NEWS:
+	  dcraw update to 8.80
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-11-16 14:48  gkulzer
+
+	* [r737563] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update dcraw to version 8.80
+
+2007-11-14 10:22  cgilles
+
+	* [r736540] libkdcraw/dcraw/dcraw.c:
+	  fix double "%s"
+
+2007-11-02 14:13  gkulzer
+
+	* [r732003] libkdcraw/dcraw/kdcraw.1:
+	  man page update
+
+2007-11-02 11:58  cgilles
+
+	* [r731957] libkdcraw/dcraw/Makefile.am:
+	  polish
+
+2007-11-02 11:44  cgilles
+
+	* [r731953] libkdcraw/libkdcraw.lsm, libkdcraw/libkdcraw.pc.in:
+	  upgrate libkdcraw version
+
+2007-11-02 11:44  cgilles
+
+	* [r731952] libkdcraw/dcraw/Makefile.am:
+	  install CAMERALIST on kdcraw bin folder
+
+2007-11-02 11:33  cgilles
+
+	* [r731948] libkdcraw/dcraw/dcraw.c:
+	  separate Make ans Model informations from identify command line
+
+2007-11-02 10:46  gkulzer
+
+	* [r731936] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1, libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  dcraw update to version 8.78
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-10-21 10:34  hasso
+
+	* [r727627] libkdcraw/configure.in.in, libkdcraw/dcraw/Makefile.am:
+	  Make it to find the lcms from nonstandard places provided by user
+	  via
+	  --with-extra-* flags. Fixes detecting lcms installed from pkgsrc
+	  package
+	  system.
+
+2007-09-07 22:02  vfuoglio
+
+	* [r709600] libkdcraw/ChangeLog, libkdcraw/configure.in.in,
+	  libkdcraw/libkdcraw.lsm, prepare_libkdcraw.rb:
+	  Preparing libkdcraw 0.1.2 release
+	  
+	  SNV_SILENT:
+
+----------------------------------------------------------------------------
+V 0.1.2 - 2007-09-07
+----------------------------------------------------------------------------
+2007-09-04 21:03  cgilles
+
+	* [r708412] libkdcraw/AUTHORS:
+	  fix email
+
+2007-09-04 09:57  cgilles
+
+	* [r708249] libkdcraw/AUTHORS:
+	  Add Guillaume as contributor
+
+2007-08-24 08:10  cgilles
+
+	* [r704175] libkdcraw/configure.in.in:
+	  fix ABI number for next release
+
+2007-08-23 11:07  cgilles
+
+	* [r703805] libkdcraw/configure.in.in:
+	  fix release number
+
+2007-08-22 13:58  cgilles
+
+	* [r703433] libkdcraw/libkdcraw/kdcraw.cpp:
+	  add comment
+
+2007-08-22 13:23  cgilles
+
+	* [r703414] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch : patch from Guillaume Castagnino
+	  about to support new chromatic aberration reduction options
+	  provided by dcraw 8.77
+	  CCBUGS: 148561
+	  CCMAIL: casta@xwing.info
+
+2007-08-22 04:33  cgilles
+
+	* [r703160] libkdcraw/libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/libkdcraw/kdcraw.cpp:
+	  libkdcraw from KDE3 branch : like BC is broken with future
+	  release, i backport "Picture Owner" extraction code from KDE4
+	  provided by new dcraw 8.77
+
+2007-08-20 09:59  cgilles
+
+	* [r702272] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix option
+
+2007-08-20 09:39  cgilles
+
+	* [r702258] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch : patch from Guillaume Castagnino
+	  about to handle RAW decoding quality settings properlly since
+	  dcraw 8.73 include a new interpolation method named PPG
+	  CCMAIL: kde-imaging@kde.org
+	  CCMAIL: casta@xwing.info
+
+2007-07-25 14:37  cgilles
+
+	* [r692427] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix typo
+
+2007-07-24 12:06  cgilles
+
+	* [r691818] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  fix internal dcraw version
+
+2007-07-24 11:57  cgilles
+
+	* [r691813] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcraw/kdcraw.1:
+	  libkdcraw from KDE3 branch :
+	  - update internal dcraw.c implementation from 8.76 to 8.77.
+	  - new cameras RAW file supported : Leaf Aptus 54S and Leaf Aptus
+	  75S
+	  - Binary compatibility respected.
+	  - Changelog from dcraw repository :
+	  * Reject 8-bit grayscale TIFFs.
+	  * Decode raw CINE files, which may exceed 2GB.
+	  * Error-check the "-s" option, and enable "-s all".
+	  * Support camera WB for the Canon EOS-1D and EOS-1DS.
+	  * Use full output range for "-H 2".
+	  
+	  CCMAIL: digikam-devel@kde.org
+
+2007-07-04 07:59  cgilles
+
+	* [r683108] libkdcraw/libkdcraw/dcrawsettingswidget.cpp:
+	  fix unclip color control with reconstruct setting
+
+2007-07-04 07:53  cgilles
+
+	* [r683105] libkdcraw/AUTHORS, libkdcraw/NEWS,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from KDE3 branch: update setting widget to new dcraw
+	  8.76.
+
+2007-07-04 07:44  cgilles
+
+	* [r683099] libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  update
+
+2007-07-04 07:41  cgilles
+
+	* [r683096] libkdcraw/libkdcraw/version.h:
+	  update
+
+2007-07-04 07:41  cgilles
+
+	* [r683095] libkdcraw/libkdcraw.lsm, libkdcraw/libkdcraw.pc.in:
+	  update
+
+2007-07-04 07:40  cgilles
+
+	* [r683094] libkdcraw/dcraw/kdcraw.1:
+	  update man page
+
+2007-07-04 07:39  cgilles
+
+	* [r683093] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/README,
+	  libkdcraw/dcraw/dcraw.c:
+	  libkdcraw from KDE3 branch: update internal dcraw version from
+	  8.60 to 8.76.
+	  
+	  New digital still camera supported are given below :
+	  
+	  Apple QuickTake 100
+	  Apple QuickTake 150
+	  Canon PowerShot A630
+	  Canon PowerShot A640
+	  Canon PowerShot A710 IS
+	  Canon EOS-1D Mark III
+	  Casio QV-R41
+	  Fuji FinePix S5Pro
+	  Hasselblad CFV
+	  Kodak C330
+	  Mamiya ZD
+	  Nikon D2Xs
+	  Nikon D40X
+	  Olympus E-410
+	  Olympus E-510
+	  Olympus SP510UZ
+	  Olympus SP550UZ
+	  Panasonic DMC-FZ8
+	  Pentax Optio 750Z
+	  Samsung GX-10
+	  Sigma SD14
+	  
+	  The current implementation of libkdcraw for KDE3 do not break
+	  binary compatibility. RAW decoding settings still the same. Only
+	  private methods have been fixed, especally the settings widget.
+	  
+	  I will break binary compatibility of libkdcraw with KDE4 port
+	  where i will add new settings like chromatic aberration
+	  correction for ex.
+	  
+	  CCBUGS: 142568
+	  CCMAIL: kde-imaging@kde.org
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: ach@mpe.mpg.de
+	  CCMAIL: boud@valdyas.org
+
+2007-06-13 16:54  cgilles
+
+	* [r674972] libkdcraw/libkdcraw/Makefile.am:
+	  fix broken compilation about moc file
+
+2007-06-13 08:38  cgilles
+
+	* [r674833] libkdcraw/libkdcraw/kdcraw.cpp:
+	  no i18n here
+
+2007-06-13 06:49  cgilles
+
+	* [r674798] libkdcraw/dcraw/CAMERALIST, libkdcraw/dcraw/cameralist:
+	  rename
+
+2007-06-13 06:48  cgilles
+
+	* [r674797] libkdcraw/libkdcraw/Makefile.am:
+	  use CXXFLAGS instead INCLUDES to dispatch -D option suring
+	  compilation
+
+----------------------------------------------------------------------------
+V 0.1.1 - 2007-06-13
+----------------------------------------------------------------------------
+
+2007-06-12 22:32  ach
+
+	* [r674731] libkdcraw/configure.in.in, libkdcraw/dcraw/Makefile.am,
+	  libkdcraw/libkdcraw/Makefile.am,
+	  libkdcraw/libkdcraw/dcrawbinary.cpp:
+	  o install the '(dirty) implementation detail' kdcraw into a
+	  directory that depends on the ABI_MAJOR. This allows
+	  several libs with different ABI_MAJOR be installed at the
+	  same time.
+	  o don't install manpage. kdcraw is not for the user
+
+2007-06-12 21:15  anaselli
+
+	* [r674703] libkdcraw/libkdcraw/Makefile.am:
+	  Changed to add libtools version managing into prepare script
+	  (hope this will avoid to forget it)
+
+2007-06-11 12:04  cgilles
+
+	* [r673923] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h:
+	  new signal emit when sixteen bits options is toggled
+
+2007-06-07 15:12  cgilles
+
+	* [r672576] libkdcraw/Makefile.am:
+	  compile
+
+2007-06-07 15:12  cgilles
+
+	* [r672575] libkdcraw/libkdcraw, libkdcraw/src:
+	  compile
+
+2007-06-07 14:52  cgilles
+
+	* [r672567] libkdcraw/Makefile.am, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/src, libkdcraw/src/Makefile.am,
+	  libkdcraw/src/dcrawbinary.cpp, libkdcraw/src/dcrawbinary.h,
+	  libkdcraw/src/dcrawinfocontainer.h,
+	  libkdcraw/src/dcrawsettingswidget.cpp,
+	  libkdcraw/src/dcrawsettingswidget.h, libkdcraw/src/kdcraw.cpp,
+	  libkdcraw/src/kdcraw.h, libkdcraw/src/libkdcraw_export.h,
+	  libkdcraw/src/rawdecodingsettings.h, libkdcraw/src/rawfiles.h,
+	  libkdcraw/src/version.h, libkdcraw/version.h:
+	  libkdcraw from KDE3 branch : move all source code files to "src"
+	  sub dir
+
+2007-06-07 07:00  cgilles
+
+	* [r672447] libkdcraw/rawdecodingsettings.h:
+	  libkdraw from KDE3 branches : patch from Jakob Stergaard to
+	  perform equality test between 2 rawdecoding settings.
+	  CCBUGS: 146464
+
+2007-06-05 09:33  vkrause
+
+	* [r671669] libkdcraw/dcrawbinary.cpp:
+	  compile, this is still Qt3
+
+2007-06-05 09:12  cgilles
+
+	* [r671664] libkdcraw/dcraw/Makefile.am:
+	  digiKam => libkdcraw
+
+2007-06-05 08:20  cgilles
+
+	* [r671639] libkdcraw/dcrawbinary.cpp:
+	  krazy fix
+
+2007-06-12 08:39  mlaurent
+
+	* [r674372] kipi-plugins/wallpaper/plugin_wallpaper.cpp,
+	  libkdcraw/libkdcraw/CMakeLists.txt:
+	  Fix compile/install
+
+2007-06-11 12:14  cgilles
+
+	* [r673926] libkdcraw/libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw/dcrawsettingswidget.h:
+	  new signal emit with sixteen bits option is toggled
+
+2007-06-10 21:01  cgilles
+
+	* [r673688] kipi-plugins/CMakeLists.txt,
+	  kipi-plugins/common/Makefile.am,
+	  kipi-plugins/jpeglossless/utils.cpp,
+	  libkdcraw/libkdcraw/kdcraw.cpp, libkexiv2/libkexiv2/kexiv2.cpp:
+	  completeSuffix -> suffix
+
+2007-06-10 10:01  coolo
+
+	* [r673456] libkdcraw/Messages.sh:
+	  no files here
+
+2007-06-08 12:43  cgilles
+
+	* [r672906] kipi-plugins/README, libkdcraw/README,
+	  libkexiv2/README, libkipi/README:
+	  add "export VERBOSE=1" in INSTALL section
+
+2007-06-08 12:30  cgilles
+
+	* [r672897] libkdcraw/README:
+	  update
+
+2007-06-07 15:19  cgilles
+
+	* [r672581] libkdcraw/CMakeLists.txt, libkdcraw/libkdcraw,
+	  libkdcraw/src, libkipi/CMakeLists.txt, libkipi/libkipi,
+	  libkipi/src:
+	  rename 'src' sub dir to libraries name
+
+2007-06-07 07:03  cgilles
+
+	* [r672448] libkdcraw/src/rawdecodingsettings.h:
+	  libkdcraw from trunk (KDE) : backport KDE3 patch from Jakob
+	  CCBUGS: 146464
+
+2007-06-06 10:48  mlaurent
+
+	* [r672195] libkdcraw/CMakeLists.txt,
+	  libkdcraw/dcraw/CMakeLists.txt, libkdcraw/src/CMakeLists.txt,
+	  libkdcraw/src/dcrawbinary.cpp, libkdcraw/src/dcrawbinary.h,
+	  libkdcraw/src/kdcraw.cpp, libkdcraw/src/kdcraw.h,
+	  libkdcraw/src/version.h, libkdcraw/src/version.h.cmake:
+	  Simplify it now when we change soname not necessary
+	  to change in 3 files just into libkdcraw/CMakeLists.txt
+
+2007-06-06 10:09  cgilles
+
+	* [r672188] libkdcraw/dcraw/CMakeLists.txt,
+	  libkdcraw/src/dcrawbinary.cpp:
+	  libkdcraw form trunk (KDE): first approach to introduce the
+	  soname ID of libary like suffixe of kdcraw binary program. By
+	  this way, we can install more than one libkdcraw version on the
+	  same computer.
+	  CCMAIL: ach@mpe.mpg.de
+
+2007-06-06 08:26  cgilles
+
+	* [r672158] libkdcraw/cmake/modules/FindLCMS.cmake:
+	  backport temporally FindLCMS from KDElibs.
+	  Laurent, i will remove later...
+
+2007-06-06 08:22  cgilles
+
+	* [r672156] libkdcraw/src/CMakeLists.txt:
+	  no need to link with lcms. Only dcraw.c require it
+
+2007-06-06 07:26  mlaurent
+
+	* [r672130] libkdcraw/CMakeLists.txt,
+	  libkdcraw/dcraw/CMakeLists.txt, libkdcraw/src/CMakeLists.txt:
+	  Use variable found by find_package
+	  (search before to go into directory)
+
+2007-06-05 22:28  cgilles
+
+	* [r671971] libkdcraw/src/CMakeLists.txt:
+	  compile
+
+2007-06-05 22:19  cgilles
+
+	* [r671968] libkdcraw/CMakeLists.txt, libkipi/src/CMakeLists.txt,
+	  libkipi/src/plugin.cpp, libkipi/src/plugin.h:
+	  compile
+
+2007-06-05 18:05  cgilles
+
+	* [r671890] libkdcraw/CMakeLists.txt, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/src/CMakeLists.txt, libkdcraw/src/dcrawbinary.cpp,
+	  libkdcraw/src/dcrawbinary.h, libkdcraw/src/dcrawinfocontainer.h,
+	  libkdcraw/src/dcrawsettingswidget.cpp,
+	  libkdcraw/src/dcrawsettingswidget.h, libkdcraw/src/kdcraw.cpp,
+	  libkdcraw/src/kdcraw.h, libkdcraw/src/libkdcraw_export.h,
+	  libkdcraw/src/rawdecodingsettings.h, libkdcraw/src/rawfiles.h,
+	  libkdcraw/src/version.h, libkdcraw/version.h:
+	  libkdcraw from trunk : polish sub-folders. Use 'src' to hosts all
+	  source code files
+
+2007-06-05 17:58  cgilles
+
+	* [r671888] libkdcraw/src:
+	  add
+
+2007-06-05 17:18  cgilles
+
+	* [r671880] libkdcraw/dcraw/CMakeLists.txt:
+	  polish
+
+2007-06-05 17:16  cgilles
+
+	* [r671877] libkdcraw/libkdcraw.kdevelop:
+	  rm
+
+2007-06-05 17:13  cgilles
+
+	* [r671876] libkdcraw/Makefile.am:
+	  rm
+
+2007-06-05 17:11  cgilles
+
+	* [r671872] libkdcraw/libkdcraw_export.h:
+	  fix export symbol
+
+2007-06-05 16:48  cgilles
+
+	* [r671862] libkdcraw/configure.in.bot, libkdcraw/configure.in.in:
+	  rm old files
+
+2007-06-05 16:46  cgilles
+
+	* [r671861] libkdcraw/Messages.sh:
+	  i18n rules
+
+2007-06-05 14:39  mlaurent
+
+	* [r671798] libkdcraw/cmake/modules/FindLCMS.cmake:
+	  Move into kdelibs (now used by koffice/libdcraw and digikam for
+	  the future)
+
+2007-06-05 13:30  cgilles
+
+	* [r671739] libkdcraw/CMakeLists.txt,
+	  libkdcraw/dcrawsettingswidget.cpp:
+	  libkdcraw from trunk : port to CMake/Qt4/KDE4 complete !
+	  
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: kde-imaging@kde.org
+	  CCMAIL: boud@valdyas.org
+
+2007-06-05 13:13  cgilles
+
+	* [r671731] libkdcraw/dcraw/CMakeLists.txt:
+	  do not use enablefinal mode to compile dcraw.c
+
+2007-06-05 12:06  cgilles
+
+	* [r671702] libkdcraw/dcrawinfocontainer.h:
+	  port to QT4/KDE4
+
+2007-06-05 12:04  cgilles
+
+	* [r671701] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  libkdcraw from trunk : porting to Qt4/KDE4
+
+2007-06-05 10:48  cgilles
+
+	* [r671692] libkdcraw/CMakeLists.txt, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h:
+	  libkdcraw from trunk : port to KDE4/QT4
+
+2007-06-05 09:43  cgilles
+
+	* [r671676] libkdcraw/dcraw/CMakeLists.txt:
+	  polish
+
+2007-06-05 09:42  cgilles
+
+	* [r671675] libkdcraw/dcraw/Makefile.am:
+	  this file is obsolete now
+
+2007-06-05 09:42  cgilles
+
+	* [r671674] libkdcraw/dcraw/CMakeLists.txt:
+	  install kcraw man page
+
+2007-06-05 09:37  cgilles
+
+	* [r671671] libkdcraw/dcraw/CMakeLists.txt:
+	  dcraw.c now compile with cmake
+
+2007-06-05 09:20  cgilles
+
+	* [r671666] libkdcraw/dcraw/CMakeLists.txt:
+	  port to cmake. Uncomplete
+
+2007-06-05 09:11  cgilles
+
+	* [r671663] libkdcraw/dcraw/Makefile.am:
+	  digiKam => libkdcraw
+
+2007-06-05 09:08  cgilles
+
+	* [r671662] libkdcraw/CMakeLists.txt,
+	  libkdcraw/icons/CMakeLists.txt, libkdcraw/icons/Makefile.am:
+	  include icons sub-dir
+
+2007-06-05 09:04  cgilles
+
+	* [r671661] libkdcraw/CMakeLists.txt:
+	  include dcraw sub dir
+
+2007-06-05 09:00  cgilles
+
+	* [r671660] libkdcraw/README:
+	  update
+
+2007-06-05 08:58  cgilles
+
+	* [r671658] libkdcraw/NEWS:
+	  update
+
+2007-06-05 08:57  cgilles
+
+	* [r671657] libkdcraw/libkdcraw.pc.cmake:
+	  new line at EOF
+
+2007-06-05 08:50  cgilles
+
+	* [r671655] libkdcraw/CMakeLists.txt:
+	  cmake port continue
+
+2007-06-05 08:43  cgilles
+
+	* [r671649] libkdcraw/libkdcraw.pc.cmake:
+	  cmake port continue
+
+2007-06-05 08:41  cgilles
+
+	* [r671647] libkdcraw/libkdcraw.pc.cmake,
+	  libkdcraw/libkdcraw.pc.in:
+	  port to cmake
+
+2007-06-05 08:35  cgilles
+
+	* [r671646] libkdcraw/cmake, libkdcraw/cmake/modules,
+	  libkdcraw/cmake/modules/FindLCMS.cmake,
+	  libkdcraw/dcrawbinary.cpp, libkdcraw/libkdcraw.lsm,
+	  libkdcraw/libkdcraw.pc.in, libkdcraw/version.h:
+	  libkdcraw from trunk : start CMake port
+
+2007-06-05 06:13  cgilles
+
+	* [r671600] libkdcraw:
+	  CMake/QT4/KDE4 port
+
+2007-06-02 14:14  helio
+
+	* [r670712] branches/extragear/kde3/libs, .:
+	  - First directory to move. No 4.x apps here yet.
+
+2007-05-16 19:27  mwiesweg
+
+	* [r665389] libkdcraw/kdcraw.cpp:
+	  I think these lines got lost when splitting the methods...
+
+2007-05-16 08:51  cgilles
+
+	* [r665231] libkdcraw/NEWS, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h:
+	  libkdcraw from trunk : separate methods to extract RAW JPEG
+	  preview and RAW half decoding
+
+2007-05-16 07:39  cgilles
+
+	* [r665228] libkdcraw/NEWS:
+	  updated
+
+2007-05-16 07:38  cgilles
+
+	* [r665227] libkdcraw/dcrawinfocontainer.h:
+	  added destructor. Fix API doc
+
+2007-05-16 07:31  cgilles
+
+	* [r665226] libkdcraw/dcrawsettingswidget.h:
+	  destructor is now virtual
+
+2007-05-16 07:30  cgilles
+
+	* [r665225] libkdcraw/rawdecodingsettings.h:
+	  destructor is now virtual
+
+2007-05-16 07:30  cgilles
+
+	* [r665224] libkdcraw/version.h:
+	  update
+
+2007-05-16 07:29  cgilles
+
+	* [r665222] libkdcraw/libkdcraw.pc.in:
+	  update
+
+2007-05-16 07:25  cgilles
+
+	* [r665218] libkdcraw/libkdcraw.lsm:
+	  update
+
+2007-05-16 07:24  cgilles
+
+	* [r665217] libkdcraw/NEWS:
+	  update
+
+2007-05-16 07:24  cgilles
+
+	* [r665215] libkdcraw/kdcraw.h:
+	  destructor is now virtual
+
+2007-05-16 07:22  cgilles
+
+	* [r665213] libkdcraw/AUTHORS:
+	  update
+
+2007-05-16 05:36  cgilles
+
+	* [r665183] libkdcraw/NEWS:
+	  update
+
+2007-05-16 05:34  cgilles
+
+	* [r665182] libkdcraw/dcrawbinary.cpp:
+	  libkdcraw from trunk : patch to compile under CYGWIN
+	  BUG: 145482
+
+2007-05-14 08:10  cgilles
+
+	* [r664527] libkdcraw/README, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/version.h:
+	  fix header
+
+2007-05-05 14:18  gkulzer
+
+	* [r661421] libkdcraw/libkdcraw.pc.in:
+	  0.1.0 release, coordinated with digiKam 0.9.2-beta1 release
+
+2007-05-05 14:10  gkulzer
+
+	* [r661419] libkdcraw/libkdcraw.lsm:
+	  0.1.3 release, coordinated with digiKam 0.9.2-beta1 release
+
+2007-05-05 14:07  gkulzer
+
+	* [r661418] libkdcraw/version.h:
+	  0.1.3 release, coordinated with digiKam 0.9.2-beta1 release
+
+2007-05-05 14:07  gkulzer
+
+	* [r661417] libkdcraw/dcraw/dcraw.c:
+	  0.1.3 release, coordinated with digiKam 0.9.2-beta1 release
+
+2007-05-02 07:09  cgilles
+
+	* [r660284] libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+	  libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/version.h:
+	  fix headers
+
+2007-04-21 20:26  mwiesweg
+
+	* [r656606] libkdcraw/kdcraw.cpp:
+	  Trying to fix crash: Do not wait on process exit here, and leave
+	  setting
+	  d->normalExit to slotProcessExited.
+	  
+	  This fixes the crash I was experiencing here.
+	  
+	  CCMAIL: caulier.gilles@gmail.com
+
+2007-03-14 12:00  cgilles
+
+	* [r642424] libkdcraw/libkdcraw.lsm:
+	  fix version
+
+2007-03-14 12:00  cgilles
+
+	* [r642423] libkdcraw/libkdcraw.pc.in:
+	  fix version
+
+2007-03-14 11:59  cgilles
+
+	* [r642422] libkdcraw/version.h:
+	  fix version
+
+2007-03-09 06:34  gkulzer
+
+	* [r640778] libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h:
+	  Disabling 'Brightness' slider when in 16bit mode, dcraw does not
+	  support this.
+	  CCMAIL:caulier.gilles@gmail.com
+
+2007-02-27 04:55  gkulzer
+
+	* [r637623] libkdcraw/dcrawsettingswidget.cpp:
+	  i18n strings polished
+
+2007-02-23 06:54  cgilles
+
+	* [r636445] libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/libkdcraw.kdevelop, libkdcraw/rawdecodingsettings.h:
+	  API doc
+
+2007-02-22 19:20  cgilles
+
+	* [r636303] libkdcraw/dcrawsettingswidget.cpp:
+	  fix interval
+
+2007-02-22 19:14  cgilles
+
+	* [r636301] libkdcraw/dcrawsettingswidget.cpp:
+	  fix
+
+2007-02-22 14:52  cgilles
+
+	* [r636237] libkdcraw/dcrawsettingswidget.cpp:
+	  added labels
+
+2007-02-22 12:13  cgilles
+
+	* [r636213] libkdcraw/dcraw/README:
+	  update
+
+2007-02-22 12:12  cgilles
+
+	* [r636212] libkdcraw/dcraw/README, libkdcraw/dcraw/cameralist:
+	  add camera list supported by current dcraw release.
+
+2007-02-22 12:01  cgilles
+
+	* [r636211] kipi-plugins/kipiplugins.kdevelop,
+	  kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  libkdcraw/dcraw/dcraw.c, libkdcraw/dcraw/kdcraw.1,
+	  libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/libkdcraw.kdevelop, libkdcraw/rawdecodingsettings.h,
+	  libkexiv2/libkexiv2.kdevelop:
+	  libkdcraw from trunk : backport last dcraw implementation "8.60"
+	  : the old noise reduction algorithm used with 8.54 version have
+	  been remplaced by a wavelet algorithm witch is more intuitive,
+	  more easy to use (just one threshold setting) and very powerfull.
+	  
+	  Kipi-plugins RAWConverter from svn trunk is fixed.
+	  The patch to use libkdcraw with current implementation of digiKam
+	  have been updated :
+	  
+	  http://digikam3rdparty.free.fr/misc.tarballs/libkdcrawdigikamport.patch
+	  
+	  CCMAIL: digikam-users@kde.org
+	  CCMAIL: digikam-devel@kde.org
+	  CCMAIL: kde-imaging@kde.org
+
+2007-02-22 09:19  cgilles
+
+	* [r636182] libkdcraw/libkdcraw.kdevelop:
+	  update project
+
+2007-02-20 20:25  ach
+
+	* [r635753] libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawsettingswidget.cpp, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h:
+	  EBN: QString::null -> QString() and some spelling fixes
+
+2007-02-20 19:59  ach
+
+	* [r635744] libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawsettingswidget.cpp:
+	  EBN: isn't -> is not etc
+
+2007-02-20 19:12  ach
+
+	* [r635732] libkdcraw/README:
+	  polish README
+
+2007-02-20 19:03  ach
+
+	* [r635729] libkdcraw/libkdcraw.pc.in:
+	  libkdcraw: add homepage URL to pkg-config file
+
+2007-02-20 19:01  ach
+
+	* [r635727] libkdcraw/libkdcraw.lsm, libkdcraw/libkdcraw.pc.in,
+	  libkdcraw/version.h:
+	  fix version 0.1.0 -> 0.1.0-beta1+svn
+
+2007-02-20 18:58  ach
+
+	* [r635726] libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+	  libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawdecodingsettings.h, libkdcraw/rawfiles.h,
+	  libkdcraw/version.h:
+	  libkdcraw:
+	  o add email to copyright lines
+	  o remove unnecessary line wrap in license
+
+2007-02-20 18:53  ach
+
+	* [r635721] libkdcraw/dcraw/kdcraw.1:
+	  libkdcraw: s/dcraw/kdcraw in manpage and add
+	  e-mail to copyright line
+
+2007-02-20 14:20  cgilles
+
+	* [r635648] kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from trunk : introduce the color balance multipliers
+	  settings
+
+2007-02-20 12:28  cgilles
+
+	* [r635609] libkdcraw/dcrawsettingswidget.cpp:
+	  polish
+
+2007-02-20 10:28  cgilles
+
+	* [r635565] libkdcraw/dcrawsettingswidget.cpp:
+	  fix layout
+
+2007-02-19 22:30  cgilles
+
+	* [r635409] libkdcraw/dcrawsettingswidget.cpp:
+	  fix layout
+
+2007-02-19 22:28  cgilles
+
+	* [r635408] libkdcraw/dcrawsettingswidget.cpp:
+	  fix layout
+
+2007-02-19 22:15  cgilles
+
+	* [r635400] libkdcraw/dcrawsettingswidget.cpp:
+	  fix layout
+
+2007-02-19 21:52  cgilles
+
+	* [r635352] libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/libkdcraw.kdevelop:
+	  use KtabWidget to separate Standard and Advanced settings
+
+2007-02-19 15:20  cgilles
+
+	* [r635245] libkdcraw/dcrawsettingswidget.cpp:
+	  fix i18n
+
+2007-02-19 15:05  cgilles
+
+	* [r635242] kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from trunk : introduce the blackpoint compensation
+	  value settings
+
+2007-02-19 11:56  cgilles
+
+	* [r635195] kipi-plugins/rawconverter/batchdialog.cpp,
+	  kipi-plugins/rawconverter/singledialog.cpp,
+	  libkdcraw/dcraw/README, libkdcraw/dcraw/dcraw.c,
+	  libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+	  libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/rawdecodingsettings.h:
+	  After 8 days of intensive work, I'm very proud to announce the
+	  first LibKdcraw shared library 0.1.0 beta release.
+	  
+	  LibKdcraw is a C++ interface around dcraw binary program used to
+	  decode RAW picture files. This library is actually used by
+	  kipi-plugins (trunk), and later by digiKam (with future 0.9.2
+	  release).
+	  
+	  http://digikam3rdparty.free.fr/Screenshots/newkipirawconverter.png
+	  
+	  The library documentation is available on header files. Check svn
+	  trunk repository for details :
+	  
+	  http://websvn.kde.org/trunk/extragear/libs/libkdcraw
+	  
+	  Libkdcraw include the last dcraw program (version 8.54) from Dave
+	  Coffin. It provide a kdcraw binary witch is used instead dcraw.
+	  This way prevent _all_ compatibility problems with all options
+	  see with dcraw. In fact the dcraw author to not respect a
+	  compatibilty between dcraw release witch break all RAW workflow !
+	  Also, he won't provide dcraw as a shared library. We have lost a
+	  waste a time with these problems in digiKam project. Using a
+	  specific version of dcraw in the library, we will valid this one
+	  with the library API and preserve the compatibility for the
+	  future.
+	  
+	  The dcraw source code can be updated easily using the
+	  libkdcraw/dcraw/README file where i have written a notice for
+	  that. The library don't touch the content of dcraw source code.
+	  It use it as well...
+	  
+	  With this library, you can extract preview image (used by camera
+	  to display picture on TV screen) as a QImage, and extract all
+	  informations given by dcraw to identify a RAW file. Of course,
+	  you can decode and extract the RAW pictures with a lot of
+	  settings. The image data (8 or 16 bits color depth) is returned
+	  in a QByteArray container. The library include a widget to
+	  control all RAW decoding settings in your application :
+	  
+	  http://digikam3rdparty.free.fr/Screenshots/rawsettings.png
+	  
+	  Using the last dcraw source code, the libary support all last
+	  Camera models, especially all models out at Christmas 2006. The
+	  complete list is given below :
+	  
+	  Adobe Digital Negative (DNG)
+	  AVT F-145C
+	  AVT F-201C
+	  AVT F-510C
+	  AVT F-810C
+	  Canon PowerShot 600
+	  Canon PowerShot A5
+	  Canon PowerShot A5 Zoom
+	  Canon PowerShot A50
+	  Canon PowerShot A610
+	  Canon PowerShot A620
+	  Canon PowerShot Pro70
+	  Canon PowerShot Pro90 IS
+	  Canon PowerShot G1
+	  Canon PowerShot G2
+	  Canon PowerShot G3
+	  Canon PowerShot G5
+	  Canon PowerShot G6
+	  Canon PowerShot S2 IS
+	  Canon PowerShot S3 IS
+	  Canon PowerShot S30
+	  Canon PowerShot S40
+	  Canon PowerShot S45
+	  Canon PowerShot S50
+	  Canon PowerShot S60
+	  Canon PowerShot S70
+	  Canon PowerShot Pro1
+	  Canon EOS D30
+	  Canon EOS D60
+	  Canon EOS 5D
+	  Canon EOS 10D
+	  Canon EOS 20D
+	  Canon EOS 30D
+	  Canon EOS 300D / Digital Rebel / Kiss Digital
+	  Canon EOS 350D / Digital Rebel XT / Kiss Digital N
+	  Canon EOS 400D / Digital Rebel XTi / Kiss Digital X
+	  Canon EOS D2000C
+	  Canon EOS-1D
+	  Canon EOS-1DS
+	  Canon EOS-1D Mark II
+	  Canon EOS-1D Mark II N
+	  Canon EOS-1Ds Mark II
+	  Casio QV-2000UX
+	  Casio QV-3000EX
+	  Casio QV-3500EX
+	  Casio QV-4000
+	  Casio QV-5700
+	  Casio QV-R51
+	  Casio QV-R61
+	  Casio EX-S100
+	  Casio EX-Z4
+	  Casio EX-Z50
+	  Casio EX-Z55
+	  Casio Exlim Pro 505
+	  Casio Exlim Pro 600
+	  Casio Exlim Pro 700
+	  Contax N Digital
+	  Creative PC-CAM 600
+	  Epson R-D1
+	  Foculus 531C
+	  Fuji FinePix E550
+	  Fuji FinePix E900
+	  Fuji FinePix F700
+	  Fuji FinePix F710
+	  Fuji FinePix F800
+	  Fuji FinePix F810
+	  Fuji FinePix S2Pro
+	  Fuji FinePix S3Pro
+	  Fuji FinePix S20Pro
+	  Fuji FinePix S5000
+	  Fuji FinePix S5100/S5500
+	  Fuji FinePix S5200/S5600
+	  Fuji FinePix S6000fd
+	  Fuji FinePix S7000
+	  Fuji FinePix S9000/S9500
+	  Imacon Ixpress 16-megapixel
+	  Imacon Ixpress 22-megapixel
+	  Imacon Ixpress 39-megapixel
+	  ISG 2020x1520
+	  Kodak DC20 (see Oliver Hartman's page)
+	  Kodak DC25 (see Jun-ichiro Itoh's page)
+	  Kodak DC40
+	  Kodak DC50
+	  Kodak DC120 (also try kdc2tiff)
+	  Kodak DCS200
+	  Kodak DCS315C
+	  Kodak DCS330C
+	  Kodak DCS420
+	  Kodak DCS460
+	  Kodak DCS460A
+	  Kodak DCS520C
+	  Kodak DCS560C
+	  Kodak DCS620C
+	  Kodak DCS620X
+	  Kodak DCS660C
+	  Kodak DCS660M
+	  Kodak DCS720X
+	  Kodak DCS760C
+	  Kodak DCS760M
+	  Kodak EOSDCS1
+	  Kodak EOSDCS3B
+	  Kodak NC2000F
+	  Kodak ProBack
+	  Kodak PB645C
+	  Kodak PB645H
+	  Kodak PB645M
+	  Kodak DCS Pro 14n
+	  Kodak DCS Pro 14nx
+	  Kodak DCS Pro SLR/c
+	  Kodak DCS Pro SLR/n
+	  Kodak P850
+	  Kodak P880
+	  Kodak KAI-0340
+	  Konica KD-400Z
+	  Konica KD-510Z
+	  Leaf Aptus 17
+	  Leaf Aptus 22
+	  Leaf Aptus 65
+	  Leaf Aptus 75
+	  Leaf Cantare
+	  Leaf CatchLight
+	  Leaf CMost
+	  Leaf DCB2
+	  Leaf Valeo 6
+	  Leaf Valeo 11
+	  Leaf Valeo 17
+	  Leaf Valeo 22
+	  Leaf Volare
+	  Leica Digilux 2
+	  Leica Digilux 3
+	  Leica D-LUX2
+	  Leica D-LUX3
+	  Leica V-LUX1
+	  Logitech Fotoman Pixtura
+	  Micron 2010
+	  Minolta RD175
+	  Minolta DiMAGE 5
+	  Minolta DiMAGE 7
+	  Minolta DiMAGE 7i
+	  Minolta DiMAGE 7Hi
+	  Minolta DiMAGE A1
+	  Minolta DiMAGE A2
+	  Minolta DiMAGE A200
+	  Minolta DiMAGE G400
+	  Minolta DiMAGE G500
+	  Minolta DiMAGE G530
+	  Minolta DiMAGE G600
+	  Minolta DiMAGE Z2
+	  Minolta Alpha/Dynax/Maxxum 5D
+	  Minolta Alpha/Dynax/Maxxum 7D
+	  Nikon D1
+	  Nikon D1H
+	  Nikon D1X
+	  Nikon D2H
+	  Nikon D2Hs
+	  Nikon D2X
+	  Nikon D40
+	  Nikon D50
+	  Nikon D70
+	  Nikon D70s
+	  Nikon D80
+	  Nikon D100
+	  Nikon D200
+	  Nikon E700 ("DIAG RAW" hack)
+	  Nikon E800 ("DIAG RAW" hack)
+	  Nikon E880 ("DIAG RAW" hack)
+	  Nikon E900 ("DIAG RAW" hack)
+	  Nikon E950 ("DIAG RAW" hack)
+	  Nikon E990 ("DIAG RAW" hack)
+	  Nikon E995 ("DIAG RAW" hack)
+	  Nikon E2100 ("DIAG RAW" hack)
+	  Nikon E2500 ("DIAG RAW" hack)
+	  Nikon E3200 ("DIAG RAW" hack)
+	  Nikon E3700 ("DIAG RAW" hack)
+	  Nikon E4300 ("DIAG RAW" hack)
+	  Nikon E4500 ("DIAG RAW" hack)
+	  Nikon E5000
+	  Nikon E5400
+	  Nikon E5700
+	  Nikon E8400
+	  Nikon E8700
+	  Nikon E8800
+	  Olympus C3030Z
+	  Olympus C5050Z
+	  Olympus C5060WZ
+	  Olympus C7070WZ
+	  Olympus C70Z,C7000Z
+	  Olympus C740UZ
+	  Olympus C770UZ
+	  Olympus C8080WZ
+	  Olympus E-1
+	  Olympus E-10
+	  Olympus E-20
+	  Olympus E-300
+	  Olympus E-330
+	  Olympus E-400
+	  Olympus E-500
+	  Olympus SP310
+	  Olympus SP320
+	  Olympus SP350
+	  Olympus SP500UZ
+	  Panasonic DMC-FZ30
+	  Panasonic DMC-FZ50
+	  Panasonic DMC-L1
+	  Panasonic DMC-LC1
+	  Panasonic DMC-LX1
+	  Panasonic DMC-LX2
+	  Pentax *ist D
+	  Pentax *ist DL
+	  Pentax *ist DL2
+	  Pentax *ist DS
+	  Pentax *ist DS2
+	  Pentax K10D
+	  Pentax K100D
+	  Pentax Optio S
+	  Pentax Optio S4
+	  Pentax Optio 33WR
+	  Phase One LightPhase
+	  Phase One H 10
+	  Phase One H 20
+	  Phase One H 25
+	  Phase One P 20
+	  Phase One P 25
+	  Phase One P 30
+	  Phase One P 45
+	  Pixelink A782
+	  Polaroid x530
+	  Rollei d530flex
+	  RoverShot 3320af
+	  Samsung GX-1S
+	  Sarnoff 4096x5440
+	  Sigma SD9
+	  Sigma SD10
+	  Sinar 3072x2048
+	  Sinar 4080x4080
+	  Sinar 4080x5440
+	  Sinar STI format
+	  SMaL Ultra-Pocket 3
+	  SMaL Ultra-Pocket 4
+	  SMaL Ultra-Pocket 5
+	  Sony DSC-F828
+	  Sony DSC-R1
+	  Sony DSC-V3
+	  Sony DSLR-A100
+	  Sony XCD-SX910CR
+	  STV680 VGA
+	  
+	  About digiKam and this library, I have a big patch on my computer
+	  to use this library with all RAW files. I will commit this code
+	  in svn repository later digiKam 0.9.1 release. It will be
+	  available for 0.9.2 release. If you is impatient to test it, the
+	  patch against current svn implementation of digiKam can be
+	  downloaded at this url :
+	  
+	  http://digikam3rdparty.free.fr/misc.tarballs/libkdcrawdigikamport.patch
+	  
+	  Of course, you need to checkout, compile and install LibKdcraw
+	  first. It is stored on extragear/libs folder of svn trunk.
+	  
+	  All feedbacks are welcome, especially all RAW pictures sample
+	  taken with a recent camera to perform advanced test. Thanks in
+	  advance for your help...
+	  
+	  Gilles Caulier
+	  digiKam team
+	  
+	  BUG: 140865
+	  CCBUG : 138744
+	  CCMAIL: digikam-users@kde.org, digikam-devel@kde.org,
+	  kde-imaging@kde.org
+
+2007-02-19 09:05  cgilles
+
+	* [r635146] libkdcraw/dcrawbinary.cpp:
+	  fix test if version is right
+
+2007-02-19 09:03  cgilles
+
+	* [r635144] libkdcraw/dcrawbinary.cpp:
+	  fix test if version is right
+
+2007-02-19 08:56  cgilles
+
+	* [r635141] libkdcraw/kdcraw.cpp:
+	  be verboze during RAW decoding
+
+2007-02-19 08:32  cgilles
+
+	* [r635135] libkdcraw/dcraw/Makefile.am, libkdcraw/dcraw/kdcraw.1:
+	  added official dcraw manual page
+
+2007-02-19 07:34  cgilles
+
+	* [r635123] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  API doc + polishing
+
+2007-02-19 06:53  cgilles
+
+	* [r635114] libkdcraw/README:
+	  update depencies
+
+2007-02-19 06:48  cgilles
+
+	* [r635113] libkdcraw/Makefile.am, libkdcraw/icons,
+	  libkdcraw/icons/Makefile.am,
+	  libkdcraw/icons/hi128-app-kdcraw.png,
+	  libkdcraw/icons/hi32-app-kdcraw.png,
+	  libkdcraw/icons/hi48-app-kdcraw.png,
+	  libkdcraw/icons/hi64-app-kdcraw.png:
+	  kdcraw icons
+
+2007-02-18 20:05  cgilles
+
+	* [r634923] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  API doc
+
+2007-02-18 18:16  cgilles
+
+	* [r634885] libkdcraw/kdcraw.cpp:
+	  libkdcraw : loading progress value will be continue now. We will
+	  folowing the last progress value used by pseudo progress during
+	  internal dcraw decoding loop and when you recieve data from
+	  dcraw, we continue progress at this point.
+	  
+	  LibKDcraw shared library is now finalized. digiKam patch to used
+	  it is ready for next 0.9.2 release.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de
+
+2007-02-18 16:27  cgilles
+
+	* [r634858] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  give raw decoding settings protected
+
+2007-02-18 14:55  cgilles
+
+	* [r634842] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  polish implementation
+
+2007-02-18 12:15  cgilles
+
+	* [r634814] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  add new method to handle progress info in digiKam during RAW file
+	  decoding
+
+2007-02-18 11:46  cgilles
+
+	* [r634799] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  update to compile with digiKam
+
+2007-02-18 11:40  cgilles
+
+	* [r634795] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  added new virtual method to cancel RAW decoding with digiKam
+
+2007-02-17 20:53  cgilles
+
+	* [r634615] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  update to compile with digiKam
+
+2007-02-17 17:21  cgilles
+
+	* [r634581] libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h:
+	  update to compile with digiKam
+
+2007-02-17 16:40  cgilles
+
+	* [r634572] libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h:
+	  update to compile with digiKam
+
+2007-02-17 14:53  cgilles
+
+	* [r634545] libkdcraw/Makefile.am:
+	  compile
+
+2007-02-17 14:47  cgilles
+
+	* [r634544] libkdcraw/dcrawinfocontainer.h:
+	  compile
+
+2007-02-16 22:01  cgilles
+
+	* [r634334] kipi-plugins/rawconverter/actionthread.cpp,
+	  kipi-plugins/rawconverter/rawdecodingiface.cpp,
+	  libkdcraw/kdcraw.cpp, libkexiv2/kexiv2.cpp:
+	  fix comments
+
+2007-02-16 19:23  cgilles
+
+	* [r634278] libkdcraw/rawdecodingsettings.h:
+	  API doc + optimized time loading settings backported from digiKam
+	  core
+
+2007-02-16 15:44  cgilles
+
+	* [r634185] libkdcraw/libkdcraw.lsm:
+	  fix email
+
+2007-02-16 15:41  cgilles
+
+	* [r634183] libkdcraw/AUTHORS, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/rawdecodingsettings.h,
+	  libkdcraw/rawfiles.h:
+	  fix email
+
+2007-02-16 13:38  cgilles
+
+	* [r634150] libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h:
+	  add link to dcraw web page
+
+2007-02-16 12:54  cgilles
+
+	* [r634137] libkdcraw/Makefile.am:
+	  forget i18n rules
+
+2007-02-16 12:52  cgilles
+
+	* [r634136] libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.h:
+	  use LIBKDCRAW_EXPORT
+
+2007-02-16 12:48  cgilles
+
+	* [r634134] libkdcraw/kdcraw.h:
+	  polish
+
+2007-02-16 10:30  cgilles
+
+	* [r634091] libkdcraw/Makefile.am,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h:
+	  libkdcraw from trunk : continue implementation. Still under
+	  developement. Not yet suitable.
+
+2007-02-16 09:56  cgilles
+
+	* [r634082] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  update API
+
+2007-02-16 09:39  cgilles
+
+	* [r634076] libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  update API
+
+2007-02-16 09:07  cgilles
+
+	* [r634066] libkdcraw/Makefile.am, libkdcraw/dcrawiface.cpp,
+	  libkdcraw/dcrawiface.h, libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h:
+	  polish
+
+2007-02-16 08:50  cgilles
+
+	* [r634064] libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+	  libkdcraw/libkdcraw.kdevelop:
+	  API doc
+
+2007-02-16 08:37  cgilles
+
+	* [r634063] libkdcraw/dcrawbinary.h:
+	  polish
+
+2007-02-16 08:05  cgilles
+
+	* [r634059] libkdcraw/dcrawiface.cpp:
+	  polish
+
+2007-02-16 07:57  cgilles
+
+	* [r634058] libkdcraw/dcrawiface.cpp,
+	  libkdcraw/rawdecodingsettings.h:
+	  fix API
+
+2007-02-16 07:55  cgilles
+
+	* [r634057] libkdcraw/dcrawiface.cpp, libkdcraw/dcrawiface.h:
+	  fix API
+
+2007-02-15 17:56  cgilles
+
+	* [r633901] libkdcraw/libkdcraw.kdevelop:
+	  kdevelop project
+
+2007-02-15 15:14  cgilles
+
+	* [r633865] libkdcraw/dcrawiface.h:
+	  polish
+
+2007-02-15 15:08  cgilles
+
+	* [r633863] libkdcraw/dcrawiface.cpp, libkdcraw/dcrawiface.h:
+	  libkdcraw from trunk : continue implementation. Still under
+	  developement. Not yet suitable.
+
+2007-02-15 14:43  cgilles
+
+	* [r633856] libkdcraw/Makefile.am, libkdcraw/dcrawiface.cpp,
+	  libkdcraw/dcrawiface.h, libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from trunk : continue implementation. Still under
+	  developement. Not yet suitable.
+
+2007-02-15 13:17  cgilles
+
+	* [r633837] libkdcraw/rawfiles.h:
+	  typo
+
+2007-02-15 13:16  cgilles
+
+	* [r633836] libkdcraw/Makefile.am, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/dcrawiface.cpp,
+	  libkdcraw/dcrawiface.h, libkdcraw/rawdecodingsettings.h:
+	  libkdcraw from trunk : continue implementation. Still under
+	  developement. Not yet suitable.
+
+2007-02-12 15:24  cgilles
+
+	* [r632867] libkdcraw, libkdcraw/AUTHORS, libkdcraw/COPYING,
+	  libkdcraw/ChangeLog, libkdcraw/INSTALL, libkdcraw/Makefile.am,
+	  libkdcraw/NEWS, libkdcraw/README, libkdcraw/configure.in.bot,
+	  libkdcraw/configure.in.in, libkdcraw/dcraw,
+	  libkdcraw/dcraw/Makefile.am, libkdcraw/dcraw/README,
+	  libkdcraw/dcraw/dcraw.c, libkdcraw/dcrawbinary.cpp,
+	  libkdcraw/dcrawbinary.h, libkdcraw/libkdcraw.lsm,
+	  libkdcraw/libkdcraw.pc.in, libkdcraw/libkdcraw_export.h,
+	  libkdcraw/rawfiles.h, libkdcraw/version.h:
+	  kipi-plugins from trunk : starting new shared library "libkdcraw"
+	  based on digiKam core and RAW converter implementations.
+	  
+	  This library will provide a C++ interface to dcraw command line
+	  program to decode RAW pictures. It will be used by digiKam and
+	  kipi-plugins. A common implementation is require to prevent
+	  duplicate source code.
+	  
+	  The library is not yet complete. I'm working on actually.
+	  Compilation is disable by default. Future digiKam 0.9.2 release
+	  will use it.
+	  
+	  CCMAIL: marcel.wiesweg@gmx.de, kde-imaging@kde.org,
+	  digikam-devel@kde.org
+
