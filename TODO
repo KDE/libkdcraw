@@ -1,0 +1,2 @@
+- Use libRaw C++ interface instead dcraw.c. (http://www.libraw.org)
+- Remove QProcess. Use multithreading instead.
