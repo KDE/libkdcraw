@@ -27,6 +27,15 @@ SET(kdcraw_SRCS dcraw.c)
 KDE4_ADD_EXECUTABLE(kdcraw_bin ${kdcraw_SRCS})
 TARGET_LINK_LIBRARIES(kdcraw_bin ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
+IF(WIN32)
+    IF( MSVC )
+        TARGET_LINK_LIBRARIES( kdcraw_bin ${QT_QTCORE_LIBRARY} )
+    ELSE( MSVC )
+        FIND_PACKAGE( kdewin32 )
+        TARGET_LINK_LIBRARIES( kdcraw_bin ws2_32 ${KDEWIN32_LIBRARY} )
+    ENDIF( MSVC )
+ENDIF( WIN32 )
+
 # the target kdcraw binary programe name add the soname of library as suffixe.
 SET_TARGET_PROPERTIES(kdcraw_bin PROPERTIES OUTPUT_NAME kdcraw)
 
