@@ -22,12 +22,14 @@ INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
 # compilers do not support it.
 # Thanks to Andras Mantia for this tip.
 ADD_DEFINITIONS("-Dinline= -w")
-
+IF( WIN32 )
+    ADD_DEFINITIONS( -DDJGPP )
+ENDIF( WIN32 )
 SET(kdcraw_SRCS dcraw.c)
 KDE4_ADD_EXECUTABLE(kdcraw_bin ${kdcraw_SRCS})
 TARGET_LINK_LIBRARIES(kdcraw_bin ${JPEG_LIBRARY} ${LCMS_LIBRARIES})
 
-IF(WIN32)
+IF( WIN32 )
     IF( MSVC )
         TARGET_LINK_LIBRARIES( kdcraw_bin ${QT_QTCORE_LIBRARY} )
     ELSE( MSVC )
