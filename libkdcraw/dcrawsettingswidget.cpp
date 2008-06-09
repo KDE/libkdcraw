@@ -286,7 +286,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "interpolate a complete image from the partial raw data received from the color-filtered "
                 "image sensor internal to many digital cameras in form of a matrix of colored pixels. "
                 "Also known as CFA interpolation or color reconstruction, another common spelling "
-                "is demosaicing. There are 3 methods to demosaicing RAW images:<p>"
+                "is demosaicing. There are 4 methods to demosaicing RAW images:<p>"
                 "<b>Bilinear</b>: use high-speed but low-quality bilinear "
                 "interpolation (default - for slow computer). In this method, "
                 "the red value of a non-red pixel is computed as the average of "
