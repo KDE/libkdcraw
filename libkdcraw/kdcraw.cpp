@@ -614,7 +614,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             // then grows more rapidly, slows down again and
             // get asymptotically closer to the maximum.
             // (this is the Hill Equation, 2.8 the Hill Coefficient, to pour some blood in this)
-            double elapsedMsecsPow = pow(elapsedMsecs, 2.8);
+            double elapsedMsecsPow = std::pow(elapsedMsecs, 2.8);
             part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
 
             // While we waiting to receive data, progress from 0% to 40%
