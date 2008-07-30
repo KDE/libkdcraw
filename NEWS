@@ -3,6 +3,23 @@
 Port to CMake/KDE4/QT4
 Moved from extragear/libs to kdegraphics/libs
 
+0.1.5
+------------------------------------------------------------------------
+
+- Updated dcraw to 8.86
+  New camera : Sony A300.
+  Fixed camera WB on the A200.
+  Set model-specific saturation levels in adobe_coeff().
+  No new options introduced.
+- Updated dcraw to 8.85
+  New camera : Olympus E-420.
+  No new options introduced.
+- Updated dcraw to 8.84
+  New cameras: Canon EOS 450D, Nikon D60, and Fuji S100FS.
+  Copied new matrices from Adobe DNG Converter 4.4.
+  sRAW support in 1.393 broke Fuji DNG files, now fixed.
+  No new options introduced.
+
 0.1.4
 ------------------------------------------------------------------------
 - updated dcraw to 8.83
