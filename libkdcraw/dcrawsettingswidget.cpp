@@ -274,13 +274,13 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     // ---------------------------------------------------------------
 
-    d->RAWQualityLabel    = new QLabel(i18n("Quality (interpolation):"), d->stdSettings);
+    d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->stdSettings);
     d->RAWQualityComboBox = new QComboBox(d->stdSettings);
     d->RAWQualityComboBox->insertItem(0, i18n("Bilinear"));
     d->RAWQualityComboBox->insertItem(1, i18n("VNG"));
     d->RAWQualityComboBox->insertItem(2, i18n("PPG"));
     d->RAWQualityComboBox->insertItem(3, i18n("AHD"));
-    d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality</b><p>"
+    d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality (interpolation)</b><p>"
                 "Select here the demosaicing RAW images decoding "
                 "interpolation method. A demosaicing algorithm is a digital image process used to "
                 "interpolate a complete image from the partial raw data received from the color-filtered "
