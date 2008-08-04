@@ -42,7 +42,7 @@ class DcrawSettingsWidgetPriv;
 class LIBKDCRAW_EXPORT DcrawSettingsWidget : public KTabWidget
 {
     Q_OBJECT
-    
+
 public:
 
     DcrawSettingsWidget(QWidget *parent, 
