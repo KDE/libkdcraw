@@ -42,12 +42,12 @@ class DcrawSettingsWidgetPriv;
 class LIBKDCRAW_EXPORT DcrawSettingsWidget : public KTabWidget
 {
     Q_OBJECT
-    
+
 public:
 
-    DcrawSettingsWidget(QWidget *parent, 
-                        bool sixteenBitsOption=false, 
-                        bool outputColorSpaceOption=true, 
+    DcrawSettingsWidget(QWidget *parent,
+                        bool sixteenBitsOption=false,
+                        bool outputColorSpaceOption=true,
                         bool showAdvancedOptions=false);
     virtual ~DcrawSettingsWidget();
 

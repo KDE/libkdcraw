@@ -176,7 +176,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                             "To resume, this option blurs the image "
                                             "a little, but it eliminates false 2x2 mesh patterns "
                                             "with VNG quality method or mazes with AHD quality method."));
-    settingsBoxLayout->addWidget(d->fourColorCheckBox, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->fourColorCheckBox, line, 0, 1, 2);
     line++;
 
     // ---------------------------------------------------------------
@@ -203,7 +203,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                              "<b>Automatic White Balance</b>: Calculates an automatic white balance "
                                              "averaging the entire image<p>"
                                              "<b>Manual White balance</b>: Set a custom temperature and green level values"));
-    settingsBoxLayout->addWidget(d->whiteBalanceLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->whiteBalanceLabel,    line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->whiteBalanceComboBox, line, 1, 1, 2);
     line++;
 
@@ -213,7 +213,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->stdSettings);
     d->customWhiteBalanceSpinBox->setWhatsThis( i18n("<p><b>Temperature</b><p>"
                                                      "Set here the color temperature."));
-    settingsBoxLayout->addWidget(d->customWhiteBalanceLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->customWhiteBalanceLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->customWhiteBalanceSpinBox, line, 1, 1, 2);
     line++;
 
@@ -223,7 +223,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->stdSettings);
     d->customWhiteBalanceGreenSpinBox->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
                                                           "cast removal level."));
-    settingsBoxLayout->addWidget(d->customWhiteBalanceGreenLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->customWhiteBalanceGreenLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->customWhiteBalanceGreenSpinBox, line, 1, 1, 2);
     line++;
  
@@ -244,7 +244,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                               "for a gradual fade to white<p>" 
                                               "<b>Rebuild</b>: reconstruct highlights using a " 
                                               "level value")); 
-    settingsBoxLayout->addWidget(d->unclipColorLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->unclipColorLabel,    line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->unclipColorComboBox, line, 1, 1, 2);
     line++;
 
@@ -255,7 +255,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b><p>"
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
-    settingsBoxLayout->addWidget(d->reconstructLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->reconstructLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->reconstructSpinBox, line, 1, 1, 2);
     line++;
 
@@ -268,7 +268,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
                                             "Specify the brightness level of output image."
                                             "The default value is 1.0 (works in 8-bit mode only).<p>"));
-    settingsBoxLayout->addWidget(d->brightnessLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->brightnessLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->brightnessSpinBox, line, 1, 1, 2);
     line++;
 
@@ -302,7 +302,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    settingsBoxLayout->addWidget(d->RAWQualityLabel, line, 0, 1, 1); 
+    settingsBoxLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1); 
     settingsBoxLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
 
@@ -320,7 +320,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
     d->NRThresholdSpinBox->setWhatsThis(i18n("<p><b>Threshold</b><p>"
                      "Set here the noise reduction threshold value to use."));
-    settingsBoxLayout->addWidget(d->NRThresholdLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->NRThresholdLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->NRThresholdSpinBox, line, 1, 1, 2);
     line++;
 
@@ -346,11 +346,11 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->caBlueMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
     d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
                      "Set here the magnification factor of the blue layer"));
-    
-    settingsBoxLayout->addWidget(d->caRedMultLabel, line, 0, 1, 1);
+
+    settingsBoxLayout->addWidget(d->caRedMultLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->caRedMultSpinBox, line, 1, 1, 2);
     line++;
-    settingsBoxLayout->addWidget(d->caBlueMultLabel, line, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->caBlueMultLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->caBlueMultSpinBox, line, 1, 1, 2);
     line++;
 
@@ -379,7 +379,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Kodak, that offers an especially large gamut designed for use with "
                 "photographic outputs in mind."));
 
-    settingsBoxLayout->addWidget(d->outputColorSpaceLabel, line, 0, 1, 1); 
+    settingsBoxLayout->addWidget(d->outputColorSpaceLabel,    line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->outputColorSpaceComboBox, line, 1, 1, 2);
 
     if (outputColorSpaceOption)
@@ -426,9 +426,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     settingsBoxLayout2->setMargin(KDialog::spacingHint());
     settingsBoxLayout2->setSpacing(KDialog::spacingHint());
-    settingsBoxLayout2->addWidget(d->dontStretchPixelsCheckBox, 0, 0, 1, 3 );   
-    settingsBoxLayout2->addWidget(d->blackPointCheckBox, 1, 0, 1, 1);
-    settingsBoxLayout2->addWidget(d->blackPointSpinBox, 1, 1, 1, 2);
+    settingsBoxLayout2->addWidget(d->dontStretchPixelsCheckBox, 0, 0, 1, 3);
+    settingsBoxLayout2->addWidget(d->blackPointCheckBox,        1, 0, 1, 1);
+    settingsBoxLayout2->addWidget(d->blackPointSpinBox,         1, 1, 1, 2);
     settingsBoxLayout2->setRowStretch(7, 10);
 
     insertTab(1, d->advSettings, i18n("Advanced"));
