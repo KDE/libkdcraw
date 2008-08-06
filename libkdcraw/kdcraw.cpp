@@ -100,7 +100,6 @@ public:
     QTimer              *queryTimer;
 
     KProcess            *process;
-
 };
 
 KDcraw::KDcraw()
@@ -590,7 +589,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // So we make up some progress (0% - 40%), using the file size as an indicator how long it might take.
     QTime dcrawStartTime = QTime::currentTime();
     int fileSize         = QFileInfo(filePath).size();
-    
+
     // This is the magic number that describes how fast the function grows
     // It _should_ be dependent on how fast the computer is, but we do not have this piece of information
     // So this is a number that works well on my computer.
@@ -610,7 +609,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
             if (elapsedMsecs > checkpointTime)
                 checkpointTime += 300;
-    
+
             // What we do here is a sigmoidal curve, it starts slowly,
             // then grows more rapidly, slows down again and
             // get asymptotically closer to the maximum.
@@ -695,16 +694,16 @@ void KDcraw::startProcess()
 
     connect(d->process, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotProcessExited(KProcess *)));
-             
+
     connect(d->process, SIGNAL(receivedStdout(KProcess *, char *, int)),
             this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
-             
+
     connect(d->process, SIGNAL(receivedStderr(KProcess *, char *, int)),
             this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
 
     // run dcraw with options:
     // -c : write to stdout
-    // -v : verboze mode.
+    // -v : verbose mode.
     //
     // -4 : 16bit ppm output
     //
@@ -719,6 +718,7 @@ void KDcraw::startProcess()
     // -h : Output a half-size color image. Twice as fast as -q 0.
     // -b : set Brightness value.
     // -k : set Black Point value.
+    // -S : set White Point value (saturation).
     // -r : set Raw Color Balance Multipliers.
     // -C : set Correct chromatic aberration correction.
 
@@ -748,6 +748,12 @@ void KDcraw::startProcess()
     {
         *d->process << "-k";
         *d->process << QString::number(m_rawDecodingSettings.blackPoint);
+    }
+
+    if (m_rawDecodingSettings.enableWhitePoint)
+    {
+        *d->process << "-S";
+        *d->process << QString::number(m_rawDecodingSettings.whitePoint);
     }
 
     switch (m_rawDecodingSettings.whiteBalance)

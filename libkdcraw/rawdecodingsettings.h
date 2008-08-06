@@ -106,6 +106,9 @@ public:
         enableBlackPoint           = false;
         blackPoint                 = 0;
 
+        enableWhitePoint           = false;
+        whitePoint                 = 0;
+
         enableNoiseReduction       = false;
         NRThreshold                = 100;
 
@@ -130,6 +133,8 @@ public:
             && halfSizeColorImage == o.halfSizeColorImage
             && enableBlackPoint == o.enableBlackPoint
             && blackPoint == o.blackPoint
+            && enableWhitePoint == o.enableWhitePoint
+            && whitePoint == o.whitePoint
             && enableNoiseReduction == o.enableNoiseReduction
             && NRThreshold == o.NRThreshold
             && enableCACorrection == o.enableCACorrection
@@ -158,6 +163,9 @@ public:
 
         enableBlackPoint           = false;
         blackPoint                 = 0;
+
+        enableWhitePoint           = false;
+        whitePoint                 = 0;
 
         enableNoiseReduction       = false;
         NRThreshold                = 100;
@@ -243,6 +251,14 @@ public:
     /** Black Point value of output image.
     */
     int blackPoint;
+
+    /** Set on the white point setting to decode RAW image.
+    */
+    bool enableWhitePoint;
+
+    /** White Point value of output image.
+    */
+    int whitePoint;
 
     /** The output color space used to decoded RAW data. See OutputColorSpace 
         values for details. 
