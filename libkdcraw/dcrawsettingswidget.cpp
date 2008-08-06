@@ -88,13 +88,13 @@ public:
         outputColorSpaceLabel          = 0;
         outputColorSpaceComboBox       = 0;
         demosaicingSettings            = 0;
-        exposureSettings               = 0;
+        whiteBalanceSettings           = 0;
         correctionsSettings            = 0;
         colormanSettings               = 0;
     }
 
     QWidget         *demosaicingSettings;
-    QWidget         *exposureSettings;
+    QWidget         *whiteBalanceSettings;
     QWidget         *correctionsSettings;
     QWidget         *colormanSettings;
 
@@ -241,13 +241,13 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     insertTab(d->demosaicingSettings, i18n("Demosaicing"));
 
     // ---------------------------------------------------------------
-    // EXPOSURE Settings Panel
+    // WHITE BALANCE Settings Panel
 
-    d->exposureSettings         = new QWidget(this);
-    QGridLayout* exposureLayout = new QGridLayout(d->exposureSettings, 7, 2);
+    d->whiteBalanceSettings         = new QWidget(this);
+    QGridLayout* exposureLayout = new QGridLayout(d->whiteBalanceSettings, 7, 2);
 
-    d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->exposureSettings);
-    d->whiteBalanceComboBox = new QComboBox( false, d->exposureSettings );
+    d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->whiteBalanceSettings);
+    d->whiteBalanceComboBox = new QComboBox( false, d->whiteBalanceSettings );
     d->whiteBalanceComboBox->insertItem(i18n("Default D65 White Balance"), 0);
     d->whiteBalanceComboBox->insertItem(i18n("Camera White Balance"),      1);
     d->whiteBalanceComboBox->insertItem(i18n("Automatic White Balance"),   2);
@@ -261,21 +261,21 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                              "averaging the entire image<p>"
                                              "<b>Manual White balance</b>: Set a custom temperature and green level values"));
 
-    d->customWhiteBalanceSpinBox = new KIntNumInput(d->exposureSettings);
+    d->customWhiteBalanceSpinBox = new KIntNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10, true);
-    d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->exposureSettings);
+    d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->whiteBalanceSettings);
     QWhatsThis::add( d->customWhiteBalanceSpinBox, i18n("<p><b>Temperature</b><p>"
                      "Set here the color temperature."));
 
-    d->customWhiteBalanceGreenSpinBox = new KDoubleNumInput(d->exposureSettings);
+    d->customWhiteBalanceGreenSpinBox = new KDoubleNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceGreenSpinBox->setPrecision(2);
     d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01, true);
-    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->exposureSettings);
+    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->whiteBalanceSettings);
     QWhatsThis::add( d->customWhiteBalanceGreenSpinBox, i18n("<p>Set here the green component to set magenta color "
                                                              "cast removal level."));
 
-    d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->exposureSettings);
-    d->unclipColorComboBox = new QComboBox( false, d->exposureSettings );
+    d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->whiteBalanceSettings);
+    d->unclipColorComboBox = new QComboBox( false, d->whiteBalanceSettings );
     d->unclipColorComboBox->insertItem(i18n("Solid white"), 0);
     d->unclipColorComboBox->insertItem(i18n("Unclip"),      1);
     d->unclipColorComboBox->insertItem(i18n("Blend"),       2);
@@ -289,37 +289,37 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                              "<b>Rebuild</b>: reconstruct highlights using a "
                                              "level value"));
 
-    d->reconstructLabel   = new QLabel(i18n("Level:"), d->exposureSettings);
-    d->reconstructSpinBox = new KIntNumInput(d->exposureSettings);
+    d->reconstructLabel   = new QLabel(i18n("Level:"), d->whiteBalanceSettings);
+    d->reconstructSpinBox = new KIntNumInput(d->whiteBalanceSettings);
     d->reconstructSpinBox->setRange(0, 6, 1, true);
     QWhatsThis::add(d->reconstructSpinBox, i18n("<p><b>Level</b><p>"
                                                "Specify the reconstruct highlight level. "
                                                "Low values favor whites and high values favor colors."));
 
-    d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->exposureSettings);
-    d->brightnessSpinBox = new KDoubleNumInput(d->exposureSettings);
+    d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->whiteBalanceSettings);
+    d->brightnessSpinBox = new KDoubleNumInput(d->whiteBalanceSettings);
     d->brightnessSpinBox->setPrecision(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
     QWhatsThis::add(d->brightnessSpinBox, i18n("<p><b>Brighness</b><p>"
                                                "Specify the brightness level of output image."
                                                "The default value is 1.0 (works in 8-bit mode only).<p>"));
 
-    d->blackPointCheckBox = new QCheckBox(i18n("Black point"), d->exposureSettings);
+    d->blackPointCheckBox = new QCheckBox(i18n("Black point"), d->whiteBalanceSettings);
     QWhatsThis::add( d->blackPointCheckBox, i18n("<p><b>Black point</b><p>"
                                             "Use a specific black point value to decode RAW pictures. "
                                             "If you set this option to off, the Black Point value will be "
                                             "automatically computed.<p>"));
-    d->blackPointSpinBox = new KIntNumInput(d->exposureSettings);
+    d->blackPointSpinBox = new KIntNumInput(d->whiteBalanceSettings);
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
     QWhatsThis::add(d->blackPointSpinBox, i18n("<p><b>Black point value</b><p>"
                                                "Specify specific black point value of the output image.<p>"));
 
-    d->whitePointCheckBox = new QCheckBox(i18n("White point"), d->exposureSettings);
+    d->whitePointCheckBox = new QCheckBox(i18n("White point"), d->whiteBalanceSettings);
     QWhatsThis::add( d->whitePointCheckBox, i18n("<p><b>White point</b><p>"
                                             "Use a specific white point value to decode RAW pictures. "
                                             "If you set this option to off, the White Point value will be "
                                             "automatically computed.<p>"));
-    d->whitePointSpinBox = new KIntNumInput(d->exposureSettings);
+    d->whitePointSpinBox = new KIntNumInput(d->whiteBalanceSettings);
     d->whitePointSpinBox->setRange(0, 1000, 1, true);
     QWhatsThis::add(d->whitePointSpinBox, i18n("<p><b>White point value</b><p>"
                                                "Specify specific white point value of the output image.<p>"));
@@ -343,7 +343,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     exposureLayout->setSpacing(KDialog::spacingHint());
     exposureLayout->setMargin(KDialog::spacingHint());
 
-    insertTab(d->exposureSettings, i18n("Exposure"));
+    insertTab(d->whiteBalanceSettings, i18n("White Balance"));
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
