@@ -2,6 +2,7 @@
 ------------------------------------------------------------------------
 
 - API changed: add white point settings support (dcraw -S option)
+               add new method to set/check brigness settings aviability
 
 - Updated dcraw to 8.86
   New camera : Sony A300.
