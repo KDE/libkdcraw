@@ -137,7 +137,7 @@ public:
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
-                                         bool outputColorSpaceOption, bool showAdvancedOptions)
+                                         bool outputColorSpaceOption, bool /*showAdvancedOptions*/)
                    : KTabWidget(parent)
 {
     d = new DcrawSettingsWidgetPriv;
