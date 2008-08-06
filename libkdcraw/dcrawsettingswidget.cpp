@@ -91,7 +91,6 @@ public:
         exposureSettings               = 0;
         correctionsSettings            = 0;
         colormanSettings               = 0;
-        exposureLayout                 = 0;
     }
 
     QWidget         *demosaicingSettings;
@@ -124,8 +123,6 @@ public:
     QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
     QCheckBox       *enableCACorrection;
-
-    QGridLayout     *exposureLayout;
 
     KIntNumInput    *customWhiteBalanceSpinBox;
     KIntNumInput    *reconstructSpinBox;
@@ -246,8 +243,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     // ---------------------------------------------------------------
     // EXPOSURE Settings Panel
 
-    d->exposureSettings = new QWidget(this);
-    d->exposureLayout   = new QGridLayout(d->exposureSettings, 8, 2);
+    d->exposureSettings         = new QWidget(this);
+    QGridLayout* exposureLayout = new QGridLayout(d->exposureSettings, 7, 2);
 
     d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->exposureSettings);
     d->whiteBalanceComboBox = new QComboBox( false, d->exposureSettings );
@@ -327,24 +324,24 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add(d->whitePointSpinBox, i18n("<p><b>White point value</b><p>"
                                                "Specify specific white point value of the output image.<p>"));
 
-    d->exposureLayout->addMultiCellWidget(d->whiteBalanceLabel,              0, 0, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->whiteBalanceComboBox,           0, 0, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->customWhiteBalanceLabel,        1, 1, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenLabel,   2, 2, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenSpinBox, 2, 2, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->unclipColorLabel,               3, 3, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->unclipColorComboBox,            3, 3, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->reconstructLabel,               4, 4, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->reconstructSpinBox,             4, 4, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->brightnessLabel,                5, 5, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->brightnessSpinBox,              5, 5, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->blackPointCheckBox,             7, 7, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->blackPointSpinBox,              7, 7, 1, 2);
-    d->exposureLayout->addMultiCellWidget(d->whitePointCheckBox,             8, 8, 0, 0);
-    d->exposureLayout->addMultiCellWidget(d->whitePointSpinBox,              8, 8, 1, 2);
-    d->exposureLayout->setSpacing(KDialog::spacingHint());
-    d->exposureLayout->setMargin(KDialog::spacingHint());
+    exposureLayout->addMultiCellWidget(d->whiteBalanceLabel,              0, 0, 0, 0);
+    exposureLayout->addMultiCellWidget(d->whiteBalanceComboBox,           0, 0, 1, 2);
+    exposureLayout->addMultiCellWidget(d->customWhiteBalanceLabel,        1, 1, 0, 0);
+    exposureLayout->addMultiCellWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
+    exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenLabel,   2, 2, 0, 0);
+    exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenSpinBox, 2, 2, 1, 2);
+    exposureLayout->addMultiCellWidget(d->unclipColorLabel,               3, 3, 0, 0);
+    exposureLayout->addMultiCellWidget(d->unclipColorComboBox,            3, 3, 1, 2);
+    exposureLayout->addMultiCellWidget(d->reconstructLabel,               4, 4, 0, 0);
+    exposureLayout->addMultiCellWidget(d->reconstructSpinBox,             4, 4, 1, 2);
+    exposureLayout->addMultiCellWidget(d->brightnessLabel,                5, 5, 0, 0);
+    exposureLayout->addMultiCellWidget(d->brightnessSpinBox,              5, 5, 1, 2);
+    exposureLayout->addMultiCellWidget(d->blackPointCheckBox,             6, 6, 0, 0);
+    exposureLayout->addMultiCellWidget(d->blackPointSpinBox,              6, 6, 1, 2);
+    exposureLayout->addMultiCellWidget(d->whitePointCheckBox,             7, 7, 0, 0);
+    exposureLayout->addMultiCellWidget(d->whitePointSpinBox,              7, 7, 1, 2);
+    exposureLayout->setSpacing(KDialog::spacingHint());
+    exposureLayout->setMargin(KDialog::spacingHint());
 
     insertTab(d->exposureSettings, i18n("Exposure"));
 
@@ -472,12 +469,6 @@ DcrawSettingsWidget::~DcrawSettingsWidget()
 void DcrawSettingsWidget::processDcrawURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
-}
-
-void DcrawSettingsWidget::setCustomExposureSettings(QWidget *settings)
-{
-    settings->reparent(d->exposureSettings, QPoint(0, 0));
-    d->exposureLayout->addMultiCellWidget(settings, 6, 6, 0, 2);
 }
 
 void DcrawSettingsWidget::setDefaultSettings()

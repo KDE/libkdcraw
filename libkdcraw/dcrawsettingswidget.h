@@ -98,8 +98,6 @@ public:
     void   setEnabledBrightnessSettings(bool b);
     bool   brightnessSettingsIsEnabled();
 
-    void   setCustomExposureSettings(QWidget *settings);
-
 signals:
 
     void signalSixteenBitsImageToggled(bool);
