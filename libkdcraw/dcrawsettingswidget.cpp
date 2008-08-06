@@ -62,6 +62,8 @@ public:
         brightnessSpinBox              = 0;
         blackPointCheckBox             = 0;
         blackPointSpinBox              = 0;
+        whitePointCheckBox             = 0;
+        whitePointSpinBox              = 0;
         whiteBalanceComboBox           = 0;
         whiteBalanceLabel              = 0;
         customWhiteBalanceSpinBox      = 0;
@@ -110,6 +112,7 @@ public:
     QComboBox       *outputColorSpaceComboBox;
 
     QCheckBox       *blackPointCheckBox;
+    QCheckBox       *whitePointCheckBox;
     QCheckBox       *sixteenBitsImage;
     QCheckBox       *fourColorCheckBox;
     QCheckBox       *customWhiteBalanceCheckBox;
@@ -120,6 +123,7 @@ public:
     KIntNumInput    *customWhiteBalanceSpinBox;
     KIntNumInput    *reconstructSpinBox;
     KIntNumInput    *blackPointSpinBox;
+    KIntNumInput    *whitePointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
 
     KDoubleNumInput *customWhiteBalanceGreenSpinBox;
@@ -393,7 +397,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     // ---------------------------------------------------------------
 
     d->advSettings                  = new QWidget(this);
-    QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings, 7, 2, KDialog::spacingHint());
+    QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings, 3, 2, KDialog::spacingHint());
 
     d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->advSettings);
     QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Do not stretch or rotate pixels</b><p>"
@@ -402,7 +406,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                    "stretch the image to its correct aspect ratio. In any "
                                                    "case, this option guarantees that each output pixel "
                                                    "corresponds to one RAW pixel.<p>"));
-    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);
 
     // ---------------------------------------------------------------
 
@@ -415,12 +418,26 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->blackPointSpinBox->setRange(0, 1000, 1, true);
     QWhatsThis::add(d->blackPointSpinBox, i18n("<p><b>Black point value</b><p>"
                                                "Specify specific black point value of the output image.<p>"));
-    settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox, 1, 1, 0, 0);
-    settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox,  1, 1, 1, 2);
+
+    d->whitePointCheckBox = new QCheckBox(i18n("White point"), d->advSettings);
+    QWhatsThis::add( d->whitePointCheckBox, i18n("<p><b>White point</b><p>"
+                                            "Use a specific white point value to decode RAW pictures. "
+                                            "If you set this option to off, the White Point value will be "
+                                            "automatically computed.<p>"));
+    d->whitePointSpinBox = new KIntNumInput(d->advSettings);
+    d->whitePointSpinBox->setRange(0, 1000, 1, true);
+    QWhatsThis::add(d->whitePointSpinBox, i18n("<p><b>White point value</b><p>"
+                                               "Specify specific white point value of the output image.<p>"));
+
+    settingsBoxLayout2->addMultiCellWidget(d->dontStretchPixelsCheckBox, 0, 0, 0, 2);
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointCheckBox,        1, 1, 0, 0);
+    settingsBoxLayout2->addMultiCellWidget(d->blackPointSpinBox,         1, 1, 1, 2);
+    settingsBoxLayout2->addMultiCellWidget(d->whitePointCheckBox,        2, 2, 0, 0);
+    settingsBoxLayout2->addMultiCellWidget(d->whitePointSpinBox,         2, 2, 1, 2);
+    settingsBoxLayout2->setRowStretch(3, 10);
 
     // ---------------------------------------------------------------
 
-    settingsBoxLayout2->setRowStretch(7, 10);
     insertTab(d->advSettings, i18n("Advanced"));
 
     if (!showAdvancedOptions)
@@ -445,6 +462,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
+
+    connect(d->whitePointCheckBox, SIGNAL(toggled(bool)),
+            d->whitePointSpinBox, SLOT(setEnabled(bool)));
 
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SLOT(slotsixteenBitsImageToggled(bool)));
@@ -478,6 +498,8 @@ void DcrawSettingsWidget::setDefaultSettings()
     setBrightness(1.0);
     setUseBlackPoint(false);
     setBlackPoint(0);
+    setUseWhitePoint(false);
+    setWhitePoint(0);
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR);
     setOutputColorSpace(RawDecodingSettings::SRGB);
@@ -716,6 +738,31 @@ int DcrawSettingsWidget::blackPoint()
 void DcrawSettingsWidget::setBlackPoint(int b)
 {
     d->blackPointSpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useWhitePoint()
+{
+    return d->whitePointCheckBox->isChecked();
+}
+
+void DcrawSettingsWidget::setUseWhitePoint(bool b)
+{
+    d->whitePointCheckBox->setChecked(b);
+    d->whitePointSpinBox->setEnabled(b);
+}
+
+// ---------------------------------------------------------------
+
+int DcrawSettingsWidget::whitePoint()
+{
+    return d->whitePointSpinBox->value();
+}
+
+void DcrawSettingsWidget::setWhitePoint(int b)
+{
+    d->whitePointSpinBox->setValue(b);
 }
 
 // ---------------------------------------------------------------

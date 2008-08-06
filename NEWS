@@ -1,6 +1,8 @@
 0.1.5
 ------------------------------------------------------------------------
 
+- API changed: add white point settings support (dcraw -S option)
+
 - Updated dcraw to 8.86
   New camera : Sony A300.
   Fixed camera WB on the A200.
