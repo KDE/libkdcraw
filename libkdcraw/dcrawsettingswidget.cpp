@@ -230,7 +230,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     settingsBoxLayout->addWidget(d->customWhiteBalanceGreenLabel,   line, 0, 1, 1);
     settingsBoxLayout->addWidget(d->customWhiteBalanceGreenSpinBox, line, 1, 1, 2);
     line++;
- 
+
     // ---------------------------------------------------------------
 
     d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->stdSettings);
@@ -517,8 +517,7 @@ void DcrawSettingsWidget::setDefaultSettings()
 
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
 {
-    d->brightnessLabel->setDisabled(b);
-    d->brightnessSpinBox->setDisabled(b); 
+    setEnabledBrightnessSettings(b);
     emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
 }
 
@@ -566,6 +565,19 @@ void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
     d->caBlueMultSpinBox->setEnabled(b);
     d->caRedMultLabel->setEnabled(b);
     d->caBlueMultLabel->setEnabled(b);
+}
+
+// ---------------------------------------------------------------
+
+void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
+{
+    d->brightnessLabel->setDisabled(b);
+    d->brightnessSpinBox->setDisabled(b);
+}
+
+bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
+{
+    return d->brightnessSpinBox->isEnabled();
 }
 
 // ---------------------------------------------------------------
