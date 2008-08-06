@@ -191,6 +191,18 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QToolTip::add(dcrawVersion, i18n("Visit dcraw project website"));
     demosaicingLayout->addMultiCellWidget(dcrawVersion, 0, 0, 2, 2);
 
+
+    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->demosaicingSettings);
+    QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Do not stretch or rotate pixels</b><p>"
+                                                   "For Fuji Super CCD cameras, show the image tilted 45 "
+                                                   "degrees. For cameras with non-square pixels, do not "
+                                                   "stretch the image to its correct aspect ratio. In any "
+                                                   "case, this option guarantees that each output pixel "
+                                                   "corresponds to one RAW pixel.<p>"));
+
+    demosaicingLayout->addMultiCellWidget(d->dontStretchPixelsCheckBox, line, line, 0, 2);
+    line++;
+
     d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
     d->RAWQualityComboBox = new QComboBox( false, d->demosaicingSettings );
     d->RAWQualityComboBox->insertItem(i18n("Bilinear"), 0);
@@ -222,17 +234,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     demosaicingLayout->addMultiCellWidget(d->RAWQualityLabel,    line, line, 0, 0);
     demosaicingLayout->addMultiCellWidget(d->RAWQualityComboBox, line, line, 1, 2);
-    line++;
-
-    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->demosaicingSettings);
-    QWhatsThis::add( d->dontStretchPixelsCheckBox, i18n("<p><b>Do not stretch or rotate pixels</b><p>"
-                                                   "For Fuji Super CCD cameras, show the image tilted 45 "
-                                                   "degrees. For cameras with non-square pixels, do not "
-                                                   "stretch the image to its correct aspect ratio. In any "
-                                                   "case, this option guarantees that each output pixel "
-                                                   "corresponds to one RAW pixel.<p>"));
-
-    demosaicingLayout->addMultiCellWidget(d->dontStretchPixelsCheckBox, line, line, 0, 2);
     demosaicingLayout->setRowStretch(5, 10);
     demosaicingLayout->setSpacing(KDialog::spacingHint());
     demosaicingLayout->setMargin(KDialog::spacingHint());
