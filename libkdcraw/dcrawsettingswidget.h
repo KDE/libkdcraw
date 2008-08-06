@@ -59,9 +59,11 @@ public:
     bool   useNoiseReduction();
     bool   useCACorrection();
     bool   useBlackPoint();
+    bool   useWhitePoint();
     int    unclipColor();
     double brightness();
     int    blackPoint();
+    int    whitePoint();
     int    NRThreshold();
     double caRedMultiplier();
     double caBlueMultiplier();
@@ -80,9 +82,11 @@ public:
     void   setNoiseReduction(bool b);
     void   setUseCACorrection(bool b);
     void   setUseBlackPoint(bool b);
+    void   setUseWhitePoint(bool b);
     void   setUnclipColor(int v);
     void   setBrightness(double b);
     void   setBlackPoint(int b);
+    void   setWhitePoint(int b);
     void   setNRThreshold(int b);
     void   setcaRedMultiplier(double b);
     void   setcaBlueMultiplier(double b);
