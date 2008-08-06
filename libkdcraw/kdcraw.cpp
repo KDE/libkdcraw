@@ -592,7 +592,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // So we make up some progress (0% - 40%), using the file size as an indicator how long it might take.
     QTime dcrawStartTime = QTime::currentTime();
     int fileSize         = QFileInfo(filePath).size();
-    
+
     // This is the magic number that describes how fast the function grows
     // It _should_ be dependent on how fast the computer is, but we do not have this piece of information
     // So this is a number that works well on my computer.
@@ -693,6 +693,7 @@ bool KDcraw::startProcess()
     // -h : Output a half-size color image. Twice as fast as -q 0.
     // -b : set Brightness value.
     // -k : set Black Point value.
+    // -S : set White Point value (saturation).
     // -r : set Raw Color Balance Multipliers.
     // -C : set Correct chromatic aberration correction.
 
@@ -722,6 +723,12 @@ bool KDcraw::startProcess()
     {
         args << "-k";
         args << QString::number(m_rawDecodingSettings.blackPoint);
+    }
+
+    if (m_rawDecodingSettings.enableWhitePoint)
+    {
+        args << "-S";
+        args << QString::number(m_rawDecodingSettings.whitePoint);
     }
 
     switch (m_rawDecodingSettings.whiteBalance)

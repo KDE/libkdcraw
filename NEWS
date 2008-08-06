@@ -1,3 +1,7 @@
+0.3.0 - Released with KDE 4.2.0
+------------------------------------------------------------------------
+Sync with KDE3 branch 0.1.5 API changes.
+
 0.2.0 - Released with KDE 4.1.0
 ------------------------------------------------------------------------
 Port to CMake/KDE4/QT4
@@ -5,6 +9,8 @@ Moved from extragear/libs to kdegraphics/libs
 
 0.1.5
 ------------------------------------------------------------------------
+
+- API changed: add white point settings support (dcraw -S option)
 
 - Updated dcraw to 8.86
   New camera : Sony A300.

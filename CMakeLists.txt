@@ -4,18 +4,19 @@ PROJECT(libkdcraw)
 # Informations to update before to release this library.
 
 # Library version history:
-# API      ABI      
-# 0.1.0 => 0.1.0    
-# 0.1.1 => 1.0.0
-# 0.1.2 => 2.0.0
-# 0.1.3.=> 2.1.0
-# 0.1.4 => 3.0.0
-# ... here we can have new releases from KDE3 branch
+# API      ABI
+# 0.1.0 => 0.1.0  (KDE3)
+# 0.1.1 => 1.0.0  (KDE3)
+# 0.1.2 => 2.0.0  (KDE3)
+# 0.1.3 => 2.1.0  (KDE3)
+# 0.1.4 => 3.0.0  (KDE3)
+# 0.1.5 => 4.0.0  (KDE3)
 # 0.2.0 => 5.0.0  (released with KDE 4.1.0)
+# 0.3.0 => 6.0.0  (released with KDE 4.2.0)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "0")
-SET(DCRAW_LIB_MINOR_VERSION "2")
+SET(DCRAW_LIB_MINOR_VERSION "3")
 SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -29,7 +30,7 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "5")
+SET(DCRAW_LIB_SO_CUR_VERSION "6")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
