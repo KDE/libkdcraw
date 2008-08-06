@@ -95,6 +95,9 @@ public:
 
     void   setDefaultSettings();
 
+    void   setEnabledBrightnessSettings(bool b);
+    bool   brightnessSettingsIsEnabled();
+
 signals:
 
     void signalSixteenBitsImageToggled(bool);

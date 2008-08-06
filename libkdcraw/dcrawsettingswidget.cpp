@@ -508,7 +508,7 @@ void DcrawSettingsWidget::setDefaultSettings()
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
 {
     d->brightnessLabel->setDisabled(b);
-    d->brightnessSpinBox->setDisabled(b); 
+    d->brightnessSpinBox->setDisabled(b);
     emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
 }
 
@@ -556,6 +556,19 @@ void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
     d->caBlueMultSpinBox->setEnabled(b);
     d->caRedMultLabel->setEnabled(b);
     d->caBlueMultLabel->setEnabled(b);
+}
+
+// ---------------------------------------------------------------
+
+void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
+{
+    d->brightnessLabel->setDisabled(b);
+    d->brightnessSpinBox->setDisabled(b);
+}
+
+bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
+{
+    return d->brightnessSpinBox->isEnabled();
 }
 
 // ---------------------------------------------------------------
