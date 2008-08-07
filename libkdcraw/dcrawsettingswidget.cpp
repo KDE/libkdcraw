@@ -138,7 +138,7 @@ public:
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
                                          bool outputColorSpaceOption, bool /*showAdvancedOptions*/)
-                   : KTabWidget(parent)
+                   : QToolBox(parent)
 {
     d = new DcrawSettingsWidgetPriv;
     setMargin(0);
@@ -238,7 +238,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     demosaicingLayout->setSpacing(KDialog::spacingHint());
     demosaicingLayout->setMargin(KDialog::spacingHint());
 
-    insertTab(d->demosaicingSettings, i18n("Demosaicing"));
+    addItem(d->demosaicingSettings, i18n("Demosaicing"));
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -343,7 +343,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     exposureLayout->setSpacing(KDialog::spacingHint());
     exposureLayout->setMargin(KDialog::spacingHint());
 
-    insertTab(d->whiteBalanceSettings, i18n("White Balance"));
+    addItem(d->whiteBalanceSettings, i18n("White Balance"));
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -392,7 +392,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
-    insertTab(d->correctionsSettings, i18n("Corrections"));
+    addItem(d->correctionsSettings, i18n("Corrections"));
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -429,10 +429,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
-    insertTab(d->colormanSettings, i18n("Color Management"));
+    addItem(d->colormanSettings, i18n("Color Management"));
 
     if (!outputColorSpaceOption)
-        removePage(d->colormanSettings);
+    {
+        removeItem(d->colormanSettings);
+        d->colormanSettings->hide();
+        d->outputColorSpaceLabel->hide();
+        d->outputColorSpaceComboBox->hide();
+    }
 
     // ---------------------------------------------------------------
 
