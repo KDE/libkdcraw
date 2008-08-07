@@ -100,6 +100,7 @@ public:
         whiteBalance               = CAMERA;
         customWhiteBalance         = 6500;
         customWhiteBalanceGreen    = 1.0;
+        medianFilterPasses         = 0;
 
         halfSizeColorImage         = false;
 
@@ -140,6 +141,7 @@ public:
             && enableCACorrection == o.enableCACorrection
             && caMultiplier[0] == o.caMultiplier[0]
             && caMultiplier[1] == o.caMultiplier[1]
+            && medianFilterPasses == o.medianFilterPasses
           ;
     };
 
@@ -160,6 +162,7 @@ public:
         customWhiteBalance         = 6500;
         customWhiteBalanceGreen    = 1.0;
         halfSizeColorImage         = true;
+        medianFilterPasses         = 0;
 
         enableBlackPoint           = false;
         blackPoint                 = 0;
@@ -220,6 +223,11 @@ public:
         for details.
     */
     DecodingQuality RAWQuality;
+
+    /** After interpolation, clean up color artifacts by repeatedly applying 
+        a 3x3 median filter to the R-G and B-G channels.
+    */
+    int medianFilterPasses;
 
     /** Use wavelets to erase noise while preserving real detail.
     */

@@ -721,6 +721,7 @@ void KDcraw::startProcess()
     // -S : set White Point value (saturation).
     // -r : set Raw Color Balance Multipliers.
     // -C : set Correct chromatic aberration correction.
+    // -m : After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
@@ -754,6 +755,12 @@ void KDcraw::startProcess()
     {
         *d->process << "-S";
         *d->process << QString::number(m_rawDecodingSettings.whitePoint);
+    }
+
+    if (m_rawDecodingSettings.medianFilterPasses > 0)
+    {
+        args << "-m";
+        args << QString::number(m_rawDecodingSettings.medianFilterPasses);
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
