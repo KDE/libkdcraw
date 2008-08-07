@@ -197,7 +197,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                     "stretch the image to its correct aspect ratio. In any "
                                                     "case, this option guarantees that each output pixel "
                                                     "corresponds to one RAW pixel.<p>"));
-    demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 1, 0- line+1, 2);
+    demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 0, 1, 2);
     line++;
 
     d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
@@ -228,7 +228,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1); 
+    demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
 
