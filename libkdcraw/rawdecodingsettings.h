@@ -100,6 +100,7 @@ public:
         whiteBalance               = CAMERA;
         customWhiteBalance         = 6500;
         customWhiteBalanceGreen    = 1.0;
+        medianFilterPasses         = 0;
 
         halfSizeColorImage         = false;
 
@@ -140,6 +141,7 @@ public:
             && enableCACorrection == o.enableCACorrection
             && caMultiplier[0] == o.caMultiplier[0]
             && caMultiplier[1] == o.caMultiplier[1]
+            && medianFilterPasses == o.medianFilterPasses
           ;
     };
 
@@ -160,6 +162,7 @@ public:
         customWhiteBalance         = 6500;
         customWhiteBalanceGreen    = 1.0;
         halfSizeColorImage         = true;
+        medianFilterPasses         = 0;
 
         enableBlackPoint           = false;
         blackPoint                 = 0;
@@ -181,8 +184,8 @@ public:
     */
     bool sixteenBitsImage;
 
-    /** Half-size color image decoding (twice as fast as "enableRAWQuality"). 
-        Use this option to reduce time loading to render histogram for example, 
+    /** Half-size color image decoding (twice as fast as "enableRAWQuality").
+        Use this option to reduce time loading to render histogram for example,
         no to render an image to screen.
     */
     bool halfSizeColorImage;
@@ -200,8 +203,8 @@ public:
     */
     bool RGBInterpolate4Colors;
 
-    /** For cameras with non-square pixels, do not stretch the image to its 
-        correct aspect ratio. In any case, this option guarantees that each 
+    /** For cameras with non-square pixels, do not stretch the image to its
+        correct aspect ratio. In any case, this option guarantees that each
         output pixel corresponds to one RAW pixel. 
     */
     bool DontStretchPixels;
@@ -216,12 +219,17 @@ public:
     */
     int unclipColors;
 
-    /** RAW quality decoding factor value. See DecodingQuality values 
+    /** RAW quality decoding factor value. See DecodingQuality values
         for details.
     */
     DecodingQuality RAWQuality;
 
-    /** Use wavelets to erase noise while preserving real detail. 
+    /** After interpolation, clean up color artifacts by repeatedly applying 
+        a 3x3 median filter to the R-G and B-G channels.
+    */
+    int medianFilterPasses;
+
+    /** Use wavelets to erase noise while preserving real detail.
     */
     bool enableNoiseReduction;
 
@@ -240,7 +248,7 @@ public:
     */
     double caMultiplier[2];
 
-    /** Brightness of output image. 
+    /** Brightness of output image.
     */
     float brightness;
 
@@ -248,7 +256,7 @@ public:
     */
     bool enableBlackPoint;
 
-    /** Black Point value of output image. 
+    /** Black Point value of output image.
     */
     int blackPoint;
 
@@ -260,7 +268,7 @@ public:
     */
     int whitePoint;
 
-    /** The output color space used to decoded RAW data. See OutputColorSpace 
+    /** The output color space used to decoded RAW data. See OutputColorSpace
         values for details. 
     */
     OutputColorSpace outputColorSpace;
