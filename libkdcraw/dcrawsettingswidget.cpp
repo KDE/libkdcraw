@@ -237,7 +237,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     line++;
 
     d->medianFilterPassesSpinBox = new KIntNumInput(d->demosaicingSettings);
-    d->medianFilterPassesSpinBox->setRange(2000, 12000, 10);
+    d->medianFilterPassesSpinBox->setRange(0, 10, 1);
     d->medianFilterPassesSpinBox->setSliderEnabled(true);
     d->medianFilterPassesLabel   = new QLabel(i18n("Median Filter:"), d->whiteBalanceSettings);
     d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Median Filter</b><p>"
