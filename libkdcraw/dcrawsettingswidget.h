@@ -98,7 +98,7 @@ public:
     void   setEnabledBrightnessSettings(bool b);
     bool   brightnessSettingsIsEnabled();
 
-    void updateMinimumWidth();
+    void   updateMinimumWidth();
 
 signals:
 

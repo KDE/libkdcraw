@@ -244,7 +244,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     // WHITE BALANCE Settings Panel
 
     d->whiteBalanceSettings         = new QWidget(this);
-    QGridLayout* exposureLayout = new QGridLayout(d->whiteBalanceSettings, 7, 2);
+    QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings, 7, 2);
 
     d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->whiteBalanceSettings);
     d->whiteBalanceComboBox = new QComboBox( false, d->whiteBalanceSettings );
@@ -324,24 +324,24 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     QWhatsThis::add(d->whitePointSpinBox, i18n("<p><b>White point value</b><p>"
                                                "Specify specific white point value of the output image.<p>"));
 
-    exposureLayout->addMultiCellWidget(d->whiteBalanceLabel,              0, 0, 0, 0);
-    exposureLayout->addMultiCellWidget(d->whiteBalanceComboBox,           0, 0, 1, 2);
-    exposureLayout->addMultiCellWidget(d->customWhiteBalanceLabel,        1, 1, 0, 0);
-    exposureLayout->addMultiCellWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
-    exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenLabel,   2, 2, 0, 0);
-    exposureLayout->addMultiCellWidget(d->customWhiteBalanceGreenSpinBox, 2, 2, 1, 2);
-    exposureLayout->addMultiCellWidget(d->unclipColorLabel,               3, 3, 0, 0);
-    exposureLayout->addMultiCellWidget(d->unclipColorComboBox,            3, 3, 1, 2);
-    exposureLayout->addMultiCellWidget(d->reconstructLabel,               4, 4, 0, 0);
-    exposureLayout->addMultiCellWidget(d->reconstructSpinBox,             4, 4, 1, 2);
-    exposureLayout->addMultiCellWidget(d->brightnessLabel,                5, 5, 0, 0);
-    exposureLayout->addMultiCellWidget(d->brightnessSpinBox,              5, 5, 1, 2);
-    exposureLayout->addMultiCellWidget(d->blackPointCheckBox,             6, 6, 0, 0);
-    exposureLayout->addMultiCellWidget(d->blackPointSpinBox,              6, 6, 1, 2);
-    exposureLayout->addMultiCellWidget(d->whitePointCheckBox,             7, 7, 0, 0);
-    exposureLayout->addMultiCellWidget(d->whitePointSpinBox,              7, 7, 1, 2);
-    exposureLayout->setSpacing(KDialog::spacingHint());
-    exposureLayout->setMargin(KDialog::spacingHint());
+    whiteBalanceLayout->addMultiCellWidget(d->whiteBalanceLabel,              0, 0, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->whiteBalanceComboBox,           0, 0, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->customWhiteBalanceLabel,        1, 1, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->customWhiteBalanceGreenLabel,   2, 2, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->customWhiteBalanceGreenSpinBox, 2, 2, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->unclipColorLabel,               3, 3, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->unclipColorComboBox,            3, 3, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->reconstructLabel,               4, 4, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->reconstructSpinBox,             4, 4, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->brightnessLabel,                5, 5, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->brightnessSpinBox,              5, 5, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->blackPointCheckBox,             6, 6, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->blackPointSpinBox,              6, 6, 1, 2);
+    whiteBalanceLayout->addMultiCellWidget(d->whitePointCheckBox,             7, 7, 0, 0);
+    whiteBalanceLayout->addMultiCellWidget(d->whitePointSpinBox,              7, 7, 1, 2);
+    whiteBalanceLayout->setSpacing(KDialog::spacingHint());
+    whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
     addItem(d->whiteBalanceSettings, i18n("White Balance"));
 
@@ -500,8 +500,8 @@ void DcrawSettingsWidget::setDefaultSettings()
     setcaBlueMultiplier(1.0);
     setBrightness(1.0);
     setUseBlackPoint(false);
-    setBlackPoint(0);
     setUseWhitePoint(false);
+    setBlackPoint(0);
     setWhitePoint(0);
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR);
