@@ -759,8 +759,8 @@ void KDcraw::startProcess()
 
     if (m_rawDecodingSettings.medianFilterPasses > 0)
     {
-        args << "-m";
-        args << QString::number(m_rawDecodingSettings.medianFilterPasses);
+        *d->process << "-m";
+        *d->process << QString::number(m_rawDecodingSettings.medianFilterPasses);
     }
 
     switch (m_rawDecodingSettings.whiteBalance)

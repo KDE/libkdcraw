@@ -91,6 +91,8 @@ public:
         whiteBalanceSettings           = 0;
         correctionsSettings            = 0;
         colormanSettings               = 0;
+        medianFilterPassesSpinBox      = 0;
+        medianFilterPassesLabel        = 0;
     }
 
     QWidget         *demosaicingSettings;
@@ -109,6 +111,7 @@ public:
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
+    QLabel          *medianFilterPassesLabel;
 
     QComboBox       *whiteBalanceComboBox;
     QComboBox       *RAWQualityComboBox;
@@ -129,6 +132,7 @@ public:
     KIntNumInput    *blackPointSpinBox;
     KIntNumInput    *whitePointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
+    KIntNumInput    *medianFilterPassesSpinBox;
 
     KDoubleNumInput *customWhiteBalanceGreenSpinBox;
     KDoubleNumInput *caRedMultSpinBox;
@@ -234,6 +238,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     demosaicingLayout->addMultiCellWidget(d->RAWQualityLabel,    line, line, 0, 0);
     demosaicingLayout->addMultiCellWidget(d->RAWQualityComboBox, line, line, 1, 2);
+    line++;
+
+    d->medianFilterPassesSpinBox = new KIntNumInput(d->demosaicingSettings);
+    d->medianFilterPassesSpinBox->setRange(0, 10, 1, true);
+    d->medianFilterPassesLabel   = new QLabel(i18n("Median Filter:"), d->demosaicingSettings);
+    QWhatsThis::add( d->medianFilterPassesSpinBox, i18n("<p><b>Temperature</b><p>"
+                     "Set here the color temperature."));
+    demosaicingLayout->addMultiCellWidget(d->medianFilterPassesLabel,   line, line, 0, 0);
+    demosaicingLayout->addMultiCellWidget(d->medianFilterPassesSpinBox, line, line, 1, 2);
     demosaicingLayout->setRowStretch(5, 10);
     demosaicingLayout->setSpacing(KDialog::spacingHint());
     demosaicingLayout->setMargin(KDialog::spacingHint());
@@ -506,6 +519,7 @@ void DcrawSettingsWidget::setDefaultSettings()
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR);
     setOutputColorSpace(RawDecodingSettings::SRGB);
+    setMedianFilterPasses(0);
 }
 
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
@@ -626,6 +640,17 @@ void DcrawSettingsWidget::setWhiteBalance(RawDecodingSettings::WhiteBalance v)
     slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentItem());
 }
 
+// ---------------------------------------------------------------
+
+int DcrawSettingsWidget::medianFilterPasses()
+{
+    return d->medianFilterPassesSpinBox->value();
+}
+
+void DcrawSettingsWidget::setMedianFilterPasses(int p)
+{
+    d->medianFilterPassesSpinBox->setValue(p);
+}
 
 // ---------------------------------------------------------------
 
