@@ -87,12 +87,16 @@ public:
         reconstructSpinBox             = 0;
         outputColorSpaceLabel          = 0;
         outputColorSpaceComboBox       = 0;
-        stdSettings                    = 0;
-        advSettings                    = 0;
+        demosaicingSettings            = 0;
+        whiteBalanceSettings           = 0;
+        correctionsSettings            = 0;
+        colormanSettings               = 0;
     }
 
-    QWidget         *stdSettings;
-    QWidget         *advSettings;
+    QWidget         *demosaicingSettings;
+    QWidget         *whiteBalanceSettings;
+    QWidget         *correctionsSettings;
+    QWidget         *colormanSettings;
 
     QLabel          *whiteBalanceLabel;
     QLabel          *customWhiteBalanceLabel;
@@ -133,21 +137,20 @@ public:
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
-                                         bool outputColorSpaceOption, bool showAdvancedOptions)
-                   : KTabWidget(parent)
+                                         bool outputColorSpaceOption, bool /*showAdvancedOptions*/)
+                   : QToolBox(parent)
 {
     d = new DcrawSettingsWidgetPriv;
 
-    d->stdSettings                 = new QWidget();
-    QGridLayout* settingsBoxLayout = new QGridLayout(d->stdSettings);
-    settingsBoxLayout->setMargin(KDialog::spacingHint());
-    settingsBoxLayout->setSpacing(KDialog::spacingHint());
-
     // ---------------------------------------------------------------
+    // DEMOSAICING Settings panel
+
+    d->demosaicingSettings         = new QWidget(this);
+    QGridLayout* demosaicingLayout = new QGridLayout(d->demosaicingSettings);
 
     int line = 0;
 
-    d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), d->stdSettings);
+    d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), d->demosaicingSettings);
     d->sixteenBitsImage->setWhatsThis(i18n("<p>If enabled, all RAW files will be decoded in 16-bit "
                                            "color depth using a linear gamma curve. To prevent dark "
                                            "picture rendering in the editor, it is recommended to use "
@@ -155,7 +158,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                            "If disabled, all RAW files will be decoded in 8-bit "
                                            "color depth with a BT.709 gamma curve and a 99th-percentile "
                                            "white point. This mode is faster than 16-bit decoding."));
-    settingsBoxLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 1);
+    demosaicingLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 1);
 
     if (sixteenBitsOption)
     {
@@ -167,9 +170,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
         d->sixteenBitsImage->hide();
     }
 
-    // ---------------------------------------------------------------
-
-    d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), d->stdSettings);
+    d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), d->demosaicingSettings);
     d->fourColorCheckBox->setWhatsThis(i18n("<p><b>Interpolate RGB as four colors</b><p>"
                                             "The default is to assume that all green "
                                             "pixels are the same. If even-row green "
@@ -180,106 +181,27 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                             "To resume, this option blurs the image "
                                             "a little, but it eliminates false 2x2 mesh patterns "
                                             "with VNG quality method or mazes with AHD quality method."));
-    settingsBoxLayout->addWidget(d->fourColorCheckBox, line, 0, 1, 2);
+    demosaicingLayout->addWidget(d->fourColorCheckBox, line, 0, 1, 2);
     line++;
-
-    // ---------------------------------------------------------------
 
     KUrlLabel *dcrawVersion = new KUrlLabel("http://cybercom.net/~dcoffin/dcraw", QString("dcraw %1")
-                                  .arg(DcrawBinary::internalVersion()), d->stdSettings);
+                                  .arg(DcrawBinary::internalVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     dcrawVersion->setToolTip(i18n("Visit dcraw project website"));
-    settingsBoxLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
+    demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
-    // ---------------------------------------------------------------
-
-    d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->stdSettings);
-    d->whiteBalanceComboBox = new QComboBox(d->stdSettings);
-    d->whiteBalanceComboBox->insertItem(0, i18n("Default D65 White Balance"));
-    d->whiteBalanceComboBox->insertItem(1, i18n("Camera White Balance"));
-    d->whiteBalanceComboBox->insertItem(2, i18n("Automatic White Balance"));
-    d->whiteBalanceComboBox->insertItem(3, i18n("Manual White balance"));
-    d->whiteBalanceComboBox->setWhatsThis( i18n("<p><b>White Balance</b><p>"
-                                             "Configure the raw white balance :<p>"
-                                             "<b>Default D65 White Balance</b>: Use a standard daylight D65 white balance (dcraw defaults)<p>"
-                                             "<b>Camera White Balance</b>: Use the white balance specified by the camera. "
-                                             "If not available, reverts to default neutral white balance<p>"
-                                             "<b>Automatic White Balance</b>: Calculates an automatic white balance "
-                                             "averaging the entire image<p>"
-                                             "<b>Manual White balance</b>: Set a custom temperature and green level values"));
-    settingsBoxLayout->addWidget(d->whiteBalanceLabel,    line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->whiteBalanceComboBox, line, 1, 1, 2);
+    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->demosaicingSettings);
+    d->dontStretchPixelsCheckBox->setWhatsThis(i18n("<p><b>Do not stretch or rotate pixels</b><p>"
+                                                    "For Fuji Super CCD cameras, show the image tilted 45 "
+                                                    "degrees. For cameras with non-square pixels, do not "
+                                                    "stretch the image to its correct aspect ratio. In any "
+                                                    "case, this option guarantees that each output pixel "
+                                                    "corresponds to one RAW pixel.<p>"));
+    demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 1, 0- line+1, 2);
     line++;
 
-    d->customWhiteBalanceSpinBox = new KIntNumInput(d->stdSettings);
-    d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
-    d->customWhiteBalanceSpinBox->setSliderEnabled(true);
-    d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->stdSettings);
-    d->customWhiteBalanceSpinBox->setWhatsThis( i18n("<p><b>Temperature</b><p>"
-                                                     "Set here the color temperature."));
-    settingsBoxLayout->addWidget(d->customWhiteBalanceLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->customWhiteBalanceSpinBox, line, 1, 1, 2);
-    line++;
-
-    d->customWhiteBalanceGreenSpinBox = new KDoubleNumInput(d->stdSettings);
-    d->customWhiteBalanceGreenSpinBox->setDecimals(2);
-    d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01, true);
-    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->stdSettings);
-    d->customWhiteBalanceGreenSpinBox->setWhatsThis( i18n("<p>Set here the green component to set magenta color "
-                                                          "cast removal level."));
-    settingsBoxLayout->addWidget(d->customWhiteBalanceGreenLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->customWhiteBalanceGreenSpinBox, line, 1, 1, 2);
-    line++;
-
-    // ---------------------------------------------------------------
-
-    d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->stdSettings);
-    d->unclipColorComboBox = new QComboBox(d->stdSettings);
-    d->unclipColorComboBox->insertItem(0, i18n("Solid white"));
-    d->unclipColorComboBox->insertItem(1, i18n("Unclip"));
-    d->unclipColorComboBox->insertItem(2, i18n("Blend")); 
-    d->unclipColorComboBox->insertItem(3, i18n("Rebuild"));
-    d->unclipColorComboBox->setWhatsThis(i18n("<p><b>Highlights</b><p>"
-                                              "Select here the highlight clipping method:<p>"
-                                              "<b>Solid white</b>: clip all highlights to solid white<p>"
-                                              "<b>Unclip</b>: leave highlights unclipped in various "
-                                              "shades of pink<p>"
-                                              "<b>Blend</b>:Blend clipped and unclipped values together "
-                                              "for a gradual fade to white<p>" 
-                                              "<b>Rebuild</b>: reconstruct highlights using a " 
-                                              "level value")); 
-    settingsBoxLayout->addWidget(d->unclipColorLabel,    line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->unclipColorComboBox, line, 1, 1, 2);
-    line++;
-
-    d->reconstructLabel   = new QLabel(i18n("Level:"), d->stdSettings);
-    d->reconstructSpinBox = new KIntNumInput(d->stdSettings);
-    d->reconstructSpinBox->setRange(0, 6, 1);
-    d->reconstructSpinBox->setSliderEnabled(true);
-    d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b><p>"
-                                             "Specify the reconstruct highlight level. "
-                                             "Low values favor whites and high values favor colors."));
-    settingsBoxLayout->addWidget(d->reconstructLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->reconstructSpinBox, line, 1, 1, 2);
-    line++;
-
-    // ---------------------------------------------------------------
-
-    d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->stdSettings);
-    d->brightnessSpinBox = new KDoubleNumInput(d->stdSettings);
-    d->brightnessSpinBox->setDecimals(2);
-    d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
-    d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
-                                            "Specify the brightness level of output image."
-                                            "The default value is 1.0 (works in 8-bit mode only).<p>"));
-    settingsBoxLayout->addWidget(d->brightnessLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->brightnessSpinBox, line, 1, 1, 2);
-    line++;
-
-    // ---------------------------------------------------------------
-
-    d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->stdSettings);
-    d->RAWQualityComboBox = new QComboBox(d->stdSettings);
+    d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
+    d->RAWQualityComboBox = new QComboBox(d->demosaicingSettings);
     d->RAWQualityComboBox->insertItem(0, i18n("Bilinear"));
     d->RAWQualityComboBox->insertItem(1, i18n("VNG"));
     d->RAWQualityComboBox->insertItem(2, i18n("PPG"));
@@ -306,62 +228,180 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
                 "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
-    settingsBoxLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1); 
-    settingsBoxLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
+    demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1); 
+    demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
 
-    // ---------------------------------------------------------------
+    addItem(d->demosaicingSettings, i18n("Demosaicing"));
 
-    d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction"), d->stdSettings);
+    // ---------------------------------------------------------------
+    // WHITE BALANCE Settings Panel
+
+    d->whiteBalanceSettings         = new QWidget(this);
+    QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
+
+    d->whiteBalanceLabel    = new QLabel(i18n("White Balance:"), d->whiteBalanceSettings);
+    d->whiteBalanceComboBox = new QComboBox(d->whiteBalanceSettings);
+    d->whiteBalanceComboBox->insertItem(0, i18n("Default D65 White Balance"));
+    d->whiteBalanceComboBox->insertItem(1, i18n("Camera White Balance"));
+    d->whiteBalanceComboBox->insertItem(2, i18n("Automatic White Balance"));
+    d->whiteBalanceComboBox->insertItem(3, i18n("Manual White balance"));
+    d->whiteBalanceComboBox->setWhatsThis(i18n("<p><b>White Balance</b><p>"
+                                          "Configure the raw white balance :<p>"
+                                          "<b>Default D65 White Balance</b>: Use a standard daylight D65 white balance (dcraw defaults)<p>"
+                                          "<b>Camera White Balance</b>: Use the white balance specified by the camera. "
+                                          "If not available, reverts to default neutral white balance<p>"
+                                          "<b>Automatic White Balance</b>: Calculates an automatic white balance "
+                                          "averaging the entire image<p>"
+                                          "<b>Manual White balance</b>: Set a custom temperature and green level values"));
+
+    d->customWhiteBalanceSpinBox = new KIntNumInput(d->whiteBalanceSettings);
+    d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
+    d->customWhiteBalanceSpinBox->setSliderEnabled(true);
+    d->customWhiteBalanceLabel   = new QLabel(i18n("Temperature (K):"), d->whiteBalanceSettings);
+    d->customWhiteBalanceSpinBox->setWhatsThis( i18n("<p><b>Temperature</b><p>"
+                                                     "Set here the color temperature."));
+
+    d->customWhiteBalanceGreenSpinBox = new KDoubleNumInput(d->whiteBalanceSettings);
+    d->customWhiteBalanceGreenSpinBox->setDecimals(2);
+    d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01, true);
+    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->whiteBalanceSettings);
+    d->customWhiteBalanceGreenSpinBox->setWhatsThis(i18n("<p>Set here the green component to set magenta color "
+                                                         "cast removal level."));
+
+    d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->whiteBalanceSettings);
+    d->unclipColorComboBox = new QComboBox(d->whiteBalanceSettings);
+    d->unclipColorComboBox->insertItem(0, i18n("Solid white"));
+    d->unclipColorComboBox->insertItem(1, i18n("Unclip"));
+    d->unclipColorComboBox->insertItem(2, i18n("Blend")); 
+    d->unclipColorComboBox->insertItem(3, i18n("Rebuild"));
+    d->unclipColorComboBox->setWhatsThis(i18n("<p><b>Highlights</b><p>"
+                                              "Select here the highlight clipping method:<p>"
+                                              "<b>Solid white</b>: clip all highlights to solid white<p>"
+                                              "<b>Unclip</b>: leave highlights unclipped in various "
+                                              "shades of pink<p>"
+                                              "<b>Blend</b>:Blend clipped and unclipped values together "
+                                              "for a gradual fade to white<p>" 
+                                              "<b>Rebuild</b>: reconstruct highlights using a " 
+                                              "level value")); 
+
+    d->reconstructLabel   = new QLabel(i18n("Level:"), d->whiteBalanceSettings);
+    d->reconstructSpinBox = new KIntNumInput(d->whiteBalanceSettings);
+    d->reconstructSpinBox->setRange(0, 6, 1);
+    d->reconstructSpinBox->setSliderEnabled(true);
+    d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b><p>"
+                                             "Specify the reconstruct highlight level. "
+                                             "Low values favor whites and high values favor colors."));
+
+    d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->whiteBalanceSettings);
+    d->brightnessSpinBox = new KDoubleNumInput(d->whiteBalanceSettings);
+    d->brightnessSpinBox->setDecimals(2);
+    d->brightnessSpinBox->setRange(0.0, 10.0, 0.01, true);
+    d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
+                                            "Specify the brightness level of output image."
+                                            "The default value is 1.0 (works in 8-bit mode only).<p>"));
+
+    d->blackPointCheckBox = new QCheckBox(i18n("Black point"), d->whiteBalanceSettings);
+    d->blackPointCheckBox->setWhatsThis(i18n("<p><b>Black point</b><p>"
+                                             "Use a specific black point value to decode RAW pictures. "
+                                             "If you set this option to off, the Black Point value will be "
+                                             "automatically computed.<p>"));
+    d->blackPointSpinBox = new KIntNumInput(d->whiteBalanceSettings);
+    d->blackPointSpinBox->setRange(0, 1000, 1);
+    d->blackPointSpinBox->setSliderEnabled(true);
+    d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b><p>"
+                                            "Specify specific black point value of the output image.<p>"));
+
+    d->whitePointCheckBox = new QCheckBox(i18n("White point"), d->whiteBalanceSettings);
+    d->whitePointCheckBox->setWhatsThis(i18n("<p><b>White point</b><p>"
+                                             "Use a specific white point value to decode RAW pictures. "
+                                             "If you set this option to off, the White Point value will be "
+                                             "automatically computed.<p>"));
+    d->whitePointSpinBox = new KIntNumInput(d->whiteBalanceSettings);
+    d->whitePointSpinBox->setRange(0, 1000, 1);
+    d->whitePointSpinBox->setSliderEnabled(true);
+    d->whitePointSpinBox->setWhatsThis(i18n("<p><b>White point value</b><p>"
+                                            "Specify specific white point value of the output image.<p>"));
+
+    whiteBalanceLayout->addWidget(d->whiteBalanceLabel,              0, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whiteBalanceComboBox,           0, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceLabel,        1, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenLabel,   2, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenSpinBox, 2, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->unclipColorLabel,               3, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->unclipColorComboBox,            3, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->reconstructLabel,               4, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->reconstructSpinBox,             4, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->brightnessLabel,                5, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              5, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             6, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              6, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             7, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              7, 1, 1, 2);
+    whiteBalanceLayout->setSpacing(KDialog::spacingHint());
+    whiteBalanceLayout->setMargin(KDialog::spacingHint());
+
+    addItem(d->whiteBalanceSettings, i18n("White Balance"));
+
+    // ---------------------------------------------------------------
+    // CORRECTIONS Settings panel
+
+    d->correctionsSettings         = new QWidget(this);
+    QGridLayout* correctionsLayout = new QGridLayout(d->correctionsSettings);
+
+    d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction"), d->correctionsSettings);
     d->enableNoiseReduction->setWhatsThis(i18n("<p><b>Enable Noise Reduction</b><p>"
                      "Use wavelets to erase noise while preserving real detail.<p>"));
-    settingsBoxLayout->addWidget(d->enableNoiseReduction, line, 0, 1, 3 );
-    line++;
 
-    d->NRThresholdSpinBox = new KIntNumInput(d->stdSettings);
+    d->NRThresholdSpinBox = new KIntNumInput(d->correctionsSettings);
     d->NRThresholdSpinBox->setRange(10, 1000, 1);
     d->NRThresholdSpinBox->setSliderEnabled(true);
-    d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->stdSettings);
+    d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->correctionsSettings);
     d->NRThresholdSpinBox->setWhatsThis(i18n("<p><b>Threshold</b><p>"
                      "Set here the noise reduction threshold value to use."));
-    settingsBoxLayout->addWidget(d->NRThresholdLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->NRThresholdSpinBox, line, 1, 1, 2);
-    line++;
 
-    // ---------------------------------------------------------------
-
-    d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->stdSettings);
+    d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
     d->enableCACorrection->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
                      "Enlarge the raw red and blue layers by the given factors, "
                      "typically 0.999 to 1.001, to correct chromatic aberration.<p>"));
-    settingsBoxLayout->addWidget(d->enableCACorrection, line, 0, 1, 3);
-    line++;
 
-    d->caRedMultLabel   = new QLabel(i18n("Red multiplier:"), d->stdSettings);
-    d->caRedMultSpinBox = new KDoubleNumInput(d->stdSettings);
+    d->caRedMultLabel   = new QLabel(i18n("Red multiplier:"), d->correctionsSettings);
+    d->caRedMultSpinBox = new KDoubleNumInput(d->correctionsSettings);
     d->caRedMultSpinBox->setDecimals(5);
     d->caRedMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
     d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red multiplier</b><p>"
                      "Set here the magnification factor of the red layer"));
 
-    d->caBlueMultLabel   = new QLabel(i18n("Blue multiplier:"), d->stdSettings);
-    d->caBlueMultSpinBox = new KDoubleNumInput(d->stdSettings);
+    d->caBlueMultLabel   = new QLabel(i18n("Blue multiplier:"), d->correctionsSettings);
+    d->caBlueMultSpinBox = new KDoubleNumInput(d->correctionsSettings);
     d->caBlueMultSpinBox->setDecimals(5);
     d->caBlueMultSpinBox->setRange(0.00001, 2.0, 0.001, true);
     d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
                      "Set here the magnification factor of the blue layer"));
 
-    settingsBoxLayout->addWidget(d->caRedMultLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->caRedMultSpinBox, line, 1, 1, 2);
-    line++;
-    settingsBoxLayout->addWidget(d->caBlueMultLabel,   line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->caBlueMultSpinBox, line, 1, 1, 2);
-    line++;
+    correctionsLayout->addWidget(d->enableNoiseReduction, 0, 0, 1, 3 );
+    correctionsLayout->addWidget(d->NRThresholdLabel,     1, 0, 1, 1);
+    correctionsLayout->addWidget(d->NRThresholdSpinBox,   1, 1, 1, 2);
+    correctionsLayout->addWidget(d->enableCACorrection,   2, 0, 1, 3 );
+    correctionsLayout->addWidget(d->caRedMultLabel,       3, 0, 1, 1);
+    correctionsLayout->addWidget(d->caRedMultSpinBox,     3, 1, 1, 2);
+    correctionsLayout->addWidget(d->caBlueMultLabel,      4, 0, 1, 1);
+    correctionsLayout->addWidget(d->caBlueMultSpinBox,    4, 1, 1, 2);
+    correctionsLayout->setRowStretch(5, 10);
+    correctionsLayout->setSpacing(KDialog::spacingHint());
+    correctionsLayout->setMargin(KDialog::spacingHint());
+
+    addItem(d->correctionsSettings, i18n("Corrections"));
 
     // ---------------------------------------------------------------
+    // COLOR MANAGEMENT Settings panel
 
-    d->outputColorSpaceLabel    = new QLabel(i18n("Color space:"), d->stdSettings);
-    d->outputColorSpaceComboBox = new QComboBox( d->stdSettings );
+    d->colormanSettings         = new QWidget(this);
+    QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings);
+
+    d->outputColorSpaceLabel    = new QLabel(i18n("Color space:"), d->colormanSettings);
+    d->outputColorSpaceComboBox = new QComboBox( d->colormanSettings );
     d->outputColorSpaceComboBox->insertItem(0, i18n("Raw (linear)"));
     d->outputColorSpaceComboBox->insertItem(1, i18n("sRGB"));
     d->outputColorSpaceComboBox->insertItem(2, i18n("Adobe RGB"));
@@ -383,77 +423,20 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Kodak, that offers an especially large gamut designed for use with "
                 "photographic outputs in mind."));
 
-    settingsBoxLayout->addWidget(d->outputColorSpaceLabel,    line, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->outputColorSpaceComboBox, line, 1, 1, 2);
+    colormanLayout->addWidget(d->outputColorSpaceLabel,    0, 0, 1, 1);
+    colormanLayout->addWidget(d->outputColorSpaceComboBox, 0, 1, 1, 2);
+    colormanLayout->setRowStretch(5, 10);
+    colormanLayout->setSpacing(KDialog::spacingHint());
+    colormanLayout->setMargin(KDialog::spacingHint());
 
-    if (outputColorSpaceOption)
+    addItem(d->colormanSettings, i18n("Color Management"));
+
+    if (!outputColorSpaceOption)
     {
-        d->outputColorSpaceLabel->show();
-        d->outputColorSpaceComboBox->show(); 
-    }
-    else
-    {
+        removeItem(indexOf(d->colormanSettings));
+        d->colormanSettings->hide();
         d->outputColorSpaceLabel->hide();
-        d->outputColorSpaceComboBox->hide(); 
-    }
-
-    insertTab(0, d->stdSettings, i18n("Standard"));
-
-    // ---------------------------------------------------------------
-
-    d->advSettings                  = new QWidget();
-    QGridLayout* settingsBoxLayout2 = new QGridLayout(d->advSettings);
-
-    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->advSettings);
-    d->dontStretchPixelsCheckBox->setWhatsThis(i18n("<p><b>Do not stretch or rotate pixels</b><p>"
-                                                    "For Fuji Super CCD cameras, show the image tilted 45 "
-                                                    "degrees. For cameras with non-square pixels, do not "
-                                                    "stretch the image to its correct aspect ratio. In any "
-                                                    "case, this option guarantees that each output pixel "
-                                                    "corresponds to one RAW pixel.<p>"));
-
-
-    // ---------------------------------------------------------------
-
-    d->blackPointCheckBox = new QCheckBox(i18n("Black point"), d->advSettings);
-    d->blackPointCheckBox->setWhatsThis(i18n("<p><b>Black point</b><p>"
-                                             "Use a specific black point value to decode RAW pictures. "
-                                             "If you set this option to off, the Black Point value will be "
-                                             "automatically computed.<p>"));
-    d->blackPointSpinBox = new KIntNumInput(d->advSettings);
-    d->blackPointSpinBox->setRange(0, 1000, 1);
-    d->blackPointSpinBox->setSliderEnabled(true);
-    d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b><p>"
-                                            "Specify specific black point value of the output image.<p>"));
-
-    d->whitePointCheckBox = new QCheckBox(i18n("White point"), d->advSettings);
-    d->whitePointCheckBox->setWhatsThis(i18n("<p><b>White point</b><p>"
-                                             "Use a specific white point value to decode RAW pictures. "
-                                             "If you set this option to off, the White Point value will be "
-                                             "automatically computed.<p>"));
-    d->whitePointSpinBox = new KIntNumInput(d->advSettings);
-    d->whitePointSpinBox->setRange(0, 1000, 1);
-    d->whitePointSpinBox->setSliderEnabled(true);
-    d->whitePointSpinBox->setWhatsThis(i18n("<p><b>White point value</b><p>"
-                                            "Specify specific white point value of the output image.<p>"));
-
-    // ---------------------------------------------------------------
-
-    settingsBoxLayout2->setMargin(KDialog::spacingHint());
-    settingsBoxLayout2->setSpacing(KDialog::spacingHint());
-    settingsBoxLayout2->addWidget(d->dontStretchPixelsCheckBox, 0, 0, 1, 3);
-    settingsBoxLayout2->addWidget(d->blackPointCheckBox,        1, 0, 1, 1);
-    settingsBoxLayout2->addWidget(d->blackPointSpinBox,         1, 1, 1, 2);
-    settingsBoxLayout2->addWidget(d->whitePointCheckBox,        2, 0, 1, 1);
-    settingsBoxLayout2->addWidget(d->whitePointSpinBox,         2, 1, 1, 2);
-    settingsBoxLayout2->setRowStretch(3, 10);
-
-    insertTab(1, d->advSettings, i18n("Advanced"));
-
-    if (!showAdvancedOptions)
-    {
-        removeTab(1);
-        setTabBarHidden(true);
+        d->outputColorSpaceComboBox->hide();
     }
 
     // ---------------------------------------------------------------
@@ -486,6 +469,16 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 DcrawSettingsWidget::~DcrawSettingsWidget()
 {
     delete d;
+}
+
+void DcrawSettingsWidget::updateMinimumWidth()
+{
+    int width = 0;
+    for (int i = 0; i < count(); i++)
+        if (widget(i)->width() > width)
+            width = widget(i)->width();
+
+    setMinimumWidth(width);
 }
 
 void DcrawSettingsWidget::processDcrawUrl(const QString& url)

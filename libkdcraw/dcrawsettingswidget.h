@@ -25,9 +25,9 @@
 #ifndef DCRAW_SETTINGS_WIDGET_H
 #define DCRAW_SETTINGS_WIDGET_H
 
-// KDE includes.
+// Qt includes.
 
-#include <ktabwidget.h>
+#include <QToolBox>
 
 // Local Includes.
 
@@ -39,7 +39,7 @@ namespace KDcrawIface
 
 class DcrawSettingsWidgetPriv;
 
-class LIBKDCRAW_EXPORT DcrawSettingsWidget : public KTabWidget
+class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QToolBox
 {
     Q_OBJECT
 
@@ -97,6 +97,8 @@ public:
 
     void   setEnabledBrightnessSettings(bool b);
     bool   brightnessSettingsIsEnabled();
+
+    void   updateMinimumWidth();
 
 Q_SIGNALS:
 
