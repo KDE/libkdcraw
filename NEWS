@@ -1,10 +1,11 @@
 0.1.5
 ------------------------------------------------------------------------
 
-- API changed: add white point settings support (dcraw -S option)
-               add new method to set/check brigness settings aviability
+- API changed: Add white point settings support (dcraw -S option)
+               Add new method to set/check brigness settings aviability
                Raw decoding settings widget re-designed to group each 
                options by features using tabs.
+               Add support dcraw -m option.
 
 - Updated dcraw to 8.86
   New camera : Sony A300.
