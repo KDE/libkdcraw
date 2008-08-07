@@ -98,6 +98,8 @@ public:
     void   setEnabledBrightnessSettings(bool b);
     bool   brightnessSettingsIsEnabled();
 
+    void updateMinimumWidth();
+
 signals:
 
     void signalSixteenBitsImageToggled(bool);

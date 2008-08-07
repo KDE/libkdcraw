@@ -471,6 +471,16 @@ DcrawSettingsWidget::~DcrawSettingsWidget()
     delete d;
 }
 
+void DcrawSettingsWidget::updateMinimumWidth()
+{
+    int width = 0;
+    for (int i = 0; i < count(); i++)
+        if (item(i)->width() > width)
+            width = item(i)->width();
+
+    setMinimumWidth(width);
+}
+
 void DcrawSettingsWidget::processDcrawURL(const QString& url)
 {
     KApplication::kApplication()->invokeBrowser(url);
