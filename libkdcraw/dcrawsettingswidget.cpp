@@ -91,6 +91,8 @@ public:
         whiteBalanceSettings           = 0;
         correctionsSettings            = 0;
         colormanSettings               = 0;
+        medianFilterPassesSpinBox      = 0;
+        medianFilterPassesLabel        = 0;
     }
 
     QWidget         *demosaicingSettings;
@@ -109,6 +111,7 @@ public:
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
     QLabel          *outputColorSpaceLabel;
+    QLabel          *medianFilterPassesLabel;
 
     QComboBox       *whiteBalanceComboBox;
     QComboBox       *RAWQualityComboBox;
@@ -129,6 +132,7 @@ public:
     KIntNumInput    *blackPointSpinBox;
     KIntNumInput    *whitePointSpinBox;
     KIntNumInput    *NRThresholdSpinBox;
+    KIntNumInput    *medianFilterPassesSpinBox;
 
     KDoubleNumInput *customWhiteBalanceGreenSpinBox;
     KDoubleNumInput *caRedMultSpinBox;
@@ -231,6 +235,16 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
+
+    d->medianFilterPassesSpinBox = new KIntNumInput(d->demosaicingSettings);
+    d->medianFilterPassesSpinBox->setRange(2000, 12000, 10);
+    d->medianFilterPassesSpinBox->setSliderEnabled(true);
+    d->medianFilterPassesLabel   = new QLabel(i18n("Median Filter:"), d->whiteBalanceSettings);
+    d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Median Filter</b><p>"
+                                                     "Set here the passes used by median filter applied after "
+                                                     "interpolation to Red-Green and Blue-Green channels."));
+    demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
+    demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
 
     addItem(d->demosaicingSettings, i18n("Demosaicing"));
 
@@ -380,10 +394,10 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
                      "Set here the magnification factor of the blue layer"));
 
-    correctionsLayout->addWidget(d->enableNoiseReduction, 0, 0, 1, 3 );
+    correctionsLayout->addWidget(d->enableNoiseReduction, 0, 0, 1, 3);
     correctionsLayout->addWidget(d->NRThresholdLabel,     1, 0, 1, 1);
     correctionsLayout->addWidget(d->NRThresholdSpinBox,   1, 1, 1, 2);
-    correctionsLayout->addWidget(d->enableCACorrection,   2, 0, 1, 3 );
+    correctionsLayout->addWidget(d->enableCACorrection,   2, 0, 1, 3);
     correctionsLayout->addWidget(d->caRedMultLabel,       3, 0, 1, 1);
     correctionsLayout->addWidget(d->caRedMultSpinBox,     3, 1, 1, 2);
     correctionsLayout->addWidget(d->caBlueMultLabel,      4, 0, 1, 1);
@@ -506,6 +520,7 @@ void DcrawSettingsWidget::setDefaultSettings()
     setNRThreshold(100);
     setQuality(RawDecodingSettings::BILINEAR);
     setOutputColorSpace(RawDecodingSettings::SRGB);
+    setMedianFilterPasses(0);
 }
 
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
@@ -626,6 +641,17 @@ void DcrawSettingsWidget::setWhiteBalance(RawDecodingSettings::WhiteBalance v)
     slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentIndex());
 }
 
+// ---------------------------------------------------------------
+
+int DcrawSettingsWidget::medianFilterPasses()
+{
+    return d->medianFilterPassesSpinBox->value();
+}
+
+void DcrawSettingsWidget::setMedianFilterPasses(int p)
+{
+    d->medianFilterPassesSpinBox->setValue(p);
+}
 
 // ---------------------------------------------------------------
 

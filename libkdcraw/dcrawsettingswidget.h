@@ -67,6 +67,7 @@ public:
     int    NRThreshold();
     double caRedMultiplier();
     double caBlueMultiplier();
+    int    medianFilterPasses();
 
     RawDecodingSettings::WhiteBalance     whiteBalance();
     RawDecodingSettings::DecodingQuality  quality();
@@ -90,6 +91,7 @@ public:
     void   setNRThreshold(int b);
     void   setcaRedMultiplier(double b);
     void   setcaBlueMultiplier(double b);
+    void   setMedianFilterPasses(int p);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
 
