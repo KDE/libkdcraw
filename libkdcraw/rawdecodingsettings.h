@@ -25,6 +25,14 @@
 #ifndef RAW_DECODING_SETTINGS_H
 #define RAW_DECODING_SETTINGS_H
 
+// Qt includes.
+
+#include <QRect>
+
+// KDE includes.
+
+#include <kurl.h>
+
 // Local includes.
 
 #include "libkdcraw_export.h"
@@ -68,16 +76,18 @@ public:
         CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not
         AUTO:     Averages an auto WB on the entire image
         CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors)
+        AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details)
     */
     enum WhiteBalance
     {
         NONE    = 0,
         CAMERA  = 1,
         AUTO    = 2,
-        CUSTOM  = 3
+        CUSTOM  = 3,
+        AERA    = 4
     };
 
-    /** Output RGB color space used to decoded image */ 
+    /** Output RGB color space used to decoded image */
     enum OutputColorSpace 
     {
         RAWCOLOR = 0,
@@ -116,32 +126,45 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
+
+        cameraProfile              = KUrl();
+        outputProfile              = KUrl();
+        useEmbedCameraProfile      = false;
+
+        deadPixelMap               = KUrl();
+
+        whiteBalanceArea           = QRect();
     };
 
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const
     {
-        return sixteenBitsImage == o.sixteenBitsImage
-            && brightness == o.brightness
-            && RAWQuality == o.RAWQuality
-            && outputColorSpace == o.outputColorSpace
-            && RGBInterpolate4Colors == o.RGBInterpolate4Colors
-            && DontStretchPixels == o.DontStretchPixels
-            && unclipColors == o.unclipColors
-            && whiteBalance == o.whiteBalance
-            && customWhiteBalance == o.customWhiteBalance
+        return sixteenBitsImage        == o.sixteenBitsImage
+            && brightness              == o.brightness
+            && RAWQuality              == o.RAWQuality
+            && outputColorSpace        == o.outputColorSpace
+            && RGBInterpolate4Colors   == o.RGBInterpolate4Colors
+            && DontStretchPixels       == o.DontStretchPixels
+            && unclipColors            == o.unclipColors
+            && whiteBalance            == o.whiteBalance
+            && customWhiteBalance      == o.customWhiteBalance
             && customWhiteBalanceGreen == o.customWhiteBalanceGreen
-            && halfSizeColorImage == o.halfSizeColorImage
-            && enableBlackPoint == o.enableBlackPoint
-            && blackPoint == o.blackPoint
-            && enableWhitePoint == o.enableWhitePoint
-            && whitePoint == o.whitePoint
-            && enableNoiseReduction == o.enableNoiseReduction
-            && NRThreshold == o.NRThreshold
-            && enableCACorrection == o.enableCACorrection
-            && caMultiplier[0] == o.caMultiplier[0]
-            && caMultiplier[1] == o.caMultiplier[1]
-            && medianFilterPasses == o.medianFilterPasses
+            && halfSizeColorImage      == o.halfSizeColorImage
+            && enableBlackPoint        == o.enableBlackPoint
+            && blackPoint              == o.blackPoint
+            && enableWhitePoint        == o.enableWhitePoint
+            && whitePoint              == o.whitePoint
+            && enableNoiseReduction    == o.enableNoiseReduction
+            && NRThreshold             == o.NRThreshold
+            && enableCACorrection      == o.enableCACorrection
+            && caMultiplier[0]         == o.caMultiplier[0]
+            && caMultiplier[1]         == o.caMultiplier[1]
+            && medianFilterPasses      == o.medianFilterPasses
+            && cameraProfile           == o.cameraProfile
+            && outputProfile           == o.outputProfile
+            && useEmbedCameraProfile   == o.useEmbedCameraProfile
+            && deadPixelMap            == o.deadPixelMap
+            && whiteBalanceArea        == o.whiteBalanceArea
           ;
     };
 
@@ -176,6 +199,14 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
+
+        cameraProfile              = KUrl();
+        outputProfile              = KUrl();
+        useEmbedCameraProfile      = false;
+
+        deadPixelMap               = KUrl();
+
+        whiteBalanceArea           = QRect();
     };
 
 public:
@@ -203,9 +234,9 @@ public:
     */
     bool RGBInterpolate4Colors;
 
-    /** For cameras with non-square pixels, do not stretch the image to its
-        correct aspect ratio. In any case, this option guarantees that each
-        output pixel corresponds to one RAW pixel. 
+    /** For cameras with non-square pixels, do not stretch the image to its 
+        correct aspect ratio. In any case, this option guarantees that each 
+        output pixel corresponds to one RAW pixel.
     */
     bool DontStretchPixels;
 
@@ -233,7 +264,7 @@ public:
     */
     bool enableNoiseReduction;
 
-    /** Noise reduction threshold value.  
+    /** Noise reduction threshold value.
         The best threshold should be somewhere between 100 and 1000.
     */
     int NRThreshold;
@@ -269,9 +300,30 @@ public:
     int whitePoint;
 
     /** The output color space used to decoded RAW data. See OutputColorSpace
-        values for details. 
+        values for details. Note: if outputProfile is not empty, this setting is ignored.
     */
     OutputColorSpace outputColorSpace;
+
+    /** Path to ICC profile to define the output colorspace.
+    */
+    KUrl outputProfile;
+
+    /** Path to ICC profile to define the camera's raw colorspace.
+    */
+    KUrl cameraProfile;
+
+    /** Use the ICC profile embedded in the raw photo. Note: if cameraProfile is not empty, 
+        this setting is ignored.
+    */
+    bool useEmbedCameraProfile;
+
+    /** Path to text file including dead pixel list.
+    */
+    KUrl deadPixelMap;
+
+    /** Rectangle used to calculate the white balance by averaging the region of image.
+    */
+    QRect whiteBalanceArea;
 };
 
 }  // namespace KDcrawIface

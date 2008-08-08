@@ -678,7 +678,7 @@ bool KDcraw::startProcess()
 
     // run dcraw with options:
     // -c : write to stdout
-    // -v : verboze mode.
+    // -v : verbose mode.
     //
     // -4 : 16bit ppm output
     //
@@ -688,8 +688,6 @@ bool KDcraw::startProcess()
     // -n : Use wavelets to erase noise while preserving real detail. 
     // -j : Do not stretch the image to its correct aspect ratio.
     // -q : Use an interpolation method.
-    // -p : Use the input ICC profiles to define the camera's raw colorspace.
-    // -o : Use ICC profiles to define the output colorspace.
     // -h : Output a half-size color image. Twice as fast as -q 0.
     // -b : set Brightness value.
     // -k : set Black Point value.
@@ -697,6 +695,10 @@ bool KDcraw::startProcess()
     // -r : set Raw Color Balance Multipliers.
     // -C : set Correct chromatic aberration correction.
     // -m : After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
+    // -A : Calculate the white balance by averaging a rectangular area from image.
+    // -P : Read the dead pixel list from this file.
+    // -p : Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
+    // -o : Use ICC profiles to define the output colorspace.
 
     QStringList args;
     args << "-c";
@@ -738,17 +740,30 @@ bool KDcraw::startProcess()
         args << QString::number(m_rawDecodingSettings.medianFilterPasses);
     }
 
+    if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
+    {
+        args << "-P";
+        args << m_rawDecodingSettings.deadPixelMap.path();
+    }
+
     switch (m_rawDecodingSettings.whiteBalance)
     {
         case RawDecodingSettings::NONE:
+        {
             break;
+        }
         case RawDecodingSettings::CAMERA:
+        {
             args <<  "-w";
             break;
+        }
         case RawDecodingSettings::AUTO:
+        {
             args <<  "-a";
             break;
+        }
         case RawDecodingSettings::CUSTOM:
+        {
             /* Convert between Temperature and RGB.
              */
             double T;
@@ -821,6 +836,16 @@ bool KDcraw::startProcess()
             args << QString::number(RGB[2], 'f', 5);
             args << QString::number(RGB[1], 'f', 5);
             break;
+        }
+        case RawDecodingSettings::AERA:
+        {
+            args << "-A";
+            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.left());
+            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.top());
+            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.width());
+            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.height());
+            break;
+        }
     }
 
     args << "-q";
@@ -839,8 +864,27 @@ bool KDcraw::startProcess()
         args << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
     }
 
-    args << "-o";
-    args << QString::number(m_rawDecodingSettings.outputColorSpace);
+    if (!m_rawDecodingSettings.cameraProfile.isEmpty())
+    {
+        args << "-p";
+        args << m_rawDecodingSettings.cameraProfile.path();
+    }
+    else if (m_rawDecodingSettings.useEmbedCameraProfile)
+    {
+        args << "-p";
+        args << "embed";
+    }
+
+    if (!m_rawDecodingSettings.outputProfile.isEmpty())
+    {
+        args << "-o";
+        args << m_rawDecodingSettings.outputProfile.path();
+    }
+    else
+    {
+        args << "-o";
+        args << QString::number(m_rawDecodingSettings.outputColorSpace);
+    }
 
     args << QFile::encodeName(d->filePath);
 
