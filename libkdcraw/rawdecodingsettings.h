@@ -27,11 +27,11 @@
 
 // Qt includes.
 
-#include "qrect.h"
+#include <qrect.h>
 
 // KDE includes.
 
-#include "kurl.h"
+#include <kurl.h>
 
 // Local includes.
 
