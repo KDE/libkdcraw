@@ -713,8 +713,6 @@ void KDcraw::startProcess()
     // -n : Use wavelets to erase noise while preserving real detail. 
     // -j : Do not stretch the image to its correct aspect ratio.
     // -q : Use an interpolation method.
-    // -p : Use the input ICC profiles to define the camera's raw colorspace.
-    // -o : Use ICC profiles to define the output colorspace.
     // -h : Output a half-size color image. Twice as fast as -q 0.
     // -b : set Brightness value.
     // -k : set Black Point value.
@@ -722,6 +720,10 @@ void KDcraw::startProcess()
     // -r : set Raw Color Balance Multipliers.
     // -C : set Correct chromatic aberration correction.
     // -m : After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
+    // -A : Calculate the white balance by averaging a rectangular area from image.
+    // -P : Read the dead pixel list from this file.
+    // -p : Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
+    // -o : Use ICC profiles to define the output colorspace.
 
     *d->process << DcrawBinary::path();
     *d->process << "-c";
@@ -761,6 +763,21 @@ void KDcraw::startProcess()
     {
         *d->process << "-m";
         *d->process << QString::number(m_rawDecodingSettings.medianFilterPasses);
+    }
+
+    if (!m_rawDecodingSettings.whiteBalanceArea.isEmpty())
+    {
+        *d->process << "-A";
+        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.left());
+        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.top());
+        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.width());
+        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.height());
+    }
+
+    if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
+    {
+        *d->process << "-P";
+        *d->process << m_rawDecodingSettings.deadPixelMap.path();
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -865,8 +882,27 @@ void KDcraw::startProcess()
         *d->process << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
     }
 
-    *d->process << "-o";
-    *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
+    if (!m_rawDecodingSettings.cameraProfile.isEmpty())
+    {
+        *d->process << "-p";
+        *d->process << m_rawDecodingSettings.cameraProfile.path();
+    }
+    else if (m_rawDecodingSettings.useEmbedCameraProfile)
+    {
+        *d->process << "-p";
+        *d->process << "embed";
+    }
+
+    if (!m_rawDecodingSettings.outputProfile.isEmpty())
+    {
+        *d->process << "-o";
+        *d->process << m_rawDecodingSettings.outputProfile.path();
+    }
+    else
+    {
+        *d->process << "-o";
+        *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
+    }
 
     *d->process << QFile::encodeName(d->filePath);
 

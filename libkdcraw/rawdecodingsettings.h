@@ -25,6 +25,14 @@
 #ifndef RAW_DECODING_SETTINGS_H
 #define RAW_DECODING_SETTINGS_H
 
+// Qt includes.
+
+#include "qrect.h"
+
+// KDE includes.
+
+#include "kurl.h"
+
 // Local includes.
 
 #include "libkdcraw_export.h"
@@ -116,32 +124,45 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
+
+        cameraProfile              = KURL();
+        outputProfile              = KURL();
+        useEmbedCameraProfile      = false;
+
+        deadPixelMap               = KURL();
+
+        whiteBalanceArea           = QRect();
     };
 
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const
     {
-        return sixteenBitsImage == o.sixteenBitsImage
-            && brightness == o.brightness
-            && RAWQuality == o.RAWQuality
-            && outputColorSpace == o.outputColorSpace
-            && RGBInterpolate4Colors == o.RGBInterpolate4Colors
-            && DontStretchPixels == o.DontStretchPixels
-            && unclipColors == o.unclipColors
-            && whiteBalance == o.whiteBalance
-            && customWhiteBalance == o.customWhiteBalance
+        return sixteenBitsImage        == o.sixteenBitsImage
+            && brightness              == o.brightness
+            && RAWQuality              == o.RAWQuality
+            && outputColorSpace        == o.outputColorSpace
+            && RGBInterpolate4Colors   == o.RGBInterpolate4Colors
+            && DontStretchPixels       == o.DontStretchPixels
+            && unclipColors            == o.unclipColors
+            && whiteBalance            == o.whiteBalance
+            && customWhiteBalance      == o.customWhiteBalance
             && customWhiteBalanceGreen == o.customWhiteBalanceGreen
-            && halfSizeColorImage == o.halfSizeColorImage
-            && enableBlackPoint == o.enableBlackPoint
-            && blackPoint == o.blackPoint
-            && enableWhitePoint == o.enableWhitePoint
-            && whitePoint == o.whitePoint
-            && enableNoiseReduction == o.enableNoiseReduction
-            && NRThreshold == o.NRThreshold
-            && enableCACorrection == o.enableCACorrection
-            && caMultiplier[0] == o.caMultiplier[0]
-            && caMultiplier[1] == o.caMultiplier[1]
-            && medianFilterPasses == o.medianFilterPasses
+            && halfSizeColorImage      == o.halfSizeColorImage
+            && enableBlackPoint        == o.enableBlackPoint
+            && blackPoint              == o.blackPoint
+            && enableWhitePoint        == o.enableWhitePoint
+            && whitePoint              == o.whitePoint
+            && enableNoiseReduction    == o.enableNoiseReduction
+            && NRThreshold             == o.NRThreshold
+            && enableCACorrection      == o.enableCACorrection
+            && caMultiplier[0]         == o.caMultiplier[0]
+            && caMultiplier[1]         == o.caMultiplier[1]
+            && medianFilterPasses      == o.medianFilterPasses
+            && cameraProfile           == o.cameraProfile
+            && outputProfile           == o.outputProfile
+            && useEmbedCameraProfile   == o.useEmbedCameraProfile
+            && deadPixelMap            == o.deadPixelMap
+            && whiteBalanceArea        == o.whiteBalanceArea
           ;
     };
 
@@ -176,6 +197,14 @@ public:
         enableCACorrection         = false;
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
+
+        cameraProfile              = KURL();
+        outputProfile              = KURL();
+        useEmbedCameraProfile      = false;
+
+        deadPixelMap               = KURL();
+
+        whiteBalanceArea           = QRect();
     };
 
 public:
@@ -268,10 +297,31 @@ public:
     */
     int whitePoint;
 
-    /** The output color space used to decoded RAW data. See OutputColorSpace 
-        values for details. 
+    /** The output color space used to decoded RAW data. See OutputColorSpace
+        values for details. Note: if outputProfile is not empty, this setting is ignored.
     */
     OutputColorSpace outputColorSpace;
+
+    /** Path to ICC profile to define the output colorspace.
+    */
+    KURL outputProfile;
+
+    /** Path to ICC profile to define the camera's raw colorspace.
+    */
+    KURL cameraProfile;
+
+    /** Use the ICC profile embedded in the raw photo. Note: if cameraProfile is not empty, 
+        this setting is ignored.
+    */
+    bool useEmbedCameraProfile;
+
+    /** Path to text file including dead pixel list.
+    */
+    KURL deadPixelMap;
+
+    /** Rectangle used to calculate the white balance by averaging the region of image.
+    */
+    QRect whiteBalanceArea;
 };
 
 }  // namespace KDcrawIface
