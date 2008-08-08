@@ -765,15 +765,6 @@ void KDcraw::startProcess()
         *d->process << QString::number(m_rawDecodingSettings.medianFilterPasses);
     }
 
-    if (!m_rawDecodingSettings.whiteBalanceArea.isEmpty())
-    {
-        *d->process << "-A";
-        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.left());
-        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.top());
-        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.width());
-        *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.height());
-    }
-
     if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
     {
         *d->process << "-P";
@@ -783,14 +774,21 @@ void KDcraw::startProcess()
     switch (m_rawDecodingSettings.whiteBalance)
     {
         case RawDecodingSettings::NONE:
+        {
             break;
+        }
         case RawDecodingSettings::CAMERA:
+        {
             *d->process << "-w";
             break;
+        }
         case RawDecodingSettings::AUTO:
+        {
             *d->process << "-a";
             break;
+        }
         case RawDecodingSettings::CUSTOM:
+        {
             /* Convert between Temperature and RGB.
              */
             double T;
@@ -864,6 +862,16 @@ void KDcraw::startProcess()
             *d->process << QString::number(RGB[2], 'f', 5);
             *d->process << QString::number(RGB[1], 'f', 5);
             break;
+        }
+        case RawDecodingSettings::AERA:
+        {
+            *d->process << "-A";
+            *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.left());
+            *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.top());
+            *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.width());
+            *d->process << QString::number(m_rawDecodingSettings.whiteBalanceArea.height());
+            break;
+        }
     }
 
     *d->process << "-q";

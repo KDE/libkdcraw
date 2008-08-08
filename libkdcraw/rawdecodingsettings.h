@@ -63,7 +63,7 @@ public:
                   This method selects the direction of interpolation so as to
                   maximize a homogeneity metric, thus typically minimizing color artifacts.
     */
-    enum DecodingQuality 
+    enum DecodingQuality
     {
         BILINEAR = 0,
         VNG      = 1,
@@ -76,13 +76,15 @@ public:
         CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not
         AUTO:     Averages an auto WB on the entire image
         CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors)
+        AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details)
     */
     enum WhiteBalance
     {
         NONE    = 0,
         CAMERA  = 1,
         AUTO    = 2,
-        CUSTOM  = 3
+        CUSTOM  = 3,
+        AERA    = 4
     };
 
     /** Output RGB color space used to decoded image */
