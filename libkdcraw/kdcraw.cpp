@@ -768,7 +768,7 @@ void KDcraw::startProcess()
     if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
     {
         *d->process << "-P";
-        *d->process << m_rawDecodingSettings.deadPixelMap.path();
+        *d->process << QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -893,7 +893,7 @@ void KDcraw::startProcess()
     if (!m_rawDecodingSettings.cameraProfile.isEmpty())
     {
         *d->process << "-p";
-        *d->process << m_rawDecodingSettings.cameraProfile.path();
+        *d->process << QFile::encodeName(m_rawDecodingSettings.cameraProfile);
     }
     else if (m_rawDecodingSettings.useEmbedCameraProfile)
     {
@@ -904,7 +904,7 @@ void KDcraw::startProcess()
     if (!m_rawDecodingSettings.outputProfile.isEmpty())
     {
         *d->process << "-o";
-        *d->process << m_rawDecodingSettings.outputProfile.path();
+        *d->process << QFile::encodeName(m_rawDecodingSettings.outputProfile);
     }
     else
     {

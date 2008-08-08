@@ -28,10 +28,7 @@
 // Qt includes.
 
 #include <qrect.h>
-
-// KDE includes.
-
-#include <kurl.h>
+#include <qstring.h>
 
 // Local includes.
 
@@ -127,11 +124,11 @@ public:
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
 
-        cameraProfile              = KURL();
-        outputProfile              = KURL();
+        cameraProfile              = QString();
+        outputProfile              = QString();
         useEmbedCameraProfile      = false;
 
-        deadPixelMap               = KURL();
+        deadPixelMap               = QString();
 
         whiteBalanceArea           = QRect();
     };
@@ -200,11 +197,11 @@ public:
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
 
-        cameraProfile              = KURL();
-        outputProfile              = KURL();
+        cameraProfile              = QString();
+        outputProfile              = QString();
         useEmbedCameraProfile      = false;
 
-        deadPixelMap               = KURL();
+        deadPixelMap               = QString();
 
         whiteBalanceArea           = QRect();
     };
@@ -306,11 +303,11 @@ public:
 
     /** Path to ICC profile to define the output colorspace.
     */
-    KURL outputProfile;
+    QString outputProfile;
 
     /** Path to ICC profile to define the camera's raw colorspace.
     */
-    KURL cameraProfile;
+    QString cameraProfile;
 
     /** Use the ICC profile embedded in the raw photo. Note: if cameraProfile is not empty, 
         this setting is ignored.
@@ -319,7 +316,7 @@ public:
 
     /** Path to text file including dead pixel list.
     */
-    KURL deadPixelMap;
+    QString deadPixelMap;
 
     /** Rectangle used to calculate the white balance by averaging the region of image.
     */
