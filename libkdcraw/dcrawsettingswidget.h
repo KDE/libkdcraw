@@ -27,7 +27,7 @@
 
 // Qt includes.
 
-#include <QToolBox>
+#include <QtGui/QToolBox>
 
 // Local Includes.
 
