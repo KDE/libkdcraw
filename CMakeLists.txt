@@ -36,7 +36,7 @@ SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
 # dcraw.c version include with this library. 
 # Look into dcraw/dcraw.c implementation for details.
-SET(DCRAW_PROGRAM_VERSION "8.86")
+SET(DCRAW_PROGRAM_VERSION "8.87")
 
 # =======================================================
 # Set env. variables accordinly.

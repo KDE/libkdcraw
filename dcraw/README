@@ -16,7 +16,7 @@ Following lines need to be changed in dcraw.c :
 int CLASS main (int argc, char **argv)
 {
 ...
-      /* NOTE: digiKam Fix : separate output of "make" and "model" information.
+      /* NOTE: libkdcraw Fix : separate output of "make" and "model" information.
       printf (_("Camera: %s %s\n"), make, model); */
       printf (_("Camera: %s\n"), make);
       printf (_("Model: %s\n"), model);
