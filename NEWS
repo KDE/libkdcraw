@@ -1,12 +1,15 @@
 0.1.5
 ------------------------------------------------------------------------
-
 - API changed: Add white point settings support (dcraw -S option)
                Add new method to set/check brigness settings aviability
                Raw decoding settings widget re-designed to group each 
                options by features using tabs.
                Add support dcraw options -m -A -P -p -o.
 
+- Updated dcraw to 8.87
+  New camera : Kodak C603, Nikon D700, Canon EOS 1000D,
+  Canon PowerShot SD300, and Olympus E-520.
+  Removed useless code from ppg_interpolate().
 - Updated dcraw to 8.86
   New camera : Sony A300.
   Fixed camera WB on the A200.
