@@ -477,6 +477,74 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
+
+    // Wrapper to emit signal when something is changed in settings.
+
+    connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->RAWQualityComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->unclipColorComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->whitePointCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->fourColorCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->customWhiteBalanceCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->dontStretchPixelsCheckBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->enableCACorrection, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->customWhiteBalanceSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->reconstructSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->blackPointSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->whitePointSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->NRThresholdSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->medianFilterPassesSpinBox, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->customWhiteBalanceGreenSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->caRedMultSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->caBlueMultSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->brightnessSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
 }
 
 DcrawSettingsWidget::~DcrawSettingsWidget()

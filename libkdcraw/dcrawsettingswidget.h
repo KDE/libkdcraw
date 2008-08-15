@@ -105,6 +105,7 @@ public:
 signals:
 
     void signalSixteenBitsImageToggled(bool);
+    void signalSettingsChanged();
 
 private slots:
 
