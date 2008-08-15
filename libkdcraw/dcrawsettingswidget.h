@@ -105,6 +105,7 @@ public:
 Q_SIGNALS:
 
     void signalSixteenBitsImageToggled(bool);
+    void signalSettingsChanged();
 
 private Q_SLOTS:
 
