@@ -122,7 +122,6 @@ public:
     QCheckBox       *whitePointCheckBox;
     QCheckBox       *sixteenBitsImage;
     QCheckBox       *fourColorCheckBox;
-    QCheckBox       *customWhiteBalanceCheckBox;
     QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
     QCheckBox       *enableCACorrection;
@@ -141,7 +140,8 @@ public:
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
-                                         bool outputColorSpaceOption, bool /*showAdvancedOptions*/)
+                                         bool outputColorSpaceOption, 
+                                         bool postProcessingOptions)
                    : QToolBox(parent)
 {
     d = new DcrawSettingsWidgetPriv;
@@ -314,6 +314,12 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
                                             "Specify the brightness level of output image."
                                             "The default value is 1.0 (works in 8-bit mode only).<p>"));
+
+    if (!postProcessingOptions)
+    {
+        d->brightnessLabel->hide();
+        d->brightnessSpinBox->hide();
+    }
 
     d->blackPointCheckBox = new QCheckBox(i18n("Black point"), d->whiteBalanceSettings);
     d->blackPointCheckBox->setWhatsThis(i18n("<p><b>Black point</b><p>"
@@ -503,9 +509,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->fourColorCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->customWhiteBalanceCheckBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->dontStretchPixelsCheckBox, SIGNAL(toggled(bool)),

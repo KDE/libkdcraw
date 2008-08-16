@@ -48,7 +48,7 @@ public:
     DcrawSettingsWidget(QWidget *parent,
                         bool sixteenBitsOption=false,
                         bool outputColorSpaceOption=true,
-                        bool showAdvancedOptions=false);
+                        bool postProcessingOptions=false);
     virtual ~DcrawSettingsWidget();
 
     bool   sixteenBits();
