@@ -61,16 +61,16 @@ public:
 
     KIntNumInput* input() const;
 
-signals:
+Q_SIGNALS:
 
     void reset();
     void valueChanged(int);
 
-public slots:
+public Q_SLOTS:
 
     void slotReset();
 
-private slots:
+private Q_SLOTS:
 
     void slotValueChanged(int);
 

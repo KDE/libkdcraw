@@ -59,16 +59,16 @@ public:
 
     void insertItem(int index, const QString& t);
 
-signals:
+Q_SIGNALS:
 
     void reset();
     void activated(int);
 
-public slots:
+public Q_SLOTS:
 
     void slotReset();
 
-private slots:
+private Q_SLOTS:
 
     void slotItemActivated(int);
 
