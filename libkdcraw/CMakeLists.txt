@@ -5,7 +5,10 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/dcrawinfo.h.cmake ${CMAKE_CURRENT_BIN
 
 SET(kdcraw_LIB_SRCS dcrawbinary.cpp 
                     kdcraw.cpp 
-                    dcrawsettingswidget.cpp)
+                    dcrawsettingswidget.cpp
+                    rcombobox.cpp
+                    rnuminput.cpp
+   )
 
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
@@ -18,7 +21,9 @@ INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 INSTALL(FILES rawdecodingsettings.h 
               kdcraw.h 
               dcrawbinary.h 
-              dcrawsettingswidget.h 
+              dcrawsettingswidget.h
+              rnuminput.h
+              rcombobox.h 
               dcrawinfocontainer.h 
               rawfiles.h 
               libkdcraw_export.h 
