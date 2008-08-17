@@ -6,6 +6,9 @@
                options by features using tabs.
                Add support dcraw options -m -A -P -p -o.
                Add new signal emited when something is changed in settings.
+               Add new integer and double slider widgets with
+               default values and reset buttons.
+               Add new combo box widget with a default item and reset button.
 
 - Updated dcraw to 8.87
   New camera : Kodak C603, Nikon D700, Canon EOS 1000D,
