@@ -454,10 +454,10 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>Custom</b>: use a custom input color space profile."));
 
     d->inIccUrlEdit = new KURLRequester(d->colormanSettings);
-    d->inIccUrlEdit->setMode(KFile::File|KFile::ExistingOnly);
+    d->inIccUrlEdit->setMode(KFile::LocalOnly | KFile::File | KFile::ExistingOnly);
     d->inIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
-    d->outputColorSpaceLabel    = new QLabel(i18n("WorkSpace:"), d->colormanSettings);
+    d->outputColorSpaceLabel    = new QLabel(i18n("Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox(d->colormanSettings);
     d->outputColorSpaceComboBox->insertItem(i18n("Raw (linear)"), RawDecodingSettings::RAWCOLOR);
     d->outputColorSpaceComboBox->insertItem(i18n("sRGB"),         RawDecodingSettings::SRGB);
@@ -466,7 +466,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->outputColorSpaceComboBox->insertItem(i18n("Pro-Photo"),    RawDecodingSettings::PROPHOTO);
     d->outputColorSpaceComboBox->insertItem(i18n("Custom"),       RawDecodingSettings::CUSTOMOUTPUTCS);
     d->outputColorSpaceComboBox->setDefaultItem(RawDecodingSettings::SRGB);
-    QWhatsThis::add(d->outputColorSpaceComboBox, i18n("<p><b>WorkSpace</b><p>"
+    QWhatsThis::add(d->outputColorSpaceComboBox, i18n("<p><b>Workspace</b><p>"
                 "Select here the output color space used to decode RAW data.<p>"
                 "<b>Raw (linear)</b>: in this mode, no output color space is used "
                 "during RAW decoding.<p>"
@@ -484,7 +484,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "<b>Custom</b>: use a custom output color space profile."));
 
     d->outIccUrlEdit = new KURLRequester(d->colormanSettings);
-    d->outIccUrlEdit->setMode(KFile::File|KFile::ExistingOnly);
+    d->outIccUrlEdit->setMode(KFile::LocalOnly | KFile::File | KFile::ExistingOnly);
     d->outIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
     colormanLayout->addMultiCellWidget(d->inputColorSpaceLabel,     0, 0, 0, 0);
