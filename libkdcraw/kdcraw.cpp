@@ -867,26 +867,44 @@ bool KDcraw::startProcess()
         args << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
     }
 
-    if (!m_rawDecodingSettings.cameraProfile.isEmpty())
+    switch (m_rawDecodingSettings.inputColorSpace)
     {
-        args << "-p";
-        args << QFile::encodeName(m_rawDecodingSettings.cameraProfile);
-    }
-    else if (m_rawDecodingSettings.useEmbedCameraProfile)
-    {
-        args << "-p";
-        args << "embed";
+        case RawDecodingSettings::EMBEDED:
+        {
+            args << "-p";
+            args << "embed";
+            break;
+        }
+        case RawDecodingSettings::CUSTOMINPUTCS:
+        {
+            if (!m_rawDecodingSettings.inputProfile.isEmpty())
+            {
+                args << "-p";
+                args << QFile::encodeName(m_rawDecodingSettings.inputProfile);
+            }
+            break;
+        }
+        default:   // No input profile
+            break;
     }
 
-    if (!m_rawDecodingSettings.outputProfile.isEmpty())
+    switch (m_rawDecodingSettings.outputColorSpace)
     {
-        args << "-o";
-        args << QFile::encodeName(m_rawDecodingSettings.outputProfile);
-    }
-    else
-    {
-        args << "-o";
-        args << QString::number(m_rawDecodingSettings.outputColorSpace);
+        case RawDecodingSettings::CUSTOMOUTPUTCS:
+        {
+            if (!m_rawDecodingSettings.outputProfile.isEmpty())
+            {
+                args << "-o";
+                args << QFile::encodeName(m_rawDecodingSettings.outputProfile);
+            }
+            break;
+        }
+        default:
+        {
+            args << "-o";
+            args << QString::number(m_rawDecodingSettings.outputColorSpace);
+            break;
+        }
     }
 
     args << QFile::encodeName(d->filePath);
