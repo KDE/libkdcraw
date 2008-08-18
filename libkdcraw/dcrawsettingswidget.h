@@ -48,6 +48,16 @@ class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QToolBox
 {
     Q_OBJECT
 
+public: 
+
+    enum SettingsTabs
+    {
+        DEMOSAICING = 0,
+        WHITEBALANCE,
+        CORRECTIONS,
+        COLORMANAGEMENT
+    };
+
 public:
 
     DcrawSettingsWidget(QWidget *parent,

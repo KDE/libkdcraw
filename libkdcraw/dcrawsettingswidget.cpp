@@ -256,7 +256,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
 
-    addItem(d->demosaicingSettings, i18n("Demosaicing"));
+    insertItem(DEMOSAICING, d->demosaicingSettings, i18n("Demosaicing"));
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -380,7 +380,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->whiteBalanceSettings, i18n("White Balance"));
+    insertItem(WHITEBALANCE, d->whiteBalanceSettings, i18n("White Balance"));
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -433,7 +433,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->correctionsSettings, i18n("Corrections"));
+    insertItem(CORRECTIONS, d->correctionsSettings, i18n("Corrections"));
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -489,15 +489,15 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);
     colormanLayout->addWidget(d->inputColorSpaceComboBox,  0, 1, 1, 2);
-    colormanLayout->addWidget(d->inIccUrlEdit,             1, 0, 1, 3 );
+    colormanLayout->addWidget(d->inIccUrlEdit,             1, 0, 1, 3);
     colormanLayout->addWidget(d->outputColorSpaceLabel,    2, 0, 1, 1);
     colormanLayout->addWidget(d->outputColorSpaceComboBox, 2, 1, 1, 2);
-    colormanLayout->addWidget(d->outIccUrlEdit,            3, 0, 1, 3 );
+    colormanLayout->addWidget(d->outIccUrlEdit,            3, 0, 1, 3);
     colormanLayout->setRowStretch(4, 10);
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->colormanSettings, i18n("Color Management"));
+    insertItem(COLORMANAGEMENT, d->colormanSettings, i18n("Color Management"));
 
     if (!outputColorSpaceOption)
     {
