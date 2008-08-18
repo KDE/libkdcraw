@@ -719,8 +719,11 @@ bool KDcraw::startProcess()
     args << "-H";
     args << QString::number(m_rawDecodingSettings.unclipColors);
 
-    args << "-b";
-    args << QString::number(m_rawDecodingSettings.brightness);
+    if (m_rawDecodingSettings.brightness != 1.0)
+    {
+        args << "-b";
+        args << QString::number(m_rawDecodingSettings.brightness);
+    }
 
     if (m_rawDecodingSettings.enableBlackPoint)
     {
