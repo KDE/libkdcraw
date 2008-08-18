@@ -126,6 +126,7 @@ void RComboBox::slotReset()
 {
     d->combo->setCurrentItem(d->defaultItem);
     d->resetButton->setEnabled(false);
+    slotItemActivated(d->defaultItem);
     emit reset();
 }
 
