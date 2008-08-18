@@ -205,7 +205,7 @@ void RDoubleNumInput::setDecimals(int p)
     d->input->setDecimals(p);
 }
 
-void RDoubleNumInput::setRange(int min, int max, int step)
+void RDoubleNumInput::setRange(double min, double max, double step)
 {
     d->input->setRange(min, max, step);
 }

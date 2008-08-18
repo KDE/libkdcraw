@@ -97,7 +97,7 @@ public:
     double value();
 
     void   setDecimals(int p);
-    void   setRange(int min, int max, int step);
+    void   setRange(double min, double max, double step);
 
     void   setDefaultValue(double d);
     double defaultValue();
