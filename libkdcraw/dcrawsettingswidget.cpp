@@ -262,7 +262,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     demosaicingLayout->setSpacing(KDialog::spacingHint());
     demosaicingLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->demosaicingSettings, i18n("Demosaicing"));
+    insertItem(DEMOSAICING, d->demosaicingSettings, i18n("Demosaicing"));
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -381,7 +381,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->whiteBalanceSettings, i18n("White Balance"));
+    insertItem(WHITEBALANCE, d->whiteBalanceSettings, i18n("White Balance"));
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -433,7 +433,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->correctionsSettings, i18n("Corrections"));
+    insertItem(CORRECTIONS, d->correctionsSettings, i18n("Corrections"));
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -497,7 +497,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->colormanSettings, i18n("Color Management"));
+    insertItem(COLORMANAGEMENT, d->colormanSettings, i18n("Color Management"));
 
     if (!outputColorSpaceOption)
     {
