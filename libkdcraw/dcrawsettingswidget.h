@@ -27,7 +27,12 @@
 
 // Qt includes.
 
+#include <qstring.h>
 #include <qtoolbox.h>
+
+// KDE includes.
+
+#include <kurlrequester.h>
 
 // Local Includes.
 
@@ -71,7 +76,11 @@ public:
 
     RawDecodingSettings::WhiteBalance     whiteBalance();
     RawDecodingSettings::DecodingQuality  quality();
+    RawDecodingSettings::InputColorSpace  inputColorSpace();
     RawDecodingSettings::OutputColorSpace outputColorSpace();
+
+    QString inputColorProfile();
+    QString outputColorProfile();
 
     void   setSixteenBits(bool b);
     void   setCameraWB(bool b);
@@ -93,7 +102,10 @@ public:
     void   setcaBlueMultiplier(double b);
     void   setMedianFilterPasses(int p);
     void   setQuality(RawDecodingSettings::DecodingQuality q);
+    void   setInputColorSpace(RawDecodingSettings::InputColorSpace c);
     void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
+    void   setInputColorProfile(const QString& path);
+    void   setOutputColorProfile(const QString& path);
 
     void   setDefaultSettings();
 
@@ -101,6 +113,9 @@ public:
     bool   brightnessSettingsIsEnabled();
 
     void   updateMinimumWidth();
+
+    KURLRequester* inputProfileUrlEdit() const;
+    KURLRequester* outputProfileUrlEdit() const;
 
 signals:
 
@@ -115,6 +130,8 @@ private slots:
     void slotNoiseReductionToggled(bool);
     void slotCACorrectionToggled(bool);
     void processDcrawURL(const QString&);
+    void slotInputColorSpaceChanged(int);
+    void slotOutputColorSpaceChanged(int);
 
 private:
 

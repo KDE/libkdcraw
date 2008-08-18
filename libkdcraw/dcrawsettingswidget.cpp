@@ -30,7 +30,6 @@
 #include <qwhatsthis.h>
 #include <qstring.h>
 #include <qtooltip.h>
-#include <qtabbar.h>
 
 // KDE includes.
 
@@ -93,6 +92,10 @@ public:
         colormanSettings               = 0;
         medianFilterPassesSpinBox      = 0;
         medianFilterPassesLabel        = 0;
+        inIccUrlEdit                   = 0;
+        outIccUrlEdit                  = 0;
+        inputColorSpaceLabel           = 0;
+        inputColorSpaceComboBox        = 0;
     }
 
     QWidget         *demosaicingSettings;
@@ -110,6 +113,7 @@ public:
     QLabel          *caBlueMultLabel;
     QLabel          *unclipColorLabel;
     QLabel          *reconstructLabel;
+    QLabel          *inputColorSpaceLabel;
     QLabel          *outputColorSpaceLabel;
     QLabel          *medianFilterPassesLabel;
 
@@ -121,9 +125,13 @@ public:
     QCheckBox       *enableNoiseReduction;
     QCheckBox       *enableCACorrection;
 
+    KURLRequester   *inIccUrlEdit;
+    KURLRequester   *outIccUrlEdit;
+
     RComboBox       *whiteBalanceComboBox;
     RComboBox       *RAWQualityComboBox;
     RComboBox       *unclipColorComboBox;
+    RComboBox       *inputColorSpaceComboBox;
     RComboBox       *outputColorSpaceComboBox;
 
     RIntNumInput    *customWhiteBalanceSpinBox;
@@ -431,17 +439,34 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     // COLOR MANAGEMENT Settings panel
 
     d->colormanSettings         = new QWidget(this);
-    QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings, 5, 2);
+    QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings, 4, 2);
 
-    d->outputColorSpaceLabel    = new QLabel(i18n("Color space:"), d->colormanSettings);
+    d->inputColorSpaceLabel    = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
+    d->inputColorSpaceComboBox = new RComboBox(d->colormanSettings);
+    d->inputColorSpaceComboBox->insertItem(i18n("None"),    RawDecodingSettings::NOINPUTCS);
+    d->inputColorSpaceComboBox->insertItem(i18n("Embeded"), RawDecodingSettings::EMBEDED);
+    d->inputColorSpaceComboBox->insertItem(i18n("Custom"),  RawDecodingSettings::CUSTOMINPUTCS);
+    d->inputColorSpaceComboBox->setDefaultItem(RawDecodingSettings::NOINPUTCS);
+    QWhatsThis::add(d->inputColorSpaceComboBox, i18n("<p><b>Camera Profile</b><p>"
+                "Select here the input color space used to decode RAW data.<p>"
+                "<b>None</b>: no input color profile is used during RAW decoding.<p>"
+                "<b>Embeded</b>: use embedded color profile from RAW file if exist.<p>"
+                "<b>Custom</b>: use a custom input color space profile."));
+
+    d->inIccUrlEdit = new KURLRequester(d->colormanSettings);
+    d->inIccUrlEdit->setMode(KFile::File|KFile::ExistingOnly);
+    d->inIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+
+    d->outputColorSpaceLabel    = new QLabel(i18n("WorkSpace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox(d->colormanSettings);
-    d->outputColorSpaceComboBox->insertItem(i18n("Raw (linear)"), 0);
-    d->outputColorSpaceComboBox->insertItem(i18n("sRGB"),         1);
-    d->outputColorSpaceComboBox->insertItem(i18n("Adobe RGB"),    2);
-    d->outputColorSpaceComboBox->insertItem(i18n("Wide Gamut"),   3);
-    d->outputColorSpaceComboBox->insertItem(i18n("Pro-Photo"),    4);
-    d->outputColorSpaceComboBox->setDefaultItem(1);
-    QWhatsThis::add( d->outputColorSpaceComboBox, i18n("<p><b>Color space</b><p>"
+    d->outputColorSpaceComboBox->insertItem(i18n("Raw (linear)"), RawDecodingSettings::RAWCOLOR);
+    d->outputColorSpaceComboBox->insertItem(i18n("sRGB"),         RawDecodingSettings::SRGB);
+    d->outputColorSpaceComboBox->insertItem(i18n("Adobe RGB"),    RawDecodingSettings::ADOBERGB);
+    d->outputColorSpaceComboBox->insertItem(i18n("Wide Gamut"),   RawDecodingSettings::WIDEGAMMUT);
+    d->outputColorSpaceComboBox->insertItem(i18n("Pro-Photo"),    RawDecodingSettings::PROPHOTO);
+    d->outputColorSpaceComboBox->insertItem(i18n("Custom"),       RawDecodingSettings::CUSTOMOUTPUTCS);
+    d->outputColorSpaceComboBox->setDefaultItem(RawDecodingSettings::SRGB);
+    QWhatsThis::add(d->outputColorSpaceComboBox, i18n("<p><b>WorkSpace</b><p>"
                 "Select here the output color space used to decode RAW data.<p>"
                 "<b>Raw (linear)</b>: in this mode, no output color space is used "
                 "during RAW decoding.<p>"
@@ -455,11 +480,20 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                 "Adobe RGB color space.<p>"
                 "<b>Pro-Photo</b>: this color space is an RGB color space, developed by "
                 "Kodak, that offers an especially large gamut designed for use with "
-                "photographic outputs in mind."));
+                "photographic outputs in mind.<p>"
+                "<b>Custom</b>: use a custom output color space profile."));
 
-    colormanLayout->addMultiCellWidget(d->outputColorSpaceLabel,    0, 0, 0, 0);
-    colormanLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 0, 0, 1, 2);
-    colormanLayout->setRowStretch(5, 10);
+    d->outIccUrlEdit = new KURLRequester(d->colormanSettings);
+    d->outIccUrlEdit->setMode(KFile::File|KFile::ExistingOnly);
+    d->outIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+
+    colormanLayout->addMultiCellWidget(d->inputColorSpaceLabel,     0, 0, 0, 0);
+    colormanLayout->addMultiCellWidget(d->inputColorSpaceComboBox,  0, 0, 1, 2);
+    colormanLayout->addMultiCellWidget(d->inIccUrlEdit,             1, 1, 0, 2);
+    colormanLayout->addMultiCellWidget(d->outputColorSpaceLabel,    2, 2, 0, 0);
+    colormanLayout->addMultiCellWidget(d->outputColorSpaceComboBox, 2, 2, 1, 2);
+    colormanLayout->addMultiCellWidget(d->outIccUrlEdit,            3, 3, 0, 2);
+    colormanLayout->setRowStretch(4, 10);
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
@@ -469,8 +503,12 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     {
         removeItem(d->colormanSettings);
         d->colormanSettings->hide();
+        d->inputColorSpaceLabel->hide();
+        d->inputColorSpaceComboBox->hide();
+        d->inIccUrlEdit->hide();
         d->outputColorSpaceLabel->hide();
         d->outputColorSpaceComboBox->hide();
+        d->outIccUrlEdit->hide();
     }
 
     // ---------------------------------------------------------------
@@ -499,7 +537,19 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     connect(dcrawVersion, SIGNAL(leftClickedURL(const QString&)),
             this, SLOT(processDcrawURL(const QString&)));
 
+    connect(d->inputColorSpaceComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotInputColorSpaceChanged(int)));
+
+    connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotOutputColorSpaceChanged(int)));
+
     // Wrapper to emit signal when something is changed in settings.
+
+    connect(d->inIccUrlEdit, SIGNAL(urlSelected(const QString&)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->outIccUrlEdit, SIGNAL(urlSelected(const QString&)),
+            this, SIGNAL(signalSettingsChanged()));
 
     connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -508,6 +558,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->unclipColorComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->inputColorSpaceComboBox, SIGNAL(activated(int)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
@@ -585,6 +638,16 @@ void DcrawSettingsWidget::processDcrawURL(const QString& url)
     KApplication::kApplication()->invokeBrowser(url);
 }
 
+KURLRequester* DcrawSettingsWidget::inputProfileUrlEdit() const
+{
+    return d->inIccUrlEdit;
+}
+
+KURLRequester* DcrawSettingsWidget::outputProfileUrlEdit() const
+{
+    return d->outIccUrlEdit;
+}
+
 void DcrawSettingsWidget::setDefaultSettings()
 {
     setWhiteBalance((RawDecodingSettings::WhiteBalance)d->whiteBalanceComboBox->defaultItem());
@@ -604,6 +667,7 @@ void DcrawSettingsWidget::setDefaultSettings()
     setWhitePoint(d->whitePointSpinBox->defaultValue());
     setNRThreshold(d->NRThresholdSpinBox->defaultValue());
     setQuality((RawDecodingSettings::DecodingQuality)d->RAWQualityComboBox->defaultItem());
+    setInputColorSpace((RawDecodingSettings::InputColorSpace)d->inputColorSpaceComboBox->defaultItem());
     setOutputColorSpace((RawDecodingSettings::OutputColorSpace)d->outputColorSpaceComboBox->defaultItem());
     setMedianFilterPasses(d->medianFilterPassesSpinBox->defaultValue());
 }
@@ -658,6 +722,16 @@ void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
     d->caBlueMultSpinBox->setEnabled(b);
     d->caRedMultLabel->setEnabled(b);
     d->caBlueMultLabel->setEnabled(b);
+}
+
+void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
+{
+    d->inIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMINPUTCS);
+}
+
+void DcrawSettingsWidget::slotOutputColorSpaceChanged(int item)
+{
+    d->outIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMOUTPUTCS);
 }
 
 // ---------------------------------------------------------------
@@ -933,6 +1007,19 @@ void DcrawSettingsWidget::setQuality(RawDecodingSettings::DecodingQuality q)
 
 // ---------------------------------------------------------------
 
+RawDecodingSettings::InputColorSpace DcrawSettingsWidget::inputColorSpace()
+{
+    return (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentItem());
+}
+
+void DcrawSettingsWidget::setInputColorSpace(RawDecodingSettings::InputColorSpace c)
+{
+    d->inputColorSpaceComboBox->setCurrentItem((int)c);
+    slotInputColorSpaceChanged((int)c);
+}
+
+// ---------------------------------------------------------------
+
 RawDecodingSettings::OutputColorSpace DcrawSettingsWidget::outputColorSpace()
 {
     return (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentItem());
@@ -941,6 +1028,7 @@ RawDecodingSettings::OutputColorSpace DcrawSettingsWidget::outputColorSpace()
 void DcrawSettingsWidget::setOutputColorSpace(RawDecodingSettings::OutputColorSpace c)
 {
     d->outputColorSpaceComboBox->setCurrentItem((int)c);
+    slotOutputColorSpaceChanged((int)c);
 }
 
 // ---------------------------------------------------------------
@@ -1003,6 +1091,30 @@ double DcrawSettingsWidget::caBlueMultiplier()
 void DcrawSettingsWidget::setcaBlueMultiplier(double b)
 {
     d->caBlueMultSpinBox->setValue(b);
+}
+
+// ---------------------------------------------------------------
+
+QString DcrawSettingsWidget::inputColorProfile()
+{
+    return d->inIccUrlEdit->url();
+}
+
+void DcrawSettingsWidget::setInputColorProfile(const QString& path)
+{
+    d->inIccUrlEdit->setURL(path);
+}
+
+// ---------------------------------------------------------------
+
+QString DcrawSettingsWidget::outputColorProfile()
+{
+    return d->outIccUrlEdit->url();
+}
+
+void DcrawSettingsWidget::setOutputColorProfile(const QString& path)
+{
+    d->outIccUrlEdit->setURL(path);
 }
 
 } // NameSpace KDcrawIface

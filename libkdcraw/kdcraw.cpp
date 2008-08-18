@@ -744,8 +744,11 @@ void KDcraw::startProcess()
     *d->process << "-H";
     *d->process << QString::number(m_rawDecodingSettings.unclipColors);
 
-    *d->process << "-b";
-    *d->process << QString::number(m_rawDecodingSettings.brightness);
+    if (m_rawDecodingSettings.brightness != 1.0)
+    {
+        *d->process << "-b";
+        *d->process << QString::number(m_rawDecodingSettings.brightness);
+    }
 
     if (m_rawDecodingSettings.enableBlackPoint)
     {
@@ -890,26 +893,44 @@ void KDcraw::startProcess()
         *d->process << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
     }
 
-    if (!m_rawDecodingSettings.cameraProfile.isEmpty())
+    switch (m_rawDecodingSettings.inputColorSpace)
     {
-        *d->process << "-p";
-        *d->process << QFile::encodeName(m_rawDecodingSettings.cameraProfile);
-    }
-    else if (m_rawDecodingSettings.useEmbedCameraProfile)
-    {
-        *d->process << "-p";
-        *d->process << "embed";
+        case RawDecodingSettings::EMBEDED:
+        {
+            *d->process << "-p";
+            *d->process << "embed";
+            break;
+        }
+        case RawDecodingSettings::CUSTOMINPUTCS:
+        {
+            if (!m_rawDecodingSettings.inputProfile.isEmpty())
+            {
+                *d->process << "-p";
+                *d->process << QFile::encodeName(m_rawDecodingSettings.inputProfile);
+            }
+            break;
+        }
+        default:   // No input profile
+            break;
     }
 
-    if (!m_rawDecodingSettings.outputProfile.isEmpty())
+    switch (m_rawDecodingSettings.outputColorSpace)
     {
-        *d->process << "-o";
-        *d->process << QFile::encodeName(m_rawDecodingSettings.outputProfile);
-    }
-    else
-    {
-        *d->process << "-o";
-        *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
+        case RawDecodingSettings::CUSTOMOUTPUTCS:
+        {
+            if (!m_rawDecodingSettings.outputProfile.isEmpty())
+            {
+                *d->process << "-o";
+                *d->process << QFile::encodeName(m_rawDecodingSettings.outputProfile);
+            }
+            break;
+        }
+        default:
+        {
+            *d->process << "-o";
+            *d->process << QString::number(m_rawDecodingSettings.outputColorSpace);
+            break;
+        }
     }
 
     *d->process << QFile::encodeName(d->filePath);

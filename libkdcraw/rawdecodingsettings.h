@@ -69,11 +69,11 @@ public:
     };
 
     /** White balances alternatives
-        NONE:     no white balance used : dcraw reverts to standard daylight D65 WB
-        CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not
-        AUTO:     Averages an auto WB on the entire image
-        CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors)
-        AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details)
+        NONE:     no white balance used : dcraw reverts to standard daylight D65 WB.
+        CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not.
+        AUTO:     Averages an auto WB on the entire image.
+        CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
+        AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
     */
     enum WhiteBalance
     {
@@ -84,14 +84,34 @@ public:
         AERA    = 4
     };
 
-    /** Output RGB color space used to decoded image */
-    enum OutputColorSpace 
+    /** Input color profile used to decoded image 
+        NOINPUTCS:     No input color profile.
+        EMBEDED:       Use the camera profile embeded in RAW file if exist.
+        CUSTOMINPUTCS: Use a custom input color space profile.
+    */
+    enum InputColorSpace 
+    {
+        NOINPUTCS = 0,
+        EMBEDED,
+        CUSTOMINPUTCS
+    };
+
+    /** Output RGB color space used to decoded image 
+        RAWCOLOR:       No output color profile (Linear RAW).
+        SRGB:           Use standard sRGB color space.
+        ADOBERGB:       Use standard Adobe RGB color space.
+        WIDEGAMMUT:     Use standard RGB Wide Gamut color space.
+        PROPHOTO:       Use standard RGB Pro Photo color space.
+        CUSTOMOUTPUTCS: Use a custom workspace color profile.
+    */
+    enum OutputColorSpace
     {
         RAWCOLOR = 0,
         SRGB,
         ADOBERGB,
         WIDEGAMMUT,
-        PROPHOTO
+        PROPHOTO,
+        CUSTOMOUTPUTCS
     };
 
     /** Standard constructor with default settings */
@@ -100,6 +120,7 @@ public:
         sixteenBitsImage           = false;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
+        inputColorSpace            = NOINPUTCS;
         outputColorSpace           = SRGB;
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
@@ -124,9 +145,8 @@ public:
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
 
-        cameraProfile              = QString();
+        inputProfile               = QString();
         outputProfile              = QString();
-        useEmbedCameraProfile      = false;
 
         deadPixelMap               = QString();
 
@@ -139,6 +159,7 @@ public:
         return sixteenBitsImage        == o.sixteenBitsImage
             && brightness              == o.brightness
             && RAWQuality              == o.RAWQuality
+            && inputColorSpace         == o.inputColorSpace
             && outputColorSpace        == o.outputColorSpace
             && RGBInterpolate4Colors   == o.RGBInterpolate4Colors
             && DontStretchPixels       == o.DontStretchPixels
@@ -157,9 +178,8 @@ public:
             && caMultiplier[0]         == o.caMultiplier[0]
             && caMultiplier[1]         == o.caMultiplier[1]
             && medianFilterPasses      == o.medianFilterPasses
-            && cameraProfile           == o.cameraProfile
+            && inputProfile            == o.inputProfile
             && outputProfile           == o.outputProfile
-            && useEmbedCameraProfile   == o.useEmbedCameraProfile
             && deadPixelMap            == o.deadPixelMap
             && whiteBalanceArea        == o.whiteBalanceArea
           ;
@@ -174,6 +194,7 @@ public:
         sixteenBitsImage           = true;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
+        inputColorSpace            = NOINPUTCS;
         outputColorSpace           = SRGB;
         RGBInterpolate4Colors      = false;
         DontStretchPixels          = false;
@@ -197,9 +218,8 @@ public:
         caMultiplier[0]            = 1.0;
         caMultiplier[1]            = 1.0;
 
-        cameraProfile              = QString();
+        inputProfile               = QString();
         outputProfile              = QString();
-        useEmbedCameraProfile      = false;
 
         deadPixelMap               = QString();
 
@@ -296,23 +316,23 @@ public:
     */
     int whitePoint;
 
-    /** The output color space used to decoded RAW data. See OutputColorSpace
-        values for details. Note: if outputProfile is not empty, this setting is ignored.
+    /** The input color profile used to decoded RAW data. See OutputColorProfile
+        values for details.
+    */
+    InputColorSpace inputColorSpace;
+
+    /** Path to custom input ICC profile to define the camera's raw colorspace.
+    */
+    QString inputProfile;
+
+    /** The output color profile used to decoded RAW data. See OutputColorProfile
+        values for details.
     */
     OutputColorSpace outputColorSpace;
 
-    /** Path to ICC profile to define the output colorspace.
+    /** Path to custom output ICC profile to define the color workspace.
     */
     QString outputProfile;
-
-    /** Path to ICC profile to define the camera's raw colorspace.
-    */
-    QString cameraProfile;
-
-    /** Use the ICC profile embedded in the raw photo. Note: if cameraProfile is not empty, 
-        this setting is ignored.
-    */
-    bool useEmbedCameraProfile;
 
     /** Path to text file including dead pixel list.
     */
