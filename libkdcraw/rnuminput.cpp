@@ -201,7 +201,7 @@ void RDoubleNumInput::setPrecision(int p)
     d->input->setPrecision(p);
 }
 
-void RDoubleNumInput::setRange(int min, int max, int step)
+void RDoubleNumInput::setRange(double min, double max, double step)
 {
     d->input->setRange(min, max, step);
 }

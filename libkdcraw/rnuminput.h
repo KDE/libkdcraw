@@ -99,7 +99,7 @@ public:
     double value();
 
     void   setPrecision(int p);
-    void   setRange(int min, int max, int step);
+    void   setRange(double min, double max, double step);
 
     void   setDefaultValue(double d);
     double defaultValue();
