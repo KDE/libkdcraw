@@ -443,9 +443,9 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     d->inputColorSpaceLabel    = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
     d->inputColorSpaceComboBox = new RComboBox(d->colormanSettings);
-    d->inputColorSpaceComboBox->insertItem(i18n("None"),    RawDecodingSettings::NOINPUTCS);
-    d->inputColorSpaceComboBox->insertItem(i18n("Embedded"), RawDecodingSettings::EMBEDED);
-    d->inputColorSpaceComboBox->insertItem(i18n("Custom"),  RawDecodingSettings::CUSTOMINPUTCS);
+    d->inputColorSpaceComboBox->insertItem(i18n("None"),     RawDecodingSettings::NOINPUTCS);
+    d->inputColorSpaceComboBox->insertItem(i18n("Embedded"), RawDecodingSettings::EMBEDDED);
+    d->inputColorSpaceComboBox->insertItem(i18n("Custom"),   RawDecodingSettings::CUSTOMINPUTCS);
     d->inputColorSpaceComboBox->setDefaultItem(RawDecodingSettings::NOINPUTCS);
     QWhatsThis::add(d->inputColorSpaceComboBox, i18n("<p><b>Camera Profile</b><p>"
                 "Select here the input color space used to decode RAW data.<p>"
