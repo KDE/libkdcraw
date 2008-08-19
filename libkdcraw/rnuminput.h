@@ -104,16 +104,16 @@ public:
 
     KDoubleNumInput* input() const;
 
-signals:
+Q_SIGNALS:
 
     void reset();
     void valueChanged(double);
 
-public slots:
+public Q_SLOTS:
 
     void slotReset();
 
-private slots:
+private Q_SLOTS:
 
     void slotValueChanged(double);
 
