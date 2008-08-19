@@ -92,7 +92,7 @@ public:
     enum InputColorSpace 
     {
         NOINPUTCS = 0,
-        EMBEDED,
+        EMBEDDED,
         CUSTOMINPUTCS
     };
 
