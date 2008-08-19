@@ -86,7 +86,7 @@ public:
 
     /** Input color profile used to decoded image 
         NOINPUTCS:     No input color profile.
-        EMBEDED:       Use the camera profile embeded in RAW file if exist.
+        EMBEDDED:      Use the camera profile embeded in RAW file if exist.
         CUSTOMINPUTCS: Use a custom input color space profile.
     */
     enum InputColorSpace 

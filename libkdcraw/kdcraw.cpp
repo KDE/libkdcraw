@@ -869,7 +869,7 @@ bool KDcraw::startProcess()
 
     switch (m_rawDecodingSettings.inputColorSpace)
     {
-        case RawDecodingSettings::EMBEDED:
+        case RawDecodingSettings::EMBEDDED:
         {
             args << "-p";
             args << "embed";
