@@ -53,7 +53,6 @@ public:
     RIntNumInput(QWidget *parent=0);
     ~RIntNumInput();
 
-    void setValue(int d);
     int  value();
 
     void setRange(int min, int max, int step);
@@ -70,6 +69,7 @@ signals:
 
 public slots:
 
+    void setValue(int d);
     void slotReset();
 
 private slots:
@@ -95,7 +95,6 @@ public:
     RDoubleNumInput(QWidget *parent=0);
     ~RDoubleNumInput();
 
-    void   setValue(double d);
     double value();
 
     void   setPrecision(int p);
@@ -113,6 +112,7 @@ signals:
 
 public slots:
 
+    void setValue(double d);
     void slotReset();
 
 private slots:
