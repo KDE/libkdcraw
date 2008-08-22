@@ -94,6 +94,11 @@ KComboBox* RComboBox::combo() const
     return d->combo;
 }
 
+void RComboBox::addItem(const QString& t, int index)
+{
+    d->combo->addItem(t, index);
+}
+
 void RComboBox::insertItem(int index, const QString& t)
 {
     d->combo->insertItem(index, t);

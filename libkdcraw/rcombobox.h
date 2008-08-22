@@ -57,6 +57,7 @@ public:
 
     KComboBox* combo() const;
 
+    void addItem(const QString& t, int index = -1);
     void insertItem(int index, const QString& t);
 
 Q_SIGNALS:
