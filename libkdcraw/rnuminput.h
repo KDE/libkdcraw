@@ -50,7 +50,6 @@ public:
     RIntNumInput(QWidget *parent=0);
     ~RIntNumInput();
 
-    void setValue(int d);
     int  value();
 
     void setSliderEnabled(bool b);
@@ -68,6 +67,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void setValue(int d);
     void slotReset();
 
 private Q_SLOTS:
@@ -93,7 +93,6 @@ public:
     RDoubleNumInput(QWidget *parent=0);
     ~RDoubleNumInput();
 
-    void   setValue(double d);
     double value();
 
     void   setDecimals(int p);
@@ -111,6 +110,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
+    void setValue(double d);
     void slotReset();
 
 private Q_SLOTS:
