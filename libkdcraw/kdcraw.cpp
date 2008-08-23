@@ -37,7 +37,7 @@ extern "C"
 #include <cstdio>
 #include <cmath>
 
-// Qt Includes.
+// Qt includes.
 
 #include <QDebug>
 #include <QEvent>

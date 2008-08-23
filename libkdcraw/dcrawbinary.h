@@ -28,7 +28,7 @@
 
 #include <QtCore/QString>
 
-// Local Includes.
+// Local includes.
 
 #include "libkdcraw_export.h"
 

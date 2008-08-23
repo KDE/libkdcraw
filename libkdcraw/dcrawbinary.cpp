@@ -26,7 +26,7 @@
 #include <QProcess>
 #include <QFileInfo>
 
-// KDE includes
+// KDE includes.
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -35,7 +35,7 @@
 #include <kglobal.h>
 #include <kaboutdata.h>
 
-// Local includes
+// Local includes.
 
 #include "version.h"
 #include "rawfiles.h"

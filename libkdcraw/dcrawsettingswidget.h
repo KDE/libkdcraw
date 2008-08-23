@@ -34,7 +34,7 @@
 
 #include <kurlrequester.h>
 
-// Local Includes.
+// Local includes.
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"

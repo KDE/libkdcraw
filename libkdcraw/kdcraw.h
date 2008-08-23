@@ -25,7 +25,7 @@
 #ifndef KDCRAW_H
 #define KDCRAW_H
 
-// Qt Includes.
+// Qt includes.
 
 #include <QtCore/QString>
 #include <QtCore/QObject>

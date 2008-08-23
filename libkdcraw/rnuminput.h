@@ -31,7 +31,7 @@
 #include <khbox.h>
 #include <knuminput.h>
 
-// Local includes
+// Local includes.
 
 #include "libkdcraw_export.h"
 

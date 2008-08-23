@@ -30,7 +30,7 @@
 #include <khbox.h>
 #include <kcombobox.h>
 
-// Local includes
+// Local includes.
 
 #include "libkdcraw_export.h"
 

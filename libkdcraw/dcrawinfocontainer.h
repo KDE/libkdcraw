@@ -29,7 +29,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QSize>
 
-// Local Includes.
+// Local includes.
 
 #include "libkdcraw_export.h"
 
