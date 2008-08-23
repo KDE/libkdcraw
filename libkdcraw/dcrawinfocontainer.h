@@ -23,7 +23,7 @@
 #ifndef DCRAW_INFO_CONTAINER_H
 #define DCRAW_INFO_CONTAINER_H
 
-// QT includes.
+// Qt includes.
 
 #include <qstring.h>
 #include <qdatetime.h>
