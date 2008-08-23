@@ -29,7 +29,7 @@
 #include <qstring.h>
 #include <qobject.h>
 
-// Local Includes.
+// Local includes.
 
 #include "libkdcraw_export.h"
 

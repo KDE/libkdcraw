@@ -25,7 +25,7 @@
 
 #include <qfileinfo.h>
 
-// KDE includes
+// KDE includes.
 
 #include <kprocess.h>
 #include <kmessagebox.h>
@@ -34,7 +34,7 @@
 #include <kglobal.h>
 #include <kaboutdata.h>
 
-// Local includes
+// Local includes.
 
 #include "rawfiles.h"
 #include "dcrawbinary.h"

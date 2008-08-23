@@ -39,7 +39,7 @@ extern "C"
 #include <cstdio>
 #include <cmath>
 
-// Qt Includes.
+// Qt includes.
 
 #include <qfile.h>
 #include <qtimer.h>

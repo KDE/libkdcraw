@@ -29,7 +29,7 @@
 #include <qdatetime.h>
 #include <qsize.h>
 
-// Local Includes.
+// Local includes.
 
 #include "libkdcraw_export.h"
 
