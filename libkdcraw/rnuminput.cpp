@@ -27,12 +27,12 @@
 
 #include <qtoolbutton.h>
 #include <qtooltip.h>
-#include <qlabel.h>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdialog.h>
 
 // Local includes.
 
@@ -67,16 +67,15 @@ RIntNumInput::RIntNumInput(QWidget *parent)
     d = new RIntNumInputPriv;
 
     d->input       = new KIntNumInput(this);
-    QLabel *space  = new QLabel(this);
     d->resetButton = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(QWidget::NoFocus);
     d->resetButton->setIconSet(SmallIconSet("reload_page"));
     QToolTip::add(d->resetButton, i18n("Reset to default value"));
 
-    setStretchFactor(space, 10);
+    setStretchFactor(d->input, 10);
     setMargin(0);
-    setSpacing(0);
+    setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
@@ -166,16 +165,15 @@ RDoubleNumInput::RDoubleNumInput(QWidget *parent)
     d = new RDoubleNumInputPriv;
 
     d->input       = new KDoubleNumInput(this);
-    QLabel *space  = new QLabel(this);
     d->resetButton = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(QWidget::NoFocus);
     d->resetButton->setIconSet(SmallIconSet("reload_page"));
     QToolTip::add(d->resetButton, i18n("Reset to default value"));
 
-    setStretchFactor(space, 10);
+    setStretchFactor(d->input, 10);
     setMargin(0);
-    setSpacing(0);
+    setSpacing(KDialog::spacingHint());
 
     // -------------------------------------------------------------
 
