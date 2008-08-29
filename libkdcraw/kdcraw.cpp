@@ -138,7 +138,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 {
     QByteArray imgData;
 
-    if ( !loadEmbeddedPreview(imgData, path) )
+    if ( loadEmbeddedPreview(imgData, path) )
     {
         if (image.loadFromData( imgData ))
         {
