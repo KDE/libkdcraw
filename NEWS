@@ -9,6 +9,8 @@
                Add new integer and double slider widgets with
                default values and reset buttons.
                Add new combo box widget with a default item and reset button.
+               Add new method to extract whole embedded JPEG image data as a 
+               byte array.
 
 - Updated dcraw to 8.87
   New camera : Kodak C603, Nikon D700, Canon EOS 1000D,

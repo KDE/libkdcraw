@@ -136,8 +136,23 @@ bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
 
 bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 {
+    QByteArray imgData;
+
+    if ( !loadEmbeddedPreview(imgData, path) )
+    {
+        if (image.loadFromData( imgData ))
+        {
+            qDebug("Using embedded RAW preview extraction");
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
+{
     FILE       *f=NULL;
-    QByteArray  imgData;
     const int   MAX_IPC_SIZE = (1024*32);
     char        buffer[MAX_IPC_SIZE];
     QFile       file;
@@ -187,13 +202,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
     pclose( f );
 
     if ( !imgData.isEmpty() )
-    {
-        if (image.loadFromData( imgData ))
-        {
-            qDebug("Using embedded RAW preview extraction");
-            return true;
-        }
-    }
+        return true;
 
     return false;
 }

@@ -68,6 +68,11 @@ public:
     */
     static bool loadDcrawPreview(QImage& image, const QString& path);
 
+    /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data. 
+        This is a fast and non cancelable. This method do not require a class instance to run.
+    */
+    static bool loadEmbeddedPreview(QByteArray& imgData, const QString& path);
+
     /** Get the embedded JPEG preview image from RAW picture. This is a fast and non cancelable 
         This method do not require a class instance to run.
     */
