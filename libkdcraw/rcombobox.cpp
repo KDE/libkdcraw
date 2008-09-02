@@ -83,9 +83,6 @@ RComboBox::RComboBox(QWidget *parent)
 
     connect(d->combo, SIGNAL(activated(int)),
             this, SLOT(slotItemActivated(int)));
-
-    connect(d->combo, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(currentIndexChanged(int)));
 }
 
 RComboBox::~RComboBox()

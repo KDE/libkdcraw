@@ -66,7 +66,6 @@ signals:
 
     void reset();
     void activated(int);
-    void currentIndexChanged(int);
 
 public slots:
 
