@@ -98,7 +98,7 @@ public:
     double value();
 
     void   setPrecision(int p);
-    void   setRange(double min, double max, double step, bool slider=false);
+    void   setRange(double min, double max, double step, bool slider=true);
 
     void   setDefaultValue(double d);
     double defaultValue();
