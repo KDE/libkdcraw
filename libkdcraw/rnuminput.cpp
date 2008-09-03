@@ -199,9 +199,9 @@ void RDoubleNumInput::setPrecision(int p)
     d->input->setPrecision(p);
 }
 
-void RDoubleNumInput::setRange(double min, double max, double step)
+void RDoubleNumInput::setRange(double min, double max, double step, bool slider)
 {
-    d->input->setRange(min, max, step);
+    d->input->setRange(min, max, step, slider);
 }
 
 double RDoubleNumInput::value()
