@@ -57,9 +57,22 @@ FIND_PACKAGE(LCMS REQUIRED)
 # Detect libJPEG
 FIND_PACKAGE(JPEG REQUIRED)
 
+# LibRAW source code -------------------------------------------------------------
+
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw)
+
+SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/foveon.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
+   )
+
+# --------------------------------------------------------------------------------
+
 SUBDIRS(icons)
 SUBDIRS(libkdcraw)
-SUBDIRS(dcraw)
 SUBDIRS(profiles)
 
 IF(NOT WIN32)

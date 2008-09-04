@@ -3,11 +3,12 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINAR
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/dcrawinfo.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/dcrawinfo.h)
 
-SET(kdcraw_LIB_SRCS dcrawbinary.cpp 
+SET(kdcraw_LIB_SRCS dcrawbinary.cpp
                     kdcraw.cpp 
                     dcrawsettingswidget.cpp
                     rcombobox.cpp
                     rnuminput.cpp
+                    ${libraw_LIB_SRCS}
    )
 
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
