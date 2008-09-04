@@ -157,16 +157,16 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    LibRaw rawProcessor;
-    int ret = rawProcessor.open_file(QFile::encodeName(path));
+    LibRaw raw;
+    int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    ret = rawProcessor.unpack_thumb();
+    ret = raw.unpack_thumb();
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    imgData = QByteArray(rawProcessor.imgdata.thumbnail.thumb);
+    imgData = QByteArray(raw.imgdata.thumbnail.thumb);
 
     if ( !imgData.isEmpty() )
         return true;
@@ -176,42 +176,42 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 {
-    QByteArray  imgData;
-    QFileInfo   fileInfo(path);
-    QString     rawFilesExt(rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
+    QFileInfo fileInfo(path);
+    QString   rawFilesExt(rawFiles());
+    QString   ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    LibRaw rawProcessor;
-    rawProcessor.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
-    rawProcessor.imgdata.params.use_camera_wb = 1; // Use camera white balance, if possible.
-    rawProcessor.imgdata.params.half_size     = 1; // Half-size color image (3x faster than -q).
+    LibRaw raw;
+    raw.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
+    raw.imgdata.params.use_camera_wb = 1; // Use camera white balance, if possible.
+    raw.imgdata.params.half_size     = 1; // Half-size color image (3x faster than -q).
 
-    int ret = rawProcessor.open_file(QFile::encodeName(path));
+    int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    ret = rawProcessor.unpack();
+    ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    ret = rawProcessor.dcraw_process();
+    ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    // TODO: extract demosaiced image data in RGB color space from memory.
-
-    if ( !imgData.isEmpty() )
+    image       = QImage(raw.imgdata.sizes.iwidth, raw.imgdata.sizes.iheight, QImage::Format_RGB32);
+    uchar *bits = image.bits();
+    int   j=0;
+    for(int i = 0; i < image.width() * image.height(); i++)
     {
-        if (image.loadFromData( imgData ))
-        {
-            qDebug("Using reduced RAW picture extraction");
-            return true;
-        }
+        bits[ j ] = raw.imgdata.image[i][0];
+        bits[j+1] = raw.imgdata.image[i][1];
+        bits[j+2] = raw.imgdata.image[i][2];
+        j += 3;
     }
 
+    qDebug("Using reduced RAW picture extraction");
     return false;
 }
 
