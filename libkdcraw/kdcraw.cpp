@@ -55,6 +55,8 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kshell.h>
 
+#include "libraw/libraw.h"
+
 // Local includes.
 
 #include "version.h"
@@ -155,26 +157,13 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    // Try to extract embedded thumbnail using dcraw with options:
-    // -c : write to stdout
-    // -e : Extract the camera-generated thumbnail, not the raw image (JPEG or a PPM file).
-    // Note : this code require at least dcraw version 8.x
+    LibRaw rawProcessor;
 
-    KProcess process;
-// FIXME    process << DcrawBinary::path();
-    process << "-c" <<  "-e" << path;
+    int ret = rawProcessor.unpack_thumb();
+    if (ret != LIBRAW_SUCCESS)
+        return false;
 
-    qDebug() << "Running RAW decoding command:" << process.program().join(" ");
-
-    process.setOutputChannelMode(KProcess::SeparateChannels);
-    process.setNextOpenMode(QIODevice::ReadOnly);
-    process.start();
-
-    while (process.waitForReadyRead(-1))
-    {
-        imgData.append(process.readAllStandardOutput());
-    }
-    process.waitForFinished();
+    imgData = QByteArray(rawProcessor.imgdata.thumbnail.thumb);
 
     if ( !imgData.isEmpty() )
         return true;
