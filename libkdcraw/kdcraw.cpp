@@ -158,8 +158,11 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
 
     LibRaw rawProcessor;
+    int ret = rawProcessor.open_file(QFile::encodeName(path));
+    if (ret != LIBRAW_SUCCESS)
+        return false;
 
-    int ret = rawProcessor.unpack_thumb();
+    ret = rawProcessor.unpack_thumb();
     if (ret != LIBRAW_SUCCESS)
         return false;
 
@@ -174,36 +177,31 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 {
     QByteArray  imgData;
-
-    QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
+    QFileInfo   fileInfo(path);
+    QString     rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    // Try to use simple RAW extraction method in 8 bits ppm output.
-    // -c : write to stdout
-    // -h : Half-size color image (3x faster than -q)
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
+    LibRaw rawProcessor;
+    rawProcessor.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
+    rawProcessor.imgdata.params.use_camera_wb = 1; // Use camera white balance, if possible.
+    rawProcessor.imgdata.params.half_size     = 1; // Half-size color image (3x faster than -q).
 
-    KProcess process;
-// FIXME    process << DcrawBinary::path();
-    process << "-c" << "-h" << "-w" << "-a";
-    process << path;
+    int ret = rawProcessor.open_file(QFile::encodeName(path));
+    if (ret != LIBRAW_SUCCESS)
+        return false;
 
-    qDebug() << "Running RAW decoding command:" << process.program().join(" ");
+    ret = rawProcessor.unpack();
+    if (ret != LIBRAW_SUCCESS)
+        return false;
 
-    process.setOutputChannelMode(KProcess::SeparateChannels);
-    process.setNextOpenMode(QIODevice::ReadOnly);
-    process.start();
+    ret = rawProcessor.dcraw_process();
+    if (ret != LIBRAW_SUCCESS)
+        return false;
 
-    while (process.waitForReadyRead(-1))
-    {
-        imgData.append(process.readAllStandardOutput());
-    }
-    process.waitForFinished();
+    // TODO: extract demosaiced image data in RGB color space from memory.
 
     if ( !imgData.isEmpty() )
     {
