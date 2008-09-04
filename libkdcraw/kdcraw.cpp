@@ -58,7 +58,7 @@ extern "C"
 // Local includes.
 
 #include "version.h"
-#include "dcrawbinary.h"
+#include "rawfiles.h"
 #include "kdcraw.h"
 #include "kdcraw.moc"
 
@@ -149,7 +149,7 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
+    QString   rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
@@ -161,7 +161,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     // Note : this code require at least dcraw version 8.x
 
     KProcess process;
-    process << DcrawBinary::path();
+// FIXME    process << DcrawBinary::path();
     process << "-c" <<  "-e" << path;
 
     qDebug() << "Running RAW decoding command:" << process.program().join(" ");
@@ -187,7 +187,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     QByteArray  imgData;
 
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
+    QString   rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
@@ -200,7 +200,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     // -w : Use camera white balance, if possible
 
     KProcess process;
-    process << DcrawBinary::path();
+// FIXME    process << DcrawBinary::path();
     process << "-c" << "-h" << "-w" << "-a";
     process << path;
 
@@ -239,7 +239,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     QByteArray  command;
 
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(KDcrawIface::DcrawBinary::instance()->rawFiles());
+    QString   rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
@@ -249,7 +249,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     // -i : identify files without decoding them.
     // -v : verbose mode.
 
-    command  = DcrawBinary::path();
+// FIXME    command  = DcrawBinary::path();
     command += " -i -v ";
     command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
@@ -917,13 +917,13 @@ bool KDcraw::startProcess()
 
     args << QFile::encodeName(d->filePath);
 
-    QString command = QString::fromAscii(DcrawBinary::path());
+    QString command /* FIXME = QString::fromAscii(DcrawBinary::path())*/;
     command += " " + args.join(" ");
 
     qDebug("Running RAW decoding command: %s", command.toAscii().constData());
 
     // actually start the process
-    d->process->setProgram(QString::fromAscii(DcrawBinary::path()), args);
+// FIXME    d->process->setProgram(QString::fromAscii(DcrawBinary::path()), args);
     d->process->setOutputChannelMode(KProcess::SeparateChannels);
     d->process->setNextOpenMode(QIODevice::ReadOnly);
     d->process->start();
@@ -1016,6 +1016,41 @@ void KDcraw::readErrorData()
 {
     QByteArray message = d->process->readAllStandardError();
     qDebug("RAW decoding StdErr: %s", (const char*)message);
+}
+
+const char *KDcraw::rawFiles()
+{
+    return raw_file_extentions;
+}
+
+QStringList KDcraw::rawFilesList()
+{
+    QString string = QString::fromLatin1(rawFiles());
+    return string.remove("*.").split(' ');
+}
+
+int KDcraw::rawFilesVersion()
+{
+    return raw_file_extensions_version;
+}
+
+QStringList KDcraw::supportedCamera()
+{
+
+    QFileInfo fi/*( TODO )*/;
+    QFile file(fi.path() + QString("/CAMERALIST"));
+    if ( !file.open(QIODevice::ReadOnly) ) 
+        return QStringList();
+
+    QByteArray data;
+    data.resize(file.size());
+    QDataStream stream( &file );
+    stream.readRawData(data.data(), data.size());
+    file.close();
+
+    QString tmp(data);
+    QStringList list = tmp.split('\n');
+    return list;
 }
 
 }  // namespace KDcrawIface

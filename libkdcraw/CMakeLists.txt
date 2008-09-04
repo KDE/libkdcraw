@@ -1,10 +1,7 @@
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/dcrawinfo.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/dcrawinfo.h)
-
-SET(kdcraw_LIB_SRCS dcrawbinary.cpp
-                    kdcraw.cpp 
+SET(kdcraw_LIB_SRCS kdcraw.cpp 
                     dcrawsettingswidget.cpp
                     rcombobox.cpp
                     rnuminput.cpp
@@ -21,7 +18,6 @@ INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 INSTALL(FILES rawdecodingsettings.h 
               kdcraw.h 
-              dcrawbinary.h 
               dcrawsettingswidget.h
               rnuminput.h
               rcombobox.h 
@@ -30,3 +26,6 @@ INSTALL(FILES rawdecodingsettings.h
               libkdcraw_export.h 
               ${CMAKE_CURRENT_BINARY_DIR}/version.h 
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
+
+# Install Camera list supported by libraw.
+INSTALL(FILES CAMERALIST DESTINATION ${DATA_INSTALL_DIR}/libkdcraw)

@@ -85,6 +85,21 @@ public:
     */ 
     static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
+    /** Return the string of all RAW file type mime supported. */
+    static const char *rawFiles();
+
+    /** Return the list of all RAW file type mime supported,
+        as a QStringList, without wildcard and suffix dot.  */
+    static QStringList rawFilesList();
+
+    /** Returns a version number for the list of supported RAW file types.
+        This version is incremented if the list of supported formats has changed
+        between library releases. */
+    static int rawFilesVersion();
+
+    /** Provide a list of supported RAW Camera name. */ 
+    static QStringList supportedCamera();
+
 public: 
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using 
