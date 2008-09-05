@@ -577,7 +577,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
                            int &width, int &height, int &rgbmax)
 {
     m_cancel      = false;
-    d->dataPos     = 0;
+    d->dataPos    = 0;
     d->filePath   = filePath;
     d->running    = true;
     d->normalExit = false;
@@ -632,9 +632,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         else if (d->dataPos > checkpoint)
         {
             // While receiving data, progress from 40% to 70%
-            double delta = 0.3 + 0.4 - 0.4*part;
+            double delta  = 0.3 + 0.4 - 0.4*part;
             int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
-            checkpoint += (int)(imageSize / (20 * delta));
+            checkpoint   += (int)(imageSize / (20 * delta));
             setRecievingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize))); 
         }
 
@@ -836,11 +836,11 @@ void KDcraw::startProcess()
             {
                 xD = -2.0064e9/(T*T*T) + 1.9018e6/(T*T) + 0.24748e3/T + 0.237040;
             }
-            yD = -3*xD*xD + 2.87*xD - 0.275;
 
-            X = xD/yD;
-            Y = 1;
-            Z = (1-xD-yD)/yD;
+            yD     = -3*xD*xD + 2.87*xD - 0.275;
+            X      = xD/yD;
+            Y      = 1;
+            Z      = (1-xD-yD)/yD;
             RGB[0] = X*XYZ_to_RGB[0][0] + Y*XYZ_to_RGB[1][0] + Z*XYZ_to_RGB[2][0];
             RGB[1] = X*XYZ_to_RGB[0][1] + Y*XYZ_to_RGB[1][1] + Z*XYZ_to_RGB[2][1];
             RGB[2] = X*XYZ_to_RGB[0][2] + Y*XYZ_to_RGB[1][2] + Z*XYZ_to_RGB[2][2];
