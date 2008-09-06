@@ -291,6 +291,188 @@ int LibRaw::dcraw_document_mode_processing(void)
 
 }
 
+#if 1
+#define FORC(cnt) for (c=0; c < cnt; c++)
+#define FORCC FORC(ret->colors)
+#define SWAP(a,b) { a ^= b; a ^= (b ^= a); }
+
+libraw_processed_image_t * LibRaw::dcraw_make_mem_thumb(int *errcode)
+{
+    if(!T.thumb)
+        {
+            if ( !ID.toffset) 
+                {
+                    if(errcode) *errcode= LIBRAW_NO_THUMBNAIL;
+                }
+            else
+                {
+                    if(errcode) *errcode= LIBRAW_OUT_OF_ORDER_CALL;
+                }
+            return NULL;
+        }
+
+    if (T.tformat == LIBRAW_THUMBNAIL_BITMAP)
+        {
+            libraw_processed_image_t * ret = 
+                (libraw_processed_image_t *)::malloc(sizeof(libraw_processed_image_t)+T.tlength);
+
+            if(!ret)
+                {
+                    if(errcode) *errcode= ENOMEM;
+                    return NULL;
+                }
+
+            bzero(ret,sizeof(libraw_processed_image_t));
+            ret->type   = LIBRAW_IMAGE_BITMAP;
+            ret->height = T.theight;
+            ret->width  = T.twidth;
+            ret->colors = 3; 
+            ret->bits   = 8;
+            ret->gamma_corrected = 1;
+            ret->data_size = T.tlength;
+            memmove(ret->data,T.thumb,T.tlength);
+            if(errcode) *errcode= 0;
+            return ret;
+        }
+    else if (T.tformat == LIBRAW_THUMBNAIL_JPEG)
+        {
+            ushort exif[5];
+            int mk_exif = 0;
+            if(strcmp(T.thumb+6,"Exif")) mk_exif = 1;
+            
+            int dsize = T.tlength + mk_exif * (sizeof(exif)+sizeof(tiff_hdr));
+
+            libraw_processed_image_t * ret = 
+                (libraw_processed_image_t *)::malloc(sizeof(libraw_processed_image_t)+dsize);
+
+            if(!ret)
+                {
+                    if(errcode) *errcode= ENOMEM;
+                    return NULL;
+                }
+
+            bzero(ret,sizeof(libraw_processed_image_t));
+
+            ret->type = LIBRAW_IMAGE_JPEG;
+            ret->data_size = dsize;
+            
+            ret->data[0] = 0xff;
+            ret->data[1] = 0xd8;
+            if(mk_exif)
+                {
+                    struct tiff_hdr th;
+                    memcpy (exif, "\xff\xe1  Exif\0\0", 10);
+                    exif[1] = htons (8 + sizeof th);
+                    memmove(ret->data+2,exif,sizeof(exif));
+                    tiff_head (&th, 0);
+                    memmove(ret->data+(2+sizeof(exif)),&th,sizeof(th));
+                    memmove(ret->data+(2+sizeof(exif)+sizeof(th)),T.thumb+2,T.tlength-2);
+                }
+            else
+                {
+                    memmove(ret->data+2,T.thumb+2,T.tlength-2);
+                }
+            if(errcode) *errcode= 0;
+            return ret;
+            
+        }
+    else
+        {
+            if(errcode) *errcode= LIBRAW_UNSUPPORTED_THUMBNAIL;
+            return NULL;
+
+        }
+}
+
+
+
+libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
+{
+    if((imgdata.progress_flags & LIBRAW_PROGRESS_THUMB_MASK) < LIBRAW_PROGRESS_PRE_INTERPOLATE)
+            {
+                if(errcode) *errcode= LIBRAW_OUT_OF_ORDER_CALL;
+                return NULL;
+            }
+
+    if(!libraw_internal_data.output_data.histogram)
+        {
+            libraw_internal_data.output_data.histogram = 
+                (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
+            merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_ppm_tiff_writer()");
+        }
+
+    unsigned ds = S.height * S.width * (O.output_bps/8) * P1.colors;
+    libraw_processed_image_t *ret = (libraw_processed_image_t*)::malloc(sizeof(libraw_processed_image_t)+ds);
+    if(!ret)
+        {
+                if(errcode) *errcode= ENOMEM;
+                return NULL;
+        }
+    bzero(ret,sizeof(libraw_processed_image_t));
+    // metadata init
+
+    int s_iheight = S.iheight;
+    int s_iwidth = S.iwidth;
+    int s_width = S.width;
+    int s_hwight = S.height;
+
+    S.iheight = S.height;
+    S.iwidth  = S.width;
+
+
+    if (S.flip & 4) SWAP(S.height,S.width);
+
+
+    ret->type   = LIBRAW_IMAGE_BITMAP;
+    ret->height = S.height;
+    ret->width  = S.width;
+    ret->colors = P1.colors;
+    ret->bits   = O.output_bps;
+    ret->gamma_corrected = (O.output_bps == 8)?1:O.gamma_16bit;
+
+    ret->data_size = ds;
+
+    // Cut'n'paste from write_tiff_ppm, should be generalized later
+    uchar *bufp = ret->data;
+    uchar *ppm;
+    ushort *ppm2,lut16[0x10000];
+    int c, row, col, soff, rstep, cstep;
+
+
+    if (ret->bits == 8 || ret->gamma_corrected ) gamma_lut (lut16);
+    soff  = flip_index (0, 0);
+    cstep = flip_index (0, 1) - soff;
+    rstep = flip_index (1, 0) - flip_index (0, S.width);
+
+
+    for (row=0; row < ret->height; row++, soff += rstep) 
+        {
+            ppm2 = (ushort*) (ppm = bufp);
+            for (col=0; col < ret->width; col++, soff += cstep)
+                if (ret->bits == 8)
+                    FORCC ppm [col*ret->colors+c] = lut16[imgdata.image[soff][c]]/256;
+                else if(ret->gamma_corrected) 
+                    FORCC ppm2[col*ret->colors+c] =     lut16[imgdata.image[soff][c]];
+                else 
+                    FORCC ppm2[col*ret->colors+c] =     imgdata.image[soff][c];
+            bufp+=ret->colors*(ret->bits/8)*ret->width;
+        }
+    if(errcode) *errcode= 0;
+
+    S.iheight = s_iheight;
+    S.iwidth = s_iwidth;
+    S.width = s_width;
+    S.height = s_hwight;
+
+    return ret;
+}
+
+#undef FORC
+#undef FORCC
+#undef SWAP
+#endif
+
+
 int LibRaw::dcraw_ppm_tiff_writer(const char *filename)
 {
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
@@ -415,9 +597,9 @@ void LibRaw::kodak_thumb_loader()
     int  (*save_hist)[LIBRAW_HISTOGRAM_SIZE] = libraw_internal_data.output_data.histogram;
     libraw_internal_data.output_data.histogram = t_hist;
     
-    uchar *lut = (uchar*)calloc(0x10000,1);
-    merror(lut,"LibRaw::kodak_thumb_loader()");
-    gamma_lut(lut);
+    ushort *lut16 = (ushort*)calloc(0x10000,sizeof(ushort));
+    merror(lut16,"LibRaw::kodak_thumb_loader()");
+    gamma_lut(lut16);
     
     libraw_internal_data.output_data.histogram = save_hist;
 
@@ -445,10 +627,10 @@ void LibRaw::kodak_thumb_loader()
                 char *ppm = T.thumb + row*S.width*P1.colors;
                 for (int col=0; col < S.width; col++, soff += cstep)
                     for(int c = 0; c < P1.colors; c++)
-                        ppm [col*P1.colors+c] = lut[imgdata.image[soff][c]];
+                        ppm [col*P1.colors+c] = lut16[imgdata.image[soff][c]]/256;
             }
     }
-    free(lut);
+    free(lut16);
     // restore variables
     free(imgdata.image);
     imgdata.image  = s_image;

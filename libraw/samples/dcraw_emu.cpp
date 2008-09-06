@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
               case 'W':  OUT.no_auto_bright    = 1;  break;
               case 'T':  OUT.output_tiff       = 1;  break;
               case '4':  OUT.output_bps       = 16;  break;
+              case '1':  OUT.gamma_16bit       = 1;  break;
               default:
                   fprintf (stderr,"Unknown option \"-%c\".\n", opt);
                   return 1;

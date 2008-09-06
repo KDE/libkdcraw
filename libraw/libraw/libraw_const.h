@@ -132,5 +132,10 @@ enum LibRaw_thumbnail_formats
     LIBRAW_THUMBNAIL_ROLLEI=5,
 };
 
+enum LibRaw_image_formats
+{
+    LIBRAW_IMAGE_BITMAP=1,
+    LIBRAW_IMAGE_JPEG=2,
+};
 
 #endif

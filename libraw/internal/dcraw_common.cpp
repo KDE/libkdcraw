@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Thu Aug 28 11:37:35 2008
+   Generated from dcraw/dcraw.c at Fri Sep  5 18:10:35 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -6840,7 +6840,7 @@ void CLASS convert_to_rgb()
     memcpy (oprof+32, pbody, sizeof pbody);
     oprof[pbody[5]/4+2] = strlen(name[output_color-1]) + 1;
     memcpy ((char *)oprof+pbody[8]+8, pwhite, sizeof pwhite);
-    if (output_bps == 8)
+    if (output_bps == 8 || gamma_16bit)
 #ifdef SRGB_GAMMA
       pcurve[3] = 0x2330000;
 #else
@@ -6977,7 +6977,7 @@ int CLASS flip_index (int row, int col)
   return row * iwidth + col;
 }
 
-void CLASS gamma_lut (uchar lut[0x10000])
+void CLASS gamma_lut (ushort lut[0x10000])
 {
   int perc, c, val, total, i;
   float t_white=0, r;
@@ -6993,16 +6993,18 @@ void CLASS gamma_lut (uchar lut[0x10000])
   t_white *= 8 / bright;
   for (i=0; i < 0x10000; i++) {
     r = i / t_white;
-    val = 256 * ( !use_gamma ? r :
+    val = 65536 * ( !use_gamma ? r :
 #ifdef SRGB_GAMMA
                   r <= 0.00304 ? r*12.92 : pow((double)r,2.5/6)*1.055-0.055 );
 #else
     r <= 0.018 ? r*4.5 : pow((double)r,0.45)*1.099-0.099 );
 #endif
-    if (val > 255) val = 255;
+    if (val > 65535) val = 65535;
     lut[i] = val;
   }
 }
+
+
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
@@ -7142,8 +7144,8 @@ void CLASS jpeg_thumb (FILE *tfp)
 void CLASS write_ppm_tiff (FILE *ofp)
 {
   struct tiff_hdr th;
-  uchar *ppm, lut[0x10000];
-  ushort *ppm2;
+  uchar *ppm;
+  ushort *ppm2,lut16[0x10000];
   int c, row, col, soff, rstep, cstep;
 
   iheight = height;
@@ -7165,14 +7167,16 @@ void CLASS write_ppm_tiff (FILE *ofp)
     fprintf (ofp, "P%d\n%d %d\n%d\n",
 	colors/2+5, width, height, (1 << output_bps)-1);
 
-  if (output_bps == 8) gamma_lut (lut);
+  if (output_bps == 8 || gamma_16bit ) gamma_lut (lut16);
+
   soff  = flip_index (0, 0);
   cstep = flip_index (0, 1) - soff;
   rstep = flip_index (1, 0) - flip_index (0, width);
   for (row=0; row < height; row++, soff += rstep) {
     for (col=0; col < width; col++, soff += cstep)
       if (output_bps == 8)
-	   FORCC ppm [col*colors+c] = lut[image[soff][c]];
+	   FORCC ppm [col*colors+c] = lut16[image[soff][c]]/256;
+      else if(gamma_16bit) FORCC ppm2[col*colors+c] =     lut16[image[soff][c]];
       else FORCC ppm2[col*colors+c] =     image[soff][c];
     if (output_bps == 16 && !output_tiff && htons(0x55aa) != 0x55aa)
         swab ((char*)ppm2, (char*)ppm2, width*colors*2);

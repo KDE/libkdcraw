@@ -59,7 +59,8 @@ DllDef    int                 libraw_dcraw_document_mode_processing(libraw_data_
 DllDef    int                 libraw_dcraw_ppm_tiff_writer(libraw_data_t* lr,const char *filename);
 DllDef    int                 libraw_dcraw_thumb_writer(libraw_data_t* lr,const char *fname);
 DllDef    int                 libraw_dcraw_process(libraw_data_t* lr);
-
+DllDef    libraw_processed_image_t* dcraw_make_mem_image(libraw_data_t* lr, int *errc);
+DllDef    libraw_processed_image_t* dcraw_make_mem_thumb(libraw_data_t* lr, int *errc);
 
 #ifdef __cplusplus
 }
@@ -119,6 +120,9 @@ class DllDef LibRaw
     int                         dcraw_ppm_tiff_writer(const char *filename);
     int                         dcraw_thumb_writer(const char *fname);
     int                         dcraw_process(void);
+    // memory writers
+    libraw_processed_image_t*   dcraw_make_mem_image(int *errcode=NULL);  
+    libraw_processed_image_t*   dcraw_make_mem_thumb(int *errcode=NULL);  
 
     // free all internal data structures
     void         recycle() 
@@ -277,7 +281,7 @@ class DllDef LibRaw
     unsigned    get4();
 
     int         flip_index (int row, int col);
-    void        gamma_lut (uchar lut[0x10000]);
+    void        gamma_lut(ushort lut[0x10000]);
 
 
 // == internal functions

@@ -104,6 +104,7 @@
 #define use_camera_matrix (imgdata.params.use_camera_matrix)
 #define output_color    (imgdata.params.output_color)
 #define output_bps      (imgdata.params.output_bps)
+#define gamma_16bit      (imgdata.params.gamma_16bit)
 #define output_tiff     (imgdata.params.output_tiff)
 #define med_passes      (imgdata.params.med_passes)
 #define no_auto_bright  (imgdata.params.no_auto_bright)

@@ -67,6 +67,21 @@ typedef void (*data_callback)(const char *file, const int offset);
 
 DllDef void default_data_callback(const char *file, const int offset);
 
+// Output bitmap type
+
+typedef struct
+{
+    enum LibRaw_image_formats type; 
+    ushort      height,
+                width,
+                colors,
+                bits,
+                gamma_corrected;
+    unsigned int  data_size; // размер поля данных в байтах
+    unsigned char data[1]; // we'll allocate more!
+}libraw_processed_image_t;
+
+
 //Decoded from exif and used in calculations
 typedef struct
 {
@@ -182,6 +197,7 @@ typedef struct
     int         use_camera_matrix; /* +M/-M */
     int         output_color;   /* -o */
     int         output_bps;     /* -4 */
+    int         gamma_16bit;    /* -1 */
     int         output_tiff;    /* -T */
     int         user_flip;      /* -t */
     int         user_qual;      /* -q */
