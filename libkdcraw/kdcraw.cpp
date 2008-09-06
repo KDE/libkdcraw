@@ -166,7 +166,21 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if (ret != LIBRAW_SUCCESS)
         return false;
 
-    imgData = QByteArray(raw.imgdata.thumbnail.thumb);
+    libraw_processed_image_t *thumb = raw.dcraw_make_mem_thumb(&ret);
+    if(!thumb)
+        return false;
+
+    if(thumb->type == LIBRAW_IMAGE_BITMAP)
+    {
+        QString header = QString("P6\n%1 %2\n").arg(thumb->width).arg(thumb->height);
+        imgData.append(header.toAscii());
+        imgData.append(QByteArray((const char*)thumb->data, (int)thumb->data_size));
+        imgData.append("\n");
+    }
+    else
+    {
+        imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
+    }
 
     if ( !imgData.isEmpty() )
         return true;
