@@ -40,20 +40,13 @@ extern "C"
 // Qt includes.
 
 #include <QDebug>
-#include <QEvent>
 #include <QFile>
 #include <QByteArray>
-#include <QTimer>
 #include <QFileInfo>
-#include <QApplication>
-#include <QMutex>
-#include <QWaitCondition>
 
 // KDE includes.
 
-#include <kprocess.h>
 #include <kstandarddirs.h>
-#include <kshell.h>
 
 // LibRaw includes.
 
@@ -75,31 +68,7 @@ public:
 
     KDcrawPriv()
     {
-        process    = 0;
-        queryTimer = 0;
-        data       = 0;
-        width      = 0;
-        height     = 0;
-        rgbmax     = 0;
-        dataPos    = 0;
     }
-
-    char           *data;
-
-    int             dataPos;
-    int             width;
-    int             height;
-    int             rgbmax;
-
-    QString         filePath;
-
-    QMutex          mutex;
-
-    QWaitCondition  condVar;
-
-    QTimer         *queryTimer;
-
-    KProcess       *process;
 
 public:
 
@@ -267,6 +236,8 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 return false;
 
+/*  TODO
+
     FILE       *f=NULL;
     QByteArray  txtData;
     const int   MAX_IPC_SIZE = (1024*32);
@@ -286,7 +257,7 @@ return false;
     // -i : identify files without decoding them.
     // -v : verbose mode.
 
-// FIXME    command  = DcrawBinary::path();
+    command  = DcrawBinary::path();
     command += " -i -v ";
     command += QFile::encodeName( KShell::quoteArg( path ) );
     qDebug("Running RAW decoding command: %s", (const char*)command);
@@ -576,7 +547,7 @@ return false;
         identify.cameraMult[3] = cameraMult.section(" ", 3, 3).toDouble();
     }
 
-    return true;
+    return true;*/
 }
 
 // ----------------------------------------------------------------------------------
@@ -747,7 +718,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
                DSLR will have a high dominant of color that will lead to
                a completly wrong WB
             */
-            if (rawFileIdentify (identify, d->filePath))
+            if (rawFileIdentify (identify, filePath))
             {
                 RGB[0] = identify.daylightMult[0] / RGB[0];
                 RGB[1] = identify.daylightMult[1] / RGB[1];

@@ -54,7 +54,7 @@ public:
     /** Standard destructor. */
     virtual ~KDcraw();
 
-public:  
+public:
 
     /** Return a string version of libkdcraw release */
     static QString version();
