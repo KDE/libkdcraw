@@ -839,6 +839,8 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         }
     }
 
+    setReceivingDataProgress(0.1);
+
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
     {
@@ -846,7 +848,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     }
 
-    setReceivingDataProgress(0.1);
+    setReceivingDataProgress(0.2);
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
@@ -855,7 +857,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     }
 
-    setReceivingDataProgress(0.2);
+    setReceivingDataProgress(0.25);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
@@ -873,12 +875,14 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     }
 
-    setReceivingDataProgress(0.4);
+    setReceivingDataProgress(0.35);
 
     width     = img->width;
     height    = img->height;
     rgbmax    = (1 << img->bits)-1;
     imageData = QByteArray((const char*)img->data, (int)img->data_size);
+
+    setReceivingDataProgress(0.4);
 
     qDebug("Raw data info: width %i height %i rgbmax %i", width, height, rgbmax);
 
