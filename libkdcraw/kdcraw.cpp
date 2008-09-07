@@ -592,11 +592,6 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
     LibRaw raw;
 
-    // -j : Do not stretch the image to its correct aspect ratio.
-    // -S : set White Point value (saturation).
-    // -P : Read the dead pixel list from this file.
-    // -p : Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
-
     if (m_rawDecodingSettings.sixteenBitsImage)
         raw.imgdata.params.output_bps = 16;      // (-4) 16bit ppm output
 
@@ -641,6 +636,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     {
 /*
         TODO
+        // (-P) Read the dead pixel list from this file.
         args << "-P";
         args << QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
 */
@@ -781,6 +777,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             /* TODO
             if (!m_rawDecodingSettings.inputProfile.isEmpty())
             {
+                // (-p) Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
                 args << "-p";
                 args << QFile::encodeName(m_rawDecodingSettings.inputProfile);
             }*/
