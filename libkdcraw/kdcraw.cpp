@@ -233,243 +233,67 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
 bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 {
-
-return false;
-
-/*  TODO
-
-    FILE       *f=NULL;
-    QByteArray  txtData;
-    const int   MAX_IPC_SIZE = (1024*32);
-    char        buffer[MAX_IPC_SIZE];
-    QFile       file;
-    qint64      len;
-    QByteArray  command;
-
     QFileInfo fileInfo(path);
     QString   rawFilesExt(rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
+    QString ext          = fileInfo.suffix().toUpper();
+    identify.isDecodable = false;
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    // Try to get camera maker/model using dcraw with options:
-    // -i : identify files without decoding them.
-    // -v : verbose mode.
+    LibRaw raw;
 
-    command  = DcrawBinary::path();
-    command += " -i -v ";
-    command += QFile::encodeName( KShell::quoteArg( path ) );
-    qDebug("Running RAW decoding command: %s", (const char*)command);
-
-    f = popen( command.data(), "r" );
-
-    if ( f == NULL )
+    int ret = raw.open_file(QFile::encodeName(path));
+    if (ret != LIBRAW_SUCCESS)
     {
-        identify = DcrawInfoContainer();
+        qDebug("LibRaw open file failed!");
         return false;
     }
 
-    file.open(f, QIODevice::ReadOnly);
-
-    while ((len = file.read(buffer, MAX_IPC_SIZE)) != 0)
+    ret = raw.adjust_sizes_info_only();
+    if (ret != LIBRAW_SUCCESS)
     {
-        if ( len == -1 )
-        {
-            identify = DcrawInfoContainer();
-            return false;
-        }
-        else
-        {
-            int oldSize = txtData.size();
-            txtData.resize( txtData.size() + len );
-            memcpy(txtData.data()+oldSize, buffer, len);
-        }
-    }
-
-    file.close();
-    pclose( f );
-    QString dcrawInfo(txtData);
-
-    if ( dcrawInfo.isEmpty() )
-    {
-        identify = DcrawInfoContainer();
+        qDebug("LibRaw adjust_sizes_info_only failed!");
         return false;
     }
 
-    int pos;
+    identify.dateTime         = QDateTime::fromTime_t(raw.imgdata.other.timestamp);
+    identify.make             = QString(raw.imgdata.idata.make);
+    identify.model            = QString(raw.imgdata.idata.model);
+    identify.owner            = QString(raw.imgdata.other.artist);
+    identify.DNGVersion       = QString::number(raw.imgdata.idata.dng_version);
+    identify.sensitivity      = raw.imgdata.other.iso_speed;
+    identify.exposureTime     = raw.imgdata.other.shutter;
+    identify.aperture         = raw.imgdata.other.aperture;
+    identify.focalLength      = raw.imgdata.other.focal_len;
+    identify.imageSize        = QSize(raw.imgdata.sizes.width, raw.imgdata.sizes.height);
+    identify.fullSize         = QSize(raw.imgdata.sizes.raw_width, raw.imgdata.sizes.raw_height);
+    identify.outputSize       = QSize(raw.imgdata.sizes.iwidth, raw.imgdata.sizes.iheight);
+    identify.thumbSize        = QSize(raw.imgdata.thumbnail.twidth, raw.imgdata.thumbnail.theight);
+    identify.hasIccProfile    = raw.imgdata.color.profile ? true : false;
+    identify.isDecodable      = true;
+    identify.pixelAspectRatio = raw.imgdata.sizes.pixel_aspect;
+    identify.rawColors        = raw.imgdata.idata.colors;
+    identify.rawImages        = raw.imgdata.idata.raw_count;
 
-    // Extract Time Stamp.
-    QString timeStampHeader("Timestamp: ");
-    pos = dcrawInfo.indexOf(timeStampHeader);
-    if (pos != -1)
+    if (raw.imgdata.idata.filters) 
     {
-        QString timeStamp = dcrawInfo.mid(pos).section('\n', 0, 0);
-        timeStamp.remove(0, timeStampHeader.length());
-        identify.dateTime = QDateTime::fromString(timeStamp);
+        if (!raw.imgdata.idata.cdesc[3]) raw.imgdata.idata.cdesc[3] = 'G';
+        for (int i=0; i < 16; i++)
+            identify.filterPattern.append(raw.imgdata.idata.cdesc[raw.fc(i >> 1,i & 1)]);
     }
 
-    // Extract Camera Maker.
-    QString makeHeader("Camera: ");
-    pos = dcrawInfo.indexOf(makeHeader);
-    if (pos != -1)
+    for(int c = 0 ; c < raw.imgdata.idata.colors ; c++)
+        identify.daylightMult[c] = raw.imgdata.color.pre_mul[c];
+
+    if (raw.imgdata.color.cam_mul[0] > 0) 
     {
-        QString make = dcrawInfo.mid(pos).section('\n', 0, 0);
-        make.remove(0, makeHeader.length());
-        identify.make = make;
+        for(int c = 0 ; c < 4 ; c++) 
+            identify.cameraMult[c] = raw.imgdata.color.cam_mul[c];
     }
-
-    // Extract Camera Model.
-    QString modelHeader("Model: ");
-    pos = dcrawInfo.indexOf(modelHeader);
-    if (pos != -1)
-    {
-        QString model = dcrawInfo.mid(pos).section('\n', 0, 0);
-        model.remove(0, modelHeader.length());
-        identify.model = model;
-    }
-
-    // Extract Picture Owner.
-    QString ownerHeader("Owner: ");
-    pos = dcrawInfo.indexOf(ownerHeader);
-    if (pos != -1)
-    {
-        QString owner = dcrawInfo.mid(pos).section('\n', 0, 0);
-        owner.remove(0, ownerHeader.length());
-        identify.owner = owner;
-    }
-
-    // Extract DNG Version.
-    QString DNGVersionHeader("DNG Version: ");
-    pos = dcrawInfo.indexOf(DNGVersionHeader);
-    if (pos != -1)
-    {
-        QString DNGVersion = dcrawInfo.mid(pos).section('\n', 0, 0);
-        DNGVersion.remove(0, DNGVersionHeader.length());
-        identify.DNGVersion = DNGVersion;
-    }
-
-    // Extract ISO Speed.
-    QString isoSpeedHeader("ISO speed: ");
-    pos = dcrawInfo.indexOf(isoSpeedHeader);
-    if (pos != -1)
-    {
-        QString isoSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
-        isoSpeed.remove(0, isoSpeedHeader.length());
-        identify.sensitivity = isoSpeed.toLong();
-    }
-
-    // Extract Shutter Speed.
-    QString shutterSpeedHeader("Shutter: ");
-    pos = dcrawInfo.indexOf(shutterSpeedHeader);
-    if (pos != -1)
-    {
-        QString shutterSpeed = dcrawInfo.mid(pos).section('\n', 0, 0);
-        shutterSpeed.remove(0, shutterSpeedHeader.length());
-
-        if (shutterSpeed.startsWith("1/"))
-            shutterSpeed.remove(0, 2);                   // remove "1/" at start of string.
-
-        shutterSpeed.remove(shutterSpeed.length()-4, 4); // remove " sec" at end of string.
-        identify.exposureTime = shutterSpeed.toFloat();
-    }
-
-    // Extract Aperture.
-    QString apertureHeader("Aperture: f/");
-    pos = dcrawInfo.indexOf(apertureHeader);
-    if (pos != -1)
-    {
-        QString aperture = dcrawInfo.mid(pos).section('\n', 0, 0);
-        aperture.remove(0, apertureHeader.length());
-        identify.aperture = aperture.toFloat();
-    }
-
-    // Extract Focal Length.
-    QString focalLengthHeader("Focal Length: ");
-    pos = dcrawInfo.indexOf(focalLengthHeader);
-    if (pos != -1)
-    {
-        QString focalLength = dcrawInfo.mid(pos).section('\n', 0, 0);
-        focalLength.remove(0, focalLengthHeader.length());
-        focalLength.remove(focalLength.length()-3, 3);    // remove " mm" at end of string.
-        identify.focalLength = focalLength.toFloat();
-    }
-
-    // Extract Image Size.
-
-    QString imageSizeHeader("Image size:  ");
-    pos = dcrawInfo.indexOf(imageSizeHeader);
-    if (pos != -1)
-    {
-        QString imageSize = dcrawInfo.mid(pos).section('\n', 0, 0);
-        imageSize.remove(0, imageSizeHeader.length());
-        int width  = imageSize.section(" x ", 0, 0).toInt();
-        int height = imageSize.section(" x ", 1, 1).toInt();
-        identify.imageSize = QSize(width, height);
-    }
-
-    // Extract Full RAW image Size.
-
-    QString fullSizeHeader("Full size:   ");
-    pos = dcrawInfo.indexOf(fullSizeHeader);
-    if (pos != -1)
-    {
-        QString fullSize = dcrawInfo.mid(pos).section('\n', 0, 0);
-        fullSize.remove(0, fullSizeHeader.length());
-        int width  = fullSize.section(" x ", 0, 0).toInt();
-        int height = fullSize.section(" x ", 1, 1).toInt();
-        identify.fullSize = QSize(width, height);
-    }
-
-    // Extract Output image Size.
-
-    QString outputSizeHeader("Output size: ");
-    pos = dcrawInfo.indexOf(outputSizeHeader);
-    if (pos != -1)
-    {
-        QString outputSize = dcrawInfo.mid(pos).section('\n', 0, 0);
-        outputSize.remove(0, outputSizeHeader.length());
-        int width  = outputSize.section(" x ", 0, 0).toInt();
-        int height = outputSize.section(" x ", 1, 1).toInt();
-        identify.outputSize = QSize(width, height);
-    }
-
-    // Extract Thumb Size.
-
-    QString thumbSizeHeader("Thumb size:  ");
-    pos = dcrawInfo.indexOf(thumbSizeHeader);
-    if (pos != -1)
-    {
-        QString thumbSize = dcrawInfo.mid(pos).section('\n', 0, 0);
-        thumbSize.remove(0, thumbSizeHeader.length());
-        int width  = thumbSize.section(" x ", 0, 0).toInt();
-        int height = thumbSize.section(" x ", 1, 1).toInt();
-        identify.thumbSize = QSize(width, height);
-    }
-
-    // Extract "Has an embedded ICC profile" flag.
-
-    QString hasIccProfileHeader("Embedded ICC profile: ");
-    pos = dcrawInfo.indexOf(hasIccProfileHeader);
-    if (pos != -1)
-    {
-        QString hasIccProfile = dcrawInfo.mid(pos).section('\n', 0, 0);
-        hasIccProfile.remove(0, hasIccProfileHeader.length());
-        if (hasIccProfile.contains("yes"))
-            identify.hasIccProfile = true;
-        else
-            identify.hasIccProfile = false;
-    }
-
-    // Check if picture is decodable
-
-    identify.isDecodable = true;
-    pos = dcrawInfo.indexOf("Cannot decode file");
-    if (pos != -1)
-        identify.isDecodable = false;
 
     // Extract "Has Secondary Pixel" flag.
-
+/*
     QString hasSecondaryPixelHeader("Secondary pixels: ");
     pos = dcrawInfo.indexOf(hasSecondaryPixelHeader);
     if (pos != -1)
@@ -481,73 +305,9 @@ return false;
         else
             identify.hasSecondaryPixel = false;
     }
+*/
 
-    // Extract Pixel Aspect Ratio.
-    QString aspectRatioHeader("Pixel Aspect Ratio: ");
-    pos = dcrawInfo.indexOf(aspectRatioHeader);
-    if (pos != -1)
-    {
-        QString aspectRatio = dcrawInfo.mid(pos).section('\n', 0, 0);
-        aspectRatio.remove(0, aspectRatioHeader.length());
-        identify.pixelAspectRatio = aspectRatio.toFloat();
-    }
-
-    // Extract Raw Colors.
-    QString rawColorsHeader("Raw colors: ");
-    pos = dcrawInfo.indexOf(rawColorsHeader);
-    if (pos != -1)
-    {
-        QString rawColors = dcrawInfo.mid(pos).section('\n', 0, 0);
-        rawColors.remove(0, rawColorsHeader.length());
-        identify.rawColors = rawColors.toInt();
-    }
-
-    // Extract Raw Images.
-    QString rawImagesHeader("Number of raw images: ");
-    pos = dcrawInfo.indexOf(rawImagesHeader);
-    if (pos != -1)
-    {
-        QString rawImages = dcrawInfo.mid(pos).section('\n', 0, 0);
-        rawImages.remove(0, rawImagesHeader.length());
-        identify.rawImages = rawImages.toInt();
-    }
-
-    // Extract Filter Pattern.
-    QString filterHeader("Filter pattern: ");
-    pos = dcrawInfo.indexOf(filterHeader);
-    if (pos != -1)
-    {
-        QString filter = dcrawInfo.mid(pos).section('\n', 0, 0);
-        filter.remove(0, filterHeader.length());
-        identify.filterPattern = filter;
-    }
-
-    // Extract Daylight Multipliers.
-    QString daylightMultHeader("Daylight multipliers: ");
-    pos = dcrawInfo.indexOf(daylightMultHeader);
-    if (pos != -1)
-    {
-        QString daylightMult = dcrawInfo.mid(pos).section('\n', 0, 0);
-        daylightMult.remove(0, daylightMultHeader.length());
-        identify.daylightMult[0] = daylightMult.section(" ", 0, 0).toDouble();
-        identify.daylightMult[1] = daylightMult.section(" ", 1, 1).toDouble();
-        identify.daylightMult[2] = daylightMult.section(" ", 2, 2).toDouble();
-    }
-
-    // Extract Camera Multipliers.
-    QString cameraMultHeader("Camera multipliers: ");
-    pos = dcrawInfo.indexOf(cameraMultHeader);
-    if (pos != -1)
-    {
-        QString cameraMult = dcrawInfo.mid(pos).section('\n', 0, 0);
-        cameraMult.remove(0, cameraMultHeader.length());
-        identify.cameraMult[0] = cameraMult.section(" ", 0, 0).toDouble();
-        identify.cameraMult[1] = cameraMult.section(" ", 1, 1).toDouble();
-        identify.cameraMult[2] = cameraMult.section(" ", 2, 2).toDouble();
-        identify.cameraMult[3] = cameraMult.section(" ", 3, 3).toDouble();
-    }
-
-    return true;*/
+    return true;
 }
 
 // ----------------------------------------------------------------------------------
