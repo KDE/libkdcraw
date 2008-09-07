@@ -627,7 +627,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // -p : Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
 
     if (m_rawDecodingSettings.sixteenBitsImage)
-        raw.imgdata.params.output_bps = 1;      // (-4) 16bit ppm output
+        raw.imgdata.params.output_bps = 16;      // (-4) 16bit ppm output
 
     if (m_rawDecodingSettings.halfSizeColorImage)
         raw.imgdata.params.half_size = 1;       // (-h) Half-size color image (3x faster than -q).
