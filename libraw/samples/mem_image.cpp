@@ -1,9 +1,10 @@
 /* -*- C++ -*-
- * File: simple_dcraw.cpp
+ * File: mem_image.cpp
  * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw simple C++ API  (emulates call to "dcraw  [-D]  [-T] [-v] [-e]")
+ * LibRaw mem_image/mem_thumb API test. Resuls should be same (bitwise) as in dcraw [-4] [-e]
+ *   Testing note: for ppm-thumbnails you should use dcraw -w -e for thumbnail extraction
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +29,10 @@
 
 #ifdef WIN32
 #define snprintf _snprintf
+#else
+#include <netinet/in.h>
 #endif
+
 
 // no error reporting, only params check
 void write_ppm(libraw_processed_image_t *img, const char *basename)
@@ -44,6 +48,18 @@ void write_ppm(libraw_processed_image_t *img, const char *basename)
     FILE *f = fopen(fn,"wb");
     if(!f) return;
     fprintf (f, "P6\n%d %d\n%d\n", img->width, img->height, (1 << img->bits)-1);
+/*
+  NOTE:
+  data in img->data is not converted to network byte order.
+  So, we should swap values on some architectures for dcraw compatibility
+  (unfortunately, xv cannot display 16-bit PPMs with network byte order data
+*/
+#define SWAP(a,b) { a ^= b; a ^= (b ^= a); }
+    if (img->bits == 16 && htons(0x55aa) != 0x55aa)
+        for(int i=0; i< img->data_size; i+=2)
+            SWAP(img->data[i],img->data[i+1]);
+#undef SWAP
+
     fwrite(img->data,img->data_size,1,f);
     fclose(f);
 }
@@ -127,27 +143,12 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
                     continue;
                 }
-            if(output_thumbs)
-                {
 
-                    if( (ret = RawProcessor.unpack_thumb() ) != LIBRAW_SUCCESS)
-                        {
-                            fprintf(stderr,"Cannot unpack_thumb %s: %s\n",av[i],libraw_strerror(ret));
-                            if(LIBRAW_FATAL_ERROR(ret))
-                                continue; // skip to next file
-                        }
-                    libraw_processed_image_t *thumb = RawProcessor.dcraw_make_mem_thumb(&ret);
-                    if(thumb)
-                        {
-                            write_thumb(thumb,av[i]);
-                            free(thumb);
-                        }
-                    else
-                        fprintf(stderr,"Cannot unpack thumbnail of %s to memory buffer: %s\n" , av[i],libraw_strerror(ret));
-                        
+            // we should call dcraw_process before thumbnail extraction because for
+            // some cameras (i.e. Kodak ones) white balance for thumbnal should be set
+            // from main image settings
 
-                }
-                    
+
             ret = RawProcessor.dcraw_process();
                 
             if(LIBRAW_SUCCESS !=ret)
@@ -165,6 +166,30 @@ int main(int ac, char *av[])
                 }
             else
                 fprintf(stderr,"Cannot unpack %s to memory buffer: %s\n" , av[i],libraw_strerror(ret));
+
+            if(output_thumbs)
+                {
+
+                    if( (ret = RawProcessor.unpack_thumb() ) != LIBRAW_SUCCESS)
+                        {
+                            fprintf(stderr,"Cannot unpack_thumb %s: %s\n",av[i],libraw_strerror(ret));
+                            if(LIBRAW_FATAL_ERROR(ret))
+                                continue; // skip to next file
+                        }
+                    else
+                        {
+                            libraw_processed_image_t *thumb = RawProcessor.dcraw_make_mem_thumb(&ret);
+                            if(thumb)
+                                {
+                                    write_thumb(thumb,av[i]);
+                                    free(thumb);
+                                }
+                            else
+                                fprintf(stderr,"Cannot unpack thumbnail of %s to memory buffer: %s\n" , av[i],libraw_strerror(ret));
+                        }
+
+                }
+                    
             RawProcessor.recycle(); // just for show this call
         }
     return 0;
