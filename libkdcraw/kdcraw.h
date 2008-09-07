@@ -192,11 +192,8 @@ protected:
 
 private:
 
-    bool loadFromDcraw(const QString& filePath, QByteArray &imageData, 
+    bool loadFromDcraw(const QString& filePath, QByteArray &imageData,
                        int &width, int &height, int &rgbmax);
-    bool startProcess();
-    void readData();
-    void readErrorData();
 
 private:
 

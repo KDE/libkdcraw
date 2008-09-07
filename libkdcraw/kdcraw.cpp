@@ -172,15 +172,24 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     LibRaw raw;
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug("LibRaw open file failed!");
         return false;
+    }
 
     ret = raw.unpack_thumb();
     if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug("LibRaw unpack failed!");
         return false;
+    }
 
     libraw_processed_image_t *thumb = raw.dcraw_make_mem_thumb(&ret);
     if(!thumb)
+    {
+        qDebug("LibRaw dcraw make mem thumb failed!");
         return false;
+    }
 
     if(thumb->type == LIBRAW_IMAGE_BITMAP)
         KDcrawPriv::createPPMHeader(imgData, thumb);
@@ -188,7 +197,10 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
 
     if ( !imgData.isEmpty() )
-        return true;
+    {
+        qDebug("Failed to load JPEG thumb from LibRaw!");
+        return false;
+    }
 
     return false;
 }
@@ -605,188 +617,62 @@ void KDcraw::setReceivingDataProgress(double)
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
                            int &width, int &height, int &rgbmax)
 {
+    m_cancel = false;
 
-return false;
+    LibRaw raw;
 
-    m_cancel      = false;
-    d->dataPos     = 0;
-    d->filePath   = filePath;
-    d->process    = 0;
-    d->data       = 0;
-    d->width      = 0;
-    d->height     = 0;
-    d->rgbmax     = 0;
-
-    if (!startProcess())
-        return false;
-
-    // The time from starting dcraw to when it first outputs something takes
-    // much longer than the time while it outputs the data and the time while
-    // we process the data.
-    // We do not have progress information for this, but it is much more promising to the user
-    // if there is progress which does not stay at a fixed value.
-    // So we make up some progress (0% - 40%), using the file size as an indicator how long it might take.
-    QTime dcrawStartTime = QTime::currentTime();
-    int fileSize         = QFileInfo(filePath).size();
-
-    // This is the magic number that describes how fast the function grows
-    // It _should_ be dependent on how fast the computer is, but we do not have this piece of information
-    // So this is a number that works well on my computer.
-    double K50         = 3000.0*fileSize;
-    double part        = 0;
-    int checkpointTime = 0;
-    int checkpoint     = 0;
-
-    while (d->process->state() == QProcess::Running &&
-           !( (d->dataPos == 0) ? checkToCancelWaitingData() : checkToCancelReceivingData() ) )
-    {
-        if (d->dataPos == 0)
-        {
-            int elapsedMsecs = dcrawStartTime.msecsTo(QTime::currentTime());
-            if (elapsedMsecs > checkpointTime)
-                checkpointTime += 300;
-
-            // What we do here is a sigmoidal curve, it starts slowly,
-            // then grows more rapidly, slows down again and
-            // get asymptotically closer to the maximum.
-            // (this is the Hill Equation, 2.8 the Hill Coefficient, to pour some blood in this)
-            double elapsedMsecsPow = std::pow(elapsedMsecs, 2.8);
-            part = (elapsedMsecsPow) / (K50 + elapsedMsecsPow);
-
-            // While we waiting to receive data, progress from 0% to 40%
-            setWaitingDataProgress(0.4*part);
-        }
-        else if (d->dataPos > checkpoint)
-        {
-            // While receiving data, progress from 40% to 70%
-            double delta = 0.3 + 0.4 - 0.4*part;
-            int imageSize = d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3);
-            checkpoint += (int)(imageSize / (20 * delta));
-            setReceivingDataProgress(0.4*part + delta * (((float)d->dataPos)/((float)imageSize)));
-        }
-
-        //QMutexLocker lock(&d->mutex);
-        //d->condVar.wait(&d->mutex, 10);
-        d->process->setReadChannel(QProcess::StandardOutput);
-        if (d->process->waitForReadyRead(25))
-            readData();
-        d->process->setReadChannel(QProcess::StandardError);
-        if (d->process->bytesAvailable())
-            readErrorData();
-    }
-
-    if (d->process->state() == QProcess::Running)
-        d->process->kill();
-
-    bool normalExit = d->process->exitStatus() == QProcess::NormalExit && d->process->exitCode() == 0;
-    delete d->process;
-    d->process    = 0;
-
-    if (!normalExit || m_cancel)
-    {
-        delete [] d->data;
-        d->data = 0;
-        return false;
-    }
-
-    // Copy decoded image data to byte array.
-    width     = d->width;
-    height    = d->height;
-    rgbmax    = d->rgbmax;
-    imageData = QByteArray(d->data, d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3));
-
-    delete [] d->data;
-    d->data = 0;
-
-    return true;
-}
-
-bool KDcraw::startProcess()
-{
-
-return false;
-
-
-    if (checkToCancelWaitingData())
-    {
-        return false;
-    }
-
-    // create KProcess and build argument list
-
-    d->process = new KProcess;
-
-    // run dcraw with options:
-    // -c : write to stdout
-    // -v : verbose mode.
-    //
-    // -4 : 16bit ppm output
-    //
-    // -f : Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns.
-    // -a : Use automatic white balance
-    // -w : Use camera white balance, if possible
-    // -n : Use wavelets to erase noise while preserving real detail. 
     // -j : Do not stretch the image to its correct aspect ratio.
-    // -q : Use an interpolation method.
-    // -h : Output a half-size color image. Twice as fast as -q 0.
-    // -b : set Brightness value.
-    // -k : set Black Point value.
     // -S : set White Point value (saturation).
-    // -r : set Raw Color Balance Multipliers.
-    // -C : set Correct chromatic aberration correction.
-    // -m : After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
-    // -A : Calculate the white balance by averaging a rectangular area from image.
     // -P : Read the dead pixel list from this file.
     // -p : Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
-    // -o : Use ICC profiles to define the output colorspace.
-
-    QStringList args;
-    args << "-c";
-    args << "-v";
 
     if (m_rawDecodingSettings.sixteenBitsImage)
-        args << "-4";
+        raw.imgdata.params.output_bps = 1;      // (-4) 16bit ppm output
 
     if (m_rawDecodingSettings.halfSizeColorImage)
-        args << "-h";
+        raw.imgdata.params.half_size = 1;       // (-h) Half-size color image (3x faster than -q).
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
-        args << "-f";
+        raw.imgdata.params.four_color_rgb = 1;  // (-f) Interpolate RGB as four colors.
 
     if (m_rawDecodingSettings.DontStretchPixels)
-        args << "-j";
+        raw.imgdata.params.use_fuji_rotate = 1; // (-j) Do not stretch the image to its correct aspect ratio.
 
-    args << "-H";
-    args << QString::number(m_rawDecodingSettings.unclipColors);
+    // (-H) Unclip highlight color.
+    raw.imgdata.params.highlight = m_rawDecodingSettings.unclipColors;
+
 
     if (m_rawDecodingSettings.brightness != 1.0)
     {
-        args << "-b";
-        args << QString::number(m_rawDecodingSettings.brightness);
+        // (-b) Set Brightness value.
+        raw.imgdata.params.bright = m_rawDecodingSettings.brightness;
     }
 
     if (m_rawDecodingSettings.enableBlackPoint)
     {
-        args << "-k";
-        args << QString::number(m_rawDecodingSettings.blackPoint);
+        // (-k) Set Black Point value.
+        raw.imgdata.params.user_black = m_rawDecodingSettings.blackPoint;
     }
 
     if (m_rawDecodingSettings.enableWhitePoint)
     {
-        args << "-S";
-        args << QString::number(m_rawDecodingSettings.whitePoint);
+        // (-S) Set White Point value (saturation).
+        raw.imgdata.params.user_sat = m_rawDecodingSettings.whitePoint;
     }
 
     if (m_rawDecodingSettings.medianFilterPasses > 0)
     {
-        args << "-m";
-        args << QString::number(m_rawDecodingSettings.medianFilterPasses);
+        // (-m) After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
+        raw.imgdata.params.med_passes = m_rawDecodingSettings.medianFilterPasses;
     }
 
     if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
     {
+/*
+        TODO
         args << "-P";
         args << QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
+*/
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -797,12 +683,14 @@ return false;
         }
         case RawDecodingSettings::CAMERA:
         {
-            args <<  "-w";
+            // (-w) Use camera white balance, if possible.
+            raw.imgdata.params.use_camera_wb = 1;
             break;
         }
         case RawDecodingSettings::AUTO:
         {
-            args <<  "-a";
+            // (-a) Use automatic white balance.
+            raw.imgdata.params.use_auto_wb = 1;
             break;
         }
         case RawDecodingSettings::CUSTOM:
@@ -841,11 +729,11 @@ return false;
             {
                 xD = -2.0064e9/(T*T*T) + 1.9018e6/(T*T) + 0.24748e3/T + 0.237040;
             }
-            yD = -3*xD*xD + 2.87*xD - 0.275;
 
-            X = xD/yD;
-            Y = 1;
-            Z = (1-xD-yD)/yD;
+            yD     = -3*xD*xD + 2.87*xD - 0.275;
+            X      = xD/yD;
+            Y      = 1;
+            Z      = (1-xD-yD)/yD;
             RGB[0] = X*XYZ_to_RGB[0][0] + Y*XYZ_to_RGB[1][0] + Z*XYZ_to_RGB[2][0];
             RGB[1] = X*XYZ_to_RGB[0][1] + Y*XYZ_to_RGB[1][1] + Z*XYZ_to_RGB[2][1];
             RGB[2] = X*XYZ_to_RGB[0][2] + Y*XYZ_to_RGB[1][2] + Z*XYZ_to_RGB[2][2];
@@ -873,55 +761,58 @@ return false;
                 qDebug("Warning: cannot get daylight multipliers");
             }
 
-            args << "-r";
-            args << QString::number(RGB[0], 'f', 5);
-            args << QString::number(RGB[1], 'f', 5);
-            args << QString::number(RGB[2], 'f', 5);
-            args << QString::number(RGB[1], 'f', 5);
+            // (-r) set Raw Color Balance Multipliers.
+            raw.imgdata.params.user_mul[0] = RGB[0];
+            raw.imgdata.params.user_mul[1] = RGB[1];
+            raw.imgdata.params.user_mul[2] = RGB[2];
+            raw.imgdata.params.user_mul[3] = RGB[1];
             break;
         }
         case RawDecodingSettings::AERA:
         {
-            args << "-A";
-            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.left());
-            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.top());
-            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.width());
-            args << QString::number(m_rawDecodingSettings.whiteBalanceArea.height());
+            // (-A) Calculate the white balance by averaging a rectangular area from image.
+            raw.imgdata.params.greybox[0] = m_rawDecodingSettings.whiteBalanceArea.left();
+            raw.imgdata.params.greybox[1] = m_rawDecodingSettings.whiteBalanceArea.top();
+            raw.imgdata.params.greybox[2] = m_rawDecodingSettings.whiteBalanceArea.width();
+            raw.imgdata.params.greybox[3] = m_rawDecodingSettings.whiteBalanceArea.height();
             break;
         }
     }
 
-    args << "-q";
-    args << QString::number(m_rawDecodingSettings.RAWQuality);
+    // (-q) Use an interpolation method.
+    raw.imgdata.params.user_qual = m_rawDecodingSettings.RAWQuality;
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
-        args << "-n";
-        args << QString::number(m_rawDecodingSettings.NRThreshold);
+        // (-n) Use wavelets to erase noise while preserving real detail.
+        raw.imgdata.params.threshold = m_rawDecodingSettings.NRThreshold;
     }
 
     if (m_rawDecodingSettings.enableCACorrection)
     {
-        args << "-C";
-        args << QString::number(m_rawDecodingSettings.caMultiplier[0], 'f', 5);
-        args << QString::number(m_rawDecodingSettings.caMultiplier[1], 'f', 5);
+        // (-C) Set Correct chromatic aberration correction.
+        raw.imgdata.params.aber[0] = m_rawDecodingSettings.caMultiplier[0];
+        raw.imgdata.params.aber[2] = m_rawDecodingSettings.caMultiplier[1];
     }
 
     switch (m_rawDecodingSettings.inputColorSpace)
     {
         case RawDecodingSettings::EMBEDDED:
         {
+            /* TODO
             args << "-p";
             args << "embed";
+            */
             break;
         }
         case RawDecodingSettings::CUSTOMINPUTCS:
         {
+            /* TODO
             if (!m_rawDecodingSettings.inputProfile.isEmpty())
             {
                 args << "-p";
                 args << QFile::encodeName(m_rawDecodingSettings.inputProfile);
-            }
+            }*/
             break;
         }
         default:   // No input profile
@@ -932,122 +823,58 @@ return false;
     {
         case RawDecodingSettings::CUSTOMOUTPUTCS:
         {
+            /* TODO
             if (!m_rawDecodingSettings.outputProfile.isEmpty())
             {
                 args << "-o";
                 args << QFile::encodeName(m_rawDecodingSettings.outputProfile);
-            }
+            }*/
             break;
         }
         default:
         {
-            args << "-o";
-            args << QString::number(m_rawDecodingSettings.outputColorSpace);
+            // (-o) Define the output colorspace.
+            raw.imgdata.params.output_color = m_rawDecodingSettings.outputColorSpace;
             break;
         }
     }
 
-    args << QFile::encodeName(d->filePath);
-
-    QString command /* FIXME = QString::fromAscii(DcrawBinary::path())*/;
-    command += " " + args.join(" ");
-
-    qDebug("Running RAW decoding command: %s", command.toAscii().constData());
-
-    // actually start the process
-// FIXME    d->process->setProgram(QString::fromAscii(DcrawBinary::path()), args);
-    d->process->setOutputChannelMode(KProcess::SeparateChannels);
-    d->process->setNextOpenMode(QIODevice::ReadOnly);
-    d->process->start();
-
-    while (d->process->state() == QProcess::Starting)
+    int ret = raw.open_file(QFile::encodeName(filePath));
+    if (ret != LIBRAW_SUCCESS)
     {
-        d->process->waitForStarted(10);
-    }
-
-    if (d->process->state() == QProcess::NotRunning)
-    {
-        qWarning("Failed to start RAW decoding");
-        delete d->process;
-        d->process    = 0;
+        qDebug("LibRaw open file failed!");
         return false;
     }
-    return true;
-}
 
-void KDcraw::readData()
-{
-    QByteArray data = d->process->readAll();
-    const char *buffer = data.constData();
-    int buflen = data.length();
-
-    if (!d->data)
+    ret = raw.unpack();
+    if (ret != LIBRAW_SUCCESS)
     {
-        // first data packet:
-        // Parse PPM header to find out size and allocate buffer
-
-        // PPM header is "P6 <width> <height> <maximum rgb value "
-        // where the blanks are newline characters
-
-        QString magic = QString::fromAscii(buffer, 2);
-        if (magic != "P6") 
-        {
-            qWarning("Cannot parse header from RAW decoding: Magic is: %s", magic.toAscii().constData());
-            d->process->kill();
-            return;
-        }
-
-        // Find the third newline that marks the header end in a dcraw generated ppm.
-        int i       = 0;
-        int counter = 0;
-
-        while (i < buflen) 
-        {
-            if (counter == 3) break;
-            if (buffer[i] == '\n') 
-            {
-                counter++;
-            }
-            ++i;
-        }
-
-        QString temp = QString::fromAscii(buffer, i);
-        QStringList splitlist = temp.split(QString("\n"));
-        temp = splitlist[1];
-        QStringList sizes = temp.split(QString(" "));
-        if (splitlist.size() < 3 || sizes.size() < 2)
-        {
-            qWarning("Cannot parse header from RAW decoding: Could not split");
-            d->process->kill();
-            return;
-        }
-
-        d->width  = sizes[0].toInt();
-        d->height = sizes[1].toInt();
-        d->rgbmax = splitlist[2].toInt();
-
-#ifdef ENABLE_DEBUG_MESSAGES
-        qDebug("Parsed PPM header: width %i height %i rgbmax %i", d->width, d->height, d->rgbmax);
-#endif
-
-        // cut header from data for memcpy below
-        buffer += i;
-        buflen -= i;
-
-        // allocate buffer
-        d->data    = new char[d->width * d->height * (m_rawDecodingSettings.sixteenBitsImage ? 6 : 3)];
-        d->dataPos = 0;
+        qDebug("LibRaw unpack failed!");
+        return false;
     }
 
-    // copy data to buffer
-    memcpy(d->data + d->dataPos, buffer, buflen);
-    d->dataPos += buflen;
-}
+    ret = raw.dcraw_process();
+    if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug("LibRaw dcraw process failed!");
+        return false;
+    }
 
-void KDcraw::readErrorData()
-{
-    QByteArray message = d->process->readAllStandardError();
-    qDebug("RAW decoding StdErr: %s", (const char*)message);
+    libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
+    if(!img)
+    {
+        qDebug("LibRaw dcraw make mem image failed!");
+        return false;
+    }
+
+    width     = img->width;
+    height    = img->height;
+    rgbmax    = (1 << img->bits)-1;
+    imageData = QByteArray((const char*)img->data, (int)img->data_size);
+
+    qDebug("Raw data info: width %i height %i rgbmax %i", width, height, rgbmax);
+
+    return true;
 }
 
 const char *KDcraw::rawFiles()
