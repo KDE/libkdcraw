@@ -55,6 +55,8 @@ extern "C"
 #include <kstandarddirs.h>
 #include <kshell.h>
 
+// LibRaw includes.
+
 #include "libraw/libraw.h"
 
 // Local includes.
@@ -98,6 +100,17 @@ public:
     QTimer         *queryTimer;
 
     KProcess       *process;
+
+public:
+
+    static void createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
+    {
+        QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
+        imgData.append(header.toAscii());
+        imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
+        imgData.append("\n");
+        qDebug() << header << endl;
+    }
 };
 
 KDcraw::KDcraw()
@@ -150,6 +163,8 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 {
+return false;
+
     QFileInfo fileInfo(path);
     QString   rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
@@ -171,16 +186,9 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
 
     if(thumb->type == LIBRAW_IMAGE_BITMAP)
-    {
-        QString header = QString("P6\n%1 %2\n").arg(thumb->width).arg(thumb->height);
-        imgData.append(header.toAscii());
-        imgData.append(QByteArray((const char*)thumb->data, (int)thumb->data_size));
-        imgData.append("\n");
-    }
+        KDcrawPriv::createPPMHeader(imgData, thumb);
     else
-    {
         imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
-    }
 
     if ( !imgData.isEmpty() )
         return true;
@@ -197,6 +205,8 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
+    qDebug("Try to use reduced RAW picture extraction");
+
     LibRaw raw;
     raw.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
     raw.imgdata.params.use_camera_wb = 1; // Use camera white balance, if possible.
@@ -204,33 +214,50 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug("LibRaw open file failed!");
         return false;
+    }
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug("LibRaw unpack failed!");
         return false;
+    }
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
-        return false;
-
-    image       = QImage(raw.imgdata.sizes.iwidth, raw.imgdata.sizes.iheight, QImage::Format_RGB32);
-    uchar *bits = image.bits();
-    int   j=0;
-    for(int i = 0; i < image.width() * image.height(); i++)
     {
-        bits[ j ] = raw.imgdata.image[i][0];
-        bits[j+1] = raw.imgdata.image[i][1];
-        bits[j+2] = raw.imgdata.image[i][2];
-        j += 3;
+        qDebug("LibRaw dcraw process failed!");
+        return false;
+    }
+
+    libraw_processed_image_t *halfImg = raw.dcraw_make_mem_image(&ret);
+    if(!halfImg)
+    {
+        qDebug("LibRaw dcraw make mem image failed!");
+        return false;
+    }
+
+    QByteArray imgData;
+    KDcrawPriv::createPPMHeader(imgData, halfImg);
+
+    if (!image.loadFromData(imgData))
+    {
+        qDebug("Failed to load PPM data from LibRaw!");
+        return false;
     }
 
     qDebug("Using reduced RAW picture extraction");
-    return false;
+    return true;
 }
 
 bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 {
+
+return false;
+
     FILE       *f=NULL;
     QByteArray  txtData;
     const int   MAX_IPC_SIZE = (1024*32);
@@ -581,6 +608,9 @@ void KDcraw::setReceivingDataProgress(double)
 bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
                            int &width, int &height, int &rgbmax)
 {
+
+return false;
+
     m_cancel      = false;
     d->dataPos     = 0;
     d->filePath   = filePath;
@@ -676,6 +706,10 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
 bool KDcraw::startProcess()
 {
+
+return false;
+
+
     if (checkToCancelWaitingData())
     {
         return false;
