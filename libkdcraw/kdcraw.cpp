@@ -109,7 +109,6 @@ public:
         imgData.append(header.toAscii());
         imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
         imgData.append("\n");
-        qDebug() << header << endl;
     }
 };
 
@@ -163,8 +162,6 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 {
-return false;
-
     QFileInfo fileInfo(path);
     QString   rawFilesExt(rawFiles());
     QString ext = fileInfo.suffix().toUpper();
