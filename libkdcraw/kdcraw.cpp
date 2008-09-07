@@ -846,12 +846,16 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     }
 
+    setReceivingDataProgress(0.1);
+
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug("LibRaw unpack failed!");
         return false;
     }
+
+    setReceivingDataProgress(0.2);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
@@ -860,12 +864,16 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     }
 
+    setReceivingDataProgress(0.3);
+
     libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
     if(!img)
     {
         qDebug("LibRaw dcraw make mem image failed!");
         return false;
     }
+
+    setReceivingDataProgress(0.4);
 
     width     = img->width;
     height    = img->height;
