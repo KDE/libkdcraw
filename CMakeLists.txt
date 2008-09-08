@@ -12,7 +12,8 @@ PROJECT(libkdcraw)
 # 0.1.4 => 3.0.0  (KDE3)
 # 0.1.5 => 4.0.0  (KDE3)
 # 0.2.0 => 5.0.0  (released with KDE 4.1.0)
-# 0.3.0 => 6.0.0  (released with KDE 4.2.0)
+# 0.3.0 => 6.0.0  (released with KDE 4.1.2)
+# 0.4.0 => 7.0.0  (using libRaw-Released with KDE 4.2.0)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "0")
