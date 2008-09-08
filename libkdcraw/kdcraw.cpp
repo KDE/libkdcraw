@@ -154,13 +154,13 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     else
         imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
 
-    if ( !imgData.isEmpty() )
+    if ( imgData.isEmpty() )
     {
         qDebug("Failed to load JPEG thumb from LibRaw!");
         return false;
     }
 
-    return false;
+    return true;
 }
 
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
