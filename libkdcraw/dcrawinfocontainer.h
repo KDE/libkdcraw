@@ -90,7 +90,7 @@ public:
             return false;
     };
 
-    /** True if camera sensor use a secondary pixel. */
+    /** Always false. This value is obsolete since dcraw 8.77. */
     bool      hasSecondaryPixel;
     /** True if RAW file include an ICC color profile. */
     bool      hasIccProfile;
@@ -136,7 +136,7 @@ public:
 
     /** The image dimensions in pixels. */
     QSize     imageSize;
-    
+
     /** The thumb dimensions in pixels. */
     QSize     thumbSize;
 
