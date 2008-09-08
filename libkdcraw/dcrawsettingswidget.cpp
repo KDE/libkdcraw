@@ -199,7 +199,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     KUrlLabel *dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
                                   .arg(KDcraw::librawVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
-    dcrawVersion->setToolTip(i18n("Visit dcraw project website"));
+    dcrawVersion->setToolTip(i18n("Visit LibRaw project website"));
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
     d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->demosaicingSettings);
