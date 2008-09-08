@@ -26,22 +26,11 @@
  *
  * ============================================================ */
 
-extern "C"
-{
-#include <unistd.h>
-}
-
-// C++ includes.
-
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
-
 // Qt includes.
 
 #include <QDebug>
-#include <QFile>
 #include <QByteArray>
+#include <QFile>
 #include <QFileInfo>
 
 // KDE includes.
@@ -292,20 +281,8 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
             identify.cameraMult[c] = raw.imgdata.color.cam_mul[c];
     }
 
-    // Extract "Has Secondary Pixel" flag.
-/*
-    QString hasSecondaryPixelHeader("Secondary pixels: ");
-    pos = dcrawInfo.indexOf(hasSecondaryPixelHeader);
-    if (pos != -1)
-    {
-        QString hasSecondaryPixel = dcrawInfo.mid(pos).section('\n', 0, 0);
-        hasSecondaryPixel.remove(0, hasSecondaryPixelHeader.length());
-        if (hasSecondaryPixel.contains("yes"))
-            identify.hasSecondaryPixel = true;
-        else
-            identify.hasSecondaryPixel = false;
-    }
-*/
+    // NOTE: since dcraw.c 8.77, this information has disapear...
+    identify.hasSecondaryPixel = false;
 
     return true;
 }
@@ -635,10 +612,9 @@ int KDcraw::rawFilesVersion()
 
 QStringList KDcraw::supportedCamera()
 {
-
-    QFileInfo fi/*( TODO )*/;
-    QFile file(fi.path() + QString("/CAMERALIST"));
-    if ( !file.open(QIODevice::ReadOnly) ) 
+    QString path = KStandardDirs::installPath("data") + QString("libkdcraw/CAMERALIST");
+    QFile file(path);
+    if ( !file.open(QIODevice::ReadOnly) )
         return QStringList();
 
     QByteArray data;
