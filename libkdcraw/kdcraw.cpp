@@ -131,21 +131,21 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw open file failed!");
+        qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     ret = raw.unpack_thumb();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw unpack failed!");
+        qDebug() << "LibRaw: failed to run unpack_thumb: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     libraw_processed_image_t *thumb = raw.dcraw_make_mem_thumb(&ret);
     if(!thumb)
     {
-        qDebug("LibRaw dcraw make mem thumb failed!");
+        qDebug() << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret) << endl;
         return false;
     }
 
@@ -182,28 +182,28 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw open file failed!");
+        qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw unpack failed!");
+        qDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw dcraw process failed!");
+        qDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     libraw_processed_image_t *halfImg = raw.dcraw_make_mem_image(&ret);
     if(!halfImg)
     {
-        qDebug("LibRaw dcraw make mem image failed!");
+        qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
         return false;
     }
 
@@ -235,14 +235,14 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw open file failed!");
+        qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
         return false;
     }
 
     ret = raw.adjust_sizes_info_only();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw adjust_sizes_info_only failed!");
+        qDebug() << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret) << endl;
         return false;
     }
 
@@ -549,7 +549,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw open file failed!");
+        qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
         return false;
     }
 
@@ -558,28 +558,31 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw unpack failed!");
+        qDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
         return false;
     }
 
+    if (m_cancel) return false;
     setReceivingDataProgress(0.25);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
-        qDebug("LibRaw dcraw process failed!");
+        qDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
         return false;
     }
 
+    if (m_cancel) return false;
     setReceivingDataProgress(0.3);
 
     libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
     if(!img)
     {
-        qDebug("LibRaw dcraw make mem image failed!");
+        qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
         return false;
     }
 
+    if (m_cancel) return false;
     setReceivingDataProgress(0.35);
 
     width     = img->width;
@@ -587,6 +590,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     rgbmax    = (1 << img->bits)-1;
     imageData = QByteArray((const char*)img->data, (int)img->data_size);
 
+    if (m_cancel) return false;
     setReceivingDataProgress(0.4);
 
     qDebug("Raw data info: width %i height %i rgbmax %i", width, height, rgbmax);
