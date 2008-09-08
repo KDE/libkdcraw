@@ -628,4 +628,10 @@ QStringList KDcraw::supportedCamera()
     return list;
 }
 
+QString KDcraw::librawVersion()
+{
+    // FIXME : use libraw version string when available.
+    return QString("0.6.0");
+}
+
 }  // namespace KDcrawIface

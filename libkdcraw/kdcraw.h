@@ -100,6 +100,9 @@ public:
     /** Provide a list of supported RAW Camera name. */ 
     static QStringList supportedCamera();
 
+    /** Return LibRaw version string. */
+    static QString librawVersion();
+
 public: 
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using 
