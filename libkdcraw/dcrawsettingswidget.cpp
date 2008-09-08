@@ -40,6 +40,7 @@
 
 // Local includes.
 
+#include "kdcraw.h"
 #include "rnuminput.h"
 #include "rcombobox.h"
 #include "dcrawsettingswidget.h"
@@ -196,7 +197,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     line++;
 
     KUrlLabel *dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
-                                  /*.arg( FIXME DcrawBinary::internalVersion())*/, d->demosaicingSettings);
+                                  .arg(KDcraw::librawVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     dcrawVersion->setToolTip(i18n("Visit dcraw project website"));
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
