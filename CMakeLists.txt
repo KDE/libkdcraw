@@ -1,5 +1,7 @@
 PROJECT(libkdcraw)
 
+FIND_PACKAGE(LCMS)
+
 # =======================================================
 # Informations to update before to release this library.
 
