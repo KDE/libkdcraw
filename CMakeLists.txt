@@ -1,7 +1,5 @@
 PROJECT(libkdcraw)
 
-FIND_PACKAGE(LCMS)
-
 # =======================================================
 # Informations to update before to release this library.
 
@@ -47,6 +45,15 @@ SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_
 
 # =======================================================
 # LibRAW source code
+
+FIND_PACKAGE(LCMS)
+FIND_PACKAGE(JPEG)
+
+INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
+ADD_DEFINITIONS(-DUSE_LCMS)
+
+# Flag to debug LibRaw
+ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
