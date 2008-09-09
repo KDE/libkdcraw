@@ -391,13 +391,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
     if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
     {
-/*
-        TODO
         // (-P) Read the dead pixel list from this file.
         args.append(QString("-P %1").arg(m_rawDecodingSettings.deadPixelMap));
-        args << "-P";
-        args << QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
-*/
+        raw.imgdata.params.bad_pixels = QFile::encodeName(m_rawDecodingSettings.deadPixelMap).data();
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -539,6 +535,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         case RawDecodingSettings::EMBEDDED:
         {
             /* TODO
+            // (-p embed) Use input profile from RAW file to define the camera's raw colorspace.
             args.append("-p embed");
             args << "-p";
             args << "embed";
@@ -547,14 +544,12 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         }
         case RawDecodingSettings::CUSTOMINPUTCS:
         {
-            /* TODO
             if (!m_rawDecodingSettings.inputProfile.isEmpty())
             {
+                // (-p) Use input profile file to define the camera's raw colorspace.
                 args.append(QString("-p %1").arg(m_rawDecodingSettings.inputProfile));
-                // (-p) Use ICC profiles to define the camera's raw colorspace or use embeded profile from raw file.
-                args << "-p";
-                args << QFile::encodeName(m_rawDecodingSettings.inputProfile);
-            }*/
+                raw.imgdata.params.camera_profile = QFile::encodeName(m_rawDecodingSettings.inputProfile).data();
+            }
             break;
         }
         default:   // No input profile
@@ -565,13 +560,12 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     {
         case RawDecodingSettings::CUSTOMOUTPUTCS:
         {
-            /* TODO
             if (!m_rawDecodingSettings.outputProfile.isEmpty())
             {
+                // (-o) Use ICC profile file to define the output colorspace.
                 args.append(QString("-o %1").arg(m_rawDecodingSettings.outputProfile));
-                args << "-o";
-                args << QFile::encodeName(m_rawDecodingSettings.outputProfile);
-            }*/
+                raw.imgdata.params.output_profile = QFile::encodeName(m_rawDecodingSettings.outputProfile).data();
+            }
             break;
         }
         default:
