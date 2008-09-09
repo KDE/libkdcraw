@@ -147,8 +147,27 @@ public:
     RDoubleNumInput *brightnessSpinBox;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, AdvancedSettingsOptions advSettings)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
                    : QToolBox(parent)
+{
+    setup(advSettings);
+}
+
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
+                                         bool outputColorSpaceOption, 
+                                         bool postProcessingOptions)
+                   : QToolBox(parent)
+{
+    int advSettings = 0;
+
+    if (sixteenBitsOption)      advSettings |= SIXTEENBITS;
+    if (outputColorSpaceOption) advSettings |= COLORSPACE;
+    if (postProcessingOptions)  advSettings |= POSTPROCESSING;
+
+    setup(advSettings);
+}
+
+void DcrawSettingsWidget::setup(int advSettings)
 {
     d = new DcrawSettingsWidgetPriv;
 

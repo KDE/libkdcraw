@@ -68,8 +68,14 @@ public:
 
 public:
 
-    DcrawSettingsWidget(QWidget *parent, AdvancedSettingsOptions advSettings=COLORSPACE);
+    DcrawSettingsWidget(QWidget *parent, int advSettings=COLORSPACE);
+    DcrawSettingsWidget(QWidget *parent,
+                        bool sixteenBitsOption=false,
+                        bool outputColorSpaceOption=true,
+                        bool postProcessingOptions=false);
     virtual ~DcrawSettingsWidget();
+
+    void setup(int advSettings);
 
     bool   sixteenBits();
     int    customWhiteBalance();
