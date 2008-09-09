@@ -32,10 +32,7 @@
 #include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
-
-// KDE includes.
-
-#include <kstandarddirs.h>
+#include <QStringList>
 
 // LibRaw includes.
 
