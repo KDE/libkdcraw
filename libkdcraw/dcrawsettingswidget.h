@@ -48,7 +48,15 @@ class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QToolBox
 {
     Q_OBJECT
 
-public: 
+public:
+
+    enum AdvancedSettingsOptions
+    {
+        SIXTEENBITS      = 0x00000001,
+        COLORSPACE       = 0x00000002,
+        POSTPROCESSING   = 0x00000004,
+        BLACKWHITEPOINTS = 0x00000008
+    };
 
     enum SettingsTabs
     {
@@ -60,11 +68,14 @@ public:
 
 public:
 
-    DcrawSettingsWidget(QWidget *parent, 
-                        bool sixteenBitsOption=false, 
-                        bool outputColorSpaceOption=true, 
+    DcrawSettingsWidget(QWidget *parent, int advSettings=COLORSPACE);
+    DcrawSettingsWidget(QWidget *parent,
+                        bool sixteenBitsOption=false,
+                        bool outputColorSpaceOption=true,
                         bool postProcessingOptions=false);
     virtual ~DcrawSettingsWidget();
+
+    void setup(int advSettings);
 
     bool   sixteenBits();
     int    customWhiteBalance();

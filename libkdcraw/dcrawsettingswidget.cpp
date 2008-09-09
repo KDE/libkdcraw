@@ -147,10 +147,27 @@ public:
     RDoubleNumInput *brightnessSpinBox;
 };
 
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
+                   : QToolBox(parent)
+{
+    setup(advSettings);
+}
+
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
                                          bool outputColorSpaceOption, 
                                          bool postProcessingOptions)
                    : QToolBox(parent)
+{
+    int advSettings = 0;
+
+    if (sixteenBitsOption)      advSettings |= SIXTEENBITS;
+    if (outputColorSpaceOption) advSettings |= COLORSPACE;
+    if (postProcessingOptions)  advSettings |= POSTPROCESSING;
+
+    setup(advSettings);
+}
+
+void DcrawSettingsWidget::setup(int advSettings)
 {
     d = new DcrawSettingsWidgetPriv;
     setMargin(0);
@@ -173,7 +190,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                "white point. This mode is faster than 16-bit decoding."));
     demosaicingLayout->addMultiCellWidget(d->sixteenBitsImage, 0, 0, 0, 1);
 
-    if (sixteenBitsOption)
+    if (advSettings & SIXTEENBITS)
     {
         d->sixteenBitsImage->show();
         line = 1;
@@ -334,7 +351,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                                "Specify the brightness level of output image."
                                                "The default value is 1.0 (works in 8-bit mode only).<p>"));
 
-    if (!postProcessingOptions)
+    if (! (advSettings & POSTPROCESSING))
     {
         d->brightnessLabel->hide();
         d->brightnessSpinBox->hide();
@@ -361,6 +378,14 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->whitePointSpinBox->setDefaultValue(0);
     QWhatsThis::add(d->whitePointSpinBox, i18n("<p><b>White point value</b><p>"
                                                "Specify specific white point value of the output image.<p>"));
+
+    if (! (advSettings & BLACKWHITEPOINTS))
+    {
+        d->blackPointCheckBox->hide();
+        d->blackPointSpinBox->hide();
+        d->whitePointCheckBox->hide();
+        d->whitePointSpinBox->hide();
+    }
 
     whiteBalanceLayout->addMultiCellWidget(d->whiteBalanceLabel,              0, 0, 0, 0);
     whiteBalanceLayout->addMultiCellWidget(d->whiteBalanceComboBox,           0, 0, 1, 2);
@@ -499,7 +524,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     insertItem(COLORMANAGEMENT, d->colormanSettings, i18n("Color Management"));
 
-    if (!outputColorSpaceOption)
+    if (! (advSettings & COLORSPACE))
     {
         removeItem(d->colormanSettings);
         d->colormanSettings->hide();
