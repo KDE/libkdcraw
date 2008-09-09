@@ -147,9 +147,7 @@ public:
     RDoubleNumInput *brightnessSpinBox;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
-                                         bool outputColorSpaceOption, 
-                                         bool postProcessingOptions)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, AdvancedSettingsOptions advSettings)
                    : QToolBox(parent)
 {
     d = new DcrawSettingsWidgetPriv;
@@ -172,7 +170,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                            "white point. This mode is faster than 16-bit decoding."));
     demosaicingLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 1);
 
-    if (sixteenBitsOption)
+    if (advSettings & SIXTEENBITS)
     {
         d->sixteenBitsImage->show();
         line = 1;
@@ -331,7 +329,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
                                             "Specify the brightness level of output image."
                                             "The default value is 1.0 (works in 8-bit mode only).<p>"));
 
-    if (!postProcessingOptions)
+    if (! (advSettings & POSTPROCESSING))
     {
         d->brightnessLabel->hide();
         d->brightnessSpinBox->hide();
@@ -360,6 +358,14 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
     d->whitePointSpinBox->setSliderEnabled(true);
     d->whitePointSpinBox->setWhatsThis(i18n("<p><b>White point value</b><p>"
                                             "Specify specific white point value of the output image.<p>"));
+
+    if (! (advSettings & BLACKWHITEPOINTS))
+    {
+        d->blackPointCheckBox->hide();
+        d->blackPointSpinBox->hide();
+        d->whitePointCheckBox->hide();
+        d->whitePointSpinBox->hide();
+    }
 
     whiteBalanceLayout->addWidget(d->whiteBalanceLabel,              0, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->whiteBalanceComboBox,           0, 1, 1, 2);
@@ -499,7 +505,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
     insertItem(COLORMANAGEMENT, d->colormanSettings, i18n("Color Management"));
 
-    if (!outputColorSpaceOption)
+    if (! (advSettings & COLORSPACE))
     {
         removeItem(indexOf(d->colormanSettings));
         d->colormanSettings->hide();
