@@ -59,9 +59,18 @@ ADD_DEFINITIONS(-DUSE_LCMS)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
+# LibRaw use C++ exception.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
+# Under Windows, use specific flag to compile.
+IF( WIN32 )
+    ADD_DEFINITIONS( -DDJGPP )
+ENDIF( WIN32 )
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw)
+
+# Do not compile LibRaw with KDE FINAL mode.
+KDE4_NO_ENABLE_FINAL(libraw)
 
 SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/foveon.cpp

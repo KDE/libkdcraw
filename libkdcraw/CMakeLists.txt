@@ -1,6 +1,11 @@
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
+# Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
+FOREACH(_curentfile ${libraw_LIB_SRCS})
+    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
+ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
+
 SET(kdcraw_LIB_SRCS kdcraw.cpp 
                     dcrawsettingswidget.cpp
                     rcombobox.cpp
