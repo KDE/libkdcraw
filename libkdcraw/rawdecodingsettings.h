@@ -189,7 +189,7 @@ public:
     virtual ~RawDecodingSettings(){};
 
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
-    void optimizeTimeLoading(void)
+    void optimizeTimeLoading()
     {
         sixteenBitsImage           = true;
         brightness                 = 1.0;
