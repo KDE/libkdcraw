@@ -534,12 +534,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     {
         case RawDecodingSettings::EMBEDDED:
         {
-            /* TODO
             // (-p embed) Use input profile from RAW file to define the camera's raw colorspace.
-            args.append("-p embed");
-            args << "-p";
-            args << "embed";
-            */
+            args.append(QString("-p embed"));
+            raw.imgdata.params.camera_profile = QString("embed").toAscii().data();
             break;
         }
         case RawDecodingSettings::CUSTOMINPUTCS:
