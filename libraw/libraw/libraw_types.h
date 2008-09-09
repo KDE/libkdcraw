@@ -33,7 +33,12 @@
 extern "C" {
 #endif
 
+#ifndef USE_LCMS
+#define NO_LCMS
+#endif
+
 #include "libraw_const.h"
+#include "libraw_version.h"
 
 typedef long long INT64;
 typedef unsigned long long UINT64;
@@ -196,6 +201,10 @@ typedef struct
     int         use_camera_wb;  /* -w */
     int         use_camera_matrix; /* +M/-M */
     int         output_color;   /* -o */
+    char        *output_profile; /* -o */
+    char        *camera_profile; /* -p */
+    char        *bad_pixels;    /* -P */
+    char        *dark_frame;    /* -K */
     int         output_bps;     /* -4 */
     int         gamma_16bit;    /* -1 */
     int         output_tiff;    /* -T */

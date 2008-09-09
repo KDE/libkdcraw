@@ -3,7 +3,7 @@
  * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw simple C++ API  (emulates call to "dcraw  [-D]  [-T] [-v] [-e]")
+ * LibRaw simple C++ API  (emulates call to "dcraw  [-D]  [-T] [-v] [-e] [-4]")
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,12 +42,15 @@ int main(int ac, char *av[])
     if(ac<2) 
         {
             printf(
-                "simple_dcraw - LibRaw sample. Emulates dcraw [-D] [-T] [-v] [-e]\n"
+                "simple_dcraw - LibRaw %s sample. Emulates dcraw [-D] [-T] [-v] [-e]\n"
+                " %d cameras supported\n"
                 "Usage: %s [-D] [-T] [-v] [-e] raw-files....\n"
                 "\t-D - document mode emulation\n"
+                "\t-4 - 16-bit mode\n"
                 "\t-v - verbose output\n"
-                "\t-T - output TIFF files instead of .pgm\n"
-                "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",
+                "\t-T - output TIFF files instead of .pgm/ppm\n"
+                "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",LibRaw::version(),
+                LibRaw::cameraCount(),
                 av[0]);
             return 0;
         }
@@ -74,6 +77,8 @@ int main(int ac, char *av[])
                         output_thumbs++;
                     if(av[i][1]=='D' && av[i][2]==0)
                         OUT.document_mode=2;
+                    if(av[i][1]=='4' && av[i][2]==0)
+                        OUT.output_bps=16;
                     continue;
                 }
 

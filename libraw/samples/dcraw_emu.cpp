@@ -44,12 +44,18 @@ void usage(const char *prog)
 "-r <r g b g> Set custom white balance\n"
 "+M/-M     Use/don't use an embedded color matrix\n"
 "-C <r b>  Correct chromatic aberration\n"
+"-P <file> Fix the dead pixels listed in this file\n"
+"-K <file> Subtract dark frame (16-bit raw PGM)\n"
 "-k <num>  Set the darkness level\n"
 "-S <num>  Set the saturation level\n"
 "-n <num>  Set threshold for wavelet denoising\n"
 "-H [0-9]  Highlight mode (0=clip, 1=unclip, 2=blend, 3+=rebuild)\n"
 "-t [0-7]  Flip image (0=none, 3=180, 5=90CCW, 6=90CW)\n"
 "-o [0-5]  Output colorspace (raw,sRGB,Adobe,Wide,ProPhoto,XYZ)\n"
+#ifndef NO_LCMS
+"-o file   Output ICC profile\n"
+"-p file   Camera input profile (use \'embed\' for embedded profile)\n"
+#endif
 "-j        Don't stretch or rotate raw pixels\n"
 "-W        Don't automatically brighten the image\n"
 "-b <num>  Adjust brightness (default = 1.0)\n"
@@ -93,6 +99,8 @@ int main(int argc, char *argv[])
                   
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
               case 'b':  OUT.bright      = atof(argv[arg++]);  break;
+              case 'P':  OUT.bad_pixels  = argv[arg++];        break;
+              case 'K':  OUT.dark_frame  = argv[arg++];        break;
               case 'r':
                   for(c=0;c<4;c++) 
                       OUT.user_mul[c] = atof(argv[arg++]);  
@@ -108,7 +116,16 @@ int main(int argc, char *argv[])
               case 'm':  OUT.med_passes  = atoi(argv[arg++]);  break;
               case 'H':  OUT.highlight   = atoi(argv[arg++]);  break;
               case 's':  OUT.shot_select = abs(atoi(argv[arg])); break;
-              case 'o':  OUT.output_color = atoi(argv[arg++]); break;
+              case 'o':  
+                  if(isdigit(argv[arg+1][0]) && !isdigit(argv[arg+1][1]))
+                          OUT.output_color = atoi(argv[arg++]);
+#ifndef NO_LCMS
+                   else
+                         OUT.output_profile = argv[arg++];
+                  break;
+              case 'p':  OUT.camera_profile = argv[arg++];
+#endif
+                  break;
               case 'h':  OUT.half_size         = 1;		
                   // no break:  "-h" implies "-f" 
               case 'f':  
@@ -128,7 +145,6 @@ int main(int argc, char *argv[])
                   return 1;
               }
       }
-
   putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
 
 #define P1 RawProcessor.imgdata.idata

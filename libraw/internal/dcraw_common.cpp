@@ -1,10 +1,11 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Sep  7 10:16:47 2008
+   Generated from dcraw/dcraw.c at Tue Sep  9 10:46:41 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
+#line 259 "dcraw/dcraw.c"
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_LIBRARY_BUILD
@@ -12,6 +13,7 @@
 #include "internal/defines.h"
 #include "internal/var_defines.h"
 
+#line 268 "dcraw/dcraw.c"
 
 #ifndef __GLIBC__
 char *my_memmem (char *haystack, size_t haystacklen,
@@ -26,6 +28,7 @@ char *my_memmem (char *haystack, size_t haystacklen,
 #define memmem my_memmem
 #endif
 
+#line 302 "dcraw/dcraw.c"
 
 ushort CLASS sget2 (uchar *s)
 {
@@ -100,6 +103,7 @@ void CLASS read_shorts (ushort *pixel, int count)
   if ((order == 0x4949) == (ntohs(0x1234) == 0x1234))
       swab ((char*)pixel, (char*)pixel, count*2);
 }
+#line 379 "dcraw/dcraw.c"
 void CLASS canon_600_fixed_wb (int temp)
 {
   static const short mul[4][5] = {
@@ -391,6 +395,7 @@ uchar * CLASS make_decoder (const uchar *source, int level)
   cur = free_decode++;
   if (free_decode > first_decode+2048) {
 throw LIBRAW_EXCEPTION_DECODE_RAW; 
+#line 674 "dcraw/dcraw.c"
   }
   for (i=next=0; i <= t_leaf && next < 16; )
     i += source[next++];
@@ -570,6 +575,7 @@ void CLASS canon_compressed_load_raw()
     black /= (raw_width - width) * height;
 }
 
+#line 865 "dcraw/dcraw.c"
 int CLASS ljpeg_start (struct jhead *jh, int info_only)
 {
   int i, tag, len;
@@ -1115,6 +1121,7 @@ void CLASS fuji_load_raw()
   }
   free (pixel);
 }
+#line 1415 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1523,6 +1530,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
+#line 1827 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2057,6 +2065,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
+#line 2364 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2564,6 +2573,104 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
+#line 3559 "dcraw/dcraw.c"
+
+/*
+   Seach from the current directory up to the root looking for
+   a ".badpixels" file, and fix those pixels now.
+ */
+void CLASS bad_pixels (char *fname)
+{
+  FILE *fp=0;
+  char *cp, line[128];
+  int len, time, row, col, r, c, rad, tot, n, fixed=0;
+
+  if (!filters) return;
+  if (fname)
+    fp = fopen (fname, "r");
+#line 3599 "dcraw/dcraw.c"
+  if (!fp) 
+      {
+imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
+          return;
+      }
+  while (fgets (line, 128, fp)) {
+    cp = strchr (line, '#');
+    if (cp) *cp = 0;
+    if (sscanf (line, "%d %d %d", &col, &row, &time) != 3) continue;
+    if ((unsigned) col >= width || (unsigned) row >= height) continue;
+    if (time > timestamp) continue;
+    for (tot=n=0, rad=1; rad < 3 && n==0; rad++)
+      for (r = row-rad; r <= row+rad; r++)
+	for (c = col-rad; c <= col+rad; c++)
+	  if ((unsigned) r < height && (unsigned) c < width &&
+		(r != row || c != col) && fc(r,c) == fc(row,col)) {
+	    tot += BAYER2(r,c);
+	    n++;
+	  }
+    BAYER2(row,col) = tot/n;
+#ifdef DCRAW_VERBOSE
+    if (verbose) {
+      if (!fixed++)
+	fprintf (stderr,_("Fixed dead pixels at:"));
+      fprintf (stderr, " %d,%d", col, row);
+    }
+#endif
+  }
+#ifdef DCRAW_VERBOSE
+  if (fixed) fputc ('\n', stderr);
+#endif
+  fclose (fp);
+}
+
+void CLASS subtract (char *fname)
+{
+  FILE *fp;
+  int dim[3]={0,0,0}, comment=0, number=0, error=0, nd=0, c, row, col;
+  ushort *pixel;
+
+  if (!(fp = fopen (fname, "rb"))) {
+#ifdef DCRAW_VERBOSE
+    perror (fname); 
+#endif
+imgdata.process_warnings |= LIBRAW_WARN_BAD_DARKFRAME_FILE; 
+    return;
+  }
+  if (fgetc(fp) != 'P' || fgetc(fp) != '5') error = 1;
+  while (!error && nd < 3 && (c = fgetc(fp)) != EOF) {
+    if (c == '#')  comment = 1;
+    if (c == '\n') comment = 0;
+    if (comment) continue;
+    if (isdigit(c)) number = 1;
+    if (number) {
+      if (isdigit(c)) dim[nd] = dim[nd]*10 + c -'0';
+      else if (isspace(c)) {
+	number = 0;  nd++;
+      } else error = 1;
+    }
+  }
+  if (error || nd < 3) {
+    fprintf (stderr,_("%s is not a valid PGM file!\n"), fname);
+    fclose (fp);  return;
+  } else if (dim[0] != width || dim[1] != height || dim[2] != 65535) {
+#ifdef DCRAW_VERBOSE
+      fprintf (stderr,_("%s has the wrong dimensions!\n"), fname);
+#endif
+imgdata.process_warnings |= LIBRAW_WARN_BAD_DARKFRAME_DIM; 
+
+    fclose (fp);  return;
+  }
+  pixel = (ushort *) calloc (width, sizeof *pixel);
+  merror (pixel, "subtract()");
+  for (row=0; row < height; row++) {
+    fread (pixel, 2, width, fp);
+    for (col=0; col < width; col++)
+      BAYER(row,col) = MAX (BAYER(row,col) - ntohs(pixel[col]), 0);
+  }
+  free (pixel);
+  black = 0;
+}
+
 void CLASS pseudoinverse (double (*in)[3], double (*out)[3], int size)
 {
   double work[3][6], num;
@@ -3521,6 +3628,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
+#line 4642 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4005,6 +4113,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
+#line 5130 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -4580,6 +4689,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
+#line 5709 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4622,6 +4732,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
+#line 5754 "dcraw/dcraw.c"
 }
 
 /*
@@ -5054,6 +5165,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
+#line 6291 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -6778,6 +6890,73 @@ notraw:
   if (flip == -1) flip = tiff_flip;
   if (flip == -1) flip = 0;
 }
+
+#ifndef NO_LCMS
+void CLASS apply_profile (char *input, char *output)
+{
+  char *prof;
+  cmsHPROFILE hInProfile=0, hOutProfile=0;
+  cmsHTRANSFORM hTransform;
+  FILE *fp;
+  unsigned size;
+
+  cmsErrorAction (LCMS_ERROR_SHOW);
+  if (strcmp (input, "embed"))
+    hInProfile = cmsOpenProfileFromFile (input, "r");
+  else if (profile_length) {
+#line 8037 "dcraw/dcraw.c"
+hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
+  } else
+      {
+imgdata.process_warnings |= LIBRAW_WARN_NO_EMBEDDED_PROFILE; 
+#ifdef DCRAW_VERBOSE
+          fprintf (stderr,_("%s has no embedded profile.\n"), ifname);
+#endif
+      }
+  if (!hInProfile)
+      {
+imgdata.process_warnings |= LIBRAW_WARN_NO_INPUT_PROFILE; 
+          return;
+      }
+  if (!output)
+    hOutProfile = cmsCreate_sRGBProfile();
+  else if ((fp = fopen (output, "rb"))) {
+    fread (&size, 4, 1, fp);
+    fseek (fp, 0, SEEK_SET);
+    oprof = (unsigned *) malloc (size = ntohl(size));
+    merror (oprof, "apply_profile()");
+    fread (oprof, 1, size, fp);
+    fclose (fp);
+    if (!(hOutProfile = cmsOpenProfileFromMem (oprof, size))) {
+      free (oprof);
+      oprof = 0;
+    }
+#ifdef DCRAW_VERBOSE
+  } else
+    fprintf (stderr,_("Cannot open file %s!\n"), output);
+#else
+}
+#endif
+  if (!hOutProfile)
+      {
+imgdata.process_warnings |= LIBRAW_WARN_BAD_OUTPUT_PROFILE; 
+          goto quit;
+      }
+#ifdef DCRAW_VERBOSE
+  if (verbose)
+    fprintf (stderr,_("Applying color profile...\n"));
+#endif
+  hTransform = cmsCreateTransform (hInProfile, TYPE_RGBA_16,
+	hOutProfile, TYPE_RGBA_16, INTENT_PERCEPTUAL, 0);
+  cmsDoTransform (hTransform, image, image, width*height);
+  raw_color = 1;		/* Don't use rgb_cam with a profile */
+  cmsDeleteTransform (hTransform);
+  cmsCloseProfile (hOutProfile);
+quit:
+  cmsCloseProfile (hInProfile);
+}
+#endif
+
 void CLASS convert_to_rgb()
 {
   int row, col, c, i, j, k;
@@ -6871,6 +7050,7 @@ void CLASS convert_to_rgb()
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
+#line 8185 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7005,6 +7185,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
+#line 8344 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

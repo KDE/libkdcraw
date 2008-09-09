@@ -55,7 +55,11 @@ int main(int ac, char *av[])
 #define T MyCoolRawProcessor.imgdata.thumbnail
 
 
-            MyCoolRawProcessor.adjust_sizes_info_only();
+            if( (ret =  MyCoolRawProcessor.adjust_sizes_info_only()))
+            {
+                printf("Cannot decode %s: %s\n",av[i],libraw_strerror(ret));
+                continue; // no recycle, open_file will recycle
+            }
             
             printf ("\nFilename: %s\n", av[i]);
             printf ("Timestamp: %s", ctime(&(P2.timestamp)));

@@ -49,6 +49,12 @@ DllDef    int                 libraw_unpack(libraw_data_t*);
 DllDef    int                 libraw_unpack_thumb(libraw_data_t*);
 DllDef    void                libraw_recycle(libraw_data_t*);
 DllDef    void                libraw_close(libraw_data_t*);
+    // version helpers
+DllDef    const char*               libraw_version();
+DllDef    int                 libraw_versionNumber();
+    // Camera list
+DllDef    const char**        libraw_cameraList();
+DllDef    int                 libraw_cameraCount();
 
 DllDef    void                libraw_set_memerror_handler(libraw_data_t*, memory_callback cb);
 DllDef    void                libraw_set_dataerror_handler(libraw_data_t*,data_callback func);
@@ -105,7 +111,7 @@ class DllDef LibRaw
             tls.init();
 #endif
         }
-    int         main (int argc, char **argv);
+
     
     libraw_output_params_t*     output_params_ptr() { return &imgdata.params;}
     int                         open_file(const char *fname);
@@ -115,6 +121,12 @@ class DllDef LibRaw
     int                         adjust_sizes_info_only(void);
     void                        set_memerror_handler(memory_callback cb) { mem_cb = cb; }
     void                        set_dataerror_handler(data_callback func) { data_cb = func;}
+
+    // helpers
+    static const char*          version() { return LIBRAW_VERSION_STR;}
+    static int                  versionNumber() { return LIBRAW_VERSION; }
+    static const char**         cameraList();
+    static int                  cameraCount();
     // dcraw emulation
     int                         dcraw_document_mode_processing();
     int                         dcraw_ppm_tiff_writer(const char *filename);
@@ -247,7 +259,9 @@ class DllDef LibRaw
     void        convert_to_rgb();
     void        kodak_ycbcr_load_raw();
     void        remove_zeroes();
-
+#ifndef NO_LCMS
+    void	apply_profile(char*,char*);
+#endif
 // Iterpolators
     void        pre_interpolate();
     void        border_interpolate (int border);
@@ -257,6 +271,8 @@ class DllDef LibRaw
     void        ahd_interpolate();
 
 // Image filters
+    void        bad_pixels(char*);
+    void        subtract(char*);
     void        hat_transform (float *temp, float *base, int st, int size, int sc);
     void        wavelet_denoise();
     void        scale_colors();

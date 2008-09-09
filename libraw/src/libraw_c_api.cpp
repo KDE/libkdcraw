@@ -19,6 +19,10 @@ extern "C"
         return &(ret->imgdata);
     }
 
+    const char*   libraw_version() { return LibRaw::version();}
+    int     libraw_versionNumber() { return LibRaw::versionNumber();}
+    const char**  libraw_cameraList() { return LibRaw::cameraList();}
+    int   libraw_cameraCount() { return LibRaw::cameraCount(); }
     int libraw_open_file(libraw_data_t* lr, const char *file)
     {
         if(!lr) return EINVAL;
