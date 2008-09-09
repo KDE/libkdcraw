@@ -40,6 +40,7 @@
 // LibRaw includes.
 
 #include "libraw/libraw.h"
+#include "libraw/libraw_version.h"
 
 // Local includes.
 
@@ -678,8 +679,7 @@ QStringList KDcraw::supportedCamera()
 
 QString KDcraw::librawVersion()
 {
-    // FIXME : use libraw version string when available.
-    return QString("0.6.0");
+    return QString(LIBRAW_VERSION_STR);
 }
 
 }  // namespace KDcrawIface
