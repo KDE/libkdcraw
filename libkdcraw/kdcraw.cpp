@@ -661,20 +661,12 @@ int KDcraw::rawFilesVersion()
 
 QStringList KDcraw::supportedCamera()
 {
-    QString path = KStandardDirs::installPath("data") + QString("libkdcraw/CAMERALIST");
-    QFile file(path);
-    if ( !file.open(QIODevice::ReadOnly) )
-        return QStringList();
+    QStringList camera;
+    const char** list = LibRaw::cameraList();
+    for (int i = 0; i < LibRaw::cameraCount(); i++)
+        camera.append(list[i]);
 
-    QByteArray data;
-    data.resize(file.size());
-    QDataStream stream( &file );
-    stream.readRawData(data.data(), data.size());
-    file.close();
-
-    QString tmp(data);
-    QStringList list = tmp.split('\n');
-    return list;
+    return camera;
 }
 
 QString KDcraw::librawVersion()
