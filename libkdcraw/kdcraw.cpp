@@ -309,7 +309,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     LibRaw      raw;
 
     // Set progress call back function.
-    raw.set_progress_handler(callbackForLibRaw, &d);
+    raw.set_progress_handler(callbackForLibRaw, d);
 
     if (m_rawDecodingSettings.gamma16bit)
     {
