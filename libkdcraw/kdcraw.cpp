@@ -50,7 +50,7 @@ namespace KDcrawIface
 
 KDcraw::KDcraw()
 {
-    d = new KDcrawPriv;
+    d = new KDcrawPriv(this);
     m_cancel  = false;
 }
 
@@ -309,7 +309,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     LibRaw      raw;
 
     // Set progress call back function.
-    raw.set_progress_handler(d->progressCallback);
+    raw.set_progress_handler(callbackForLibRaw, &d);
 
     if (m_rawDecodingSettings.gamma16bit)
     {

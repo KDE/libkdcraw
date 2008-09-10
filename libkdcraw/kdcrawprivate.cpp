@@ -31,12 +31,22 @@
 
 // Local includes.
 
+#include "kdcraw.h"
 #include "kdcrawprivate.h"
 
 namespace KDcrawIface
 {
 
-KDcrawPriv::KDcrawPriv()
+int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration,int expected)
+{
+    KDcrawPriv *d = static_cast<KDcrawPriv*>(data);
+    if (d)
+        return d->progressCallback(p, iteration, expected);
+
+    return 0;
+}
+
+KDcrawPriv::KDcrawPriv(const KDcraw *p): m_parent(p)
 {
 }
 
@@ -63,7 +73,9 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
     else if (iteration == expected-1)
         printf("%s finished\n",libraw_strprogress(p));
 */
-    //if(KDcraw::m_cancel) return 1; // emulate user termination on 10-th callback call
+
+    // Clean processing termination by user...
+    if(m_parent->m_cancel) return 1;
 
     // Return 0 to continue processing...
     return 0;

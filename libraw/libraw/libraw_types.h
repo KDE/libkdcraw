@@ -64,15 +64,27 @@ typedef unsigned short ushort;
 
 //class LibRaw;
 
-typedef void (* memory_callback)(const char *file, const char *where);
+typedef void (* memory_callback)(void * data, const char *file, const char *where);
 
-DllDef void default_memory_callback(const char *file, const char *where);
+DllDef void default_memory_callback(void *data,const char *file, const char *where);
 
-typedef void (*data_callback)(const char *file, const int offset);
+typedef void (*data_callback)(void *data,const char *file, const int offset);
 
-DllDef void default_data_callback(const char *file, const int offset);
+DllDef void default_data_callback(void *data,const char *file, const int offset);
 
-typedef int (* progress_callback) (enum LibRaw_progress stage, int iteration,int expected);
+typedef int (* progress_callback) (void *data,enum LibRaw_progress stage, int iteration,int expected);
+
+typedef struct
+{
+    memory_callback mem_cb;
+    void*  memcb_data;
+
+    data_callback data_cb;
+    void*       datacb_data;
+
+    progress_callback progress_cb;
+    void *progresscb_data;
+} libraw_callbacks_t;
 
 // Output bitmap type
 

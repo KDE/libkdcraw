@@ -73,11 +73,13 @@ void usage(const char *prog)
 static int verbosity=0;
 
 int cnt=0;
-int my_progress_callback(enum LibRaw_progress p,int iteration, int expected)
+int my_progress_callback(void *d,enum LibRaw_progress p,int iteration, int expected)
 {
+    char *passed  = (char*)(d?d:"default string"); // data passed to callback at set_callback stage
+
     if(verbosity>2) // verbosity set by repeat -v switches
         {
-            printf("CB: %s  pass %d of %d\n",libraw_strprogress(p),iteration,expected);
+            printf("CB: %s  pass %d of %d (data passed=%s)\n",libraw_strprogress(p),iteration,expected,passed);
         }
     else if (iteration == 0) // 1st iteration of each step
         printf("Starting %s (expecting %d iterations)\n", libraw_strprogress(p),expected);
@@ -171,7 +173,7 @@ int main(int argc, char *argv[])
 #define T RawProcessor.imgdata.thumbnail
 #define P2 RawProcessor.imgdata.other
 
-  if(verbosity>0) RawProcessor.set_progress_handler(my_progress_callback);
+  if(verbosity>0) RawProcessor.set_progress_handler(my_progress_callback,(void*)"Sample data passed");
 
   for ( ; arg < argc; arg++)
         {

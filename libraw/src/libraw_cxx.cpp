@@ -19,12 +19,12 @@
 extern "C" 
 {
 #endif
-    void default_memory_callback(const char *file,const char *where)
+    void default_memory_callback(void *,const char *file,const char *where)
     {
         fprintf (stderr,"%s: Out of memory in %s\n", file, where);
     }
 
-    void default_data_callback(const char *file, const int offset)
+    void default_data_callback(void*,const char *file, const int offset)
     {
         if(offset < 0)
             fprintf (stderr,"%s: Unexpected end of file\n", file);

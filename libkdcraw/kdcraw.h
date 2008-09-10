@@ -201,6 +201,8 @@ private:
 private:
 
     KDcrawPriv *d;
+
+    friend class KDcrawPriv;
 };
 
 }  // namespace KDcrawIface

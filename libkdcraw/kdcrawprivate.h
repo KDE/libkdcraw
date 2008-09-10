@@ -34,19 +34,30 @@
 namespace KDcrawIface
 {
 
+class KDcraw;
+
+extern "C"
+{
+    int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int expected);
+}
+
 class KDcrawPriv
 {
 
 public:
 
-    KDcrawPriv();
+    KDcrawPriv(const KDcraw *p);
     ~KDcrawPriv();
 
 public:
 
     static void createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img);
 
-    static int progressCallback(enum LibRaw_progress p, int iteration, int expected);
+    int progressCallback(enum LibRaw_progress p, int iteration, int expected);
+
+private:
+
+    const KDcraw *m_parent;
 };
 
 }  // namespace KDcrawIface
