@@ -77,7 +77,11 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
 */
 
     // Clean processing termination by user...
-    if(m_parent->m_cancel) return 1;
+    if(m_parent->m_cancel)
+    {
+        qDebug() << "LibRaw process terminaison invoked...";
+        return 1;
+    }
 
     // Return 0 to continue processing...
     return 0;
