@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Sep  9 10:46:41 2008
+   Generated from dcraw/dcraw.c at Wed Sep 10 10:50:00 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -268,6 +268,7 @@ void CLASS remove_zeroes()
 {
   unsigned row, col, tot, n, r, c;
 
+RUN_CALLBACK(LIBRAW_PROGRESS_REMOVE_ZEROES,0,2); 
   for (row=0; row < height; row++)
     for (col=0; col < width; col++)
       if (BAYER(row,col) == 0) {
@@ -279,6 +280,7 @@ void CLASS remove_zeroes()
 	      tot += (n++,BAYER(r,c));
 	if (n) BAYER(row,col) = tot/n;
       }
+RUN_CALLBACK(LIBRAW_PROGRESS_REMOVE_ZEROES,1,2); 
 }
 
 int CLASS canon_s2is()
@@ -395,7 +397,7 @@ uchar * CLASS make_decoder (const uchar *source, int level)
   cur = free_decode++;
   if (free_decode > first_decode+2048) {
 throw LIBRAW_EXCEPTION_DECODE_RAW; 
-#line 674 "dcraw/dcraw.c"
+#line 676 "dcraw/dcraw.c"
   }
   for (i=next=0; i <= t_leaf && next < 16; )
     i += source[next++];
@@ -575,7 +577,7 @@ void CLASS canon_compressed_load_raw()
     black /= (raw_width - width) * height;
 }
 
-#line 865 "dcraw/dcraw.c"
+#line 867 "dcraw/dcraw.c"
 int CLASS ljpeg_start (struct jhead *jh, int info_only)
 {
   int i, tag, len;
@@ -1121,7 +1123,7 @@ void CLASS fuji_load_raw()
   }
   free (pixel);
 }
-#line 1415 "dcraw/dcraw.c"
+#line 1417 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1530,7 +1532,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 1827 "dcraw/dcraw.c"
+#line 1829 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2065,7 +2067,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
-#line 2364 "dcraw/dcraw.c"
+#line 2366 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2573,7 +2575,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 3559 "dcraw/dcraw.c"
+#line 3571 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -2586,9 +2588,10 @@ void CLASS bad_pixels (char *fname)
   int len, time, row, col, r, c, rad, tot, n, fixed=0;
 
   if (!filters) return;
+RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2); 
   if (fname)
     fp = fopen (fname, "r");
-#line 3599 "dcraw/dcraw.c"
+#line 3612 "dcraw/dcraw.c"
   if (!fp) 
       {
 imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
@@ -2621,6 +2624,7 @@ imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP;
   if (fixed) fputc ('\n', stderr);
 #endif
   fclose (fp);
+RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,1,2); 
 }
 
 void CLASS subtract (char *fname)
@@ -2628,6 +2632,7 @@ void CLASS subtract (char *fname)
   FILE *fp;
   int dim[3]={0,0,0}, comment=0, number=0, error=0, nd=0, c, row, col;
   ushort *pixel;
+RUN_CALLBACK(LIBRAW_PROGRESS_DARK_FRAME,0,2); 
 
   if (!(fp = fopen (fname, "rb"))) {
 #ifdef DCRAW_VERBOSE
@@ -2669,6 +2674,7 @@ imgdata.process_warnings |= LIBRAW_WARN_BAD_DARKFRAME_DIM;
   }
   free (pixel);
   black = 0;
+RUN_CALLBACK(LIBRAW_PROGRESS_DARK_FRAME,1,2); 
 }
 
 void CLASS pseudoinverse (double (*in)[3], double (*out)[3], int size)
@@ -2917,6 +2923,8 @@ void CLASS scale_colors()
   float scale_mul[4], fr, fc;
   ushort *img=0, *pix;
 
+RUN_CALLBACK(LIBRAW_PROGRESS_SCALE_COLORS,0,2); 
+
   if (user_mul[0])
     memcpy (pre_mul, user_mul, sizeof pre_mul);
   if (use_auto_wb || (use_camera_wb && cam_mul[0] == -1)) {
@@ -3027,6 +3035,7 @@ color_flags.pre_mul_state =color_flags.pre_mul_state; }
       free(img);
     }
   }
+RUN_CALLBACK(LIBRAW_PROGRESS_SCALE_COLORS,1,2); 
 }
 
 void CLASS pre_interpolate()
@@ -3034,6 +3043,7 @@ void CLASS pre_interpolate()
   ushort (*img)[4];
   int row, col, c;
 
+RUN_CALLBACK(LIBRAW_PROGRESS_PRE_INTERPOLATE,0,2); 
   if (shrink) {
     if (half_size) {
       height = iheight;
@@ -3061,6 +3071,7 @@ void CLASS pre_interpolate()
     }
   }
   if (half_size) filters = 0;
+RUN_CALLBACK(LIBRAW_PROGRESS_PRE_INTERPOLATE,1,2); 
 }
 
 void CLASS border_interpolate (int border)
@@ -3095,6 +3106,7 @@ void CLASS lin_interpolate()
   if (verbose) fprintf (stderr,_("Bilinear interpolation...\n"));
 #endif
 
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,0,3); 
   border_interpolate(1);
   for (row=0; row < 16; row++)
     for (col=0; col < 16; col++) {
@@ -3116,6 +3128,7 @@ void CLASS lin_interpolate()
 	  *ip++ = 256 / sum[c];
 	}
     }
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,1,3); 
   for (row=1; row < height-1; row++)
     for (col=1; col < width-1; col++) {
       pix = image[row*width+col];
@@ -3126,6 +3139,7 @@ void CLASS lin_interpolate()
       for (i=colors; --i; ip+=2)
 	pix[ip[0]] = sum[ip[0]] * ip[1] >> 8;
     }
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,2,3); 
 }
 
 /*
@@ -3168,7 +3182,7 @@ void CLASS vng_interpolate()
   int prow=7, pcol=1, *ip, *code[16][16], gval[8], gmin, gmax, sum[4];
   int row, col, x, y, x1, x2, y1, y2, t, weight, grads, color, diag;
   int g, diff, thold, num, c;
-
+int rcnt=0; 
   lin_interpolate();
 #ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("VNG interpolation...\n"));
@@ -3212,6 +3226,7 @@ void CLASS vng_interpolate()
   for (row=0; row < 3; row++)
     brow[row] = brow[4] + row*width;
   for (row=2; row < height-2; row++) {		/* Do VNG interpolation */
+if(!((row-2)%256))RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,rcnt++,((height-3)/256)+1); 
     for (col=2; col < width-2; col++) {
       pix = image[row*width+col];
       ip = code[row & prow][col & pcol];
@@ -3281,6 +3296,7 @@ void CLASS ppg_interpolate()
 #endif
 
 /*  Fill in the green layer with gradients and pattern recognition: */
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,0,3); 
   for (row=3; row < height-3; row++)
     for (col=3+(FC(row,3) & 1), c=FC(row,col); col < width-3; col+=2) {
       pix = image + row*width+col;
@@ -3297,6 +3313,7 @@ void CLASS ppg_interpolate()
       pix[0][1] = ULIM(guess[i] >> 2, pix[d][1], pix[-d][1]);
     }
 /*  Calculate red and blue for each green pixel:		*/
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,1,3); 
   for (row=1; row < height-1; row++)
     for (col=1+(FC(row,2) & 1), c=FC(row,col+1); col < width-1; col+=2) {
       pix = image + row*width+col;
@@ -3305,6 +3322,7 @@ void CLASS ppg_interpolate()
 			- pix[-d][1] - pix[d][1]) >> 1);
     }
 /*  Calculate blue for red pixels and vice versa:		*/
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,2,3); 
   for (row=1; row < height-1; row++)
     for (col=1+(FC(row,1) & 1), c=2-FC(row,col); col < width-1; col+=2) {
       pix = image + row*width+col;
@@ -3338,7 +3356,7 @@ void CLASS ahd_interpolate()
   ushort (*rgb)[TS][TS][3];
    short (*lab)[TS][TS][3], (*lix)[3];
    char (*homo)[TS][TS], *buffer;
-
+int rcnt=0; 
 #ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("AHD interpolation...\n"));
 #endif
@@ -3360,6 +3378,9 @@ void CLASS ahd_interpolate()
   homo = (char  (*)[TS][TS])   (buffer + 24*TS*TS);
 
   for (top=2; top < height-5; top += TS-6)
+  {    
+      
+RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,rcnt++,(height-7)/(TS-6)+1); 
     for (left=2; left < width-5; left += TS-6) {
 
 /*  Interpolate green horizontally and vertically:		*/
@@ -3451,6 +3472,7 @@ void CLASS ahd_interpolate()
 	}
       }
     }
+  }
   free (buffer);
 }
 #undef TS
@@ -3464,6 +3486,7 @@ void CLASS median_filter ()
     0,3, 5,8, 4,7, 3,6, 1,4, 2,5, 4,7, 4,2, 6,4, 4,2 };
 
   for (pass=1; pass <= med_passes; pass++) {
+RUN_CALLBACK(LIBRAW_PROGRESS_MEDIAN_FILTER,pass-1,med_passes); 
 #ifdef DCRAW_VERBOSE
     if (verbose)
       fprintf (stderr,_("Median filter pass %d...\n"), pass);
@@ -3501,6 +3524,7 @@ void CLASS blend_highlights()
   if (verbose) fprintf (stderr,_("Blending highlights...\n"));
 #endif
   FORCC if (clip > (i = 65535*pre_mul[c])) clip = i;
+RUN_CALLBACK(LIBRAW_PROGRESS_HIGHLIGHTS,0,2); 
   for (row=0; row < height; row++)
     for (col=0; col < width; col++) {
       FORCC if (image[row*width+col][c] > clip) break;
@@ -3522,6 +3546,7 @@ void CLASS blend_highlights()
 	cam[0][c] += itrans[colors-3][c][j] * lab[0][j];
       FORCC image[row*width+col][c] = cam[0][c] / colors;
     }
+RUN_CALLBACK(LIBRAW_PROGRESS_HIGHLIGHTS,1,2); 
 }
 
 #define SCALE (4 >> shrink)
@@ -3547,6 +3572,7 @@ void CLASS recover_highlights()
   map = (float *) calloc (high*wide, sizeof *map);
   merror (map, "recover_highlights()");
   FORCC if (c != kc) {
+RUN_CALLBACK(LIBRAW_PROGRESS_HIGHLIGHTS,c-1,colors-1); 
     memset (map, 0, high*wide*sizeof *map);
     for (mrow=0; mrow < high; mrow++)
       for (mcol=0; mcol < wide; mcol++) {
@@ -3628,7 +3654,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 4642 "dcraw/dcraw.c"
+#line 4678 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4113,7 +4139,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-#line 5130 "dcraw/dcraw.c"
+#line 5166 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -4689,7 +4715,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5709 "dcraw/dcraw.c"
+#line 5745 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4732,7 +4758,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 5754 "dcraw/dcraw.c"
+#line 5790 "dcraw/dcraw.c"
 }
 
 /*
@@ -5165,7 +5191,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6291 "dcraw/dcraw.c"
+#line 6327 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -5706,6 +5732,8 @@ void CLASS identify()
     { "Canon", "NIKON", "EPSON", "KODAK", "Kodak", "OLYMPUS", "PENTAX",
       "MINOLTA", "Minolta", "Konica", "CASIO", "Sinar", "Phase One",
       "SAMSUNG", "Mamiya" };
+
+RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,0,2); 
 
   tiff_flip = flip = filters = -1;	/* 0 is valid, so -1 is unknown */
   raw_height = raw_width = fuji_width = fuji_layout = cr2_slice[0] = 0;
@@ -6889,6 +6917,7 @@ imgdata.process_warnings |= LIBRAW_WARN_NO_JPEGLIB ;
 notraw:
   if (flip == -1) flip = tiff_flip;
   if (flip == -1) flip = 0;
+RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,1,2); 
 }
 
 #ifndef NO_LCMS
@@ -6904,7 +6933,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8037 "dcraw/dcraw.c"
+#line 8076 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -6946,6 +6975,7 @@ imgdata.process_warnings |= LIBRAW_WARN_BAD_OUTPUT_PROFILE;
   if (verbose)
     fprintf (stderr,_("Applying color profile...\n"));
 #endif
+RUN_CALLBACK(LIBRAW_PROGRESS_APPLY_PROFILE,0,2); 
   hTransform = cmsCreateTransform (hInProfile, TYPE_RGBA_16,
 	hOutProfile, TYPE_RGBA_16, INTENT_PERCEPTUAL, 0);
   cmsDoTransform (hTransform, image, image, width*height);
@@ -6954,6 +6984,7 @@ imgdata.process_warnings |= LIBRAW_WARN_BAD_OUTPUT_PROFILE;
   cmsCloseProfile (hOutProfile);
 quit:
   cmsCloseProfile (hInProfile);
+RUN_CALLBACK(LIBRAW_PROGRESS_APPLY_PROFILE,1,2); 
 }
 #endif
 
@@ -7001,6 +7032,8 @@ void CLASS convert_to_rgb()
 	0x6258595a, 0, 20 };	/* bXYZ */
   static const unsigned pwhite[] = { 0xf351, 0x10000, 0x116cc };
   unsigned pcurve[] = { 0x63757276, 0, 1, 0x1000000 };
+
+RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2); 
 
   memcpy (out_cam, rgb_cam, sizeof out_cam);
   raw_color |= colors == 1 || document_mode ||
@@ -7050,7 +7083,7 @@ void CLASS convert_to_rgb()
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8185 "dcraw/dcraw.c"
+#line 8228 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7068,6 +7101,7 @@ memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4);
     }
   if (colors == 4 && output_color) colors = 3;
   if (document_mode && filters) colors = 1;
+RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,1,2); 
 }
 
 void CLASS fuji_rotate()
@@ -7090,6 +7124,8 @@ void CLASS fuji_rotate()
   img = (ushort (*)[4]) calloc (wide*high, sizeof *img);
   merror (img, "fuji_rotate()");
 
+RUN_CALLBACK(LIBRAW_PROGRESS_FUJI_ROTATE,0,2); 
+
   for (row=0; row < high; row++)
     for (col=0; col < wide; col++) {
       ur = r = fuji_width + (row-col)*step;
@@ -7108,6 +7144,7 @@ void CLASS fuji_rotate()
   height = high;
   image  = img;
   fuji_width = 0;
+RUN_CALLBACK(LIBRAW_PROGRESS_FUJI_ROTATE,1,2); 
 }
 
 void CLASS stretch()
@@ -7117,6 +7154,7 @@ void CLASS stretch()
   double rc, frac;
 
   if (pixel_aspect == 1) return;
+RUN_CALLBACK(LIBRAW_PROGRESS_STRETCH,0,2); 
 #ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("Stretching the image...\n"));
 #endif
@@ -7147,6 +7185,7 @@ void CLASS stretch()
   }
   free (image);
   image = img;
+RUN_CALLBACK(LIBRAW_PROGRESS_STRETCH,1,2); 
 }
 
 int CLASS flip_index (int row, int col)
@@ -7185,7 +7224,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8344 "dcraw/dcraw.c"
+#line 8393 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

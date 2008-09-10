@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Sep  9 10:46:41 2008
+   Generated from dcraw/dcraw.c at Wed Sep 10 10:50:00 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */

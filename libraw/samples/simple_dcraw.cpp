@@ -30,6 +30,14 @@
 #define snprintf _snprintf
 #endif
 
+int my_progress_callback(enum LibRaw_progress state,int iter, int expected)
+{
+    if(iter==0)
+        printf("CB: state=%x, expected %d iterations\n",state,expected);
+    return 0;
+}
+
+
 int main(int ac, char *av[])
 {
     int  i, ret, verbose=0, output_thumbs=0;
@@ -79,6 +87,8 @@ int main(int ac, char *av[])
                         OUT.document_mode=2;
                     if(av[i][1]=='4' && av[i][2]==0)
                         OUT.output_bps=16;
+                    if(av[i][1]=='C' && av[i][2]==0)
+                        RawProcessor.set_progress_handler(my_progress_callback);
                     continue;
                 }
 

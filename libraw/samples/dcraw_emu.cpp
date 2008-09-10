@@ -37,7 +37,7 @@ void usage(const char *prog)
     printf("dcraw_emu: almost complete dcraw emulator\n");
     printf("Usage:  %s [OPTION]... [FILE]...\n", prog);
     printf(
-"-v        Verbose: print progress messages\n"
+"-v        Verbose: print progress messages (repeated -v will add verbosity)\n"
 "-w        Use camera white balance, if possible\n"
 "-a        Average the whole image for white balance\n"
 "-A <x y w h> Average a grey box for white balance\n"
@@ -70,6 +70,24 @@ void usage(const char *prog)
     exit(1);
 }
 
+static int verbosity=0;
+
+int cnt=0;
+int my_progress_callback(enum LibRaw_progress p,int iteration, int expected)
+{
+    if(verbosity>2) // verbosity set by repeat -v switches
+        {
+            printf("CB: %s  pass %d of %d\n",libraw_strprogress(p),iteration,expected);
+        }
+    else if (iteration == 0) // 1st iteration of each step
+        printf("Starting %s (expecting %d iterations)\n", libraw_strprogress(p),expected);
+    else if (iteration == expected-1)
+        printf("%s finished\n",libraw_strprogress(p));
+
+///    if(++cnt>10) return 1; // emulate user termination on 10-th callback call
+
+    return 0; // always return 0 to continue processing
+}
 
 
 int main(int argc, char *argv[])
@@ -77,7 +95,7 @@ int main(int argc, char *argv[])
     if(argc==1) usage(argv[0]);
 
     LibRaw RawProcessor;
-    int i,arg,c, verbose=0,ret;
+    int i,arg,c,ret;
     char opm,opt,*cp,*sp;
 
 #define OUT RawProcessor.imgdata.params
@@ -95,7 +113,7 @@ int main(int argc, char *argv[])
                       }
           switch (opt) 
               {
-              case 'v':  verbose           = 1;  break;
+              case 'v':  verbosity++;  break;
                   
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
               case 'b':  OUT.bright      = atof(argv[arg++]);  break;
@@ -153,12 +171,13 @@ int main(int argc, char *argv[])
 #define T RawProcessor.imgdata.thumbnail
 #define P2 RawProcessor.imgdata.other
 
+  if(verbosity>0) RawProcessor.set_progress_handler(my_progress_callback);
 
   for ( ; arg < argc; arg++)
         {
             char outfn[1024];
 
-            if(verbose) printf("Processing file %s\n",argv[arg]);
+            if(verbosity) printf("Processing file %s\n",argv[arg]);
             if( (ret = RawProcessor.open_file(argv[arg])) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot open %s: %s\n",argv[arg],libraw_strerror(ret));
@@ -179,7 +198,7 @@ int main(int argc, char *argv[])
                      "%s.%s",
                      argv[arg], OUT.output_tiff ? "tiff" : (P1.colors>1?"ppm":"pgm"));
 
-            if(verbose) printf("Writing file %s\n",outfn);
+            if(verbosity) printf("Writing file %s\n",outfn);
 
             if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
                 fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));

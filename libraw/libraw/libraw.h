@@ -42,6 +42,7 @@ extern "C"
 {
 #endif
 DllDef    const char          *libraw_strerror(int errorcode);
+DllDef    const char          *libraw_strprogress(enum LibRaw_progress);
     // LibRaw C API
 DllDef    libraw_data_t       *libraw_init(unsigned int flags);
 DllDef    int                 libraw_open_file(libraw_data_t*, const char *);
@@ -58,6 +59,7 @@ DllDef    int                 libraw_cameraCount();
 
 DllDef    void                libraw_set_memerror_handler(libraw_data_t*, memory_callback cb);
 DllDef    void                libraw_set_dataerror_handler(libraw_data_t*,data_callback func);
+DllDef    void                libraw_set_progress_handler(libraw_data_t*,progress_callback cb);
 
     // DCRAW compatibility
 DllDef    int                 libraw_adjust_sizes_info_only(libraw_data_t*);
@@ -91,6 +93,7 @@ class DllDef LibRaw
 #endif
             bzero(&imgdata,sizeof(imgdata));
             bzero(&libraw_internal_data,sizeof(libraw_internal_data));
+            progress_cb = NULL;
             mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
             data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
             memmove(&imgdata.params.aber,&aber,sizeof(aber));
@@ -121,12 +124,15 @@ class DllDef LibRaw
     int                         adjust_sizes_info_only(void);
     void                        set_memerror_handler(memory_callback cb) { mem_cb = cb; }
     void                        set_dataerror_handler(data_callback func) { data_cb = func;}
+    void                        set_progress_handler(progress_callback pcb) { progress_cb = pcb;}
 
     // helpers
     static const char*          version() { return LIBRAW_VERSION_STR;}
     static int                  versionNumber() { return LIBRAW_VERSION; }
     static const char**         cameraList();
     static int                  cameraCount();
+    static const char*          strprogress(enum LibRaw_progress);
+    static const char*          strerror(int p) { return libraw_strerror(p);}
     // dcraw emulation
     int                         dcraw_document_mode_processing();
     int                         dcraw_ppm_tiff_writer(const char *filename);
@@ -247,6 +253,7 @@ class DllDef LibRaw
                 (LibRaw:: *thumb_load_raw)();
     memory_callback mem_cb;
     data_callback data_cb;
+    progress_callback progress_cb;
 
     void        kodak_thumb_loader();
     void        write_thumb_ppm_tiff(FILE *); // kodak
@@ -307,6 +314,14 @@ class DllDef LibRaw
 #endif
 
 };
+
+#ifdef LIBRAW_LIBRARY_BUILD 
+#define RUN_CALLBACK(stage,iter,expect)  if(progress_cb) { \
+        int rr = (*progress_cb)(stage,iter,expect); \
+        if(rr!=0) throw LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK; \
+    }
+#endif
+
 
 #endif // __cplusplus
 

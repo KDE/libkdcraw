@@ -72,6 +72,8 @@ typedef void (*data_callback)(const char *file, const int offset);
 
 DllDef void default_data_callback(const char *file, const int offset);
 
+typedef int (* progress_callback) (enum LibRaw_progress stage, int iteration,int expected);
+
 // Output bitmap type
 
 typedef struct

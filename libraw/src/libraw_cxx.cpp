@@ -56,6 +56,8 @@ extern "C"
                 return "Corrupted data or unexpected EOF";
             case    LIBRAW_IO_ERROR:
                 return "Input/output error";
+            case LIBRAW_CANCELLED_BY_CALLBACK:
+                return "Cancelled by user callback";
             default:
                 return "Unknown error code";
         }
@@ -98,6 +100,9 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
             case LIBRAW_EXCEPTION_IO_CORRUPT:           \
                 recycle();                              \
                 return LIBRAW_IO_ERROR;                 \
+            case LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK: \
+                recycle();                              \
+                return LIBRAW_CANCELLED_BY_CALLBACK;     \
             default:                                    \
                 return LIBRAW_UNSPECIFIED_ERROR;        \
             } \
@@ -173,6 +178,7 @@ int LibRaw::unpack(void)
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_IDENTIFY);
     try {
 
+        RUN_CALLBACK(LIBRAW_PROGRESS_LOAD_RAW,0,2);
         if (O.shot_select >= P1.raw_count)
             return LIBRAW_REQUEST_FOR_NONEXISTENT_IMAGE;
         
@@ -206,6 +212,7 @@ int LibRaw::unpack(void)
         O.document_mode = save_document_mode;
         
         SET_PROC_FLAG(LIBRAW_PROGRESS_LOAD_RAW);
+        RUN_CALLBACK(LIBRAW_PROGRESS_LOAD_RAW,1,2);
         
         return 0;
     }
@@ -239,9 +246,17 @@ int LibRaw::dcraw_document_mode_processing(void)
                 remove_zeroes();
                 SET_PROC_FLAG(LIBRAW_PROGRESS_REMOVE_ZEROES);
             }
-        if(O.bad_pixels) bad_pixels(O.bad_pixels);
-        if (O.dark_frame) subtract (O.dark_frame);
-
+        if(O.bad_pixels) 
+            {
+                bad_pixels(O.bad_pixels);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_BAD_PIXELS);
+            }
+        if (O.dark_frame)
+            {
+                subtract (O.dark_frame);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_DARK_FRAME);
+            }
+        
         if (O.user_black >= 0) 
             C.black = O.user_black;
 
@@ -274,7 +289,11 @@ int LibRaw::dcraw_document_mode_processing(void)
             fuji_rotate();
         SET_PROC_FLAG(LIBRAW_PROGRESS_FUJI_ROTATE);
 #ifndef NO_LCMS
-	if(O.camera_profile) apply_profile(O.camera_profile,O.output_profile);
+	if(O.camera_profile)
+            {
+                apply_profile(O.camera_profile,O.output_profile);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_APPLY_PROFILE);
+            }
 #endif
         if(!libraw_internal_data.output_data.histogram)
             {
@@ -863,100 +882,117 @@ int LibRaw::dcraw_process(void)
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
 
-    if(O.half_size) 
-        O.four_color_rgb = 1;
+    try {
+        if(O.half_size) 
+            O.four_color_rgb = 1;
 
-    if (IO.zero_is_bad) 
-        {
-            remove_zeroes();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_REMOVE_ZEROES);
-        }
-    if(O.bad_pixels) bad_pixels(O.bad_pixels);
-    if (O.dark_frame) subtract (O.dark_frame);
+        if (IO.zero_is_bad) 
+            {
+                remove_zeroes();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_REMOVE_ZEROES);
+            }
+        if(O.bad_pixels) 
+            {
+                bad_pixels(O.bad_pixels);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_BAD_PIXELS);
+            }
+        if (O.dark_frame)
+            {
+                subtract (O.dark_frame);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_DARK_FRAME);
+            }
 
-    quality = 2 + !IO.fuji_width;
-    if (O.user_qual >= 0) quality = O.user_qual;
-    if (O.user_black >= 0) C.black = O.user_black;
-    if (O.user_sat > 0) C.maximum = O.user_sat;
+        quality = 2 + !IO.fuji_width;
+        if (O.user_qual >= 0) quality = O.user_qual;
+        if (O.user_black >= 0) C.black = O.user_black;
+        if (O.user_sat > 0) C.maximum = O.user_sat;
 
-    if (P1.is_foveon && !O.document_mode) 
-        {
-            foveon_interpolate();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_FOVEON_INTERPOLATE);
-        }
+        if (P1.is_foveon && !O.document_mode) 
+            {
+                foveon_interpolate();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_FOVEON_INTERPOLATE);
+            }
 
-    if (!P1.is_foveon && O.document_mode < 2)
-        {
-            scale_colors();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_SCALE_COLORS);
-        }
+        if (!P1.is_foveon && O.document_mode < 2)
+            {
+                scale_colors();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_SCALE_COLORS);
+            }
 
-    pre_interpolate();
-    SET_PROC_FLAG(LIBRAW_PROGRESS_PRE_INTERPOLATE);
+        pre_interpolate();
+        SET_PROC_FLAG(LIBRAW_PROGRESS_PRE_INTERPOLATE);
 
-    if (P1.filters && !O.document_mode) 
-        {
-            if (quality == 0)
-                lin_interpolate();
-            else if (quality == 1 || P1.colors > 3)
-                vng_interpolate();
-            else if (quality == 2)
-                ppg_interpolate();
-            else 
-                ahd_interpolate();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_INTERPOLATE);
-        }
-    if (IO.mix_green)
-        {
-            for (P1.colors=3, i=0; i < S.height * S.width; i++)
-                imgdata.image[i][1] = (imgdata.image[i][1] + imgdata.image[i][3]) >> 1;
-            SET_PROC_FLAG(LIBRAW_PROGRESS_MIX_GREEN);
-        }
+        if (P1.filters && !O.document_mode) 
+            {
+                if (quality == 0)
+                    lin_interpolate();
+                else if (quality == 1 || P1.colors > 3)
+                    vng_interpolate();
+                else if (quality == 2)
+                    ppg_interpolate();
+                else 
+                    ahd_interpolate();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_INTERPOLATE);
+            }
+        if (IO.mix_green)
+            {
+                for (P1.colors=3, i=0; i < S.height * S.width; i++)
+                    imgdata.image[i][1] = (imgdata.image[i][1] + imgdata.image[i][3]) >> 1;
+                SET_PROC_FLAG(LIBRAW_PROGRESS_MIX_GREEN);
+            }
 
-    if(!P1.is_foveon)
-        {
-            if (P1.colors == 3) 
-                {
-                    median_filter();
-                    SET_PROC_FLAG(LIBRAW_PROGRESS_MEDIAN_FILTER);
-                }
+        if(!P1.is_foveon)
+            {
+                if (P1.colors == 3) 
+                    {
+                        median_filter();
+                        SET_PROC_FLAG(LIBRAW_PROGRESS_MEDIAN_FILTER);
+                    }
             
-            if (O.highlight == 2) 
-                {
-                    blend_highlights();
-                    SET_PROC_FLAG(LIBRAW_PROGRESS_HIGHLIGHTS);
-                }
+                if (O.highlight == 2) 
+                    {
+                        blend_highlights();
+                        SET_PROC_FLAG(LIBRAW_PROGRESS_HIGHLIGHTS);
+                    }
             
-            if (O.highlight > 2) 
-                {
-                    recover_highlights();
-                    SET_PROC_FLAG(LIBRAW_PROGRESS_HIGHLIGHTS);
-                }
-        }
-    if (O.use_fuji_rotate) 
-        {
-            fuji_rotate();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_FUJI_ROTATE);
-        }
+                if (O.highlight > 2) 
+                    {
+                        recover_highlights();
+                        SET_PROC_FLAG(LIBRAW_PROGRESS_HIGHLIGHTS);
+                    }
+            }
+        if (O.use_fuji_rotate) 
+            {
+                fuji_rotate();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_FUJI_ROTATE);
+            }
     
-    if(!libraw_internal_data.output_data.histogram)
-        {
-            libraw_internal_data.output_data.histogram = (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
-            merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_process()");
-        }
+        if(!libraw_internal_data.output_data.histogram)
+            {
+                libraw_internal_data.output_data.histogram = (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
+                merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_process()");
+            }
 #ifndef NO_LCMS
-	if(O.camera_profile) apply_profile(O.camera_profile,O.output_profile);
+	if(O.camera_profile)
+            {
+                apply_profile(O.camera_profile,O.output_profile);
+                SET_PROC_FLAG(LIBRAW_PROGRESS_APPLY_PROFILE);
+            }
 #endif
 
-    convert_to_rgb();
-    SET_PROC_FLAG(LIBRAW_PROGRESS_CONVERT_RGB);
+        convert_to_rgb();
+        SET_PROC_FLAG(LIBRAW_PROGRESS_CONVERT_RGB);
 
-    if (O.use_fuji_rotate) 
-        {
-            stretch();
-            SET_PROC_FLAG(LIBRAW_PROGRESS_STRETCH);
-        }
-    return 0;
+        if (O.use_fuji_rotate) 
+            {
+                stretch();
+                SET_PROC_FLAG(LIBRAW_PROGRESS_STRETCH);
+            }
+        return 0;
+    }
+    catch ( LibRaw_exceptions err) {
+        EXCEPTION_HANDLER(err);
+    }
 }
 
 // Supported cameras:
@@ -1274,3 +1310,55 @@ static const char  *static_camera_list[] =
 
 const char** LibRaw::cameraList() { return static_camera_list;}
 int LibRaw::cameraCount() { return (sizeof(static_camera_list)/sizeof(static_camera_list[0]))-1; }
+
+
+const char * LibRaw::strprogress(enum LibRaw_progress p)
+{
+    switch(p)
+        {
+        case LIBRAW_PROGRESS_START:
+            return "Starting";
+        case LIBRAW_PROGRESS_OPEN :
+            return "Opening file";
+        case LIBRAW_PROGRESS_IDENTIFY :
+            return "Reading metadata";
+        case LIBRAW_PROGRESS_SIZE_ADJUST:
+            return "Adjusting size";
+        case LIBRAW_PROGRESS_LOAD_RAW:
+            return "Reading RAW data";
+        case LIBRAW_PROGRESS_REMOVE_ZEROES:
+            return "Clearing zero values";
+        case LIBRAW_PROGRESS_BAD_PIXELS :
+            return "Removing dead pixels";
+        case LIBRAW_PROGRESS_DARK_FRAME:
+            return "Subtracting dark frame data";
+        case LIBRAW_PROGRESS_FOVEON_INTERPOLATE:
+            return "Interpolating Foveon sensor data";
+        case LIBRAW_PROGRESS_SCALE_COLORS:
+            return "Scaling colors";
+        case LIBRAW_PROGRESS_PRE_INTERPOLATE:
+            return "Pre-interpolating";
+        case LIBRAW_PROGRESS_INTERPOLATE:
+            return "Interpolating";
+        case LIBRAW_PROGRESS_MIX_GREEN :
+            return "Mixing green channels";
+        case LIBRAW_PROGRESS_MEDIAN_FILTER   :
+            return "Median filter";
+        case LIBRAW_PROGRESS_HIGHLIGHTS:
+            return "Highlight recovery";
+        case LIBRAW_PROGRESS_FUJI_ROTATE :
+            return "Rotating Fuji diagonal data";
+        case LIBRAW_PROGRESS_FLIP :
+            return "Flipping image";
+        case LIBRAW_PROGRESS_APPLY_PROFILE:
+            return "ICC conversion";
+        case LIBRAW_PROGRESS_CONVERT_RGB:
+            return "Converting to RGB";
+        case LIBRAW_PROGRESS_STRETCH:
+            return "Stretching image";
+        case LIBRAW_PROGRESS_THUMB_LOAD:
+            return "Loading thumbnail";
+        default:
+            return "Some strange things";
+        }
+}

@@ -20,6 +20,7 @@ extern "C"
     }
 
     const char*   libraw_version() { return LibRaw::version();}
+    const char*   libraw_strprogress(enum LibRaw_progress p) { return LibRaw::strprogress(p);}
     int     libraw_versionNumber() { return LibRaw::versionNumber();}
     const char**  libraw_cameraList() { return LibRaw::cameraList();}
     int   libraw_cameraCount() { return LibRaw::cameraCount(); }
@@ -66,6 +67,13 @@ extern "C"
         if(!lr) return;
         LibRaw *ip = (LibRaw*) lr->parent_class;
         ip->set_dataerror_handler(func);
+
+    }
+    void  libraw_set_progress_handler(libraw_data_t* lr, progress_callback cb)
+    {
+        if(!lr) return;
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        ip->set_progress_handler(cb);
 
     }
 
