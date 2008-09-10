@@ -308,6 +308,10 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     QStringList args;     // List of dcraw options to show as debug message on the console.
     LibRaw      raw;
 
+    QByteArray deadpixelPath = QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
+    QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
+    QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
+
     // Set progress call back function.
     raw.set_progress_handler(callbackForLibRaw, d);
 
@@ -381,8 +385,8 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     if (!m_rawDecodingSettings.deadPixelMap.isEmpty())
     {
         // (-P) Read the dead pixel list from this file.
-        args.append(QString("-P %1").arg(m_rawDecodingSettings.deadPixelMap));
-        raw.imgdata.params.bad_pixels = QFile::encodeName(m_rawDecodingSettings.deadPixelMap).data();
+        raw.imgdata.params.bad_pixels = deadpixelPath.data();
+        args.append(QString("-P %1").arg(raw.imgdata.params.bad_pixels));
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -524,7 +528,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         case RawDecodingSettings::EMBEDDED:
         {
             // (-p embed) Use input profile from RAW file to define the camera's raw colorspace.
-            raw.imgdata.params.camera_profile = QString("embed").toAscii().data();
+            raw.imgdata.params.camera_profile = (char*)"embed";
             args.append(QString("-p embed"));
             break;
         }
@@ -533,7 +537,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             if (!m_rawDecodingSettings.inputProfile.isEmpty())
             {
                 // (-p) Use input profile file to define the camera's raw colorspace.
-                raw.imgdata.params.camera_profile = QFile::encodeName(m_rawDecodingSettings.inputProfile).data();
+                raw.imgdata.params.camera_profile = cameraProfile.data();
                 args.append(QString("-p %1").arg(raw.imgdata.params.camera_profile));
             }
             break;
@@ -549,7 +553,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             if (!m_rawDecodingSettings.outputProfile.isEmpty())
             {
                 // (-o) Use ICC profile file to define the output colorspace.
-                raw.imgdata.params.output_profile = QFile::encodeName(m_rawDecodingSettings.outputProfile).data();
+                raw.imgdata.params.output_profile = outputProfile.data();
                 args.append(QString("-o %1").arg(raw.imgdata.params.output_profile));
             }
             break;
@@ -615,7 +619,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     if (m_cancel) return false;
     setReceivingDataProgress(0.4);
 
-    qDebug("Raw data info: width %i height %i rgbmax %i", width, height, rgbmax);
+    qDebug("LibRaw: data info: width %i height %i rgbmax %i", width, height, rgbmax);
 
     return true;
 }
