@@ -37,11 +37,13 @@
 namespace KDcrawIface
 {
 
-int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration,int expected)
+int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int expected)
 {
-    KDcrawPriv *d = static_cast<KDcrawPriv*>(data);
-    if (d)
-        return d->progressCallback(p, iteration, expected);
+    if (data)
+    {
+        KDcrawPriv *d = static_cast<KDcrawPriv*>(data);
+        if (d) return d->progressCallback(p, iteration, expected);
+    }
 
     return 0;
 }

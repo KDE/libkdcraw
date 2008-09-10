@@ -51,7 +51,7 @@ namespace KDcrawIface
 KDcraw::KDcraw()
 {
     d = new KDcrawPriv(this);
-    m_cancel  = false;
+    m_cancel = false;
 }
 
 KDcraw::~KDcraw()
