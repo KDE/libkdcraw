@@ -311,6 +311,12 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // Set progress call back function.
     raw.set_progress_handler(d->progressCallback);
 
+    if (m_rawDecodingSettings.gamma16bit)
+    {
+        // 16 bits color depth auto-gamma is not implemented in dcraw.
+        raw.imgdata.params.gamma_16bit = 1;
+    }
+
     if (m_rawDecodingSettings.sixteenBitsImage)
     {
         // (-4) 16bit ppm output
