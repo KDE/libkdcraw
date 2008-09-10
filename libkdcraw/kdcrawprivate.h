@@ -46,7 +46,7 @@ class KDcrawPriv
 
 public:
 
-    KDcrawPriv(const KDcraw *p);
+    KDcrawPriv(KDcraw *p);
     ~KDcrawPriv();
 
 public:
@@ -57,7 +57,7 @@ public:
 
 private:
 
-    const KDcraw *m_parent;
+    KDcraw *m_parent;
 };
 
 }  // namespace KDcrawIface

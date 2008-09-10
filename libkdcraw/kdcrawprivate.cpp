@@ -48,8 +48,9 @@ int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int exp
     return 0;
 }
 
-KDcrawPriv::KDcrawPriv(const KDcraw *p): m_parent(p)
+KDcrawPriv::KDcrawPriv(KDcraw *p)
 {
+    m_parent = p;
 }
 
 KDcrawPriv::~KDcrawPriv()
@@ -77,7 +78,7 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
 */
 
     // Clean processing termination by user...
-    if(m_parent->m_cancel)
+    if(m_parent->checkToCancelWaitingData())
     {
         qDebug() << "LibRaw process terminaison invoked...";
         return 1;
