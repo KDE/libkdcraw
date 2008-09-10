@@ -6,7 +6,8 @@ FOREACH(_curentfile ${libraw_LIB_SRCS})
     SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
 ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
 
-SET(kdcraw_LIB_SRCS kdcraw.cpp 
+SET(kdcraw_LIB_SRCS kdcraw.cpp
+                    kdcrawprivate.cpp
                     dcrawsettingswidget.cpp
                     rcombobox.cpp
                     rnuminput.cpp

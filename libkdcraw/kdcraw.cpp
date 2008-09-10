@@ -29,44 +29,24 @@
 // Qt includes.
 
 #include <QDebug>
-#include <QByteArray>
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
 
 // LibRaw includes.
 
-#include "libraw/libraw.h"
 #include "libraw/libraw_version.h"
 
 // Local includes.
 
 #include "version.h"
 #include "rawfiles.h"
+#include "kdcrawprivate.h"
 #include "kdcraw.h"
 #include "kdcraw.moc"
 
 namespace KDcrawIface
 {
-
-class KDcrawPriv
-{
-public:
-
-    KDcrawPriv()
-    {
-    }
-
-public:
-
-    static void createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
-    {
-        QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
-        imgData.append(header.toAscii());
-        imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
-        imgData.append("\n");
-    }
-};
 
 KDcraw::KDcraw()
 {
@@ -327,6 +307,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
     QStringList args;     // List of dcraw options to show as debug message on the console.
     LibRaw      raw;
+
+    // Set progress call back function.
+    raw.set_progress_handler(d->progressCallback);
 
     if (m_rawDecodingSettings.sixteenBitsImage)
     {
