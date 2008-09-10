@@ -59,7 +59,7 @@ ADD_DEFINITIONS(-DUSE_LCMS)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
-# Flag to use LibRaw childrens threads ?
+# Flag to make LibRaw code threads-safe.
 ADD_DEFINITIONS(-DLIBAW_THREADS)
 
 # LibRaw use C++ exception.
