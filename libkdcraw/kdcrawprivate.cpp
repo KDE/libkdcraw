@@ -70,22 +70,57 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
     qDebug() << "LibRaw progress: " << libraw_strprogress(p) << " pass "
              << iteration << " of " << expected;
 
-
-/*  else if (iteration == 0) // 1st iteration of each step
-        printf("Starting %s (expecting %d iterations)\n", libraw_strprogress(p),expected);
-    else if (iteration == expected-1)
-        printf("%s finished\n",libraw_strprogress(p));
-*/
-
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
         qDebug() << "LibRaw process terminaison invoked...";
+        m_parent->m_cancel = true;
         return 1;
     }
 
     // Return 0 to continue processing...
     return 0;
+}
+
+void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
+{
+    identify.dateTime         = QDateTime::fromTime_t(raw->imgdata.other.timestamp);
+    identify.make             = QString(raw->imgdata.idata.make);
+    identify.model            = QString(raw->imgdata.idata.model);
+    identify.owner            = QString(raw->imgdata.other.artist);
+    identify.DNGVersion       = QString::number(raw->imgdata.idata.dng_version);
+    identify.sensitivity      = raw->imgdata.other.iso_speed;
+    identify.exposureTime     = raw->imgdata.other.shutter;
+    identify.aperture         = raw->imgdata.other.aperture;
+    identify.focalLength      = raw->imgdata.other.focal_len;
+    identify.imageSize        = QSize(raw->imgdata.sizes.width, raw->imgdata.sizes.height);
+    identify.fullSize         = QSize(raw->imgdata.sizes.raw_width, raw->imgdata.sizes.raw_height);
+    identify.outputSize       = QSize(raw->imgdata.sizes.iwidth, raw->imgdata.sizes.iheight);
+    identify.thumbSize        = QSize(raw->imgdata.thumbnail.twidth, raw->imgdata.thumbnail.theight);
+    identify.hasIccProfile    = raw->imgdata.color.profile ? true : false;
+    identify.isDecodable      = true;
+    identify.pixelAspectRatio = raw->imgdata.sizes.pixel_aspect;
+    identify.rawColors        = raw->imgdata.idata.colors;
+    identify.rawImages        = raw->imgdata.idata.raw_count;
+
+    if (raw->imgdata.idata.filters) 
+    {
+        if (!raw->imgdata.idata.cdesc[3]) raw->imgdata.idata.cdesc[3] = 'G';
+        for (int i=0; i < 16; i++)
+            identify.filterPattern.append(raw->imgdata.idata.cdesc[raw->fc(i >> 1,i & 1)]);
+    }
+
+    for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
+        identify.daylightMult[c] = raw->imgdata.color.pre_mul[c];
+
+    if (raw->imgdata.color.cam_mul[0] > 0) 
+    {
+        for(int c = 0 ; c < 4 ; c++) 
+            identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
+    }
+
+    // NOTE: since dcraw->c 8.77, this information has disapear...
+    identify.hasSecondaryPixel = false;
 }
 
 }  // namespace KDcrawIface

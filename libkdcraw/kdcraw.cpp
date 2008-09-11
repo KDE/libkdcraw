@@ -106,17 +106,21 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
 
     LibRaw raw;
+
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
     ret = raw.unpack_thumb();
     if (ret != LIBRAW_SUCCESS)
     {
+        raw.recycle();
         qDebug() << "LibRaw: failed to run unpack_thumb: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -124,6 +128,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if(!thumb)
     {
         qDebug() << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -131,6 +136,9 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         KDcrawPriv::createPPMHeader(imgData, thumb);
     else
         imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
+
+    free(thumb);
+    raw.recycle();
 
     if ( imgData.isEmpty() )
     {
@@ -161,6 +169,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -168,6 +177,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -175,6 +185,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -182,11 +193,14 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if(!halfImg)
     {
         qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
     QByteArray imgData;
     KDcrawPriv::createPPMHeader(imgData, halfImg);
+    free(halfImg);
+    raw.recycle();
 
     if (!image.loadFromData(imgData))
     {
@@ -214,6 +228,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
@@ -221,51 +236,117 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
-    identify.dateTime         = QDateTime::fromTime_t(raw.imgdata.other.timestamp);
-    identify.make             = QString(raw.imgdata.idata.make);
-    identify.model            = QString(raw.imgdata.idata.model);
-    identify.owner            = QString(raw.imgdata.other.artist);
-    identify.DNGVersion       = QString::number(raw.imgdata.idata.dng_version);
-    identify.sensitivity      = raw.imgdata.other.iso_speed;
-    identify.exposureTime     = raw.imgdata.other.shutter;
-    identify.aperture         = raw.imgdata.other.aperture;
-    identify.focalLength      = raw.imgdata.other.focal_len;
-    identify.imageSize        = QSize(raw.imgdata.sizes.width, raw.imgdata.sizes.height);
-    identify.fullSize         = QSize(raw.imgdata.sizes.raw_width, raw.imgdata.sizes.raw_height);
-    identify.outputSize       = QSize(raw.imgdata.sizes.iwidth, raw.imgdata.sizes.iheight);
-    identify.thumbSize        = QSize(raw.imgdata.thumbnail.twidth, raw.imgdata.thumbnail.theight);
-    identify.hasIccProfile    = raw.imgdata.color.profile ? true : false;
-    identify.isDecodable      = true;
-    identify.pixelAspectRatio = raw.imgdata.sizes.pixel_aspect;
-    identify.rawColors        = raw.imgdata.idata.colors;
-    identify.rawImages        = raw.imgdata.idata.raw_count;
-
-    if (raw.imgdata.idata.filters) 
-    {
-        if (!raw.imgdata.idata.cdesc[3]) raw.imgdata.idata.cdesc[3] = 'G';
-        for (int i=0; i < 16; i++)
-            identify.filterPattern.append(raw.imgdata.idata.cdesc[raw.fc(i >> 1,i & 1)]);
-    }
-
-    for(int c = 0 ; c < raw.imgdata.idata.colors ; c++)
-        identify.daylightMult[c] = raw.imgdata.color.pre_mul[c];
-
-    if (raw.imgdata.color.cam_mul[0] > 0) 
-    {
-        for(int c = 0 ; c < 4 ; c++) 
-            identify.cameraMult[c] = raw.imgdata.color.cam_mul[c];
-    }
-
-    // NOTE: since dcraw.c 8.77, this information has disapear...
-    identify.hasSecondaryPixel = false;
-
+    KDcrawPriv::fillIndentifyInfo(&raw, identify);
+    raw.recycle();
     return true;
 }
 
 // ----------------------------------------------------------------------------------
+
+bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawInfoContainer& identify)
+{
+
+    QFileInfo fileInfo(filePath);
+    QString   rawFilesExt(rawFiles());
+    QString ext          = fileInfo.suffix().toUpper();
+    identify.isDecodable = false;
+
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
+        return false;
+
+    if (m_cancel)
+        return false;
+
+    setReceivingDataProgress(0.1);
+
+    LibRaw raw;
+    // Set progress call back function.
+    raw.set_progress_handler(callbackForLibRaw, d);
+
+    int ret = raw.open_file(QFile::encodeName(filePath));
+    if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        raw.recycle();
+        return false;
+    }
+
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
+    setReceivingDataProgress(0.3);
+
+    raw.imgdata.params.output_bps    = 16;
+    raw.imgdata.params.document_mode = 2;
+
+    ret = raw.unpack();
+    if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        raw.recycle();
+        return false;
+    }
+
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
+    setReceivingDataProgress(0.5);
+
+    KDcrawPriv::fillIndentifyInfo(&raw, identify);
+
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
+    setReceivingDataProgress(0.6);
+
+    ret = raw.dcraw_document_mode_processing();
+    if (ret != LIBRAW_SUCCESS)
+    {
+        qDebug() << "LibRaw: failed to run dcraw_document_mode_processing: " << libraw_strerror(ret) << endl;
+        raw.recycle();
+        return false;
+    }
+
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
+    setReceivingDataProgress(0.7);
+
+    libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
+    if(!img)
+    {
+        qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
+        raw.recycle();
+        return false;
+    }
+
+    if (m_cancel)
+    {
+        free(img);
+        raw.recycle();
+        return false;
+    }
+    setReceivingDataProgress(0.9);
+
+    rawData = QByteArray((const char*)img->data, (int)img->data_size);
+    free(img);
+    raw.recycle();
+    setReceivingDataProgress(1.0);
+
+    return true;
+}
 
 bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                                 QByteArray &imageData, int &width, int &height, int &rgbmax)
@@ -306,14 +387,14 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     m_cancel = false;
 
     QStringList args;     // List of dcraw options to show as debug message on the console.
-    LibRaw      raw;
+
+    LibRaw raw;
+    // Set progress call back function.
+    raw.set_progress_handler(callbackForLibRaw, d);
 
     QByteArray deadpixelPath = QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
     QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
     QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
-
-    // Set progress call back function.
-    raw.set_progress_handler(callbackForLibRaw, d);
 
     if (m_rawDecodingSettings.gamma16bit)
     {
@@ -463,7 +544,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
                DSLR will have a high dominant of color that will lead to
                a completly wrong WB
             */
-            if (rawFileIdentify (identify, filePath))
+            if (rawFileIdentify(identify, filePath))
             {
                 RGB[0] = identify.daylightMult[0] / RGB[0];
                 RGB[1] = identify.daylightMult[1] / RGB[1];
@@ -510,8 +591,8 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
         // (-n) Use wavelets to erase noise while preserving real detail.
-        args.append(QString("-n %1").arg(m_rawDecodingSettings.NRThreshold));
         raw.imgdata.params.threshold = m_rawDecodingSettings.NRThreshold;
+        args.append(QString("-n %1").arg(raw.imgdata.params.threshold));
     }
 
     if (m_rawDecodingSettings.enableCACorrection)
@@ -561,8 +642,8 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         default:
         {
             // (-o) Define the output colorspace.
-            args.append(QString("-o %1").arg(m_rawDecodingSettings.outputColorSpace));
             raw.imgdata.params.output_color = m_rawDecodingSettings.outputColorSpace;
+            args.append(QString("-o %1").arg(raw.imgdata.params.output_color));
             break;
         }
     }
@@ -570,53 +651,78 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     setReceivingDataProgress(0.1);
 
     args.append(filePath);
-    qDebug() << "LibRaw dcraw options: " << args << endl;
+    qDebug() << "LibRaw: dcraw emulation: " << args << endl;
 
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
     setReceivingDataProgress(0.2);
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
-    if (m_cancel) return false;
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
     setReceivingDataProgress(0.25);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
         qDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
-    if (m_cancel) return false;
+    if (m_cancel)
+    {
+        raw.recycle();
+        return false;
+    }
     setReceivingDataProgress(0.3);
 
     libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
     if(!img)
     {
         qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
+        raw.recycle();
         return false;
     }
 
-    if (m_cancel) return false;
+    if (m_cancel)
+    {
+        free(img);
+        raw.recycle();
+        return false;
+    }
     setReceivingDataProgress(0.35);
 
     width     = img->width;
     height    = img->height;
     rgbmax    = (1 << img->bits)-1;
     imageData = QByteArray((const char*)img->data, (int)img->data_size);
+    free(img);
+    raw.recycle();
 
-    if (m_cancel) return false;
+    if (m_cancel)
+        return false;
     setReceivingDataProgress(0.4);
 
     qDebug("LibRaw: data info: width %i height %i rgbmax %i", width, height, rgbmax);

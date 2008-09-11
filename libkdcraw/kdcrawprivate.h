@@ -31,6 +31,10 @@
 
 #include "libraw/libraw.h"
 
+// Local includes.
+
+#include "dcrawinfocontainer.h"
+
 namespace KDcrawIface
 {
 
@@ -52,6 +56,8 @@ public:
 public:
 
     static void createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img);
+
+    static void fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify);
 
     int progressCallback(enum LibRaw_progress p, int iteration, int expected);
 
