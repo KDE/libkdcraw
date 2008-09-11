@@ -46,9 +46,6 @@ SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_
 # =======================================================
 # LibRAW source code
 
-FIND_PACKAGE(LCMS)
-FIND_PACKAGE(JPEG)
-
 IF( NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF( NOT WIN32 )
