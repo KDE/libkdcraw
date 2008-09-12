@@ -1,4 +1,7 @@
-0.3.0 - Released with KDE 4.2.0
+0.4.0 - Released with KDE 4.2.0
+Ported to LibRaw Api. Removed dcraw.c and DcrawBinary class.
+
+0.3.0 - Released with KDE 4.1.2
 ------------------------------------------------------------------------
 Sync with KDE3 branch 0.1.5 API changes.
 

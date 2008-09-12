@@ -4,7 +4,7 @@ libdir=${LIB_INSTALL_DIR}
 includedir=${INCLUDE_INSTALL_DIR}
 
 Name: libkdcraw
-Description: A C++ library for dcraw command line program to decode RAW pictures. This library is used by digiKam and kipi-plugins.
+Description: A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins.
 URL: http://www.kipi-plugins.org
 Requires:
 Version: ${DCRAW_LIB_VERSION_STRING}

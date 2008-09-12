@@ -1,3 +1,1 @@
-- Use libRaw C++ interface instead dcraw.c. (http://www.libraw.org)
-- Remove QProcess. Use multithreading instead.
-- Remove DcrawBinary API. It's a no sence if libraw is used instead a fork of dcraw program.
+- Add DNG writting mode support using Adobe DNG sdk
