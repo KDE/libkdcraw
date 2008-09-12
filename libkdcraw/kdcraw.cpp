@@ -249,7 +249,6 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawInfoContainer& identify)
 {
-
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
     QString ext          = fileInfo.suffix().toUpper();
@@ -307,41 +306,10 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.6);
-
-    ret = raw.dcraw_document_mode_processing();
-    if (ret != LIBRAW_SUCCESS)
-    {
-        qDebug() << "LibRaw: failed to run dcraw_document_mode_processing: " << libraw_strerror(ret) << endl;
-        raw.recycle();
-        return false;
-    }
-
-    if (m_cancel)
-    {
-        raw.recycle();
-        return false;
-    }
     setReceivingDataProgress(0.7);
 
-    libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
-    if(!img)
-    {
-        qDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
-        raw.recycle();
-        return false;
-    }
-
-    if (m_cancel)
-    {
-        free(img);
-        raw.recycle();
-        return false;
-    }
-    setReceivingDataProgress(0.9);
-
-    rawData = QByteArray((const char*)img->data, (int)img->data_size);
-    free(img);
+    rawData = QByteArray((const char*)raw.imgdata.image, 
+                         (int)(raw.imgdata.sizes.iheight * raw.imgdata.sizes.iwidth * sizeof(raw.imgdata.image)));
     raw.recycle();
     setReceivingDataProgress(1.0);
 
