@@ -1,3 +1,353 @@
+V 0.1.5 - 2008-09-13
+----------------------------------------------------------------------------
+
+2008-09-09 10:09  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: sync API with trunk
+
+2008-09-05 06:01  cgilles
+
+    * libkdcraw/kdcraw.cpp: polish
+
+2008-09-03 16:44  cgilles
+
+    * libkdcraw/rnuminput.h: wrong default value
+
+2008-09-03 11:58  cgilles
+
+    * libkdcraw/rnuminput.cpp, libkdcraw/rnuminput.h: sync with KDE4
+
+2008-09-02 13:54  aclemens
+
+    * libkdcraw/rcombobox.cpp, libkdcraw/rcombobox.h: Due to a backport
+      commit we get a lot of connect warning messages now.
+      
+      We have to remove the signal currentIndexChanged() again, it is
+      not present in Qt3.
+
+2008-09-01 19:47  cgilles
+
+    * libkdcraw/Makefile.am: fix linking
+
+2008-08-29 14:57  cgilles
+
+    * libkdcraw/kdcraw.cpp: wrong condition
+
+2008-08-29 13:36  cgilles
+
+    * NEWS, libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h: backport commit
+      #854433 from KDE4
+
+2008-08-25 17:34  cgilles
+
+    * libkdcraw/rnuminput.cpp: better layout management
+
+2008-08-24 13:18  aclemens
+
+    * libkdcraw/rcombobox.cpp, libkdcraw/rcombobox.h: backport commit
+      #851735 from KDE4 branch
+
+2008-08-23 11:16  aclemens
+
+    * libkdcraw/dcrawinfocontainer.h: polish
+
+2008-08-23 11:00  aclemens
+
+    * libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+      libkdcraw/dcrawinfocontainer.h, libkdcraw/dcrawsettingswidget.h,
+      libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h, libkdcraw/rcombobox.h,
+      libkdcraw/rnuminput.h: polish
+
+2008-08-22 13:13  aclemens
+
+    * libkdcraw/rnuminput.h: setValue() should be a slot
+
+2008-08-19 07:59  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp, libkdcraw/kdcraw.cpp,
+      libkdcraw/rawdecodingsettings.h: typo
+
+2008-08-18 19:52  aclemens
+
+    * libkdcraw/dcrawsettingswidget.cpp: fixed some typos
+
+2008-08-18 13:56  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: add enum of tabs
+
+2008-08-18 13:28  cgilles
+
+    * libkdcraw/rnuminput.cpp, libkdcraw/rnuminput.h: int -> double
+
+2008-08-18 12:13  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: polish
+
+2008-08-18 11:10  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+      libkdcraw/rawdecodingsettings.h: libkdcraw from KDE3 branch :
+      Added more color management options
+
+2008-08-18 09:53  cgilles
+
+    * libkdcraw/rcombobox.cpp: polish
+
+2008-08-17 13:55  cgilles
+
+    * NEWS, libkdcraw/Makefile.am, libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/rcombobox.cpp, libkdcraw/rcombobox.h,
+      libkdcraw/rnuminput.cpp, libkdcraw/rnuminput.h: libkdcraw from
+      KDE3 branch:
+      New integer and double input widget based on KDE components which
+      provide a default value and a reset button, like we
+      can found in pro-photograph programs like Aperture or Nikon Nx
+      New combo box widget based on KDE component which provide a
+      default item and a reset button.
+      Adapt dcraw settings widget with these new objects.
+      
+      Andi,
+      
+      We need to use these widget into digiKam, especially into all
+      image plugins. I will use it in RAW import tool.
+      Just look my code to see how to use it.
+      
+      CCMAIL: andi.clemens@gmx.net
+      CCMAIL: digikam-devel@kde.org
+
+2008-08-16 05:52  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: libkdcraw from KDE3 branch:
+      -fix crash duing a connection to a null widget.
+      -fix advanced option in constructor to switch on/off post
+      processed option done by dcraw.
+
+2008-08-15 07:38  cgilles
+
+    * NEWS, libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: new signal to ping host
+      application when something is changed in settings
+
+2008-08-14 09:44  cgilles
+
+    * NEWS: update
+
+2008-08-14 09:43  cgilles
+
+    * dcraw/CAMERALIST, dcraw/README, dcraw/dcraw.c,
+      libkdcraw/dcrawbinary.cpp: libkdcraw from KDE3 branch: update to
+      last dcraw version 8.87. Look like new pro camera are now
+      supported:
+      -Kodak C603
+      -Nikon D700
+      -Canon EOS 1000D
+      -Canon PowerShot SD300
+      -Olympus E-520.
+      
+      CCMAIL: digikam-devel@kde.org
+
+2008-08-08 09:14  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/rawdecodingsettings.h: use
+      QString instead KURL
+
+2008-08-08 07:25  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/rawdecodingsettings.h: polish
+
+2008-08-08 07:12  cgilles
+
+    * libkdcraw/rawdecodingsettings.h: polish
+
+2008-08-08 07:10  cgilles
+
+    * NEWS: update
+
+2008-08-08 07:08  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/rawdecodingsettings.h: prepare
+      the future : support more and more dcraw option here :
+      -A : Calculate the white balance by averaging a rectangular area
+      from image.
+      -P : Read the dead pixel list from this file.
+      -p : Use ICC profiles to define the camera's raw colorspace or
+      use embeded profile from raw file.
+      -o : Use ICC profiles to define the output colorspace.
+
+2008-08-07 13:48  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp: add median
+      filter passes settings. compile
+
+2008-08-07 13:31  cgilles
+
+    * NEWS: update
+
+2008-08-07 13:30  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/rawdecodingsettings.h: add
+      support of -m dcraw option
+
+2008-08-07 12:55  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: polish
+
+2008-08-07 10:05  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: new method to re-compute minimim
+      width of QToolBox
+
+2008-08-07 09:18  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: now raw decoding settings widget
+      use QToolBox instead KTabWidget
+
+2008-08-06 19:36  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: polish
+
+2008-08-06 19:33  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: revert
+
+2008-08-06 19:01  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: new method to set customized
+      Exposure settings
+
+2008-08-06 14:39  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: fix warnings
+
+2008-08-06 14:38  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: polish
+
+2008-08-06 14:36  cgilles
+
+    * NEWS: update
+
+2008-08-06 14:04  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: rewritting RAW decoding
+      settings layout : grouping all options by functions
+
+2008-08-06 11:23  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: polish
+
+2008-08-06 10:22  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: polish
+
+2008-08-06 10:18  cgilles
+
+    * NEWS: update
+
+2008-08-06 10:17  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: new method to set Brightness
+      settings
+
+2008-08-06 08:39  cgilles
+
+    * NEWS, configure.in.in, libkdcraw.lsm, libkdcraw.pc.in,
+      libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: Added support of White level
+      settings
+
+2008-08-06 08:06  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/rawdecodingsettings.h,
+      libkdcraw/version.h: libkdcraw from KDE3 branch : version 0.1.5 :
+      API changed add support to white point settings. BC compatibility
+      is broken. ABI dumped
+
+2008-08-04 17:13  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: optimize spacing
+
+2008-08-04 17:09  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp,
+      libkdcraw/dcrawsettingswidget.h: optimize layout
+
+2008-06-09 04:21  cgilles
+
+    * libkdcraw/dcrawsettingswidget.cpp: fix i18n
+
+2008-04-20 18:48  cgilles
+
+    * NEWS, dcraw/CAMERALIST, dcraw/dcraw.c, libkdcraw/dcrawbinary.cpp:
+      libkdcraw from KDE3 branch : updated to dcraw.c 8.86:
+      Added SONY A300 (dcraw's 300th camera!),
+      Fixed camera WB on the A200,
+      Set model-specific saturation levels in adobe_coeff().
+
+2008-04-07 21:52  cgilles
+
+    * NEWS: update
+
+2008-04-07 21:48  cgilles
+
+    * libkdcraw/dcrawbinary.cpp: update
+
+2008-04-07 21:47  cgilles
+
+    * dcraw/CAMERALIST, dcraw/dcraw.c: libkdcraw from KDE3 branch :
+      update to dcraw.c 8.85 => support of Olympus E-420 camera
+
+2008-04-07 07:00  cgilles
+
+    * libkdcraw/dcrawbinary.cpp: update
+
+2008-04-07 06:59  cgilles
+
+    * NEWS: update
+
+2008-04-07 06:57  cgilles
+
+    * dcraw/CAMERALIST, dcraw/dcraw.c: libkdcraw from KDE3 branch:
+      update to new dcraw.c 8.84
+      Support the Canon EOS 450D, Nikon D60, and Fuji S100FS.
+      Copied new matrices from Adobe DNG Converter 4.4.
+      sRAW support in 1.393 broke Fuji DNG files, now fixed.
+      CCMAIL: digikam-devel@kde.org
+
+2008-03-18 18:30  cgilles
+
+    * libkdcraw/version.h: update
+
+2008-03-18 18:30  cgilles
+
+    * libkdcraw.pc.in: update
+
+2008-03-18 18:29  cgilles
+
+    * NEWS: update
+
+2008-03-18 18:28  cgilles
+
+    * libkdcraw.lsm: update
+
+2008-03-09 15:29  vfuoglio
+
+    * ChangeLog, libkdcraw.lsm: Preparing libkdcraw 0.1.4 release
+      
+      SVN_SILENT:
+      CCMAIL: anaselli@linux.it
+
 V 0.1.4 - 2008-03-09
 ----------------------------------------------------------------------------
 2008-03-05 10:25  cgilles

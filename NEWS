@@ -30,9 +30,6 @@
   sRAW support in 1.393 broke Fuji DNG files, now fixed.
   No new options introduced.
 
-Bugs fixed from B.K.O (http://bugs.kde.org):
-001 ==> 
-
 0.1.4
 ------------------------------------------------------------------------
 - updated dcraw to 8.83
