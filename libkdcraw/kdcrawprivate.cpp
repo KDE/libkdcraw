@@ -26,7 +26,9 @@
 
 // Qt includes.
 
+#include <qcstring.h>
 #include <qstring.h>
+#include <qdeepcopy.h>
 
 // Local includes.
 
@@ -73,7 +75,7 @@ void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_ima
 
     header.append("\n");
 
-    imgData = header;
+    imgData = QDeepCopy<QCString>(header);
 }
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
