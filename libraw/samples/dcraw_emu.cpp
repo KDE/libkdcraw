@@ -173,7 +173,12 @@ int main(int argc, char *argv[])
 #define T RawProcessor.imgdata.thumbnail
 #define P2 RawProcessor.imgdata.other
 
-  if(verbosity>0) RawProcessor.set_progress_handler(my_progress_callback,(void*)"Sample data passed");
+  if(verbosity>1)
+          RawProcessor.set_progress_handler(my_progress_callback,(void*)"Sample data passed");
+#ifdef _OPENMP
+  if(verbosity)
+          printf ("Using %d threads\n", omp_get_max_threads());
+#endif
 
   for ( ; arg < argc; arg++)
         {

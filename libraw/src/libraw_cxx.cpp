@@ -11,6 +11,8 @@
 #include <math.h>
 #ifndef WIN32
 #include <netinet/in.h>
+#else
+#include <winsock2.h>
 #endif
 #define LIBRAW_LIBRARY_BUILD
 #include "libraw/libraw.h"

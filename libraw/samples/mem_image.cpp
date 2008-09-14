@@ -29,6 +29,8 @@
 
 #ifdef WIN32
 #define snprintf _snprintf
+#include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
 #else
 #include <netinet/in.h>
 #endif
