@@ -50,7 +50,7 @@ IF( NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF( NOT WIN32 )
 
-INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR} ${LCMS_INCLUDE_DIR})
+# Flage to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
 
 # Flag to debug LibRaw
@@ -67,7 +67,11 @@ IF( WIN32 )
     ADD_DEFINITIONS( -DDJGPP )
 ENDIF( WIN32 )
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw)
+INCLUDE_DIRECTORIES(
+                    ${JPEG_INCLUDE_DIR}
+                    ${LCMS_INCLUDE_DIR}
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw
+                   )
 
 # Do not compile LibRaw with KDE FINAL mode.
 KDE4_NO_ENABLE_FINAL(libraw)
