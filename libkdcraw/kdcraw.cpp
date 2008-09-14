@@ -134,7 +134,6 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if(thumb->type == LIBRAW_IMAGE_BITMAP)
     {
         KDcrawPriv::createPPMHeader(imgData, thumb);
-        qDebug("%1", imgData);
     }
     else
     {
@@ -210,7 +209,6 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (!image.loadFromData(imgData))
     {
         qDebug("Failed to load PPM data from LibRaw!");
-        qDebug("%1", imgData);
         return false;
     }
 
