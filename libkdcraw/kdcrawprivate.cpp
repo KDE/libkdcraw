@@ -58,13 +58,22 @@ KDcrawPriv::~KDcrawPriv()
 
 void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
 {
-    QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
+    QCString tmp;
+    QCString header("P6\n");
+    header.append(tmp.setNum(img->width));
+    header.append(" ");
+    header.append(tmp.setNum(img->height));
+    header.append("\n");
+    header.append(tmp.setNum((1 << img->bits)-1));
+    header.append("\n");
+
     QByteArray data((int)img->data_size);
     memcpy(data.data(), (const char*)img->data, (int)img->data_size);
     header.append(data);
+
     header.append("\n");
-    imgData = QByteArray(header.length());
-    memcpy(imgData.data(), header.ascii(), header.length());
+
+    imgData = header;
 }
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
