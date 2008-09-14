@@ -14,7 +14,7 @@ libkdcraw_la_SOURCES = ../libraw/src/libraw_cxx.cpp \
 	                   ../libraw/internal/dcraw_common.cpp \
 	                   ../libraw/internal/foveon.cpp \
 	                   kdcraw.cpp \
-	                   kdcrawiface.cpp \
+	                   kdcrawprivate.cpp \
 	                   dcrawsettingswidget.cpp \
 	                   rnuminput.cpp \
 	                   rcombobox.cpp 
