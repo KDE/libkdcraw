@@ -28,6 +28,10 @@
 #include <sys/time.h>
 #endif
 #include <stdio.h>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,6 +100,7 @@ typedef struct
                 colors,
                 bits,
                 gamma_corrected;
+#pragma omp firstprivate(colors,height,width)
     unsigned int  data_size; // размер поля данных в байтах
     unsigned char data[1]; // we'll allocate more!
 }libraw_processed_image_t;
@@ -127,6 +132,7 @@ typedef struct
                 left_margin;
     ushort      iheight,
                 iwidth;
+#pragma omp firstprivate(iheight,iwidth)
     double      pixel_aspect;
     int         flip;
 
@@ -206,6 +212,7 @@ typedef struct
     unsigned    shot_select;    /* -s */
     float       bright;         /* -b */
     float       threshold;      /*  -n */
+#pragma omp firstprivate(threshold)
     int         half_size;      /* -h */
     int         four_color_rgb; /* -f */
     int         document_mode;  /* -d/-D */
@@ -242,7 +249,7 @@ typedef struct
     libraw_imgother_t           other;
     libraw_thumbnail_t          thumbnail;
     ushort                      (*image)[4] ;
-
+#pragma omp shared(image)
     libraw_output_params_t     params;
     // pointer to LibRaw class for use in C calls
     void                *parent_class;      
@@ -250,7 +257,7 @@ typedef struct
 
 
 #ifdef __cplusplus
-}
+};
 #endif
 
 #endif
