@@ -60,6 +60,7 @@ KDcrawPriv::~KDcrawPriv()
 
 void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
 {
+return;
     QCString tmp;
     QCString header("P6\n");
     header.append(tmp.setNum(img->width));
@@ -80,7 +81,7 @@ void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_ima
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
-    qDebug("LibRaw progress: %1 pass %2 of %3", libraw_strprogress(p), iteration, expected);
+    qDebug("LibRaw progress: %s pass %i of %i", libraw_strprogress(p), iteration, expected);
 
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
