@@ -50,6 +50,7 @@ public:
         focalLength       = -1.0;
         pixelAspectRatio  = 1.0;    // Default value. This can be unavailable (depending of camera model).
         rawColors         = -1;
+        rawImages         = -1;
         hasIccProfile     = false;
         isDecodable       = false;
         hasSecondaryPixel = false;
@@ -78,8 +79,12 @@ public:
              pixelAspectRatio == 1.0 &&
              sensitivity  == -1      && 
              rawColors    == -1      &&
+             rawImages    == -1      &&
              !dateTime.isValid()     && 
-             !imageSize.isValid() )
+             !imageSize.isValid()    &&
+             !fullSize.isValid()     &&
+             !outputSize.isValid()   &&
+             !thumbSize.isValid() )
             return true;
         else
             return false;
@@ -94,6 +99,9 @@ public:
 
     /** The number of RAW colors. */
     int       rawColors;
+
+    /** The number of RAW images. */
+    int       rawImages;
 
     /** The sensitivity in ISO used by camera to take the picture. */
     long      sensitivity;
@@ -126,8 +134,18 @@ public:
     /** Date & time when have been taken the picture. */
     QDateTime dateTime;
 
+
     /** The image dimensions in pixels. */
     QSize     imageSize;
+
+    /** The thumb dimensions in pixels. */
+    QSize     thumbSize;
+
+    /** The full RAW image dimensions in pixels. */
+    QSize     fullSize;
+
+    /** The output dimensions in pixels. */
+    QSize     outputSize;
 };
 
 } // namespace KDcrawIface

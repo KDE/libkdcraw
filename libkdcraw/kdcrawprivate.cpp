@@ -26,8 +26,7 @@
 
 // Qt includes.
 
-#include <QDebug>
-#include <QString>
+#include <qstring.h>
 
 // Local includes.
 
@@ -60,20 +59,22 @@ KDcrawPriv::~KDcrawPriv()
 void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
 {
     QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
-    imgData.append(header.toAscii());
-    imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
-    imgData.append("\n");
+    QByteArray data((int)img->data_size);
+    memcpy(data.data(), (const char*)img->data, (int)img->data_size);
+    header.append(data);
+    header.append("\n");
+    imgData = QByteArray(header.length());
+    memcpy(imgData.data(), header.ascii(), header.length());
 }
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
-    qDebug() << "LibRaw progress: " << libraw_strprogress(p) << " pass "
-             << iteration << " of " << expected;
+    qDebug("LibRaw progress: %1 pass %2 of %3", libraw_strprogress(p), iteration, expected);
 
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
-        qDebug() << "LibRaw process terminaison invoked...";
+        qDebug("LibRaw process terminaison invoked...");
         m_parent->m_cancel = true;
         return 1;
     }
@@ -84,7 +85,7 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
 
 void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
 {
-    identify.dateTime         = QDateTime::fromTime_t(raw->imgdata.other.timestamp);
+    identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
     identify.make             = QString(raw->imgdata.idata.make);
     identify.model            = QString(raw->imgdata.idata.model);
     identify.owner            = QString(raw->imgdata.other.artist);
