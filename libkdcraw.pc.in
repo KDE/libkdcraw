@@ -7,6 +7,6 @@ Name: libkdcraw
 Description: a C++ library for dcraw command line program to decode RAW picture. This library is used by digiKam and kipi-plugins. 
 URL: http://www.kipi-plugins.org
 Requires:
-Version: 0.1.5
+Version: 0.1.6
 Libs: -L${libdir} -lkdcraw
 Cflags: -I${includedir}

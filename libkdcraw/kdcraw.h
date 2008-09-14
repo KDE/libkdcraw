@@ -31,15 +31,15 @@
 #include <qobject.h>
 #include <qimage.h>
 
+// KDE includes.
+
+#include <kdemacros.h>
+
 // Local includes.
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"
 #include "dcrawinfocontainer.h"
-
-class QCustomEvent;
-
-class KProcess;
 
 namespace KDcrawIface
 {
@@ -73,7 +73,7 @@ public:
     */
     static bool loadEmbeddedPreview(QByteArray& imgData, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW picture. This is a fast and non cancelable 
+    /** Get the embedded JPEG preview image from RAW picture has a QImage. This is a fast and non cancelable 
         This method do not require a class instance to run.
     */
     static bool loadEmbeddedPreview(QImage& image, const QString& path);
@@ -89,15 +89,40 @@ public:
     */ 
     static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
+    /** Return the string of all RAW file type mime supported. */
+    static const char *rawFiles();
+
+    /** Return the list of all RAW file type mime supported,
+        as a QStringList, without wildcard and suffix dot.  */
+    static QStringList rawFilesList();
+
+    /** Provide a list of supported RAW Camera name. */ 
+    static QStringList supportedCamera();
+
+    /** Return LibRaw version string. */
+    static QString librawVersion();
+
 public: 
 
+    /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file. 
+        This is a cancelable method which require a class instance to run because RAW pictures loading 
+        can take a while.
+
+        This method return:
+
+            - A byte array container 'rawData' with raw data. 
+            - All info about Raw image into 'identify' container. 
+            - 'false' is returned if loadding failed, else 'true'.  
+    */
+    bool extractRAWData(const QString& filePath, QByteArray &rawData, DcrawInfoContainer& identify);
+
     /** Extract a small size of decode RAW data from 'filePath' picture file using 
-        'rawDecodingSettings' settings. This is a cancelable method witch require 
+        'rawDecodingSettings' settings. This is a cancelable method which require 
         a class instance to run because RAW pictures decoding can take a while.
 
         This method return:
 
-            - A byte array container ('imageData') with picture data. Pixels order is RGB. 
+            - A byte array container 'imageData' with picture data. Pixels order is RGB. 
               Color depth can be 8 or 16. In 8 bits you can access to color component 
               using (uchar*), in 16 bits using (ushort*).
 
@@ -105,16 +130,16 @@ public:
             - The max average of RGB components from decoded picture.
             - 'false' is returned if decoding failed, else 'true'.  
     */
-    bool decodeHalfRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+    bool decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                             QByteArray &imageData, int &width, int &height, int &rgbmax);
 
     /** Extract a full size of RAW data from 'filePath' picture file using 
-        'rawDecodingSettings' settings. This is a cancelable method witch require 
+        'rawDecodingSettings' settings. This is a cancelable method which require 
         a class instance to run because RAW pictures decoding can take a while.
 
         This method return:
 
-            - A byte array container ('imageData') with picture data. Pixels order is RGB. 
+            - A byte array container 'imageData' with picture data. Pixels order is RGB. 
               Color depth can be 8 or 16. In 8 bits you can access to color component 
               using (uchar*), in 16 bits using (ushort*).
 
@@ -122,7 +147,7 @@ public:
             - The max average of RGB components from decoded picture. 
             - 'false' is returned if decoding failed, else 'true'.  
     */
-    bool decodeRAWImage(const QString& filePath, RawDecodingSettings rawDecodingSettings, 
+    bool decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                         QByteArray &imageData, int &width, int &height, int &rgbmax);
 
     /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
@@ -147,25 +172,12 @@ protected:
     /** Re-implement this method to control the cancelisation of loop witch wait data 
         from RAW decoding process with your propers envirronement. 
         By default, this method check if m_cancel is true.
-
-        NOTE: RAW decoding is divided to 3 stages : 
-
-              1-demosaising from dcraw. no progress feedback is available. We using a pseudo 
-                progress value. You can control this stage using checkToCancelWaitingData() and 
-                setWaitingDataProgress() methods.
-
-              2-decoding data reception from dcraw. You can control this stage using 
-                checkToCancelRecievingData() and setRecievingDataProgress() methods. 
-
-              3-storage decoded data in your application using the QByteArray container.
     */
     virtual bool checkToCancelWaitingData();
 
-    /** Re-implement this method to control the cancelisation of the loop which receives data 
-        from RAW decoding process with your proper environment. 
-        By default, this method check if m_cancel is true.
+    /** This method is obsolete and will be removed in the future.
     */
-    virtual bool checkToCancelRecievingData();
+    virtual bool checkToCancelReceivingData() KDE_DEPRECATED;
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
         internal loop without feedback) with your proper environment. By default, this method do nothing.
@@ -177,26 +189,18 @@ protected:
         with your proper environment. By default, this method do nothing.
         Progress value average for this stage is n%-70%, with 'n' == 40% max (see setWaitingDataProgress() method).
     */
-    virtual void setRecievingDataProgress(double value);
+    virtual void setReceivingDataProgress(double value);
 
 private:
 
-    bool loadFromDcraw(const QString& filePath, QByteArray &imageData, 
+    bool loadFromDcraw(const QString& filePath, QByteArray &imageData,
                        int &width, int &height, int &rgbmax);
-    void startProcess();
-
-    virtual void customEvent(QCustomEvent *);
-
-private slots:
-
-    void slotProcessExited(KProcess *);
-    void slotReceivedStdout(KProcess *, char *, int);
-    void slotReceivedStderr(KProcess *, char *, int);
-    void slotContinueQuery();
 
 private:
 
     KDcrawPriv *d;
+
+    friend class KDcrawPriv;
 };
 
 }  // namespace KDcrawIface

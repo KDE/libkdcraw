@@ -42,7 +42,7 @@
 
 #include "rnuminput.h"
 #include "rcombobox.h"
-#include "dcrawbinary.h"
+#include "kdcraw.h"
 #include "dcrawsettingswidget.h"
 #include "dcrawsettingswidget.moc"
 
@@ -214,8 +214,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addMultiCellWidget(d->fourColorCheckBox, line, line, 0, 1);
     line++;
 
-    KURLLabel *dcrawVersion = new KURLLabel("http://cybercom.net/~dcoffin/dcraw", i18n("dcraw %1")
-                                  .arg(DcrawBinary::internalVersion()), d->demosaicingSettings);
+    KURLLabel *dcrawVersion = new KURLLabel("http://www.libraw.org", i18n("libraw %1")
+                                  .arg(KDcraw::librawVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     QToolTip::add(dcrawVersion, i18n("Visit dcraw project website"));
     demosaicingLayout->addMultiCellWidget(dcrawVersion, 0, 0, 2, 2);

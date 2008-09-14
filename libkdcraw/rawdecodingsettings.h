@@ -117,6 +117,7 @@ public:
     /** Standard constructor with default settings */
     RawDecodingSettings()
     {
+        gamma16bit                 = true;
         sixteenBitsImage           = false;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
@@ -156,7 +157,8 @@ public:
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const
     {
-        return sixteenBitsImage        == o.sixteenBitsImage
+        return gamma16bit              == o.gamma16bit
+            && sixteenBitsImage        == o.sixteenBitsImage
             && brightness              == o.brightness
             && RAWQuality              == o.RAWQuality
             && inputColorSpace         == o.inputColorSpace
@@ -189,8 +191,9 @@ public:
     virtual ~RawDecodingSettings(){};
 
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
-    void optimizeTimeLoading(void)
+    void optimizeTimeLoading()
     {
+        gamma16bit                 = true;
         sixteenBitsImage           = true;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
@@ -227,6 +230,10 @@ public:
     };
 
 public:
+
+    /** If true, perform an auto-gamma with 16 bits color depth image, as in 8 bits.
+    */
+    bool gamma16bit;
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
     */
