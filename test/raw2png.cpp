@@ -100,6 +100,7 @@ int main (int argc, char **argv)
 
     PRINT_DEBUG << "raw2png: Loading half RAW image" << endl;
 
+    targetImg = QImage();
     if (!rawProcessor.loadHalfPreview(targetImg, filePath))
     {
         PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted..." << endl;
