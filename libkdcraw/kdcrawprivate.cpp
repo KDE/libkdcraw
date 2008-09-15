@@ -60,7 +60,6 @@ KDcrawPriv::~KDcrawPriv()
 
 void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
 {
-return;
     QCString tmp;
     QCString header("P6\n");
     header.append(tmp.setNum(img->width));
