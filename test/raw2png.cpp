@@ -23,13 +23,19 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qcstring.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 
 // KDE includes.
 
 #include "kdebug.h"
+#include "kdeversion.h"
+
+#if KDE_IS_VERSION(4,0,0)
+    #define PRINT_DEBUG kDebug()
+#else
+    #define PRINT_DEBUG kdDebug()
+#endif
 
 // Local includes.
 
@@ -41,8 +47,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2) 
     {
-        kdDebug() << "raw2png - RAW Camera Image to PNG Converter" << endl;
-        kdDebug() << "Usage: <rawfile>" << endl;
+        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter" << endl;
+        PRINT_DEBUG << "Usage: <rawfile>" << endl;
         return -1;
     }
 
@@ -53,38 +59,38 @@ int main (int argc, char **argv)
     QImage             targetImg;
     DcrawInfoContainer identify;
 
-    kdDebug() << "raw2png: Identify RAW image from " << input.fileName() << endl;
+    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName() << endl;
 
     KDcraw rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
     {
-        kdDebug() << "raw2png: Idendify RAW image failed. Aborted..." << endl;
+        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted..." << endl;
         return -1;
     }
 
     int width      = identify.imageSize.width();
     int height     = identify.imageSize.height();
 
-    kdDebug() << "raw2png: Raw image info:" << endl;
-    kdDebug() << "--- Date:      " << identify.dateTime.toString(Qt::ISODate) << endl;
-    kdDebug() << "--- Make:      " << identify.make << endl;
-    kdDebug() << "--- Model:     " << identify.model << endl;
-    kdDebug() << "--- Size:      " << width << "x" << height << endl;
-    kdDebug() << "--- Filter:    " << identify.filterPattern << endl;
-    kdDebug() << "--- Colors:    " << identify.rawColors << endl;
+    PRINT_DEBUG << "raw2png: Raw image info:" << endl;
+    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate) << endl;
+    PRINT_DEBUG << "--- Make:      " << identify.make << endl;
+    PRINT_DEBUG << "--- Model:     " << identify.model << endl;
+    PRINT_DEBUG << "--- Size:      " << width << "x" << height << endl;
+    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern << endl;
+    PRINT_DEBUG << "--- Colors:    " << identify.rawColors << endl;
 
-    kdDebug() << "raw2png: Loading RAW image preview" << endl;
+    PRINT_DEBUG << "raw2png: Loading RAW image preview" << endl;
 
     if (!rawProcessor.loadDcrawPreview(targetImg, filePath))
     {
-        kdDebug() << "raw2png: Loading RAW image preview failed. Aborted..." << endl;
+        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted..." << endl;
         return -1;
     }
 
-    kdDebug() << "raw2png: Saving preview image" << endl;
+    PRINT_DEBUG << "raw2png: Saving preview image" << endl;
     targetImg.save(previewFilePath, "PNG");
 
-    kdDebug() << "raw2png: PNG conversion complete..." << endl;
+    PRINT_DEBUG << "raw2png: PNG conversion complete..." << endl;
 
     return 0;
 }
