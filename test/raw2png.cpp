@@ -53,7 +53,7 @@ int main (int argc, char **argv)
     QImage             targetImg;
     DcrawInfoContainer identify;
 
-    kdDebug() << "raw2png: Identify RAW image from" << input.fileName() << endl;
+    kdDebug() << "raw2png: Identify RAW image from " << input.fileName() << endl;
 
     KDcraw rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
