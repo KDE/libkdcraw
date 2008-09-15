@@ -86,6 +86,7 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
 
 SUBDIRS(icons)
 SUBDIRS(libkdcraw)
+SUBDIRS(test)
 SUBDIRS(profiles)
 
 IF(NOT WIN32)
