@@ -31,6 +31,9 @@ libkdcraw_la_SOURCES = kdcraw.cpp \
 	                   rnuminput.cpp \
 	                   rcombobox.cpp
 
+# This LibRaw flags is require to compile libkdcraw with thread-safe support.
+libkdcraw_la_CXXFLAGS = -DLIBAW_THREADS 
+
 libkdcraw_la_LDFLAGS  = $(all_libraries) $(KDE_RPATH) -version-info $(VERSION_INFO) -no-undefined
 libkdcraw_la_LIBADD   = $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIB_KIO) libraw.la
 
