@@ -23,7 +23,6 @@
 // Qt includes.
 
 #include <qstring.h>
-#include <qcstring.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 
