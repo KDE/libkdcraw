@@ -1,4 +1,5 @@
-SUBDIRS = icons libkdcraw 
+COMPILE_FIRST = libkdcraw
+SUBDIRS = libkdcraw test icons
 
 libkdcrawpkgconfigdir = $(libdir)/pkgconfig
 libkdcrawpkgconfig_DATA = libkdcraw.pc
