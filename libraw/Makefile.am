@@ -1,6 +1,7 @@
 
 # Requires by libraw.
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+#KDE_CXXFLAGS = $(USE_EXCEPTIONS) -fbuiltin -fvisibility-inlines-hidden -fvisibility=hidden
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) 
 
 INCLUDES = $(all_includes)
 

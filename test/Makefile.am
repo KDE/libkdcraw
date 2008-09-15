@@ -2,7 +2,7 @@ KDE_OPTIONS = nofinal
 METASOURCES = AUTO
 
 # Requires by libraw.
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DLIBRAW_THREADS
 
 INCLUDES = -I../libraw -I../libkdcraw $(all_includes)
 
