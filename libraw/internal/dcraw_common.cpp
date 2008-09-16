@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Sep 14 19:37:37 2008
+   Generated from dcraw/dcraw.c at Tue Sep 16 12:31:11 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -323,7 +323,7 @@ void CLASS canon_a5_load_raw()
  */
 unsigned CLASS getbits (int nbits)
 {
-#ifndef LIBRAW_THREADS
+#ifdef LIBRAW_NOTHREADS
   static unsigned bitbuf=0;
   static int vbits=0, reset=0;
 #else
@@ -344,7 +344,7 @@ unsigned CLASS getbits (int nbits)
   }
   vbits -= nbits;
   return bitbuf << (32-nbits-vbits) >> (32-nbits);
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef bitbuf
 #undef vbits
 #undef reset
@@ -386,7 +386,7 @@ void CLASS init_decoder()
 uchar * CLASS make_decoder (const uchar *source, int level)
 {
   struct decode *cur;
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define t_leaf tls.make_decoder_leaf
 #else
   static int t_leaf;
@@ -411,7 +411,7 @@ throw LIBRAW_EXCEPTION_DECODE_RAW;
       cur->leaf = source[16 + t_leaf++];
   }
   return (uchar *) source + 16 + t_leaf;
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef t_leaf
 #endif
 }
@@ -1401,7 +1401,7 @@ void CLASS phase_one_load_raw()
 
 unsigned CLASS ph1_bits (int nbits)
 {
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define bitbuf tls.ph1_bits.bitbuf
 #define vbits  tls.ph1_bits.vbits    
 #else
@@ -1417,7 +1417,7 @@ unsigned CLASS ph1_bits (int nbits)
   }
   vbits -= nbits;
   return bitbuf << (64-nbits-vbits) >> (64-nbits);
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef bitbuf
 #undef vbits
 #endif
@@ -1638,7 +1638,7 @@ void CLASS nokia_load_raw()
 
 unsigned CLASS pana_bits (int nbits)
 {
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define buf tls.pana_bits.buf
 #define vbits tls.pana_bits.vbits   
 #else
@@ -1648,7 +1648,7 @@ unsigned CLASS pana_bits (int nbits)
   vbits = (vbits - nbits) & 127;
   return (buf[(vbits >> 3)+1] << 8 | buf[vbits >> 3])
 	>> (vbits & 7) & ~(-1 << nbits);
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef buf
 #undef vbits
 #endif
@@ -1896,7 +1896,7 @@ const int * CLASS make_decoder_int (const int *source, int level)
 int CLASS radc_token (int tree)
 {
   int t;
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define dstart tls.radc_token.dstart
 #define dindex tls.radc_token.dindex
 #define s       tls.radc_token.s
@@ -1941,7 +1941,7 @@ int CLASS radc_token (int tree)
     dindex = dindex->branch[getbits(1)];
   return dindex->leaf;
 
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef dstart
 #undef dindex
 #undef s
@@ -2028,7 +2028,7 @@ void CLASS kodak_jpeg_load_raw() {}
 METHODDEF(boolean)
 fill_input_buffer (j_decompress_ptr cinfo)
 {
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define jpeg_buffer tls.jpeg_buffer
 #else
   static uchar jpeg_buffer[4096];
@@ -2040,7 +2040,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   cinfo->src->next_input_byte = jpeg_buffer;
   cinfo->src->bytes_in_buffer = nbytes;
   return TRUE;
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef jpeg_buffer
 #endif
 }
@@ -2320,7 +2320,7 @@ void CLASS kodak_thumb_load_raw()
 
 void CLASS sony_decrypt (unsigned *data, int len, int start, int key)
 {
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define pad tls.sony_decrypt.pad
 #define p   tls.sony_decrypt.p
 #else
@@ -2338,7 +2338,7 @@ void CLASS sony_decrypt (unsigned *data, int len, int start, int key)
   }
   while (len--)
     *data++ ^= pad[p++ & 127] = pad[(p+1) & 127] ^ pad[(p+65) & 127];
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef pad
 #undef p
 #endif
