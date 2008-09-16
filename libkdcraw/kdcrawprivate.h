@@ -55,7 +55,7 @@ public:
 
 public:
 
-    static void createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img);
+    static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t *img);
 
     static void fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify);
 
