@@ -27,6 +27,10 @@
 
 #include <QByteArray>
 
+// KDE includes.
+
+#include <kdebug.h>
+
 // LibRaw includes.
 
 #include "libraw/libraw.h"

@@ -26,7 +26,6 @@
 
 // Qt includes.
 
-#include <QDebug>
 #include <QString>
 
 // Local includes.
@@ -66,7 +65,7 @@ void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t *
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
-    qDebug() << "LibRaw progress: " << libraw_strprogress(p) << " pass "
+    kDebug(51002) << "LibRaw progress: " << libraw_strprogress(p) << " pass "
              << iteration << " of " << expected;
 
     // Clean processing termination by user...
