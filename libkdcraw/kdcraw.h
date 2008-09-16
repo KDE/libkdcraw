@@ -186,11 +186,9 @@ protected:
     */
     virtual void setWaitingDataProgress(double value);
 
-    /** Re-implement this method to control the progress value during RAW decoding (when dcraw return data)
-        with your proper environment. By default, this method do nothing.
-        Progress value average for this stage is n%-70%, with 'n' == 40% max (see setWaitingDataProgress() method).
+    /** This method is obsolete and will be removed in the future.
     */
-    virtual void setReceivingDataProgress(double value);
+    virtual KDE_DEPRECATED void setReceivingDataProgress(double value);
 
 private:
 
