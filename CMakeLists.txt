@@ -56,9 +56,6 @@ ADD_DEFINITIONS(-DUSE_LCMS)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
-# Flag to make LibRaw code threads-safe.
-ADD_DEFINITIONS(-DLIBRAW_THREADS)
-
 # LibRaw use C++ exception.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
