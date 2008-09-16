@@ -6,7 +6,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DLIBRAW_THREADS -DDCRAW_VERBOSE -DUSE_LCMS
 
 INCLUDES = -I../libraw -I../libkdcraw $(all_includes)
 
-bin_PROGRAMS = raw2png identify simple_dcraw mem_image dcraw_emu
+check_PROGRAMS = raw2png identify simple_dcraw mem_image dcraw_emu
 
 # -------------------------------------------------------------
 
