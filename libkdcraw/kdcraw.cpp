@@ -85,17 +85,16 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
     if ( loadEmbeddedPreview(imgData, path) )
     {
+        qDebug("Preview data size: %i", imgData.size());
+
         if (image.loadFromData( imgData ))
         {
             qDebug("Using embedded RAW preview extraction");
             return true;
         }
-        else
-        {
-            qDebug("Failed to load embedded RAW preview");
-        }
     }
 
+    qDebug("Failed to load embedded RAW preview");
     return false;
 }
 
