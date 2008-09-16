@@ -72,7 +72,7 @@ void KDcraw::cancel()
 
 bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
 {
-    // In first, try to extrcat the embedded JPEG preview. Very fast.
+    // In first, try to extract the embedded JPEG preview. Very fast.
     bool ret = loadEmbeddedPreview(image, path);
     if (ret) return true;
 
