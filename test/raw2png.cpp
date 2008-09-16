@@ -28,13 +28,14 @@
 
 // KDE includes.
 
-#include "kdebug.h"
 #include "kdeversion.h"
 
 #if KDE_IS_VERSION(4,0,0)
-    #define PRINT_DEBUG kDebug()
+#include "qdebug.h"
+#define PRINT_DEBUG qDebug()
 #else
-    #define PRINT_DEBUG kdDebug()
+#include "kdebug.h"
+#define PRINT_DEBUG kDebug()
 #endif
 
 // Local includes.
@@ -47,8 +48,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2) 
     {
-        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter" << endl;
-        PRINT_DEBUG << "Usage: <rawfile>" << endl;
+        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter";
+        PRINT_DEBUG << "Usage: <rawfile>";
         return -1;
     }
 
@@ -58,57 +59,63 @@ int main (int argc, char **argv)
     QFileInfo          previewOutput(previewFilePath);
     QString            halfFilePath(input.baseName() + QString(".half.png"));
     QFileInfo          halfOutput(halfFilePath);
-    QImage             targetImg;
+    QImage             image;
     DcrawInfoContainer identify;
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName() << endl;
+    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName();
 
     KDcraw rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
     {
-        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted..." << endl;
+        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted...";
         return -1;
     }
 
     int width  = identify.imageSize.width();
     int height = identify.imageSize.height();
 
-    PRINT_DEBUG << "raw2png: Raw image info:" << endl;
-    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate) << endl;
-    PRINT_DEBUG << "--- Make:      " << identify.make << endl;
-    PRINT_DEBUG << "--- Model:     " << identify.model << endl;
-    PRINT_DEBUG << "--- Size:      " << width << "x" << height << endl;
-    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern << endl;
-    PRINT_DEBUG << "--- Colors:    " << identify.rawColors << endl;
+    PRINT_DEBUG << "raw2png: Raw image info:";
+    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate);
+    PRINT_DEBUG << "--- Make:      " << identify.make;
+    PRINT_DEBUG << "--- Model:     " << identify.model;
+    PRINT_DEBUG << "--- Size:      " << width << "x" << height;
+    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern;
+    PRINT_DEBUG << "--- Colors:    " << identify.rawColors;
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading RAW image preview" << endl;
+    PRINT_DEBUG << "raw2png: Loading RAW image preview";
 
-    if (!rawProcessor.loadDcrawPreview(targetImg, filePath))
+    if (!rawProcessor.loadDcrawPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted..." << endl;
+        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted...";
         return -1;
     }
 
-    PRINT_DEBUG << "raw2png: Saving preview image " << previewOutput.fileName() << endl;
-    targetImg.save(previewFilePath, "PNG");
+    PRINT_DEBUG << "raw2png: Saving preview image to "
+                << previewOutput.fileName() << " size ("
+                << image.width() << "x" << image.height()
+                << ")";
+    image.save(previewFilePath, "PNG");
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading half RAW image" << endl;
+    PRINT_DEBUG << "raw2png: Loading half RAW image";
 
-    targetImg = QImage();
-    if (!rawProcessor.loadHalfPreview(targetImg, filePath))
+    image = QImage();
+    if (!rawProcessor.loadHalfPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted..." << endl;
+        PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted...";
         return -1;
     }
 
-    PRINT_DEBUG << "raw2png: Saving half image " << halfOutput.fileName() << endl;
-    targetImg.save(halfFilePath, "PNG");
+    PRINT_DEBUG << "raw2png: Saving half image to "
+                << halfOutput.fileName() << " size ("
+                << image.width() << "x" << image.height()
+                << ")";
+    image.save(halfFilePath, "PNG");
 
     return 0;
 }
