@@ -267,7 +267,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
     if (m_cancel)
         return false;
 
-    setReceivingDataProgress(0.1);
+    setWaitingDataProgress(0.1);
 
     LibRaw raw;
     // Set progress call back function.
@@ -286,7 +286,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.3);
+    setWaitingDataProgress(0.3);
 
     raw.imgdata.params.output_bps    = 16;
     raw.imgdata.params.document_mode = 2;
@@ -304,7 +304,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.5);
+    setWaitingDataProgress(0.5);
 
     KDcrawPriv::fillIndentifyInfo(&raw, identify);
 
@@ -313,13 +313,13 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.7);
+    setWaitingDataProgress(0.7);
 
     rawData.resize((int)(raw.imgdata.sizes.iheight * raw.imgdata.sizes.iwidth * sizeof(raw.imgdata.image)));
     memcpy(rawData.data(), (const char*)raw.imgdata.image, rawData.size());
 
     raw.recycle();
-    setReceivingDataProgress(1.0);
+    setWaitingDataProgress(1.0);
 
     return true;
 }
@@ -624,7 +624,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         }
     }
 
-    setReceivingDataProgress(0.1);
+    setWaitingDataProgress(0.1);
 
     args.append(filePath);
     qDebug("LibRaw: dcraw emulation: %s", args.join(", ").ascii());
@@ -642,7 +642,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.2);
+    setWaitingDataProgress(0.2);
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
@@ -657,7 +657,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.25);
+    setWaitingDataProgress(0.25);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
@@ -672,7 +672,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.3);
+    setWaitingDataProgress(0.3);
 
     libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
     if(!img)
@@ -688,7 +688,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setReceivingDataProgress(0.35);
+    setWaitingDataProgress(0.35);
 
     width     = img->width;
     height    = img->height;
@@ -701,7 +701,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
     if (m_cancel)
         return false;
-    setReceivingDataProgress(0.4);
+    setWaitingDataProgress(0.4);
 
     qDebug("LibRaw: data info: width %i height %i rgbmax %i", width, height, rgbmax);
 
