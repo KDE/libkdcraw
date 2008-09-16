@@ -258,7 +258,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
     if (m_cancel)
         return false;
 
-    setWaitingDataProgress(0.1);
+    d->setProgress(0.1);
 
     LibRaw raw;
     // Set progress call back function.
@@ -277,7 +277,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.3);
+    d->setProgress(0.3);
 
     raw.imgdata.params.output_bps    = 16;
     raw.imgdata.params.document_mode = 2;
@@ -295,7 +295,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.5);
+    d->setProgress(0.5);
 
     KDcrawPriv::fillIndentifyInfo(&raw, identify);
 
@@ -304,12 +304,12 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.7);
+    d->setProgress(0.7);
 
     rawData = QByteArray((const char*)raw.imgdata.image, 
                          (int)(raw.imgdata.sizes.iheight * raw.imgdata.sizes.iwidth * sizeof(raw.imgdata.image)));
     raw.recycle();
-    setWaitingDataProgress(1.0);
+    d->setProgress(1.0);
 
     return true;
 }
@@ -614,7 +614,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         }
     }
 
-    setWaitingDataProgress(0.1);
+    d->setProgress(0.1);
 
     args.append(filePath);
     kDebug(51002) << "LibRaw: dcraw emulation: " << args << endl;
@@ -632,7 +632,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.2);
+    d->setProgress(0.2);
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
@@ -647,7 +647,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.25);
+    d->setProgress(0.25);
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
@@ -662,7 +662,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.3);
+    d->setProgress(0.3);
 
     libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
     if(!img)
@@ -678,7 +678,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         raw.recycle();
         return false;
     }
-    setWaitingDataProgress(0.35);
+    d->setProgress(0.35);
 
     width     = img->width;
     height    = img->height;
@@ -689,7 +689,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
 
     if (m_cancel)
         return false;
-    setWaitingDataProgress(0.4);
+    d->setProgress(0.4);
 
     qDebug("LibRaw: data info: width %i height %i rgbmax %i", width, height, rgbmax);
 

@@ -65,7 +65,12 @@ public:
 
     int progressCallback(enum LibRaw_progress p, int iteration, int expected);
 
+    void setProgress(double value);
+    double progressValue();
+
 private:
+
+    double  m_progress;
 
     KDcraw *m_parent;
 };

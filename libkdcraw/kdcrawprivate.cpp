@@ -45,7 +45,8 @@ int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int exp
 
 KDcrawPriv::KDcrawPriv(KDcraw *p)
 {
-    m_parent = p;
+    m_progress = 0.0;
+    m_parent   = p;
 }
 
 KDcrawPriv::~KDcrawPriv()
@@ -62,18 +63,33 @@ void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t *
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
     kDebug(51002) << "LibRaw progress: " << libraw_strprogress(p) << " pass "
-             << iteration << " of " << expected;
+                  << iteration << " of " << expected;
+
+    // post a little change in progress indicator to show raw processor activity.
+    setProgress(progressValue()+1);
 
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
         qDebug() << "LibRaw process terminaison invoked...";
         m_parent->m_cancel = true;
+        m_progress = 0.0;
         return 1;
     }
 
     // Return 0 to continue processing...
     return 0;
+}
+
+void KDcrawPriv::setProgress(double value)
+{
+    m_progress = value;
+    m_parent->setWaitingDataProgress(m_progress);
+}
+
+double KDcrawPriv::progressValue()
+{
+    return m_progress;
 }
 
 void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
