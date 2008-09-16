@@ -10,10 +10,6 @@
  * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
- * NOTE: Do not use kdDebug() in this implementation because 
- *       it will be multithreaded. Use kDebug(51002) instead. 
- *       See B.K.O #133026 for details.
- *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
