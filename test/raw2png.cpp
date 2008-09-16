@@ -33,9 +33,11 @@
 #if KDE_IS_VERSION(4,0,0)
 #include "qdebug.h"
 #define PRINT_DEBUG qDebug()
+#define ENDL
 #else
 #include "kdebug.h"
 #define PRINT_DEBUG kdDebug()
+#define ENDL << endl
 #endif
 
 // Local includes.
@@ -48,8 +50,8 @@ int main (int argc, char **argv)
 {
     if(argc != 2) 
     {
-        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter";
-        PRINT_DEBUG << "Usage: <rawfile>";
+        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter" ENDL;
+        PRINT_DEBUG << "Usage: <rawfile>" ENDL;
         return -1;
     }
 
@@ -64,57 +66,57 @@ int main (int argc, char **argv)
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName();
+    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName() ENDL;
 
     KDcraw rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
     {
-        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted...";
+        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted..." ENDL;
         return -1;
     }
 
     int width  = identify.imageSize.width();
     int height = identify.imageSize.height();
 
-    PRINT_DEBUG << "raw2png: Raw image info:";
-    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate);
-    PRINT_DEBUG << "--- Make:      " << identify.make;
-    PRINT_DEBUG << "--- Model:     " << identify.model;
-    PRINT_DEBUG << "--- Size:      " << width << "x" << height;
-    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern;
-    PRINT_DEBUG << "--- Colors:    " << identify.rawColors;
+    PRINT_DEBUG << "raw2png: Raw image info:" ENDL;
+    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate) ENDL;
+    PRINT_DEBUG << "--- Make:      " << identify.make ENDL;
+    PRINT_DEBUG << "--- Model:     " << identify.model ENDL;
+    PRINT_DEBUG << "--- Size:      " << width << "x" << height ENDL;
+    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern ENDL;
+    PRINT_DEBUG << "--- Colors:    " << identify.rawColors ENDL;
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading RAW image preview";
+    PRINT_DEBUG << "raw2png: Loading RAW image preview" ENDL;
 
     if (!rawProcessor.loadDcrawPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted...";
+        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted..." ENDL;
         return -1;
     }
 
     PRINT_DEBUG << "raw2png: Saving preview image to "
                 << previewOutput.fileName() << " size ("
                 << image.width() << "x" << image.height()
-                << ")";
+                << ")" ENDL;
     image.save(previewFilePath, "PNG");
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading half RAW image";
+    PRINT_DEBUG << "raw2png: Loading half RAW image" ENDL;
 
     image = QImage();
     if (!rawProcessor.loadHalfPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted...";
+        PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted..." ENDL;
         return -1;
     }
 
     PRINT_DEBUG << "raw2png: Saving half image to "
                 << halfOutput.fileName() << " size ("
                 << image.width() << "x" << image.height()
-                << ")";
+                << ")" ENDL;
     image.save(halfFilePath, "PNG");
 
     return 0;
