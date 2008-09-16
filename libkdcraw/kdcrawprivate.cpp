@@ -57,12 +57,11 @@ KDcrawPriv::~KDcrawPriv()
 {
 }
 
-void KDcrawPriv::createPPMHeader(QByteArray& imgData, const libraw_processed_image_t *img)
+void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t *img)
 {
     QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
     imgData.append(header.toAscii());
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
-    imgData.append("\n");
 }
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
