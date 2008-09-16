@@ -81,15 +81,16 @@ class DllDef LibRaw
 {
   public:
     libraw_data_t imgdata;
-#ifdef DCRAW_VERBOSE
     int verbose;
-#endif
+
     LibRaw(unsigned int flags = LIBRAW_OPTIONS_NONE)
         {
             double aber[4] = {1,1,1,1};
             unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
 #ifdef DCRAW_VERBOSE
             verbose = 1;
+#else
+            verbose = 0;
 #endif
             bzero(&imgdata,sizeof(imgdata));
             bzero(&libraw_internal_data,sizeof(libraw_internal_data));
@@ -110,9 +111,7 @@ class DllDef LibRaw
             imgdata.params.use_fuji_rotate=1;
             imgdata.parent_class = this;
             imgdata.progress_flags = 0;
-#ifdef LIBRAW_THREADS
             tls.init();
-#endif
         }
 
     
@@ -156,14 +155,13 @@ class DllDef LibRaw
             FREE(imgdata.thumbnail.thumb);
             FREE(libraw_internal_data.internal_data.meta_data);
             FREE(libraw_internal_data.output_data.histogram);
+            FREE(libraw_internal_data.output_data.oprof);
             FREE(imgdata.color.profile);
 #undef FREE
             memmgr.cleanup();
             imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
             imgdata.progress_flags = 0;
-#ifdef LIBRAW_THREADS
             tls.init();
-#endif
        }
     ~LibRaw(void) 
         { 
@@ -241,9 +239,7 @@ class DllDef LibRaw
 
 // data
 
-#ifdef LIBRAW_THREADS
     LibRaw_TLS  tls;
-#endif
     libraw_internal_data_t libraw_internal_data;
     decode      first_decode[2048], *second_decode, *free_decode;
     tiff_ifd_t  tiff_ifd[10];

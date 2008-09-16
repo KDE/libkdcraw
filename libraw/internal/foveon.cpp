@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Sep 14 19:37:37 2008
+   Generated from dcraw/dcraw.c at Tue Sep 16 12:31:11 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -22,7 +22,7 @@
 
 void CLASS foveon_decoder (unsigned size, unsigned code)
 {
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #define huff tls.foveon_decoder_huff
 #else
   static unsigned huff[1024];
@@ -53,7 +53,7 @@ throw LIBRAW_EXCEPTION_DECODE_RAW;
   foveon_decoder (size, code);
   cur->branch[1] = free_decode;
   foveon_decoder (size, code+1);
-#ifdef LIBRAW_THREADS
+#ifndef LIBRAW_NOTHREADS
 #undef huff
 #endif
 }

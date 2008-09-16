@@ -100,7 +100,9 @@ typedef struct
                 colors,
                 bits,
                 gamma_corrected;
+#ifdef _OPENMP
 #pragma omp firstprivate(colors,height,width)
+#endif
     unsigned int  data_size; // размер поля данных в байтах
     unsigned char data[1]; // we'll allocate more!
 }libraw_processed_image_t;
@@ -132,7 +134,9 @@ typedef struct
                 left_margin;
     ushort      iheight,
                 iwidth;
+#ifdef _OPENMP
 #pragma omp firstprivate(iheight,iwidth)
+#endif
     double      pixel_aspect;
     int         flip;
 
@@ -212,7 +216,9 @@ typedef struct
     unsigned    shot_select;    /* -s */
     float       bright;         /* -b */
     float       threshold;      /*  -n */
+#ifdef _OPENMP
 #pragma omp firstprivate(threshold)
+#endif
     int         half_size;      /* -h */
     int         four_color_rgb; /* -f */
     int         document_mode;  /* -d/-D */
@@ -249,7 +255,9 @@ typedef struct
     libraw_imgother_t           other;
     libraw_thumbnail_t          thumbnail;
     ushort                      (*image)[4] ;
+#ifdef _OPENMP
 #pragma omp shared(image)
+#endif
     libraw_output_params_t     params;
     // pointer to LibRaw class for use in C calls
     void                *parent_class;      

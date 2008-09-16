@@ -46,7 +46,6 @@ int main(int ac, char *av[])
     char outfn[1024],thumbfn[1024]; 
 
     LibRaw RawProcessor;
-    
     if(ac<2) 
         {
             printf(

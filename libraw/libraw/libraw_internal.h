@@ -28,6 +28,7 @@
 
 #ifdef __cplusplus
 
+
 #ifndef CLASS
 #define CLASS LibRaw::
 #endif
@@ -41,8 +42,6 @@
 
 
 #ifdef __cplusplus
-
-#ifdef LIBRAW_THREADS
 
 class LibRaw_TLS
 {
@@ -60,7 +59,7 @@ public:
     }ph1_bits;
     struct
     {
-        uchar buf[16], vbits;
+        uchar buf[16], vbits, padding[3];
     }pana_bits;
     int make_decoder_leaf;
     struct
@@ -68,12 +67,12 @@ public:
         struct decode *dstart[18], *dindex;
         const int *s;
     }radc_token;
-    uchar jpeg_buffer[4096];
     struct
     {
          unsigned pad[128], p;
     }sony_decrypt;
-     unsigned foveon_decoder_huff[1024];
+    unsigned foveon_decoder_huff[1024];
+    uchar jpeg_buffer[4096];
     // init - should use in constructor/recycle
     void init() 
         { 
@@ -83,7 +82,6 @@ public:
         }
 };
 
-#endif
 
 class LibRaw_constants
 {
@@ -201,6 +199,8 @@ struct tiff_hdr {
   unsigned gps[26];
   char t_desc[512], t_make[64], t_model[64], soft[32], date[20], t_artist[64];
 };
+
+
 
 #ifdef DEBUG_STAGE_CHECKS
 #define CHECK_ORDER_HIGH(expected_stage) \
