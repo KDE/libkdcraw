@@ -35,7 +35,7 @@
 #define PRINT_DEBUG qDebug()
 #else
 #include "kdebug.h"
-#define PRINT_DEBUG kDebug()
+#define PRINT_DEBUG kdDebug()
 #endif
 
 // Local includes.
