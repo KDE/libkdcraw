@@ -90,6 +90,10 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
             qDebug("Using embedded RAW preview extraction");
             return true;
         }
+        else
+        {
+            qDebug("Failed to load embedded RAW preview");
+        }
     }
 
     return false;
