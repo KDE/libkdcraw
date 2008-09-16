@@ -66,7 +66,7 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
                   << iteration << " of " << expected;
 
     // post a little change in progress indicator to show raw processor activity.
-    setProgress(progressValue()+1);
+    setProgress(progressValue()+0.01);
 
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
