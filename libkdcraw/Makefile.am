@@ -3,8 +3,8 @@ METASOURCES = AUTO
 
 INCLUDES = -I../libraw $(all_includes)
 
-# Requires by libraw.
-KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DLIBRAW_THREADS 
+# LibRaw definitions
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DLIBRAW_THREADS -DDCRAW_VERBOSE -DUSE_LCMS
 
 lib_LTLIBRARIES = libkdcraw.la
 
