@@ -52,7 +52,8 @@ int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int exp
 
 KDcrawPriv::KDcrawPriv(KDcraw *p)
 {
-    m_parent = p;
+    m_progress = 0.0;
+    m_parent   = p;
 }
 
 KDcrawPriv::~KDcrawPriv()
@@ -79,6 +80,9 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
 {
     qDebug("LibRaw progress: %s pass %i of %i", libraw_strprogress(p), iteration, expected);
 
+    // post a little change in progress indicator to show raw processor activity.
+    setProgress(progressValue()+0.01);
+
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
@@ -89,6 +93,18 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
 
     // Return 0 to continue processing...
     return 0;
+}
+
+
+void KDcrawPriv::setProgress(double value)
+{
+    m_progress = value;
+    m_parent->setWaitingDataProgress(m_progress);
+}
+
+double KDcrawPriv::progressValue()
+{
+    return m_progress;
 }
 
 void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
@@ -128,7 +144,7 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
             identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
     }
 
-    // NOTE: since dcraw->c 8.77, this information has disapear...
+    // NOTE: since dcraw.c 8.77, this information has disapear...
     identify.hasSecondaryPixel = false;
 }
 
