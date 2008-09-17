@@ -18,7 +18,6 @@ The library documentation is available on header files.
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 
 
-
 -- DEPENDENCIES -------------------------------------------------------
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
@@ -27,3 +26,9 @@ libqt      >= 3.3.x                        http://www.trolltech.com
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 liblcms    >= 1.14.x (used by libraw)      http://www.littlecms.com
 libjpeg    >= 6b     (used by libraw)      http://www.ijg.org
+
+Optional: 
+
+"--enable-openmp" .configure script option set on parallelized LibRaw code to 
+speed-up RAW demosaicing operations.
+libgomp    >= 4.3.x  (used by libraw)      http://gcc.gnu.org/projects/gomp
