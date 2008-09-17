@@ -52,7 +52,7 @@
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")
 #define snprintf _snprintf
-#define strcasecmp stricmp
+#define strcasecmp _stricmp
 #define strncasecmp strnicmp
 typedef __int64 INT64;
 typedef unsigned __int64 UINT64;
