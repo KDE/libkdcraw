@@ -1,4 +1,4 @@
-DCRAW program interface for KDE
+LibRaw C++ interface for KDE
 
 This library is a part of Kipi-Plugins project (http://www.kipi-plugins.org)
 
@@ -10,8 +10,10 @@ See AUTHORS file for details.
 
 -- ABOUT -------------------------------------------------------------
 
-Libkdcraw is a C++ interface around dcraw binary program used to decode RAW
-picture files.  The library documentation is available on header files.
+Libkdcraw is a C++ interface around LibRaw library used to decode RAW
+picture files.
+
+The library documentation is available on header files.
 
 This library is used by kipi-plugins, digiKam and others kipi host programs.
 
@@ -23,5 +25,5 @@ AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
 libqt      >= 3.3.x                        http://www.trolltech.com
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
-liblcms    >= 1.14.x (used by dcraw.c)     http://www.littlecms.com
-libjpeg    >= 6b     (used by dcraw.c)     http://www.ijg.org
+liblcms    >= 1.14.x (used by libraw)      http://www.littlecms.com
+libjpeg    >= 6b     (used by libraw)      http://www.ijg.org

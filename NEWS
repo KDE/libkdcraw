@@ -1,3 +1,7 @@
+0.1.6
+------------------------------------------------------------------------
+Ported to LibRaw Api. Removed dcraw.c and DcrawBinary class.
+
 0.1.5
 ------------------------------------------------------------------------
 - API changed: Add white point settings support (dcraw -S option)
