@@ -1,5 +1,6 @@
 0.4.0 - Released with KDE 4.2.0
 Ported to LibRaw Api. Removed dcraw.c and DcrawBinary class.
+Use kDebug(51002) instead qDebug().
 
 0.3.0 - Released with KDE 4.1.2
 ------------------------------------------------------------------------
