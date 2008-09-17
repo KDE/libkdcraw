@@ -7,22 +7,23 @@ FOREACH(_curentfile ${libraw_LIB_SRCS})
     SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w )
 ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
 
+# add a small macro so that this is a bit cleaner
+macro(libkdcraw_build_test)
+    SET(_target ${ARGV0})
+    SET(${_target}_SRCS ../libraw/samples/${_target}.cpp ${libraw_LIB_SRCS})
+    KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
+    TARGET_LINK_LIBRARIES(${_target} ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
+    SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
+    IF(WIN32)
+        TARGET_LINK_LIBRARIES(${_target} ws2_32)
+    ENDIF(WIN32)
+endmacro(libkdcraw_build_test)
+
 SET(raw2png_SRCS raw2png.cpp)
 KDE4_ADD_EXECUTABLE(raw2png NOGUI ${raw2png_SRCS})
 TARGET_LINK_LIBRARIES(raw2png kdcraw)
 
-SET(identify_SRCS ../libraw/samples/identify.cpp ${libraw_LIB_SRCS})
-KDE4_ADD_EXECUTABLE(identify NOGUI ${identify_SRCS})
-TARGET_LINK_LIBRARIES(identify ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
-
-SET(simple_dcraw_SRCS ../libraw/samples/simple_dcraw.cpp ${libraw_LIB_SRCS})
-KDE4_ADD_EXECUTABLE(simple_dcraw NOGUI ${simple_dcraw_SRCS})
-TARGET_LINK_LIBRARIES(simple_dcraw ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
-
-SET(mem_image_SRCS ../libraw/samples/mem_image.cpp ${libraw_LIB_SRCS})
-KDE4_ADD_EXECUTABLE(mem_image NOGUI ${simple_dcraw_SRCS})
-TARGET_LINK_LIBRARIES(mem_image ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
-
-SET(dcraw_emu_SRCS ../libraw/samples/dcraw_emu.cpp ${libraw_LIB_SRCS})
-KDE4_ADD_EXECUTABLE(dcraw_emu NOGUI ${simple_dcraw_SRCS})
-TARGET_LINK_LIBRARIES(dcraw_emu ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
+libkdcraw_build_test( identify )
+libkdcraw_build_test( simple_dcraw )
+libkdcraw_build_test( mem_image )
+libkdcraw_build_test( dcraw_emu )
