@@ -50,7 +50,7 @@ IF( NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF( NOT WIN32 )
 
-# Flage to compile Little CMS code from LibRaw
+# Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
 
 # Flag to debug LibRaw
