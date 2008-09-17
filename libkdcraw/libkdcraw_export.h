@@ -24,7 +24,7 @@
 #include <kdemacros.h>
 
 #ifndef LIBKDCRAW_EXPORT
-# if defined(MAKE_KDCRAW_LIB)
+# if defined(LIBRAW_BUILDLIB)
    /* We are building this library */ 
 #  define LIBKDCRAW_EXPORT KDE_EXPORT
 # else

@@ -13,13 +13,13 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     rnuminput.cpp
                     ${libraw_LIB_SRCS}
    )
-
+   
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdcraw ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY})
 
 SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION}
-                                        COMPILE_FLAGS -DLIBRAW_BUILDLIB)
+                                        DEFINE_SYMBOL LIBRAW_BUILDLIB)
 
 INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 
