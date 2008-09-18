@@ -315,8 +315,19 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawI
     }
     d->setProgress(0.7);
 
-    rawData.resize((int)(raw.imgdata.sizes.iheight * raw.imgdata.sizes.iwidth * sizeof(raw.imgdata.image)));
-    memcpy(rawData.data(), (const char*)raw.imgdata.image, rawData.size());
+    rawData = QByteArray();
+    rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
+
+    unsigned short *output = (unsigned short *)rawData.data();
+
+    for (uint row=0 ; row < raw.imgdata.sizes.iheight ; row++)
+    {
+        for (uint col=0 ; col < raw.imgdata.sizes.iwidth ; col++)
+        {
+            *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col] [raw.FC(row, col)];
+            *output++;
+        }
+    }
 
     raw.recycle();
     d->setProgress(1.0);
