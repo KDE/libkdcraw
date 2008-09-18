@@ -111,7 +111,8 @@ class DllDef LibRaw
             imgdata.params.use_fuji_rotate=1;
             imgdata.parent_class = this;
             imgdata.progress_flags = 0;
-            tls.init();
+            tls = new LibRaw_TLS;
+            tls->init();
         }
 
     
@@ -161,11 +162,12 @@ class DllDef LibRaw
             memmgr.cleanup();
             imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
             imgdata.progress_flags = 0;
-            tls.init();
+            tls->init();
        }
     ~LibRaw(void) 
         { 
             recycle(); 
+            delete tls;
         }
 
     int FC(int row,int col) { return (imgdata.idata.filters >> ((((row) << 1 & 14) + ((col) & 1)) << 1) & 3);}
@@ -239,7 +241,7 @@ class DllDef LibRaw
 
 // data
 
-    LibRaw_TLS  tls;
+    LibRaw_TLS  *tls;
     libraw_internal_data_t libraw_internal_data;
     decode      first_decode[2048], *second_decode, *free_decode;
     tiff_ifd_t  tiff_ifd[10];

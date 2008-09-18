@@ -59,7 +59,7 @@ public:
     }ph1_bits;
     struct
     {
-        uchar buf[16], vbits, padding[3];
+        uchar buf[0x4000], vbits, padding[3];
     }pana_bits;
     int make_decoder_leaf;
     struct
@@ -144,7 +144,7 @@ typedef struct
     unsigned    tiff_bps;
     unsigned    tiff_compress;
     unsigned    zero_after_ff;
-    unsigned    tile_width, tile_length;
+    unsigned    tile_width, tile_length,load_flags;
     unsigned    data_error;
 }unpacker_data_t;
 

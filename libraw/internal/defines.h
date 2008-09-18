@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Sep 16 12:31:11 2008
+   Generated from dcraw/dcraw.c at Thu Sep 18 20:21:56 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -8,7 +8,7 @@
 #line 27 "dcraw/dcraw.c"
 #define NO_JPEG
 #line 32 "dcraw/dcraw.c"
-#define VERSION "8.87"
+#define VERSION "8.88"
 
 #define _GNU_SOURCE
 #define _USE_MATH_DEFINES
