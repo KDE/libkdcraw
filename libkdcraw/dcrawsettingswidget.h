@@ -68,7 +68,10 @@ public:
 
 public:
 
-    DcrawSettingsWidget(QWidget *parent, int advSettings=COLORSPACE);
+    /**
+     * @param advSettings the default value is COLORSPACE
+     */
+    DcrawSettingsWidget(QWidget *parent, int advSettings);
     KDE_DEPRECATED DcrawSettingsWidget(QWidget *parent,
                         bool sixteenBitsOption=false,
                         bool outputColorSpaceOption=true,
