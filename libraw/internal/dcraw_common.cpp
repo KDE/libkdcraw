@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Sep 16 12:31:11 2008
+   Generated from dcraw/dcraw.c at Thu Sep 18 20:21:56 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -104,6 +104,20 @@ void CLASS read_shorts (ushort *pixel, int count)
       swab ((char*)pixel, (char*)pixel, count*2);
 }
 #line 379 "dcraw/dcraw.c"
+void CLASS canon_black (double dark[2])
+{
+  int c, diff, row, col;
+
+  if (raw_width < width+4) return;
+  FORC(2) dark[c] /= (raw_width-width-2) * height >> 1;
+  if ((diff = dark[0] - dark[1]))
+    for (row=0; row < height; row++)
+      for (col=1; col < width; col+=2)
+	BAYER(row,col) += diff;
+  dark[1] += diff;
+  black = (dark[0] + dark[1] + 1) / 2;
+}
+
 void CLASS canon_600_fixed_wb (int temp)
 {
   static const short mul[4][5] = {
@@ -303,9 +317,9 @@ void CLASS canon_a5_load_raw()
   for (row=-top_margin; row < raw_height-top_margin; row++) {
     read_shorts (dp=data, raw_width * 10 / 16);
     for (col=-left_margin; col < raw_width-left_margin; col++) {
-      if (vbits < 10)
+      if ((vbits -= 10) < 0)
 	buf = (vbits += 16, (buf << 16) + *dp++);
-      pixel = buf >> (vbits -= 10) & 0x3ff;
+      pixel = buf >> vbits & 0x3ff;
       if ((unsigned) row < height && (unsigned) col < width)
 	BAYER(row,col) = pixel;
       else if (col > 1-left_margin && col != width)
@@ -327,9 +341,9 @@ unsigned CLASS getbits (int nbits)
   static unsigned bitbuf=0;
   static int vbits=0, reset=0;
 #else
-#define bitbuf tls.getbits.bitbuf
-#define vbits  tls.getbits.vbits
-#define reset  tls.getbits.reset
+#define bitbuf tls->getbits.bitbuf
+#define vbits  tls->getbits.vbits
+#define reset  tls->getbits.reset
 #endif
   unsigned c;
 
@@ -387,7 +401,7 @@ uchar * CLASS make_decoder (const uchar *source, int level)
 {
   struct decode *cur;
 #ifndef LIBRAW_NOTHREADS
-#define t_leaf tls.make_decoder_leaf
+#define t_leaf tls->make_decoder_leaf
 #else
   static int t_leaf;
 #endif
@@ -397,7 +411,7 @@ uchar * CLASS make_decoder (const uchar *source, int level)
   cur = free_decode++;
   if (free_decode > first_decode+2048) {
 throw LIBRAW_EXCEPTION_DECODE_RAW; 
-#line 676 "dcraw/dcraw.c"
+#line 690 "dcraw/dcraw.c"
   }
   for (i=next=0; i <= t_leaf && next < 16; )
     i += source[next++];
@@ -508,6 +522,7 @@ void CLASS canon_compressed_load_raw()
   unsigned irow, icol;
   struct decode *decode, *dindex;
   int block, diffbuf[64], leaf, len, diff, carry=0, pnum=0, base[2];
+  double dark[2] = { 0,0 };
   uchar c;
 
   crw_init_tables (tiff_compress);
@@ -567,17 +582,16 @@ void CLASS canon_compressed_load_raw()
 	icol = col - left_margin;
 	if (icol < width)
 	  BAYER(irow,icol) = pixel[r*raw_width+col];
-	else
-	  black += pixel[r*raw_width+col];
+	else if (col > 1)
+	  dark[icol & 1] += pixel[r*raw_width+col];
       }
     }
   }
   free (pixel);
-  if (raw_width > width)
-    black /= (raw_width - width) * height;
+  canon_black (dark);
 }
 
-#line 867 "dcraw/dcraw.c"
+#line 881 "dcraw/dcraw.c"
 int CLASS ljpeg_start (struct jhead *jh, int info_only)
 {
   int i, tag, len;
@@ -684,6 +698,7 @@ ushort * CLASS ljpeg_row (int jrow, struct jhead *jh)
 void CLASS lossless_jpeg_load_raw()
 {
   int jwide, jrow, jcol, val, jidx, i, j, row=0, col=0;
+  double dark[2] = { 0,0 };
   struct jhead jh;
   int min=INT_MAX;
   ushort *rp;
@@ -712,15 +727,15 @@ void CLASS lossless_jpeg_load_raw()
 	if ((unsigned) (col-left_margin) < width) {
 	  BAYER(row-top_margin,col-left_margin) = val;
 	  if (min > val) min = val;
-	} else black += val;
+	} else if (col > 1)
+	  dark[(col-left_margin) & 1] += val;
       }
       if (++col >= raw_width)
 	col = (row++,0);
     }
   }
   free (jh.row);
-  if (raw_width > width)
-    black /= (raw_width - width) * height;
+  canon_black (dark);
   if (!strcasecmp(make,"KODAK"))
     black = min;
 }
@@ -934,31 +949,6 @@ color_flags.curve_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-void CLASS nikon_load_raw()
-{
-  int irow, row, col, i;
-
-  getbits(-1);
-  for (irow=0; irow < height; irow++) {
-    row = irow;
-    if (make[0] == 'O' || model[0] == 'E') {
-      row = irow * 2 % height + irow / (height/2);
-      if (row == 1 && data_offset == 0) {
-	fseek (ifp, 0, SEEK_END);
-	fseek (ifp, ftell(ifp)/2, SEEK_SET);
-	getbits(-1);
-      }
-    }
-    for (col=0; col < raw_width; col++) {
-      i = getbits(12);
-      if ((unsigned) (col-left_margin) < width)
-	BAYER(row,col-left_margin) = i;
-      if (tiff_compress > 32768 && (col % 10) == 9)
-	if (getbits(8)) derror();
-    }
-  }
-}
-
 /*
    Figure out if a NEF file is compressed.  These fancy heuristics
    are only needed for the D100, thanks to a bug in some cameras
@@ -1067,34 +1057,6 @@ void CLASS nikon_e900_load_raw()
   }
 }
 
-void CLASS nikon_e2100_load_raw()
-{
-  uchar   data[4608], *dp;
-  ushort pixel[3072], *pix;
-  int row, col;
-
-  for (row=0; row <= height; row+=2) {
-    if (row == height) {
-      fseek (ifp, 0, SEEK_END);
-      fseek (ifp, ftell(ifp)/2, SEEK_SET);
-      row = 1;
-    }
-    fread (data, 1, width*3/2, ifp);
-    for (dp=data, pix=pixel; pix < pixel+width; dp+=12, pix+=8) {
-      pix[0] = (dp[2] >> 4) + (dp[ 3] << 4);
-      pix[1] = (dp[2] << 8) +  dp[ 1];
-      pix[2] = (dp[7] >> 4) + (dp[ 0] << 4);
-      pix[3] = (dp[7] << 8) +  dp[ 6];
-      pix[4] = (dp[4] >> 4) + (dp[ 5] << 4);
-      pix[5] = (dp[4] << 8) +  dp[11];
-      pix[6] = (dp[9] >> 4) + (dp[10] << 4);
-      pix[7] = (dp[9] << 8) +  dp[ 8];
-    }
-    for (col=0; col < width; col++)
-      BAYER(row,col) = (pixel[col] & 0xfff);
-  }
-}
-
 /*
    The Fuji Super CCD is just a Bayer grid rotated 45 degrees.
  */
@@ -1123,7 +1085,7 @@ void CLASS fuji_load_raw()
   }
   free (pixel);
 }
-#line 1417 "dcraw/dcraw.c"
+#line 1379 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1402,8 +1364,8 @@ void CLASS phase_one_load_raw()
 unsigned CLASS ph1_bits (int nbits)
 {
 #ifndef LIBRAW_NOTHREADS
-#define bitbuf tls.ph1_bits.bitbuf
-#define vbits  tls.ph1_bits.vbits    
+#define bitbuf tls->ph1_bits.bitbuf
+#define vbits  tls->ph1_bits.vbits    
 #else
   static UINT64 bitbuf=0;
   static int vbits=0;
@@ -1411,11 +1373,10 @@ unsigned CLASS ph1_bits (int nbits)
   if (nbits == -1)
     return bitbuf = vbits = 0;
   if (nbits == 0) return 0;
-  if (vbits < nbits) {
+  if ((vbits -= nbits) < 0) {
     bitbuf = bitbuf << 32 | get4();
     vbits += 32;
   }
-  vbits -= nbits;
   return bitbuf << (64-nbits-vbits) >> (64-nbits);
 #ifndef LIBRAW_NOTHREADS
 #undef bitbuf
@@ -1532,7 +1493,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 1829 "dcraw/dcraw.c"
+#line 1790 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -1579,19 +1540,40 @@ void CLASS imacon_full_load_raw()
 
 void CLASS packed_12_load_raw()
 {
-  int row, col;
+  int vbits=0, rbits=0, irow, row, col;
+  UINT64 bitbuf=0;
 
-  if (raw_width * 2 < width * 3)
-    raw_width = raw_width * 3 / 2;	/* Convert raw_width to bytes */
-  getbits(-1);
-  for (row=0; row < height; row++) {
-    for (col=0; col < left_margin; col++)
-      getbits(12);
-    for (col=0; col < width; col++)
-      BAYER(row,col) = getbits(12);
-    for (col = (width+left_margin)*3/2; col < raw_width; col++)
-      if (getbits(8) && raw_width-col < 35 && width != 3896) derror();
+  if (raw_width * 2 >= width * 3) {	/* If raw_width is in bytes, */
+    rbits = raw_width * 8;
+    raw_width = raw_width * 2 / 3;	/* convert it to pixels and  */
+    rbits -= raw_width * 12;		/* save the remainder.       */
   }
+  order = load_flags & 1 ? 0x4949 : 0x4d4d;
+  for (irow=0; irow < height; irow++) {
+    row = irow;
+    if (load_flags & 2 &&
+	(row = irow * 2 % height + irow / (height/2)) == 1 &&
+	load_flags & 4) {
+      if (vbits=0, tiff_compress)
+	fseek (ifp, data_offset - (-width*height*3/4 & -2048), SEEK_SET);
+      else {
+	fseek (ifp, 0, SEEK_END);
+	fseek (ifp, ftell(ifp)/2, SEEK_SET);
+      }
+    }
+    for (col=0; col < raw_width; col++) {
+      if ((vbits -= 12) < 0) {
+	bitbuf = bitbuf << 32 | get4();
+	vbits += 32;
+      }
+      if ((unsigned) (col-left_margin) < width)
+	BAYER(row,col-left_margin) = bitbuf << (52-vbits) >> 52;
+      if (load_flags & 8 && (col % 10) == 9)
+	if (vbits=0, bitbuf & 255) derror();
+    }
+    vbits -= rbits;
+  }
+  if (!strcmp(make,"OLYMPUS")) black >>= 4;
 }
 
 void CLASS unpacked_load_raw()
@@ -1639,15 +1621,22 @@ void CLASS nokia_load_raw()
 unsigned CLASS pana_bits (int nbits)
 {
 #ifndef LIBRAW_NOTHREADS
-#define buf tls.pana_bits.buf
-#define vbits tls.pana_bits.vbits   
+#define buf tls->pana_bits.buf
+#define vbits tls->pana_bits.vbits   
 #else
-  static uchar buf[16], vbits=0;
+  static uchar buf[0x4000];
+  static int vbits;
 #endif
-  if (!vbits && fread (buf, 1, 16, ifp) < 16) derror();
-  vbits = (vbits - nbits) & 127;
-  return (buf[(vbits >> 3)+1] << 8 | buf[vbits >> 3])
-	>> (vbits & 7) & ~(-1 << nbits);
+  int byte;
+
+  if (!nbits) return vbits=0;
+  if (!vbits) {
+    fread (buf+load_flags, 1, 0x4000-load_flags, ifp);
+    fread (buf, 1, load_flags, ifp);
+  }
+  vbits = (vbits - nbits) & 0x1ffff;
+  byte = vbits >> 3 ^ 0x3ff0;
+  return (buf[byte] | buf[byte+1] << 8) >> (vbits & 7) & ~(-1 << nbits);
 #ifndef LIBRAW_NOTHREADS
 #undef buf
 #undef vbits
@@ -1658,22 +1647,22 @@ void CLASS panasonic_load_raw()
 {
   int row, col, i, j, sh=0, pred[2], nonz[2];
 
-  raw_width = (raw_width+13)/14*14;
+  pana_bits(0);
   for (row=0; row < height; row++)
     for (col=0; col < raw_width; col++) {
-      if ((i = col % 14) < 2)
-	nonz[i] = pred[i] = pana_bits(12);
-      else {
-	if (i % 3 == 2) sh = 4 >> (3 - pana_bits(2));
+      if ((i = col % 14) == 0)
+	pred[0] = pred[1] = nonz[0] = nonz[1] = 0;
+      if (i % 3 == 2) sh = 4 >> (3 - pana_bits(2));
+      if (nonz[i & 1]) {
 	if ((j = pana_bits(8))) {
 	  if ((pred[i & 1] -= 0x80 << sh) < 0 || sh == 4)
 	       pred[i & 1] &= ~(-1 << sh);
-	  pred[i & 1] += nonz[i & 1] ? j << sh : j;
-	  nonz[i & 1] = 1;
+	  pred[i & 1] += j << sh;
 	}
-      }
+      } else if ((nonz[i & 1] = pana_bits(8)) || i > 11)
+	pred[i & 1] = nonz[i & 1] << 4 | pana_bits(4);
       if (col < width)
-	if ((BAYER(row,col) = pred[col & 1]) >> 12) derror();
+	if ((BAYER(row,col) = pred[col & 1]) > 4098) derror();
     }
 }
 
@@ -1743,22 +1732,6 @@ void CLASS olympus_e410_load_raw()
       if ((BAYER(row,col) = pred + ((diff << 2) | low)) >> 12) derror();
     }
   }
-}
-
-void CLASS olympus_cseries_load_raw()
-{
-  int irow, row, col;
-
-  for (irow=0; irow < height; irow++) {
-    row = irow * 2 % height + irow / (height/2);
-    if (row < 2) {
-      fseek (ifp, data_offset - row*(-width*height*3/4 & -2048), SEEK_SET);
-      getbits(-1);
-    }
-    for (col=0; col < width; col++)
-      BAYER(row,col) = getbits(12);
-  }
-  black >>= 4;
 }
 
 void CLASS minolta_rd175_load_raw()
@@ -1897,9 +1870,9 @@ int CLASS radc_token (int tree)
 {
   int t;
 #ifndef LIBRAW_NOTHREADS
-#define dstart tls.radc_token.dstart
-#define dindex tls.radc_token.dindex
-#define s       tls.radc_token.s
+#define dstart tls->radc_token.dstart
+#define dindex tls->radc_token.dindex
+#define s       tls->radc_token.s
 
   static const  int source[] = {
 #else
@@ -2029,7 +2002,7 @@ METHODDEF(boolean)
 fill_input_buffer (j_decompress_ptr cinfo)
 {
 #ifndef LIBRAW_NOTHREADS
-#define jpeg_buffer tls.jpeg_buffer
+#define jpeg_buffer tls->jpeg_buffer
 #else
   static uchar jpeg_buffer[4096];
 #endif
@@ -2067,7 +2040,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
-#line 2366 "dcraw/dcraw.c"
+#line 2339 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2321,8 +2294,8 @@ void CLASS kodak_thumb_load_raw()
 void CLASS sony_decrypt (unsigned *data, int len, int start, int key)
 {
 #ifndef LIBRAW_NOTHREADS
-#define pad tls.sony_decrypt.pad
-#define p   tls.sony_decrypt.p
+#define pad tls->sony_decrypt.pad
+#define p   tls->sony_decrypt.p
 #else
   static unsigned pad[128], p;
 #endif
@@ -2575,7 +2548,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 3571 "dcraw/dcraw.c"
+#line 3544 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -2591,7 +2564,7 @@ void CLASS bad_pixels (char *fname)
 RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2); 
   if (fname)
     fp = fopen (fname, "r");
-#line 3612 "dcraw/dcraw.c"
+#line 3585 "dcraw/dcraw.c"
   if (!fp) 
       {
 imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
@@ -3882,7 +3855,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 4906 "dcraw/dcraw.c"
+#line 4879 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4041,23 +4014,23 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
       meta_offset = ftell(ifp);
     if (tag == 0x97) {
       for (i=0; i < 4; i++)
-	ver97 = (ver97 << 4) + fgetc(ifp)-'0';
+	ver97 = ver97 * 10 + fgetc(ifp)-'0';
       switch (ver97) {
-	case 0x100:
+	case 100:
 	  fseek (ifp, 68, SEEK_CUR);
 	  FORC4 cam_mul[(c >> 1) | ((c & 1) << 1)] = get2();
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
 	  break;
-	case 0x102:
+	case 102:
 	  fseek (ifp, 6, SEEK_CUR);
 	  goto get2_rggb;
-	case 0x103:
+	case 103:
 	  fseek (ifp, 16, SEEK_CUR);
 	  FORC4 cam_mul[c] = get2();
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
       }
-      if (ver97 >> 8 == 2) {
-	if (ver97 != 0x205) fseek (ifp, 280, SEEK_CUR);
+      if (ver97 >= 200) {
+	if (ver97 != 205) fseek (ifp, 280, SEEK_CUR);
 	fread (buf97, 324, 1, ifp);
       }
     }
@@ -4066,17 +4039,15 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
       FORC3 cam_mul[c] = get2();
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
     }
-    if (tag == 0xa7 && ver97 >> 8 == 2) {
+    if (tag == 0xa7 && (unsigned) (ver97-200) < 12 && !cam_mul[0]) {
       ci = xlat[0][serial & 0xff];
       cj = xlat[1][fgetc(ifp)^fgetc(ifp)^fgetc(ifp)^fgetc(ifp)];
       ck = 0x60;
       for (i=0; i < 324; i++)
 	buf97[i] ^= (cj += ci * ck++);
-      FORC4 cam_mul[c ^ (c >> 1)] =
-	sget2 (buf97 + (ver97 == 0x205 ? 14:6) + c*2);
-      if (ver97 == 0x209)
-	FORC4 cam_mul[c ^ (c >> 1) ^ 1] =
-	  sget2 (buf97 + 10 + c*2);
+      i = "66666>666;6A"[ver97-200] - '0';
+      FORC4 cam_mul[c ^ (c >> 1) ^ (i & 1)] =
+	sget2 (buf97 + (i & -2) + c*2);
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
     }
     if (tag == 0x200 && len == 3)
@@ -4367,7 +4338,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-#line 5394 "dcraw/dcraw.c"
+#line 5365 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -4440,6 +4411,10 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
       case 272:				/* Model */
 	fgets (model, 64, ifp);
 	break;
+      case 280:				/* Panasonic RW2 offset */
+	if (~tiff_ifd[ifd].offset) break;
+	load_raw = &CLASS panasonic_load_raw;
+	load_flags = 0x2008;
       case 273:				/* StripOffset */
       case 513:
 	tiff_ifd[ifd].offset = get4()+base;
@@ -4825,16 +4800,14 @@ void CLASS parse_tiff (int base)
 	switch (tiff_bps) {
 	  case  8: load_raw = &CLASS eight_bit_load_raw;	break;
 	  case 12: load_raw = &CLASS packed_12_load_raw;
-		   if (!strncmp(make,"NIKON",5))
-		     load_raw = &CLASS nikon_load_raw;
+		   if (tiff_ifd[raw].phint == 2)
+		     load_flags = 6;
 		   if (strncmp(make,"PENTAX",6)) break;
 	  case 14:
 	  case 16: load_raw = &CLASS unpacked_load_raw;		break;
 	}
 	if (tiff_ifd[raw].bytes*5 == raw_width*raw_height*8)
 	  load_raw = &CLASS olympus_e300_load_raw;
-	if (tiff_bps == 12 && tiff_ifd[raw].phint == 2)
-	  load_raw = &CLASS olympus_cseries_load_raw;
 	break;
       case 6:  case 7:  case 99:
 	load_raw = &CLASS lossless_jpeg_load_raw;		break;
@@ -4847,7 +4820,7 @@ void CLASS parse_tiff (int base)
 	raw_height += 8;
 	load_raw = &CLASS sony_arw_load_raw;			break;
       case 32769:
-	load_raw = &CLASS nikon_load_raw;			break;
+	load_flags = 8;
       case 32773:
 	load_raw = &CLASS packed_12_load_raw;			break;
       case 34713:
@@ -4943,7 +4916,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5973 "dcraw/dcraw.c"
+#line 5946 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4986,7 +4959,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 6018 "dcraw/dcraw.c"
+#line 5991 "dcraw/dcraw.c"
 }
 
 /*
@@ -5053,8 +5026,8 @@ void CLASS parse_ciff (int offset, int length)
       thumb_length = len;
     }
     if (type == 0x1818) {
-      shutter = pow (2, -int_to_float((get4(),get4())));
-      aperture = pow (2, int_to_float(get4())/2);
+      shutter = pow (2.0f, -int_to_float((get4(),get4())));
+      aperture = pow (2.0f, int_to_float(get4())/2);
     }
     if (type == 0x102a) {
       iso_speed = pow (2, (get4(),get2())/32.0 - 4) * 50;
@@ -5341,7 +5314,7 @@ void CLASS parse_riff()
     memset (&t, 0, sizeof t);
     if (sscanf (date, "%*s %s %d %d:%d:%d %d", month, &t.tm_mday,
 	&t.tm_hour, &t.tm_min, &t.tm_sec, &t.tm_year) == 6) {
-      for (i=0; i < 12 && strcmp(mon[i],month); i++);
+      for (i=0; i < 12 && strcasecmp(mon[i],month); i++);
       t.tm_mon = i;
       t.tm_year -= 1900;
       if (mktime(&t) > 0)
@@ -5419,7 +5392,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6555 "dcraw/dcraw.c"
+#line 6528 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -5512,6 +5485,8 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
 	{ 15591,-6402,-1592,-5365,13198,2168,-1300,1824,5075 } },
     { "Canon PowerShot A620", 0, 0,	/* DJC */
 	{ 15265,-6193,-1558,-4125,12116,2010,-888,1639,5220 } },
+    { "Canon PowerShot A630", 0, 0,	/* DJC */
+	{ 14201,-5308,-1757,-6087,14472,1617,-2191,3105,5348 } },
     { "Canon PowerShot A640", 0, 0,	/* DJC */
 	{ 13124,-5329,-1390,-3602,11658,1944,-1612,2863,4885 } },
     { "Canon PowerShot A650", 0, 0,	/* DJC */
@@ -5678,6 +5653,8 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
 	{ 7732,-2422,-789,-8238,15884,2498,-859,783,7330 } },
     { "NIKON D80", 0, 0,
 	{ 8629,-2410,-883,-9055,16940,2171,-1490,1363,8520 } },
+    { "NIKON D90", 0, 0xf00,		/* DJC */
+	{ 9692,-2519,-831,-5396,13053,2344,-1818,2682,7084 } },
     { "NIKON D200", 0, 0xfbc,
 	{ 8367,-2248,-763,-8758,16447,2422,-1527,1550,8053 } },
     { "NIKON D300", 0, 0,
@@ -5819,7 +5796,9 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
     { "SONY DSLR-A350", 0, 0xffc,
 	{ 6038,-1484,-578,-9146,16746,2513,-875,746,7217 } },
     { "SONY DSLR-A700", 254, 0x1ffe,
-	{ 5775,-805,-359,-8574,16295,2391,-1943,2341,7249 } }
+	{ 5775,-805,-359,-8574,16295,2391,-1943,2341,7249 } },
+    { "SONY DSLR-A900", 254, 0x1ffe,	/* DJC */
+	{ 6971,-1730,-794,-5763,13529,2236,-1500,2251,6715 } }
   };
   double cam_xyz[4][3];
   char name[130];
@@ -5974,7 +5953,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,0,2);
   load_raw = thumb_load_raw = 0;
   write_thumb = &CLASS jpeg_thumb;
   data_offset = meta_length = tiff_bps = tiff_compress = 0;
-  kodak_cbpp = zero_after_ff = dng_version = 0;
+  kodak_cbpp = zero_after_ff = dng_version = load_flags = 0;
   timestamp = shot_order = tiff_samples = black = is_foveon = 0;
   mix_green = profile_length = data_error = zero_is_bad = 0;
   pixel_aspect = is_raw = raw_color = use_gamma = 1;
@@ -6128,8 +6107,12 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   if ((is_canon = !strcmp(make,"Canon")))
     load_raw = memcmp (head+6,"HEAPCCDR",8) ?
 	&CLASS lossless_jpeg_load_raw : &CLASS canon_compressed_load_raw;
-  if (!strcmp(make,"NIKON") && !load_raw)
-    load_raw = &CLASS nikon_load_raw;
+  if (!strcmp(make,"NIKON")) {
+    if (!load_raw)
+      load_raw = &CLASS packed_12_load_raw;
+    if (model[0] == 'E')
+      load_flags |= !data_offset << 2 | 2;
+  }
   if (!strcmp(make,"CASIO")) {
     load_raw = &CLASS packed_12_load_raw;
     maximum = 0xf7f;
@@ -6143,7 +6126,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
     filters = 0;
     load_raw = &CLASS foveon_load_raw;
     simple_coeff(0);
-  } else if (is_canon && tiff_samples == 4) {
+  } else if (is_canon && tiff_bps == 15) {
     filters = 0;
     load_raw = &CLASS canon_sraw_load_raw;
   } else if (!strcmp(model,"PowerShot 600")) {
@@ -6351,6 +6334,12 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
     top_margin  = 34;
     left_margin = 90;
     goto canon_cr2;
+  } else if (is_canon && raw_width == 1208) {
+    top_margin  = 51;
+    left_margin = 62;
+    raw_width = width *= 4;
+    maximum = 0x3d93;
+    goto canon_cr2;
   } else if (is_canon && raw_width == 5108) {
     top_margin  = 13;
     left_margin = 98;
@@ -6381,9 +6370,12 @@ canon_cr2:
 	     !strncmp(model,"D50",3) ||
 	     !strncmp(model,"D70",3)) {
     width--;
+  } else if (!strcmp(model,"D90")) {
+    width -= 42;
   } else if (!strcmp(model,"D100")) {
     if (tiff_compress == 34713 && !nikon_is_compressed()) {
-      load_raw = &CLASS nikon_load_raw;
+      load_raw = &CLASS packed_12_load_raw;
+      load_flags |= 8;
       raw_width = (width += 3) + 3;
     }
   } else if (!strcmp(model,"D200")) {
@@ -6398,6 +6390,9 @@ canon_cr2:
     else width -= 8;
   } else if (!strcmp(model,"D300")) {
     width -= 32;
+  } else if (!strcmp(model,"COOLPIX P6000")) {
+    load_flags = 1;
+    filters = 0x94949494;
   } else if (fsize == 1581060) {
     height = 963;
     width = 1287;
@@ -6424,7 +6419,8 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
     width  = 2064;
     colors = 4;
     filters = 0xe1e1e1e1;
-    load_raw = &CLASS nikon_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 6;
     if (!timestamp && nikon_e995())
       strcpy (model, "E995");
     if (strcmp(model,"E995")) {
@@ -6439,7 +6435,7 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
     if (!timestamp && !nikon_e2100()) goto cp_e2500;
     height = 1206;
     width  = 1616;
-    load_raw = &CLASS nikon_e2100_load_raw;
+    load_flags = 7;
   } else if (!strcmp(model,"E2500")) {
 cp_e2500:
     strcpy (model, "E2500");
@@ -6450,7 +6446,8 @@ cp_e2500:
   } else if (fsize == 4775936) {
     height = 1542;
     width  = 2064;
-    load_raw = &CLASS nikon_e2100_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 7;
     pre_mul[0] = 1.818;
     pre_mul[2] = 1.618;
 color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST; 
@@ -6472,8 +6469,8 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
       strcpy (make, "Minolta");
       strcpy (model,"DiMAGE Z2");
     }
-    if (make[0] == 'M')
-      load_raw = &CLASS nikon_e2100_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 6 + (make[0] == 'M');
   } else if (!strcmp(model,"E4500")) {
     height = 1708;
     width  = 2288;
@@ -6488,7 +6485,8 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
     height = 2118;
     width  = 2832;
     maximum = 0xf83;
-    load_raw = &CLASS nikon_e2100_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 7;
   } else if (!strcmp(model,"FinePix S5100") ||
 	     !strcmp(model,"FinePix S5500")) {
     load_raw = &CLASS unpacked_load_raw;
@@ -6595,7 +6593,8 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
   } else if (!strcmp(model,"Optio 750Z")) {
     height = 2302;
     width  = 3072;
-    load_raw = &CLASS nikon_e2100_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 7;
   } else if (!strcmp(model,"STV680 VGA")) {
     height = 484;
     width  = 644;
@@ -6804,6 +6803,15 @@ fz18:	if (height > 2480)
 	width = 3682;
 	filters = 0x49494949;
 	break;
+      case 3724:
+	width -= 14;
+      case 3836:
+	width += 36;
+      case 4060:
+	width -= 78;
+	filters = 0x16161616;
+	maximum = 0xfff;
+	break;
       case 3880:
 	width -= 22;
 	left_margin = 6;
@@ -6824,7 +6832,8 @@ fz18:	if (height > 2480)
     height = 1718;
     width  = 2304;
     filters = 0x16161616;
-    load_raw = &CLASS nikon_e2100_load_raw;
+    load_raw = &CLASS packed_12_load_raw;
+    load_flags = 7;
   } else if (!strcmp(make,"OLYMPUS")) {
     height += height & 1;
     filters = exif_cfa;
@@ -7161,7 +7170,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8304 "dcraw/dcraw.c"
+#line 8313 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7311,7 +7320,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8456 "dcraw/dcraw.c"
+#line 8465 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7452,7 +7461,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8621 "dcraw/dcraw.c"
+#line 8630 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

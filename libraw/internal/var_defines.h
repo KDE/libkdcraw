@@ -160,5 +160,6 @@
 #define zero_after_ff   (libraw_internal_data.unpacker_data.zero_after_ff)
 #define tile_width      (libraw_internal_data.unpacker_data.tile_width)
 #define tile_length     (libraw_internal_data.unpacker_data.tile_length)
+#define load_flags      (libraw_internal_data.unpacker_data.load_flags)
 
 #endif
