@@ -112,6 +112,8 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
     identify.pixelAspectRatio = raw->imgdata.sizes.pixel_aspect;
     identify.rawColors        = raw->imgdata.idata.colors;
     identify.rawImages        = raw->imgdata.idata.raw_count;
+    memcpy(&identify.cameraColorMatrix1, &raw->imgdata.color.cmatrix, sizeof(raw->imgdata.color.cmatrix));
+    memcpy(&identify.cameraColorMatrix2, &raw->imgdata.color.rgb_cam, sizeof(raw->imgdata.color.rgb_cam));
 
     if (raw->imgdata.idata.filters) 
     {

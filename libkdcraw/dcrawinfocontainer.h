@@ -120,6 +120,10 @@ public:
     /** Camera multipliers used for White Balance adjustements */
     double    cameraMult[4];
 
+    /** Camera Color Matrix */
+    float     cameraColorMatrix1[3][4];
+    float     cameraColorMatrix2[3][4];
+
     /** The camera maker. */
     QString   make;
     /** The camera model. */
