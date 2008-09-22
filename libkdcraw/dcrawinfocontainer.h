@@ -63,6 +63,8 @@ public:
         cameraMult[3]     = 0.0;
         blackPoint        = 0;
         whitePoint        = 0;
+        topMargin         = 0;
+        bottomMargin      = 0;
 
         for (int x=0 ; x<3 ; x++)
         {
@@ -84,15 +86,17 @@ public:
              model.isEmpty()                 &&
              filterPattern.isEmpty()         &&
              DNGVersion.isEmpty()            &&
-             exposureTime == -1.0            &&
-             aperture     == -1.0            &&
-             focalLength  == -1.0            &&
+             exposureTime     == -1.0        &&
+             aperture         == -1.0        &&
+             focalLength      == -1.0        &&
              pixelAspectRatio == 1.0         &&
-             sensitivity  == -1              &&
-             rawColors    == -1              &&
-             rawImages    == -1              &&
-             blackPoint   == 0               &&
-             whitePoint   == 0               &&
+             sensitivity      == -1          &&
+             rawColors        == -1          &&
+             rawImages        == -1          &&
+             blackPoint       == 0           &&
+             whitePoint       == 0           &&
+             topMargin        == 0           &&
+             bottomMargin     == 0           &&
              !dateTime.isValid()             &&
              !imageSize.isValid()            &&
              !fullSize.isValid()             &&
@@ -129,70 +133,76 @@ public:
     };
 
     /** Always false. This value is obsolete since dcraw 8.77. */
-    bool      hasSecondaryPixel;
+    bool         hasSecondaryPixel;
     /** True if RAW file include an ICC color profile. */
-    bool      hasIccProfile;
+    bool         hasIccProfile;
     /** True is RAW file is decodable by dcraw. */
-    bool      isDecodable;
+    bool         isDecodable;
 
     /** The number of RAW colors. */
-    int       rawColors;
+    int          rawColors;
 
     /** The number of RAW images. */
-    int       rawImages;
+    int          rawImages;
 
     /** Black level from Raw histogram. */
-    unsigned  blackPoint;
+    unsigned int blackPoint;
 
     /** White level from Raw histogram. */
-    unsigned  whitePoint;
+    unsigned int whitePoint;
+
+    /** Left margin of raw image. */
+    unsigned int topMargin;
+
+    /** Bottom margin of raw image. */
+    unsigned int bottomMargin;
 
     /** The sensitivity in ISO used by camera to take the picture. */
-    long      sensitivity;
+    long         sensitivity;
 
     /** ==> 1/exposureTime = exposure time in seconds. */
-    float     exposureTime;
+    float        exposureTime;
     /** ==> Aperture value in APEX. */
-    float     aperture;
+    float        aperture;
     /** ==> Focal Length value in mm. */
-    float     focalLength;
+    float        focalLength;
     /** The pixel Aspect Ratio if != 1.0. NOTE: if == 1.0, dcraw do not show this value. */
-    float     pixelAspectRatio;
+    float        pixelAspectRatio;
 
     /** White color balance settings. */
-    double    daylightMult[3];
+    double       daylightMult[3];
     /** Camera multipliers used for White Balance adjustements */
-    double    cameraMult[4];
+    double       cameraMult[4];
 
     /** Camera Color Matrix */
-    float     cameraColorMatrix1[3][4];
-    float     cameraColorMatrix2[3][4];
+    float        cameraColorMatrix1[3][4];
+    float        cameraColorMatrix2[3][4];
 
     /** The camera maker. */
-    QString   make;
+    QString      make;
     /** The camera model. */
-    QString   model;
+    QString      model;
     /** The artist name who have picture owner. */
-    QString   owner;
+    QString      owner;
     /** The demosaising filter pattern. */
-    QString   filterPattern;
+    QString      filterPattern;
     /** The DNG version. NOTE: its only show with DNG RAW files. */
-    QString   DNGVersion;
+    QString      DNGVersion;
 
     /** Date & time when have been taken the picture. */
-    QDateTime dateTime;
+    QDateTime    dateTime;
 
     /** The image dimensions in pixels. */
-    QSize     imageSize;
+    QSize        imageSize;
 
     /** The thumb dimensions in pixels. */
-    QSize     thumbSize;
+    QSize        thumbSize;
 
     /** The full RAW image dimensions in pixels. */
-    QSize     fullSize;
+    QSize        fullSize;
 
     /** The output dimensions in pixels. */
-    QSize     outputSize;
+    QSize        outputSize;
 };
 
 } // namespace KDcrawIface
