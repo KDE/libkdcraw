@@ -23,6 +23,13 @@ libkde     >= 4.0.x                    http://www.kde.org
 liblcms    >= 1.14.x (used by libraw)  http://www.littlecms.com
 libjpeg    >= 6b     (used by libraw)  http://www.ijg.org
 
+Optional:
+
+"-DENABLE_OPENMP=yes" CMake option set on parallelized LibRaw code to
+speed-up RAW demosaicing operations.
+libgomp    >= 4.3.x  (used by libraw)  http://gcc.gnu.org/projects/gomp
+
+
 -- INSTALL ------------------------------------------------------------
 
 In order to compile, especially when QT3/Qt4 are installed at the same time, 
@@ -35,8 +42,6 @@ just use something like that:
 # make
 
 Usual CMake options :
-
--DENABLE_OPENMP=yes    : Use LibRaw parralelized codes using OpenMp to speed demosaicing operation (default=no).
 
 -DCMAKE_INSTALL_PREFIX : decide where the program will be install on your computer.
 -DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". The default is "relwithdebinfo" (-O2 -g).
