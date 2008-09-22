@@ -107,8 +107,8 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
     identify.fullSize         = QSize(raw->imgdata.sizes.raw_width, raw->imgdata.sizes.raw_height);
     identify.outputSize       = QSize(raw->imgdata.sizes.iwidth, raw->imgdata.sizes.iheight);
     identify.thumbSize        = QSize(raw->imgdata.thumbnail.twidth, raw->imgdata.thumbnail.theight);
-    identify.topMargin        = raw->imgdata.top_margin;
-    identify.leftMargin       = raw->imgdata.left_margin;
+    identify.topMargin        = raw->imgdata.sizes.top_margin;
+    identify.leftMargin       = raw->imgdata.sizes.left_margin;
     identify.hasIccProfile    = raw->imgdata.color.profile ? true : false;
     identify.isDecodable      = true;
     identify.pixelAspectRatio = raw->imgdata.sizes.pixel_aspect;

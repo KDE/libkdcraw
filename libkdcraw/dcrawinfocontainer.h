@@ -64,7 +64,7 @@ public:
         blackPoint        = 0;
         whitePoint        = 0;
         topMargin         = 0;
-        bottomMargin      = 0;
+        leftMargin        = 0;
 
         for (int x=0 ; x<3 ; x++)
         {
@@ -96,7 +96,7 @@ public:
              blackPoint       == 0           &&
              whitePoint       == 0           &&
              topMargin        == 0           &&
-             bottomMargin     == 0           &&
+             leftMargin       == 0           &&
              !dateTime.isValid()             &&
              !imageSize.isValid()            &&
              !fullSize.isValid()             &&
@@ -151,11 +151,11 @@ public:
     /** White level from Raw histogram. */
     unsigned int whitePoint;
 
-    /** Left margin of raw image. */
+    /** Top margin of raw image. */
     unsigned int topMargin;
 
-    /** Bottom margin of raw image. */
-    unsigned int bottomMargin;
+    /** Left margin of raw image. */
+    unsigned int leftMargin;
 
     /** The sensitivity in ISO used by camera to take the picture. */
     long         sensitivity;
