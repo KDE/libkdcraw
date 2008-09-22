@@ -61,6 +61,17 @@ public:
         cameraMult[1]     = 0.0;
         cameraMult[2]     = 0.0;
         cameraMult[3]     = 0.0;
+        blackPoint        = 0;
+        whitePoint        = 0;
+
+        for (int x=0 ; x<3 ; x++)
+        {
+            for (int y=0 ; y<4 ; y++)
+            {
+                cameraColorMatrix1[x][y] = 0.0;
+                cameraColorMatrix2[x][y] = 0.0;
+            }
+        }
     };
 
     /** Standard destructor */
@@ -69,22 +80,49 @@ public:
     /** return 'true' if container is empty, else 'false' */
     bool isEmpty()
     {
-        if ( make.isEmpty()          &&
-             model.isEmpty()         &&
-             filterPattern.isEmpty() &&
-             DNGVersion.isEmpty()    &&
-             exposureTime == -1.0    && 
-             aperture     == -1.0    && 
-             focalLength  == -1.0    && 
-             pixelAspectRatio == 1.0 &&
-             sensitivity  == -1      && 
-             rawColors    == -1      &&
-             rawImages    == -1      &&
-             !dateTime.isValid()     && 
-             !imageSize.isValid()    &&
-             !fullSize.isValid()     &&
-             !outputSize.isValid()   &&
-             !thumbSize.isValid() )
+        if ( make.isEmpty()                  &&
+             model.isEmpty()                 &&
+             filterPattern.isEmpty()         &&
+             DNGVersion.isEmpty()            &&
+             exposureTime == -1.0            &&
+             aperture     == -1.0            &&
+             focalLength  == -1.0            &&
+             pixelAspectRatio == 1.0         &&
+             sensitivity  == -1              &&
+             rawColors    == -1              &&
+             rawImages    == -1              &&
+             blackPoint   == 0               &&
+             whitePoint   == 0               &&
+             !dateTime.isValid()             &&
+             !imageSize.isValid()            &&
+             !fullSize.isValid()             &&
+             !outputSize.isValid()           &&
+             !thumbSize.isValid()            &&
+             cameraColorMatrix1[0][0] == 0.0 &&
+             cameraColorMatrix1[0][1] == 0.0 &&
+             cameraColorMatrix1[0][2] == 0.0 &&
+             cameraColorMatrix1[0][3] == 0.0 &&
+             cameraColorMatrix1[1][0] == 0.0 &&
+             cameraColorMatrix1[1][1] == 0.0 &&
+             cameraColorMatrix1[1][2] == 0.0 &&
+             cameraColorMatrix1[1][3] == 0.0 &&
+             cameraColorMatrix1[2][0] == 0.0 &&
+             cameraColorMatrix1[2][1] == 0.0 &&
+             cameraColorMatrix1[2][2] == 0.0 &&
+             cameraColorMatrix1[2][3] == 0.0 &&
+             cameraColorMatrix2[0][0] == 0.0 &&
+             cameraColorMatrix2[0][1] == 0.0 &&
+             cameraColorMatrix2[0][2] == 0.0 &&
+             cameraColorMatrix2[0][3] == 0.0 &&
+             cameraColorMatrix2[1][0] == 0.0 &&
+             cameraColorMatrix2[1][1] == 0.0 &&
+             cameraColorMatrix2[1][2] == 0.0 &&
+             cameraColorMatrix2[1][3] == 0.0 &&
+             cameraColorMatrix2[2][0] == 0.0 &&
+             cameraColorMatrix2[2][1] == 0.0 &&
+             cameraColorMatrix2[2][2] == 0.0 &&
+             cameraColorMatrix2[2][3] == 0.0
+           )
             return true;
         else
             return false;
@@ -102,6 +140,12 @@ public:
 
     /** The number of RAW images. */
     int       rawImages;
+
+    /** Black level from Raw histogram. */
+    unsigned  blackPoint;
+
+    /** White level from Raw histogram. */
+    unsigned  whitePoint;
 
     /** The sensitivity in ISO used by camera to take the picture. */
     long      sensitivity;
