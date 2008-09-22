@@ -1,5 +1,7 @@
 PROJECT(libkdcraw)
 
+option(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaicing operation" OFF)
+
 # =======================================================
 # Informations to update before to release this library.
 
@@ -58,6 +60,12 @@ ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
 # LibRaw use C++ exception.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
+# OpenMP support to use parallelized code.
+IF(ENABLE_OPENMP)
+    ADD_DEFINITIONS(-fopenmp)
+    SET(OPENMP_LDFLAGS -lgomp)
+ENDIF(ENABLE_OPENMP)
 
 # Under Windows, use specific flag to compile.
 IF( WIN32 )

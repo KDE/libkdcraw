@@ -36,6 +36,8 @@ just use something like that:
 
 Usual CMake options :
 
+-DENABLE_OPENMP=yes    : Use LibRaw parralelized codes using OpenMp to speed demosaicing operation (default=no).
+
 -DCMAKE_INSTALL_PREFIX : decide where the program will be install on your computer.
 -DCMAKE_BUILD_TYPE     : decide which type of build you want. You can chose between "debugfull", "debug", "profile", "relwithdebinfo" and "release". The default is "relwithdebinfo" (-O2 -g).
 
