@@ -72,6 +72,7 @@ public:
             {
                 cameraColorMatrix1[x][y] = 0.0;
                 cameraColorMatrix2[x][y] = 0.0;
+                cameraXYZMatrix[x][y]    = 0.0;
             }
         }
     };
@@ -125,7 +126,19 @@ public:
              cameraColorMatrix2[2][0] == 0.0 &&
              cameraColorMatrix2[2][1] == 0.0 &&
              cameraColorMatrix2[2][2] == 0.0 &&
-             cameraColorMatrix2[2][3] == 0.0
+             cameraColorMatrix2[2][3] == 0.0 &&
+             cameraXYZMatrix[0][0]    == 0.0 &&
+             cameraXYZMatrix[0][1]    == 0.0 &&
+             cameraXYZMatrix[0][2]    == 0.0 &&
+             cameraXYZMatrix[0][3]    == 0.0 &&
+             cameraXYZMatrix[1][0]    == 0.0 &&
+             cameraXYZMatrix[1][1]    == 0.0 &&
+             cameraXYZMatrix[1][2]    == 0.0 &&
+             cameraXYZMatrix[1][3]    == 0.0 &&
+             cameraXYZMatrix[2][0]    == 0.0 &&
+             cameraXYZMatrix[2][1]    == 0.0 &&
+             cameraXYZMatrix[2][2]    == 0.0 &&
+             cameraXYZMatrix[2][3]    == 0.0
            )
             return true;
         else
@@ -177,6 +190,7 @@ public:
     /** Camera Color Matrix */
     float        cameraColorMatrix1[3][4];
     float        cameraColorMatrix2[3][4];
+    float        cameraXYZMatrix[3][4];
 
     /** The camera maker. */
     QString      make;
