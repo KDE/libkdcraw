@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Thu Sep 18 20:21:56 2008
+   Generated from dcraw/dcraw.c at Thu Sep 25 11:44:51 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -5810,6 +5810,7 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
       if (table[i].t_black)   black   = (ushort) table[i].t_black;
       if (table[i].t_maximum) maximum = (ushort) table[i].t_maximum;
       for (j=0; j < 12; j++)
+imgdata.color.cam_xyz[0][j] =  
 	cam_xyz[0][j] = table[i].trans[j] / 10000.0;
       cam_xyz_coeff (cam_xyz);
       break;
@@ -7170,7 +7171,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8313 "dcraw/dcraw.c"
+#line 8314 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7320,7 +7321,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8465 "dcraw/dcraw.c"
+#line 8466 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7461,7 +7462,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8630 "dcraw/dcraw.c"
+#line 8631 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

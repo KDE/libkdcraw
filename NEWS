@@ -1,5 +1,6 @@
 0.1.6
 ------------------------------------------------------------------------
+Updated LibRaw to 0.6.1.
 Ported to LibRaw 0.6.0 Api. Removed dcraw.c and DcrawBinary class.
 New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
                                                             

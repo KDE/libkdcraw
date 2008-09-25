@@ -114,6 +114,9 @@ int main(int ac, char *av[])
                    csl[C.color_flags.cmatrix_state],csl[C.color_flags.pre_mul_state],
                    csl[C.color_flags.cam_mul_state]);
             putchar ('\n');
+            printf("Cam->XYZ matrix:\n");
+            for(int i=0; i< 4; i++)
+                printf("%6.4f\t%6.4f\t%6.4f\n",C.cam_xyz[i][0],C.cam_xyz[i][1],C.cam_xyz[i][2]);
         }
         else // verbose 
             printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
