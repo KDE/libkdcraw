@@ -1,7 +1,7 @@
 0.4.0 - Released with KDE 4.2.0
+Updated LibRaw to 0.6.1.
 Ported to LibRaw Api 0.6.0. Removed dcraw.c and DcrawBinary class.
 Use kDebug(51002) instead qDebug().
-Ported to LibRaw 0.6.0 Api. Removed dcraw.c and DcrawBinary class.
 New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
 
 0.3.0 - Released with KDE 4.1.2

@@ -169,6 +169,7 @@ typedef struct
     float       pre_mul[4]; // either set in identify() or calculated. Used on output
     float       cmatrix[3][4]; // camera color matrix
     float       rgb_cam[3][4]; // another way to set color matrix
+    float       cam_xyz[4][3]; // Camera to XYZ matrix (DNG coeffs)
     ushort      curve[0x4001]; // camera tone curve/ljpeg curve
     unsigned    black;
     unsigned    maximum;
