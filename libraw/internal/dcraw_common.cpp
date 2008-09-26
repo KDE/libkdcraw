@@ -372,7 +372,7 @@ void CLASS init_decoder()
 }
 
 /*
-   Construct a decode tree according to the specification in *source.
+   Construct a decode tree according the specification in *source.
    The first 16 bytes specify how many codes should be 1-bit, 2-bit
    3-bit, etc.  Bytes after that are the leaf values.
 
