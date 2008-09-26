@@ -184,6 +184,7 @@ public:
     /** Left margin of raw image. */
     unsigned int     leftMargin;
 
+    /** The raw image orientation */
     ImageOrientation orientation;
 
     /** The sensitivity in ISO used by camera to take the picture. */
