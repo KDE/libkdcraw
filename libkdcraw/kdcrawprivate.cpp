@@ -116,6 +116,7 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
     identify.rawImages        = raw->imgdata.idata.raw_count;
     identify.blackPoint       = raw->imgdata.color.black;
     identify.whitePoint       = raw->imgdata.color.maximum;
+    identify.orientation      = (DcrawInfoContainer::ImageOrientation)raw->imgdata.sizes.flip;
     memcpy(&identify.cameraColorMatrix1, &raw->imgdata.color.cmatrix, sizeof(raw->imgdata.color.cmatrix));
     memcpy(&identify.cameraColorMatrix2, &raw->imgdata.color.rgb_cam, sizeof(raw->imgdata.color.rgb_cam));
     memcpy(&identify.cameraXYZMatrix,    &raw->imgdata.color.cam_xyz, sizeof(raw->imgdata.color.cam_xyz));
