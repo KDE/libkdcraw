@@ -45,10 +45,10 @@ public:
      */
     enum ImageOrientation
     {
-        ORIENTATION_UNSPECIFIED  = 0,
-        ORIENTATION_ROT_180      = 3,
-        ORIENTATION_ROT_90_HFLIP = 5,
-        ORIENTATION_ROT_90       = 6
+        ORIENTATION_NONE  = 0,
+        ORIENTATION_180   = 3,
+        ORIENTATION_90CCW = 5,
+        ORIENTATION_90CW  = 6
     };
 
 public:
@@ -75,7 +75,7 @@ public:
         cameraMult[1]     = 0.0;
         cameraMult[2]     = 0.0;
         cameraMult[3]     = 0.0;
-        orientation       = ORIENTATION_UNSPECIFIED;
+        orientation       = ORIENTATION_NONE;
     };
 
     /** Standard destructor */
@@ -102,7 +102,7 @@ public:
              !fullSize.isValid()     &&
              !outputSize.isValid()   &&
              !thumbSize.isValid()    &&
-             orientation == ORIENTATION_UNSPECIFIED
+             orientation == ORIENTATION_NONE
            )
             return true;
         else
