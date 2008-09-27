@@ -77,7 +77,7 @@ public:
         whitePoint        = 0;
         topMargin         = 0;
         leftMargin        = 0;
-        orientation       = ORIENTATION_UNSPECIFIED;
+        orientation       = ORIENTATION_NONE;
 
         for (int x=0 ; x<3 ; x++)
         {
@@ -152,7 +152,7 @@ public:
              cameraXYZMatrix[2][1]    == 0.0 &&
              cameraXYZMatrix[2][2]    == 0.0 &&
              cameraXYZMatrix[2][3]    == 0.0 &&
-             orientation              == ORIENTATION_UNSPECIFIED
+             orientation              == ORIENTATION_NONE
            )
             return true;
         else
