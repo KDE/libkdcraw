@@ -45,10 +45,10 @@ public:
      */
     enum ImageOrientation
     {
-        ORIENTATION_UNSPECIFIED  = 0,
-        ORIENTATION_ROT_180      = 3,
-        ORIENTATION_ROT_90_HFLIP = 5,
-        ORIENTATION_ROT_90       = 6
+        ORIENTATION_NONE  = 0,
+        ORIENTATION_180   = 3,
+        ORIENTATION_90CCW = 5,
+        ORIENTATION_90CW  = 6
     };
 
 public:
