@@ -1,6 +1,6 @@
 PROJECT(libkdcraw)
 
-option(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaicing operation" OFF)
+OPTION(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaicing operation" OFF)
 
 # =======================================================
 # Informations to update before to release this library.
