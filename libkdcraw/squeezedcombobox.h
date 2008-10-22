@@ -29,8 +29,7 @@
 
 // Qt includes.
 
-#include <QComboBox>
-#include <QWidget>
+#include <QtGui/QComboBox>
 
 // Local includes.
 
@@ -131,7 +130,7 @@ public:
      */
     virtual QSize sizeHint() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotTimeOut();
     void slotUpdateToolTip(int index);
