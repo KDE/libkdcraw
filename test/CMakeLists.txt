@@ -15,7 +15,13 @@ MACRO(libkdcraw_build_test)
     ENDFOREACH(_curentfile ${${_target}_SRCS})
 
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
-    TARGET_LINK_LIBRARIES(${_target} ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY} ${OPENMP_LDFLAGS})
+    TARGET_LINK_LIBRARIES(${_target} 
+                          ${MATH_LIBRARY} 
+                          ${LCMS_LIBRARIES} 
+                          ${JPEG_LIBRARY} 
+                          ${OPENMP_LDFLAGS} 
+                          ${CMAKE_THREAD_LIBS_INIT}
+                         )
     SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
@@ -31,3 +37,8 @@ LIBKDCRAW_BUILD_TEST(simple_dcraw)
 LIBKDCRAW_BUILD_TEST(mem_image)
 LIBKDCRAW_BUILD_TEST(dcraw_emu)
 LIBKDCRAW_BUILD_TEST(dcraw_half)
+IF(WIN32)
+    LIBKDCRAW_BUILD_TEST(half_mt_win32)
+#ELSE(WIN32)
+#    LIBKDCRAW_BUILD_TEST(half_mt)
+ENDIF(WIN32)
