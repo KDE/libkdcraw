@@ -520,7 +520,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
             /* By default, decraw override his default D65 WB
                We need to keep it as a basis : if not, colors with some
                DSLR will have a high dominant of color that will lead to
-               a completly wrong WB
+               a completely wrong WB
             */
             if (rawFileIdentify(identify, filePath))
             {

@@ -70,7 +70,7 @@ public:
 
     /** White balances alternatives
         NONE:     no white balance used : dcraw reverts to standard daylight D65 WB.
-        CAMERA:   Use the camera embeded WB if available. Reverts to NONE if not.
+        CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
         AUTO:     Averages an auto WB on the entire image.
         CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
         AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
@@ -86,7 +86,7 @@ public:
 
     /** Input color profile used to decoded image 
         NOINPUTCS:     No input color profile.
-        EMBEDDED:      Use the camera profile embeded in RAW file if exist.
+        EMBEDDED:      Use the camera profile embedded in RAW file if exist.
         CUSTOMINPUTCS: Use a custom input color space profile.
     */
     enum InputColorSpace 
