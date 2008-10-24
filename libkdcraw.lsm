@@ -1,6 +1,6 @@
 Begin4
 Title: libkdcraw
-Version: 0.1.6
+Version: 0.1.7
 Entered-date: 2008-03-09
 Description: A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins.
 Keywords: kde image raw decode libraw digiKam kipi-plugins
