@@ -2,15 +2,19 @@
 KDE4_NO_ENABLE_FINAL(kdcraw)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
-# Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
-FOREACH(_curentfile ${libraw_LIB_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
-
 # add a small macro so that this is a bit cleaner
 macro(libkdcraw_build_test)
     SET(_target ${ARGV0})
-    SET(${_target}_SRCS ../libraw/samples/${_target}.cpp ${libraw_LIB_SRCS})
+    SET(${_target}_SRCS 
+        ../libraw/samples/${_target}.cpp 
+        ${libraw_LIB_SRCS}
+       )
+    
+    # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
+    FOREACH(_curentfile ${${_target}_SRCS})
+	SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
+    ENDFOREACH(_curentfile ${${_target}_SRCS})
+
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
     TARGET_LINK_LIBRARIES(${_target} ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY} ${OPENMP_LDFLAGS})
     SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
