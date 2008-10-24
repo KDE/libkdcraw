@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 # add a small macro so that this is a bit cleaner
 MACRO(libkdcraw_build_test)
-    SET(_target ${ARGV0})
+    SET(_target ${ARGV0}.cpp)
     SET(${_target}_SRCS 
         ../libraw/samples/${_target}
         ${libraw_LIB_SRCS}
@@ -26,8 +26,8 @@ SET(raw2png_SRCS raw2png.cpp)
 KDE4_ADD_EXECUTABLE(raw2png NOGUI ${raw2png_SRCS})
 TARGET_LINK_LIBRARIES(raw2png kdcraw)
 
-LIBKDCRAW_BUILD_TEST(identify.cpp)
-LIBKDCRAW_BUILD_TEST(simple_dcraw.cpp)
-LIBKDCRAW_BUILD_TEST(mem_image.cpp)
-LIBKDCRAW_BUILD_TEST(dcraw_emu.cpp)
-LIBKDCRAW_BUILD_TEST(dcraw_half.cpp)
+LIBKDCRAW_BUILD_TEST(identify)
+LIBKDCRAW_BUILD_TEST(simple_dcraw)
+LIBKDCRAW_BUILD_TEST(mem_image)
+LIBKDCRAW_BUILD_TEST(dcraw_emu)
+LIBKDCRAW_BUILD_TEST(dcraw_half)
