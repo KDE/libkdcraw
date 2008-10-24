@@ -1,12 +1,11 @@
-
 KDE4_NO_ENABLE_FINAL(kdcraw)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 # add a small macro so that this is a bit cleaner
-macro(libkdcraw_build_test)
+MACRO(libkdcraw_build_test)
     SET(_target ${ARGV0})
     SET(${_target}_SRCS 
-        ../libraw/samples/${_target}.cpp 
+        ../libraw/samples/${_target}
         ${libraw_LIB_SRCS}
        )
     
@@ -21,13 +20,14 @@ macro(libkdcraw_build_test)
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
     ENDIF(WIN32)
-endmacro(libkdcraw_build_test)
+ENDMACRO(libkdcraw_build_test)
 
 SET(raw2png_SRCS raw2png.cpp)
 KDE4_ADD_EXECUTABLE(raw2png NOGUI ${raw2png_SRCS})
 TARGET_LINK_LIBRARIES(raw2png kdcraw)
 
-libkdcraw_build_test( identify )
-libkdcraw_build_test( simple_dcraw )
-libkdcraw_build_test( mem_image )
-libkdcraw_build_test( dcraw_emu )
+LIBKDCRAW_BUILD_TEST(identify.cpp)
+LIBKDCRAW_BUILD_TEST(simple_dcraw.cpp)
+LIBKDCRAW_BUILD_TEST(mem_image.cpp)
+LIBKDCRAW_BUILD_TEST(dcraw_emu.cpp)
+LIBKDCRAW_BUILD_TEST(dcraw_half.cpp)
