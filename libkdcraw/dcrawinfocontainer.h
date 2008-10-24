@@ -56,7 +56,7 @@ public:
     /** Standard constructor */
     DcrawInfoContainer()
     {
-        sensitivity       = -1;
+        sensitivity       = -1.0;
         exposureTime      = -1.0;
         aperture          = -1.0;
         focalLength       = -1.0;
@@ -104,7 +104,7 @@ public:
              aperture         == -1.0        &&
              focalLength      == -1.0        &&
              pixelAspectRatio == 1.0         &&
-             sensitivity      == -1          &&
+             sensitivity      == -1.0        &&
              rawColors        == -1          &&
              rawImages        == -1          &&
              blackPoint       == 0           &&
@@ -188,7 +188,7 @@ public:
     ImageOrientation orientation;
 
     /** The sensitivity in ISO used by camera to take the picture. */
-    long             sensitivity;
+    float            sensitivity;
 
     /** ==> 1/exposureTime = exposure time in seconds. */
     float            exposureTime;
