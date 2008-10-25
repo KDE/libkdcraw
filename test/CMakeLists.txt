@@ -3,9 +3,9 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 # add a small macro so that this is a bit cleaner
 MACRO(libkdcraw_build_test)
-    SET(_target ${ARGV0}.cpp)
+    SET(_target ${ARGV0})
     SET(${_target}_SRCS 
-        ../libraw/samples/${_target}
+        ../libraw/samples/${_target}.cpp
         ${libraw_LIB_SRCS}
        )
     
