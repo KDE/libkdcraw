@@ -83,7 +83,7 @@ bool SqueezedComboBox::contains(const QString& text) const
     if (text.isEmpty())
         return false;
 
-    for (QMap<int, QString>::const_iterator it = d->originalItems.begin() ; it != d->originalItems.end();
+    for (QMap<int, QString>::const_iterator it = d->originalItems.constBegin() ; it != d->originalItems.constEnd();
          ++it)
     {
         if (it.value() == text)
