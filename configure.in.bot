@@ -16,10 +16,10 @@ else
 fi
 
 if test "x$USING_OPENMP" != "xyes"; then
-  echo "-- compile with OpenMP support.... NO"
+  echo "-- compile with OpenMP support.... NO (Optional)"
   all_tests=bad
 else
-  echo "-- compile with OpenMP support.... YES"
+  echo "-- compile with OpenMP support.... YES (Optional)"
 fi
 
 
