@@ -30,7 +30,7 @@ ENDMACRO(libkdcraw_build_test)
 
 SET(raw2png_SRCS raw2png.cpp)
 KDE4_ADD_EXECUTABLE(raw2png NOGUI ${raw2png_SRCS})
-TARGET_LINK_LIBRARIES(raw2png kdcraw)
+TARGET_LINK_LIBRARIES(raw2png kdcraw ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 LIBKDCRAW_BUILD_TEST(identify)
 LIBKDCRAW_BUILD_TEST(simple_dcraw)
