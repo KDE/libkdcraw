@@ -174,8 +174,8 @@ struct tiff_ifd_t
 
 
 struct jhead {
-  int bits, high, wide, clrs, sraw, psv, restart, vpred[4];
-  struct decode *huff[4];
+  int bits, high, wide, clrs, sraw, psv, restart, vpred[6];
+  struct decode *huff[6];
   ushort *row;
 };
 struct tiff_tag {
