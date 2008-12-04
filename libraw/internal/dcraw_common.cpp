@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Wed Dec  3 12:31:02 2008
+   Generated from dcraw/dcraw.c at Thu Dec  4 18:30:08 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -1678,7 +1678,7 @@ void CLASS panasonic_load_raw()
       } else if ((nonz[i & 1] = pana_bits(8)) || i > 11)
 	pred[i & 1] = nonz[i & 1] << 4 | pana_bits(4);
       if (col < width)
-	if ((BAYER(row,col) = pred[col & 1]) > 4098) derror();
+      if ((BAYER(row,col) = pred[col & 1]) > 4098) derror();
     }
 }
 
