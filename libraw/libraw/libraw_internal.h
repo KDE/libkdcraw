@@ -57,10 +57,6 @@ public:
          int vbits;
 
     }ph1_bits;
-    struct
-    {
-        uchar buf[0x4000], vbits, padding[3];
-    }pana_bits;
     int make_decoder_leaf;
     struct
     {
@@ -73,6 +69,12 @@ public:
     }sony_decrypt;
     unsigned foveon_decoder_huff[1024];
     uchar jpeg_buffer[4096];
+    struct
+    {
+        uchar buf[0x4000];
+        int vbits, padding;
+    }pana_bits;
+
     // init - should use in constructor/recycle
     void init() 
         { 
