@@ -1,18 +1,21 @@
 0.4.0 - Released with KDE 4.2.0
-Updated LibRaw to 0.6.2.
-Updated LibRaw to 0.6.1.
-Ported to LibRaw Api 0.6.0. Removed dcraw.c and DcrawBinary class.
-Use kDebug(51002) instead qDebug().
-New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
+------------------------------------------------------------------------
+- Updated LibRaw to 0.6.2.
+- New cameras: Canon G10 & 5D Mk2, Leaf AFi 7, Leica D-LUX4,              
+               Panasonic FX150 & G 1, Fujifilm IS Pro.
+- Updated LibRaw to 0.6.1.
+- New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
+- Ported to LibRaw Api 0.6.0. Removed dcraw.c and DcrawBinary class.
+- Use kDebug(51002) instead qDebug().
 
 0.3.0 - Released with KDE 4.1.2
 ------------------------------------------------------------------------
-Sync with KDE3 branch 0.1.5 API changes.
+- Sync with KDE3 branch 0.1.5 API changes.
 
 0.2.0 - Released with KDE 4.1.0
 ------------------------------------------------------------------------
-Port to CMake/KDE4/QT4
-Moved from extragear/libs to kdegraphics/libs
+- Port to CMake/KDE4/QT4
+- Moved from extragear/libs to kdegraphics/libs
 
 0.1.5
 ------------------------------------------------------------------------
@@ -50,17 +53,17 @@ Bugs fixed from B.K.O (http://bugs.kde.org):
 0.1.3
 ------------------------------------------------------------------------
 - updated dcraw to 8.81
-  new cameras: Canon G7, Fuji FinePix S9100/S9600, Olympus SP560UZ, Panasonic DMC-L10
+- New cameras: Canon G7, Fuji FinePix S9100/S9600, Olympus SP560UZ, Panasonic DMC-L10
 
-  - updated dcraw to 8.80
-    new cameras: Hasselblad H3D, Olympus E-3, Canon EOS 40D, Canon PowerShot G9,
-                 Canon EOS-1Ds Mark III, AVT F-080C, Nikon D3, Nikon D300,
-                 Nikon Coolpix S6, Panasonic DMC-FZ18, Sony DSLR-A700
+- updated dcraw to 8.80
+- new cameras: Hasselblad H3D, Olympus E-3, Canon EOS 40D, Canon PowerShot G9,
+               Canon EOS-1Ds Mark III, AVT F-080C, Nikon D3, Nikon D300,
+               Nikon Coolpix S6, Panasonic DMC-FZ18, Sony DSLR-A700
 
-                 -m number_of_passes
-                 After interpolation, clean up color artifacts by repeatedly 
-                 applying a 3x3 median filter to the R-G and B-G channels.
-  - Licence : is GPL compatible again == less wories)
+               -m number_of_passes
+               After interpolation, clean up color artifacts by repeatedly 
+               applying a 3x3 median filter to the R-G and B-G channels.
+- dcraw.c licence : is GPL compatible again == less wories)
 
 0.1.2
 ------------------------------------------------------------------------
