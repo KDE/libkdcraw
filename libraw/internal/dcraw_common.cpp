@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Thu Dec  4 18:30:08 2008
+   Generated from dcraw/dcraw.c at Thu Dec 11 18:24:22 2008
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -913,7 +913,7 @@ void CLASS nikon_compressed_load_raw()
       7,6,8,5,9,4,10,3,11,12,2,0,1,13,14 } };
   struct decode *dindex;
   ushort ver0, ver1, vpred[2][2], hpred[2], csize;
-  int i, max, step=0, huff=0, split=0, row, col, len, shl, diff;
+  int i, min, max, step=0, huff=0, split=0, row, col, len, shl, diff;
 
   fseek (ifp, meta_offset, SEEK_SET);
   ver0 = fgetc(ifp);
@@ -939,14 +939,16 @@ color_flags.curve_state = LIBRAW_COLORSTATE_LOADED;
 { 
     read_shorts (curve, max=csize);
 color_flags.curve_state = LIBRAW_COLORSTATE_LOADED; }
+  while (curve[max-2] == curve[max-1]) max--;
   init_decoder();
   make_decoder (nikon_tree[huff], 0);
   fseek (ifp, data_offset, SEEK_SET);
   getbits(-1);
-  for (row=0; row < height; row++) {
+  for (min=row=0; row < height; row++) {
     if (split && row == split) {
       init_decoder();
       make_decoder (nikon_tree[huff+1], 0);
+      max += (min = 16) << 1;
     }
     for (col=0; col < raw_width; col++) {
       for (dindex=first_decode; dindex->branch[0]; )
@@ -958,9 +960,9 @@ color_flags.curve_state = LIBRAW_COLORSTATE_LOADED; }
 	diff -= (1 << len) - !shl;
       if (col < 2) hpred[col] = vpred[row & 1][col] += diff;
       else	   hpred[col & 1] += diff;
-      if (hpred[col & 1] >= max) derror();
+      if ((ushort)(hpred[col & 1] + min) >= max) derror();
       if ((unsigned) (col-left_margin) < width)
-	BAYER(row,col-left_margin) = curve[hpred[col & 1] & 0x3fff];
+	BAYER(row,col-left_margin) = curve[LIM((short)hpred[col & 1],0,0x3fff)];
     }
   }
 }
@@ -1101,7 +1103,7 @@ void CLASS fuji_load_raw()
   }
   free (pixel);
 }
-#line 1395 "dcraw/dcraw.c"
+#line 1397 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1509,7 +1511,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 1806 "dcraw/dcraw.c"
+#line 1808 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2056,7 +2058,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
-#line 2355 "dcraw/dcraw.c"
+#line 2357 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2564,7 +2566,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 3560 "dcraw/dcraw.c"
+#line 3562 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -2580,7 +2582,7 @@ void CLASS bad_pixels (char *fname)
 RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2); 
   if (fname)
     fp = fopen (fname, "r");
-#line 3601 "dcraw/dcraw.c"
+#line 3603 "dcraw/dcraw.c"
   if (!fp) 
       {
 imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
@@ -3871,7 +3873,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 4895 "dcraw/dcraw.c"
+#line 4897 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4126,7 +4128,9 @@ get2_256:
       cam_mul[2] = get2() / 256.0;
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
     }
-    if (tag == 0x2010 && type == 13)
+    if ((tag | 0x70) == 0x2070 && type == 4)
+      fseek (ifp, get4()+base, SEEK_SET);
+    if (tag == 0x2010 && type != 7)
       load_raw = &CLASS olympus_e410_load_raw;
     if (tag == 0x2020)
       parse_thumb_note (base, 257, 258);
@@ -4355,7 +4359,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-#line 5382 "dcraw/dcraw.c"
+#line 5386 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -4654,6 +4658,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
 	break;
       case 50706:			/* DNGVersion */
 	FORC4 dng_version = (dng_version << 8) + fgetc(ifp);
+	if (!make[0]) strcpy (make, "DNG");
 	break;
       case 50710:			/* CFAPlaneColor */
 	if (len > 4) len = 4;
@@ -4934,7 +4939,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5964 "dcraw/dcraw.c"
+#line 5969 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4977,7 +4982,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 6009 "dcraw/dcraw.c"
+#line 6014 "dcraw/dcraw.c"
 }
 
 /*
@@ -5197,7 +5202,7 @@ void CLASS parse_phase_one (int base)
   fseek (ifp, base, SEEK_SET);
   order = get4() & 0xffff;
   if (get4() >> 8 != 0x526177) return;		/* "Raw" */
-  fseek (ifp, base+get4(), SEEK_SET);
+  fseek (ifp, get4()+base, SEEK_SET);
   entries = get4();
   get4();
   while (entries--) {
@@ -5418,7 +5423,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6554 "dcraw/dcraw.c"
+#line 6559 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -7246,7 +7251,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8389 "dcraw/dcraw.c"
+#line 8394 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7396,7 +7401,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8541 "dcraw/dcraw.c"
+#line 8546 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7537,7 +7542,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8706 "dcraw/dcraw.c"
+#line 8711 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
