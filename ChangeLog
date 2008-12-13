@@ -1,3 +1,338 @@
+V 0.1.7 - 2008-12-13
+----------------------------------------------------------------------------
+
+2008-12-11 21:32  cgilles
+
+    * NEWS, libraw/internal/dcraw_common.cpp,
+      libraw/internal/defines.h, libraw/internal/foveon.cpp,
+      libraw/libraw/libraw_version.h: updated to LibRaw 0.6.3
+
+2008-12-04 17:22  cgilles
+
+    * libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+      libraw/internal/foveon.cpp, libraw/libraw/libraw_internal.h,
+      libraw/libraw/libraw_version.h: libkdcraw from KDE3 branch:
+      update to official libraw 0.6.2
+
+2008-12-03 20:13  cgilles
+
+    * NEWS, libraw/internal/dcraw_common.cpp,
+      libraw/internal/defines.h, libraw/internal/foveon.cpp,
+      libraw/libraw/libraw_internal.h, libraw/src/libraw_cxx.cpp:
+      libkdcraw from KDE3 branch : updated internal Libraw to
+      0.6.2-beta1
+      New camera supported: Canon G10 & 5D Mk2, Leaf AFi 7, Leica
+      D-LUX4, Panasonic FX150 & G 1, Fujifilm IS Pro.
+      Binary compatibility is preserved.
+      CCMAIL: digikam-devel@kde.org
+      CCMAIL: kde-imaging@kde.org
+
+2008-11-15 09:39  cgilles
+
+    * configure.in.bot: this is optional. it's a warning
+
+2008-10-24 14:54  cgilles
+
+    * NEWS, configure.in.in, libkdcraw.lsm, libkdcraw.pc.in,
+      libkdcraw/dcrawinfocontainer.h, libkdcraw/version.h: bump release
+      id
+
+V 0.1.6 - 2008-10-06
+----------------------------------------------------------------------------
+
+2008-10-06 10:48  cgilles
+
+    * libkdcraw/rawfiles.h: backport from trunk
+
+2008-09-27 15:08  cgilles
+
+    * libkdcraw/dcrawinfocontainer.h: sync with trunk
+
+2008-09-26 09:06  cgilles
+
+    * libraw/libraw/libraw_version.h: fix version
+
+2008-09-26 09:05  cgilles
+
+    * libkdcraw/dcrawinfocontainer.h, libkdcraw/kdcrawprivate.cpp: sync
+      with trunk : orientation flag + W/B points
+
+2008-09-25 11:04  cgilles
+
+    * NEWS, libraw/internal/dcraw_common.cpp,
+      libraw/internal/defines.h, libraw/internal/foveon.cpp,
+      libraw/libraw/libraw_types.h, libraw/samples/identify.cpp: update
+      LibRaw to 0.6.1
+
+2008-09-22 12:00  cgilles
+
+    * configure.in.in: obsolete set
+
+2008-09-18 20:35  cgilles
+
+    * libkdcraw/kdcraw.cpp: backport from trunk
+
+2008-09-18 19:50  cgilles
+
+    * libkdcraw/dcrawsettingswidget.h: backport from trunk
+
+2008-09-18 19:01  cgilles
+
+    * NEWS: update
+
+2008-09-18 19:00  cgilles
+
+    * libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+      libraw/internal/foveon.cpp,
+      libraw/internal/libraw_internal_funcs.h,
+      libraw/internal/var_defines.h, libraw/libraw/libraw.h,
+      libraw/libraw/libraw_internal.h, libraw/libraw/libraw_version.h,
+      libraw/src/libraw_cxx.cpp: update libraw to 0.6.0 release.
+      * dcraw 8.88 imported: new cameras (Canon 50D, Sony A900, Nikon
+      D90 & P6000, Panasonic LX3 FZ28)
+      * new method of black point subtraction for Canon cameras,
+      preliminary banding supression.
+      * Stack memory usage lowered (some thread data moved to dynamic
+      memory)
+      * some patches for MSVC compatibility
+      
+
+2008-09-17 11:32  cgilles
+
+    * README: update
+
+2008-09-17 10:26  cgilles
+
+    * configure.in.bot, configure.in.in: libkdcraw from KDE3 branch :
+      add a new .configure --enable-openmp option to compile libraw
+      with parallelized code to speed-up RAW Demosaicing operations.
+      You need libgomp shared library installed.
+      CCMAIL: digikam-devel@kde.org
+      CCMAIL: digikam-users@kde.org
+      CCMAIL: kde-imaging@kde.org
+      CCMAIL: holger.berger@googlemail.com
+      CCMAIL: lexa@lexa.ru
+
+2008-09-17 03:55  cgilles
+
+    * NEWS, README, libkdcraw.lsm, libkdcraw.pc.in: sunc with trunk
+
+2008-09-16 16:38  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/kdcrawprivate.cpp,
+      libkdcraw/kdcrawprivate.h: sync with trunk
+
+2008-09-16 12:41  cgilles
+
+    * libkdcraw/Makefile.am, libraw/Makefile.am, test/Makefile.am: this
+      flag is obsolete now
+
+2008-09-16 12:40  cgilles
+
+    * libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+      libraw/internal/foveon.cpp, libraw/libraw/libraw.h,
+      libraw/libraw/libraw_const.h, libraw/libraw/libraw_internal.h,
+      libraw/libraw/libraw_types.h, libraw/libraw/libraw_version.h,
+      libraw/samples/simple_dcraw.cpp: sync with trunk
+
+2008-09-16 12:07  cgilles
+
+    * test/Makefile.am: do not intall these program
+
+2008-09-16 11:58  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/kdcraw.h: this method is
+      depreciated
+
+2008-09-16 10:41  cgilles
+
+    * libkdcraw/kdcrawprivate.cpp, libkdcraw/kdcrawprivate.h: fix PPM
+      construction from memory image
+
+2008-09-16 08:42  cgilles
+
+    * test/raw2png.cpp: polish
+
+2008-09-16 08:31  cgilles
+
+    * libkdcraw/Makefile.am, libraw/Makefile.am, test/Makefile.am: I
+      hate automake : we need to copy everywhere all libraw definition
+      as well to have an homogenous compilation env. I have lost 2 days
+      about this problem.
+      Thanks to CMake to resolve this problem very quickly in trunk
+
+2008-09-16 06:54  cgilles
+
+    * libkdcraw/kdcraw.cpp: more debug messages
+
+2008-09-16 06:22  cgilles
+
+    * libkdcraw/kdcraw.cpp: more debug message
+
+2008-09-16 06:06  cgilles
+
+    * test/raw2png.cpp: polish
+
+2008-09-16 04:28  cgilles
+
+    * libkdcraw/Makefile.am: polish
+
+2008-09-15 18:57  cgilles
+
+    * libkdcraw/Makefile.am, libraw/Makefile.am, test/Makefile.am: fix
+      compilation flags
+
+2008-09-15 18:55  cgilles
+
+    * libkdcraw/Makefile.am: fix flag name
+
+2008-09-15 14:20  cgilles
+
+    * test/raw2png.cpp: sync with trunk
+
+2008-09-15 14:19  cgilles
+
+    * libraw/Makefile.am: file missing
+
+2008-09-15 14:12  cgilles
+
+    * test/raw2png.cpp: add half extraction
+
+2008-09-15 13:18  cgilles
+
+    * test/raw2png.cpp: polish
+
+2008-09-15 13:04  cgilles
+
+    * test/raw2png.cpp: polish
+
+2008-09-15 11:40  cgilles
+
+    * test/Makefile.am: add more test program
+
+2008-09-15 11:21  cgilles
+
+    * test/Makefile.am: add identify program
+
+2008-09-15 10:09  cgilles
+
+    * test/raw2png.cpp: polish
+
+2008-09-15 10:04  cgilles
+
+    * libkdcraw/kdcrawprivate.cpp: worng return
+
+2008-09-15 09:49  cgilles
+
+    * Makefile.am, libkdcraw/Makefile.am: separate libraw and libkdcraw
+      compilation rules
+
+2008-09-15 09:36  cgilles
+
+    * libkdcraw/Makefile.am: polish
+
+2008-09-15 09:07  cgilles
+
+    * Makefile.am: polish
+
+2008-09-15 09:00  cgilles
+
+    * test, test/Makefile.am, test/raw2png.cpp: add test program
+
+2008-09-15 07:54  cgilles
+
+    * libkdcraw/Makefile.am: polish
+
+2008-09-14 20:57  cgilles
+
+    * libkdcraw/kdcraw.cpp: use const char
+
+2008-09-14 20:41  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/kdcrawprivate.cpp: fix qDebug
+      statements
+
+2008-09-14 19:20  cgilles
+
+    * libkdcraw/Makefile.am: now, make and compile fine
+
+2008-09-14 19:14  cgilles
+
+    * libkdcraw/Makefile.am: polish
+
+2008-09-14 18:52  cgilles
+
+    * libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+      libraw/internal/foveon.cpp, libraw/libraw/libraw_const.h,
+      libraw/libraw/libraw_types.h, libraw/libraw/libraw_version.h,
+      libraw/samples/dcraw_emu.cpp, libraw/samples/mem_image.cpp,
+      libraw/src/libraw_cxx.cpp: backport form trunk
+
+2008-09-14 17:01  cgilles
+
+    * libkdcraw/kdcraw.cpp: remove debug
+
+2008-09-14 16:57  cgilles
+
+    * libkdcraw/kdcraw.cpp, libkdcraw/kdcrawprivate.cpp: make a deep
+      copy
+
+2008-09-14 16:34  cgilles
+
+    * libkdcraw/kdcrawprivate.cpp: polish
+
+2008-09-14 16:05  cgilles
+
+    * libkdcraw/dcrawinfocontainer.h, libkdcraw/kdcrawprivate.cpp:
+      missing to backbport some settings from trunk
+
+2008-09-14 15:17  cgilles
+
+    * libkdcraw/Makefile.am: wrong file name
+
+2008-09-14 15:16  cgilles
+
+    * libkdcraw/Makefile.am: missing file to compile
+
+2008-09-14 12:30  cgilles
+
+    * Makefile.am, configure.in.in, dcraw, libkdcraw.lsm,
+      libkdcraw.pc.in, libkdcraw/Makefile.am,
+      libkdcraw/dcrawbinary.cpp, libkdcraw/dcrawbinary.h,
+      libkdcraw/dcrawsettingswidget.cpp, libkdcraw/kdcraw.cpp,
+      libkdcraw/kdcraw.h, libkdcraw/kdcrawprivate.cpp,
+      libkdcraw/kdcrawprivate.h, libkdcraw/rawdecodingsettings.h,
+      libkdcraw/version.h, libraw, libraw/internal,
+      libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+      libraw/internal/foveon.cpp,
+      libraw/internal/libraw_internal_funcs.h,
+      libraw/internal/var_defines.h, libraw/libraw,
+      libraw/libraw/libraw.h, libraw/libraw/libraw_alloc.h,
+      libraw/libraw/libraw_const.h, libraw/libraw/libraw_internal.h,
+      libraw/libraw/libraw_types.h, libraw/libraw/libraw_version.h,
+      libraw/samples, libraw/samples/dcraw_emu.cpp,
+      libraw/samples/dcraw_half.c, libraw/samples/half_mt.c,
+      libraw/samples/identify.cpp, libraw/samples/mem_image.cpp,
+      libraw/samples/simple_dcraw.cpp, libraw/src,
+      libraw/src/libraw_c_api.cpp, libraw/src/libraw_cxx.cpp: libkdcraw
+      from KDE3 branch : start new 0.1.6 version :
+      port code to libraw library (http://www.libraw.org).
+      remove dcraw.c code
+      remove KDcrawBinary class.
+      
+      TODO: adapt kipi-plugins and digiKam code to new api
+      
+      CCMAIL: digikam-devel@kde.org
+      CCMAIL: kde-imaging@kde.org
+
+2008-09-13 12:27  cgilles
+
+    * TODO: missing
+
+2008-09-13 12:19  cgilles
+
+    * ChangeLog, NEWS: preapring libkdcraw 0.1.5 release
+
 V 0.1.5 - 2008-09-13
 ----------------------------------------------------------------------------
 
