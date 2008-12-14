@@ -23,9 +23,9 @@
 #ifndef KDCRAW_VERSION_H
 #define KDCRAW_VERSION_H
 
-static const char kdcraw_version[] = "0.1.7";
+static const char kdcraw_version[] = "0.1.8";
 
-#define KDCRAW_VERSION 0x000107
+#define KDCRAW_VERSION 0x000108
 
 #endif // KDCRAW_VERSION_H
 
