@@ -822,7 +822,10 @@ int LibRaw::dcraw_thumb_writer(const char *fname)
         return errno;
 
     if(!T.thumb)
-        return LIBRAW_OUT_OF_ORDER_CALL;
+        {
+            fclose(tfp);
+            return LIBRAW_OUT_OF_ORDER_CALL;
+        }
 
     try {
         switch (T.tformat)
