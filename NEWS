@@ -1,10 +1,14 @@
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
-- Updated to LibRaw to 0.6.3 : NEF processing code changed (some overflow control added).
-- Updated to LibRaw to 0.6.2.
+- Updated to LibRaw 0.6.5 : Fixed file descriptor and buffer memory leak when thumbnail extractor is called, 
+                            but library object is not properly initialized.
+                            Fixes in Imacon files unpacking.
+                            Fixes in Hasselblad .fff files unpacking.
+- Updated to LibRaw 0.6.3 : NEF processing code changed (some overflow control added).
+- Updated to LibRaw 0.6.2.
 - New cameras: Canon G10 & 5D Mk2, Leaf AFi 7, Leica D-LUX4,              
                Panasonic FX150 & G 1, Fujifilm IS Pro.
-- Updated to LibRaw to 0.6.1.
+- Updated to LibRaw 0.6.1.
 - New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
 - Ported to LibRaw Api 0.6.0. Removed dcraw.c and DcrawBinary class.
 - Use kDebug(51002) instead qDebug().
