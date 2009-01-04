@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Thu Dec 11 18:24:22 2008
+   Generated from dcraw/dcraw.c at Sun Jan  4 16:41:18 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -1462,6 +1462,7 @@ void CLASS hasselblad_load_raw()
 
   if (!ljpeg_start (&jh, 0)) return;
   free (jh.row);
+  order = 0x4949;
   ph1_bits(-1);
   for (row=-top_margin; row < height; row++) {
     pred[0] = pred[1] = 0x8000;
@@ -1475,6 +1476,7 @@ void CLASS hasselblad_load_raw()
 	diff = ph1_bits(len[i]);
 	if ((diff & (1 << (len[i]-1))) == 0)
 	  diff -= (1 << len[i]) - 1;
+	if (diff == 65535) diff = -32768;
 	pred[i] += diff;
 	if (row >= 0 && (unsigned)(col+i) < width)
 	  BAYER(row,col+i) = pred[i];
@@ -1511,7 +1513,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 1808 "dcraw/dcraw.c"
+#line 1810 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2058,7 +2060,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
-#line 2357 "dcraw/dcraw.c"
+#line 2359 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2566,7 +2568,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 3562 "dcraw/dcraw.c"
+#line 3564 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -2582,7 +2584,7 @@ void CLASS bad_pixels (char *fname)
 RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2); 
   if (fname)
     fp = fopen (fname, "r");
-#line 3603 "dcraw/dcraw.c"
+#line 3605 "dcraw/dcraw.c"
   if (!fp) 
       {
 imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
@@ -3873,7 +3875,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 4897 "dcraw/dcraw.c"
+#line 4899 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4359,7 +4361,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-#line 5386 "dcraw/dcraw.c"
+#line 5388 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -4605,6 +4607,7 @@ color_flags.rgb_cam_state = LIBRAW_COLORSTATE_LOADED;
 	ima_len = len;
 	break;
       case 46279:
+	if (!ima_len) break;
 	fseek (ifp, 78, SEEK_CUR);
 	raw_width  = get4();
 	raw_height = get4();
@@ -4939,7 +4942,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5969 "dcraw/dcraw.c"
+#line 5972 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4982,7 +4985,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 6014 "dcraw/dcraw.c"
+#line 6017 "dcraw/dcraw.c"
 }
 
 /*
@@ -5423,7 +5426,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6559 "dcraw/dcraw.c"
+#line 6562 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -7251,7 +7254,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8394 "dcraw/dcraw.c"
+#line 8397 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7401,7 +7404,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8546 "dcraw/dcraw.c"
+#line 8549 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7542,7 +7545,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8711 "dcraw/dcraw.c"
+#line 8714 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
