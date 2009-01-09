@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: simple_dcraw.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw simple C++ API  (emulates call to "dcraw  [-D]  [-T] [-v] [-e] [-4]")

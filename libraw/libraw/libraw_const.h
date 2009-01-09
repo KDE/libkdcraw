@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_const.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw error codes
@@ -71,6 +71,18 @@ enum LibRaw_colorstate
     LIBRAW_COLORSTATE_RESERVED3 =7
 };
 
+enum LibRaw_filtering
+{
+    LIBRAW_FILTERING_DEFAULT    =0,
+    // with exception of foveon and some hasselblad cameras
+    LIBRAW_FILTERING_NOZEROES   =1,  //  no remove zeroes
+    LIBRAW_FILTERING_NOBLACKS   =2,  //  no black subtraction
+    LIBRAW_FILTERING_NONE       =3,  //  (1+2) no filtering 
+    LIBRAW_FILTERING_LIBRAWOWN  =7,  //  (4+1+2) own filtering routines
+    LIBRAW_FILTERING_AUTOMATIC  =15,  // (8+4+2+1) own filtering routines with fallback to dcraw
+    LIBRAW_FILTERING_AUTOMATIC_BIT  =8  // (8) - restore automatic mode after processing
+};
+
 
 enum LibRaw_progress
 {
@@ -121,6 +133,7 @@ enum LibRaw_errors
     LIBRAW_OUT_OF_ORDER_CALL=-4,
     LIBRAW_NO_THUMBNAIL=-5,
     LIBRAW_UNSUPPORTED_THUMBNAIL=-6,
+    LIBRAW_CANNOT_ADDMASK=-7,
     LIBRAW_UNSUFFICIENT_MEMORY=-100007,
     LIBRAW_DATA_ERROR=-100008,
     LIBRAW_IO_ERROR=-100009,

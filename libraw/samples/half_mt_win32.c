@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: simple_dcraw_c.c
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw  C API mutithreaded sample  (emulates call to "dcraw  -h [-w] [-a] [-v]")
@@ -24,9 +24,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include <pthread.h>
-
+#include <windows.h>
 #include "libraw/libraw.h"
+
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 
 #define HANDLE_ERRORS(ret) do {                                 \
     if(ret)                                                     \
@@ -45,18 +49,30 @@
 int verbose=0,use_camera_wb=0,use_auto_wb=0,tiff_mode=0;
 
 // global file queue
-pthread_mutex_t qm;
+HANDLE qmutex;
 char **queue=NULL;
 size_t qsize=0,qptr=0;
 
 char *get_next_file()
 {
     char *ret;
+	DWORD dwWaitResult;
     if(!queue) return NULL;
     if(qptr>=qsize) return NULL;
-    pthread_mutex_lock(&qm);
-    ret = queue[qptr++];
-    pthread_mutex_unlock(&qm);
+
+	dwWaitResult = WaitForSingleObject( 
+            qmutex,    // handle to mutex
+            INFINITE);  // no time-out interval
+	switch (dwWaitResult) 
+        {
+            // The thread got ownership of the mutex
+            case WAIT_OBJECT_0:     
+				ret = queue[qptr++];
+				ReleaseMutex(qmutex);
+				break;
+			case WAIT_ABANDONED: 
+                return NULL; // cannot obtain the lock
+	};
     return ret;
 }
 
@@ -93,7 +109,7 @@ int process_files(void *q)
             ret = libraw_dcraw_process(iprc);
             HANDLE_ERRORS(ret);
             
-            snprintf(outfn,1023,"%s.ppm",fn);
+            snprintf(outfn,1023,"%s.%s",fn,tiff_mode?"tif":"ppm");
 
             if(verbose) fprintf(stderr,"Writing file %s\n",outfn);
             ret = libraw_dcraw_ppm_tiff_writer(iprc,outfn);
@@ -101,17 +117,18 @@ int process_files(void *q)
             count++;
         }
     libraw_close(iprc);
-    return count;
+	printf("Processed %d files\n",count);
+    return 0;
 }
 
 void usage(const char*p)
 {
-    printf("%s: Multi-threaded LibRaw sample app. Emulates dcraw -h [-w] [-a]\n",p);
     printf(
         "Options:\n"
         "-J n  - set parrallel job coun (default 2)\n"
         "-v    - verbose\n"
         "-w    - use camera white balance\n"
+        "-T    - output TIFF instead of PPM\n"
         "-a    - average image for white balance\n");
     exit(1);
 }
@@ -131,8 +148,10 @@ int show_files(void *q)
 
 int main(int ac, char *av[])
 {
-    int i, thread_count,max_threads = 2;
-    pthread_t *threads;
+    int i,max_threads = 2;
+    HANDLE *threads;
+	DWORD   ThreadID;
+
     if(ac<2)
         usage(av[0]);
 
@@ -159,20 +178,34 @@ int main(int ac, char *av[])
             else
                 queue[qsize++] = av[i];
         }
-    pthread_mutex_init(&qm,NULL);
+    qmutex = CreateMutex(NULL,FALSE,NULL);	
     threads = calloc(max_threads,sizeof(threads[0]));
     for(i=0;i<max_threads;i++)
-        pthread_create(&threads[i],NULL,process_files,NULL);
-    for(i=0;i<max_threads;i++)
+	{
+
+		if (NULL == (threads[i] = CreateThread( 
+                     NULL,       // default security attributes
+                     0,          // default stack size
+                     (LPTHREAD_START_ROUTINE) process_files, 
+                     NULL,       // no thread function arguments
+                     0,          // default creation flags
+                     &ThreadID) // receive thread identifier
+					 )
+			)
         {
-            int *iptr;
-            if(threads[i])
-                {
-                    pthread_join(threads[i],&iptr);
-                    if(iptr)
-                        printf("Thread %d : %d files\n",i,(int)iptr);
-                }
+            printf("CreateThread error: %d\n", GetLastError());
+            return 1;
         }
-            
+	}
+        
+	WaitForMultipleObjects(max_threads, threads, TRUE, INFINITE);
+
+    // Close thread and mutex handles
+
+    for( i=0; i < max_threads; i++ )
+        CloseHandle(threads[i]);
+
+    CloseHandle(qmutex);
+           
     return 0;
 }

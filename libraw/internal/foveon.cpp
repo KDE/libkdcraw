@@ -1,11 +1,10 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Jan  4 16:41:18 2009
+   Generated from dcraw/dcraw.c at Thu Jan  8 19:26:36 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
-#line 2868 "dcraw/dcraw.c"
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_LIBRARY_BUILD
@@ -16,7 +15,6 @@
 #define SRC_USES_CURVE
 #include "internal/var_defines.h"
 #define sget4(s) sget4((uchar *)s)
-#line 2880 "dcraw/dcraw.c"
 
 /* RESTRICTED code starts here */
 
@@ -37,8 +35,12 @@ void CLASS foveon_decoder (unsigned size, unsigned code)
   }
   cur = free_decode++;
   if (free_decode > first_decode+2048) {
-throw LIBRAW_EXCEPTION_DECODE_RAW; 
-#line 2905 "dcraw/dcraw.c"
+#ifdef LIBRAW_LIBRARY_BUILD
+      throw LIBRAW_EXCEPTION_DECODE_RAW;
+#else
+    fprintf (stderr,_("%s: decoder table overflow\n"), ifname);
+    longjmp (failure, 2);
+#endif
   }
   if (code)
     for (i=0; i < size; i++)
@@ -201,7 +203,9 @@ void * CLASS foveon_camf_matrix (unsigned dim[3], const char *name)
 	mat[i] = sget4(dp + i*2) & 0xffff;
     return mat;
   }
-imgdata.process_warnings |= LIBRAW_WARN_FOVEON_NOMATRIX; 
+#ifdef LIBRAW_LIBRARY_BUILD
+  imgdata.process_warnings |= LIBRAW_WARN_FOVEON_NOMATRIX;
+#endif
 #ifdef DCRAW_VERBOSE
   fprintf (stderr,_("%s: \"%s\" matrix not found!\n"), ifname, name);
 #endif
@@ -270,12 +274,10 @@ int CLASS foveon_apply_curve (short *curve, int i)
   return i < 0 ? -curve[1-i] : curve[1+i];
 }
 
-#line 3139 "dcraw/dcraw.c"
 #ifdef image
 #undef image
 #endif
 #define image ((short(*)[4]) imgdata.image)
-#line 3146 "dcraw/dcraw.c"
 
 void CLASS foveon_interpolate()
 {
@@ -300,7 +302,9 @@ void CLASS foveon_interpolate()
   if (verbose)
     fprintf(stderr,_("Foveon interpolation...\n"));
 #endif
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,0,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,0,9);
+#endif  
 
   foveon_fixed (dscr, 4, "DarkShieldColRange");
   foveon_fixed (ppm[0][0], 27, "PostPolyMatrix");
@@ -326,13 +330,15 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,0,9);
     }
 
   if (!(cp = foveon_camf_param ("WhiteBalanceIlluminants", model2)))
+  { 
 #ifdef DCRAW_VERBOSE
-  { fprintf (stderr,_("%s: Invalid white balance \"%s\"\n"), ifname, model2);
-#else
-      {
+      fprintf (stderr,_("%s: Invalid white balance \"%s\"\n"), ifname, model2);
 #endif
-imgdata.process_warnings |= LIBRAW_WARN_FOVEON_INVALIDWB; 
-    return; }
+#ifdef LIBRAW_LIBRARY_BUILD
+      imgdata.process_warnings |= LIBRAW_WARN_FOVEON_INVALIDWB;
+#endif
+      return; 
+  }
   foveon_fixed (cam_xyz, 9, cp);
   foveon_fixed (correct, 9,
 	foveon_camf_param ("WhiteBalanceCorrections", model2));
@@ -379,7 +385,9 @@ imgdata.process_warnings |= LIBRAW_WARN_FOVEON_INVALIDWB;
   sgx = (width + dim[1]-2) / (dim[1]-1);
 
   black = (float (*)[3]) calloc (height, sizeof *black);
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,1,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,1,9);
+#endif
   for (row=0; row < height; row++) {
     for (i=0; i < 6; i++)
       ddft[0][0][i] = ddft[1][0][i] +
@@ -426,7 +434,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,1,9);
   for (row=0; row < height; row++)
     FORC3 black[row][c] += fsum[c]/2 + total[c]/(total[3]*100.0);
 
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,2,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,2,9);
+#endif
   for (row=0; row < height; row++) {
     for (i=0; i < 6; i++)
       ddft[0][0][i] = ddft[1][0][i] +
@@ -469,7 +479,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,2,9);
   free (sgrow);
   free (sgain);
 
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,3,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,3,9);
+#endif
   if ((badpix = (unsigned int *) foveon_camf_matrix (dim, "BadPixels"))) {
     for (i=0; i < dim[0]; i++) {
       col = (badpix[i] >> 8 & 0xfff) - keep[0];
@@ -521,7 +533,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,3,9);
     }
   }
 
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,4,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,4,9);
+#endif
   /* Adjust the brighter pixels for better linearity */
   min = 0xffff;
   FORC3 {
@@ -551,7 +565,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,4,9);
    the sum R+G+B is much less noisy than the individual colors.
    So smooth the hues without smoothing the total.
  */
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,5,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,5,9);
+#endif
   for (smlast=-1, row=2; row < height-2; row++) {
     while (smlast < row+2) {
       for (i=0; i < 6; i++)
@@ -598,7 +614,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,5,9);
     }
   }
 
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,6,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,6,9);
+#endif
   /* Transform the image to a different colorspace */
   for (pix=image[0]; pix < image[height*width]; pix+=4) {
     FORC3 pix[c] -= foveon_apply_curve (curve[c], pix[c]);
@@ -631,7 +649,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,6,9);
 	    (shrink[(row+1)*(width/4)+col][c]*1840 + ipix[c]*141 + 2048) >> 12;
     }
   /* From the 1/4-scale image, smooth right-to-left */
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,7,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,7,9);
+#endif
   for (row=0; row < (height & ~3); row++) {
     ipix[0] = ipix[1] = ipix[2] = 0;
     if ((row & 3) == 0)
@@ -677,7 +697,9 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,7,9);
   free (smrow[6]);
   for (i=0; i < 8; i++)
     free (curve[i]);
-RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,8,9); 
+#ifdef LIBRAW_LIBRARY_BUILD
+  RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,8,9);
+#endif
 
   /* Trim off the black border */
   active[1] -= keep[1];
@@ -692,7 +714,6 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,8,9);
 #undef image
 
 /* RESTRICTED code ends here */
-#line 6460 "dcraw/dcraw.c"
 char * CLASS foveon_gets (int offset, char *str, int len)
 {
   int i;

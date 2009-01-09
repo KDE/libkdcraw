@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: version.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Mon Sept  8, 2008 
  *
  * LibRaw C++ interface
@@ -25,9 +25,9 @@
 #define __VERSION_H
 
 #define LIBRAW_MAJOR_VERSION  0
-#define LIBRAW_MINOR_VERSION  6
-#define LIBRAW_PATCH_VERSION  5
-#define LIBRAW_VERSION_TAIL   Release
+#define LIBRAW_MINOR_VERSION  7
+#define LIBRAW_PATCH_VERSION  0
+#define LIBRAW_VERSION_TAIL   Alpha1
 
 #define _LIBRAW_VERSION_MAKE(a,b,c,d) #a"."#b"."#c"-"#d
 #define LIBRAW_VERSION_MAKE(a,b,c,d) _LIBRAW_VERSION_MAKE(a,b,c,d)

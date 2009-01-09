@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_cxx.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C++ interface (implementation)
@@ -52,6 +52,8 @@ extern "C"
                 return "No thumbnail in file";
             case    LIBRAW_UNSUPPORTED_THUMBNAIL:
                 return "Unsupported thumbnail format";
+            case LIBRAW_CANNOT_ADDMASK:
+                return "Cannot add masked pixels to resized image";
             case    LIBRAW_UNSUFFICIENT_MEMORY:
                 return "Unsufficient memory";
             case    LIBRAW_DATA_ERROR:
@@ -83,6 +85,7 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
 #define S imgdata.sizes
 #define O imgdata.params
 #define C imgdata.color
+#define M imgdata.masked_pixels
 #define T imgdata.thumbnail
 #define IO libraw_internal_data.internal_output_params
 #define ID libraw_internal_data.internal_data
@@ -110,6 +113,365 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
             } \
     }while(0)
 
+void LibRaw::derror()
+{
+    if (!libraw_internal_data.unpacker_data.data_error) 
+        {
+            if (feof(libraw_internal_data.internal_data.input))
+                {
+                    if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
+                                                              libraw_internal_data.internal_data.ifname,-1);
+                    throw LIBRAW_EXCEPTION_IO_EOF;
+                }
+            else
+                {
+                    if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
+                                                              libraw_internal_data.internal_data.ifname,
+                                                              ftell(libraw_internal_data.internal_data.input));
+                    throw LIBRAW_EXCEPTION_IO_CORRUPT;
+                }
+        }
+    libraw_internal_data.unpacker_data.data_error = 1;
+}
+LibRaw:: LibRaw(unsigned int flags)
+{
+    double aber[4] = {1,1,1,1};
+    unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
+#ifdef DCRAW_VERBOSE
+    verbose = 1;
+#else
+    verbose = 0;
+#endif
+    bzero(&imgdata,sizeof(imgdata));
+    bzero(&libraw_internal_data,sizeof(libraw_internal_data));
+    bzero(&callbacks,sizeof(callbacks));
+    callbacks.mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
+    callbacks.data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
+    memmove(&imgdata.params.aber,&aber,sizeof(aber));
+    memmove(&imgdata.params.greybox,&greybox,sizeof(greybox));
+    
+    imgdata.params.bright=1;
+    imgdata.params.use_camera_matrix=-1;
+    imgdata.params.user_flip=-1;
+    imgdata.params.user_black=-1;
+    imgdata.params.user_sat=-1;
+    imgdata.params.user_qual=-1;
+    imgdata.params.output_color=1;
+    imgdata.params.output_bps=8;
+    imgdata.params.use_fuji_rotate=1;
+    imgdata.parent_class = this;
+    imgdata.progress_flags = 0;
+    tls = new LibRaw_TLS;
+    tls->init();
+}
+
+
+void* LibRaw:: malloc(size_t t)
+{
+    void *p = memmgr.malloc(t);
+    return p;
+}
+void* LibRaw::       calloc(size_t n,size_t t)
+{
+    void *p = memmgr.calloc(n,t);
+    return p;
+}
+void  LibRaw::      free(void *p)
+{
+    memmgr.free(p);
+}
+
+
+int LibRaw:: fc (int row, int col)
+{
+    static const char filter[16][16] =
+        { { 2,1,1,3,2,3,2,0,3,2,3,0,1,2,1,0 },
+          { 0,3,0,2,0,1,3,1,0,1,1,2,0,3,3,2 },
+          { 2,3,3,2,3,1,1,3,3,1,2,1,2,0,0,3 },
+          { 0,1,0,1,0,2,0,2,2,0,3,0,1,3,2,1 },
+          { 3,1,1,2,0,1,0,2,1,3,1,3,0,1,3,0 },
+          { 2,0,0,3,3,2,3,1,2,0,2,0,3,2,2,1 },
+          { 2,3,3,1,2,1,2,1,2,1,1,2,3,0,0,1 },
+          { 1,0,0,2,3,0,0,3,0,3,0,3,2,1,2,3 },
+          { 2,3,3,1,1,2,1,0,3,2,3,0,2,3,1,3 },
+          { 1,0,2,0,3,0,3,2,0,1,1,2,0,1,0,2 },
+          { 0,1,1,3,3,2,2,1,1,3,3,0,2,1,3,2 },
+          { 2,3,2,0,0,1,3,0,2,0,1,2,3,0,1,0 },
+          { 1,3,1,2,3,2,3,2,0,2,0,1,1,0,3,0 },
+          { 0,2,0,3,1,0,0,1,1,3,3,2,3,2,2,1 },
+          { 2,1,3,2,3,1,2,1,0,3,0,2,0,2,0,2 },
+          { 0,3,1,0,0,2,0,3,2,1,3,1,1,3,1,3 } };
+    
+    if (imgdata.idata.filters != 1) return FC(row,col);
+    return filter[(row+imgdata.sizes.top_margin) & 15][(col+imgdata.sizes.left_margin) & 15];
+}
+
+void LibRaw:: recycle() 
+{
+    if(libraw_internal_data.internal_data.input) 
+        { 
+            fclose(libraw_internal_data.internal_data.input); 
+            libraw_internal_data.internal_data.input = NULL;
+        }
+#define FREE(a) do { if(a) { free(a); a = NULL;} }while(0)
+            
+    FREE(imgdata.image); 
+    FREE(imgdata.thumbnail.thumb);
+    FREE(libraw_internal_data.internal_data.meta_data);
+    FREE(libraw_internal_data.output_data.histogram);
+    FREE(libraw_internal_data.output_data.oprof);
+    FREE(imgdata.color.profile);
+    FREE(imgdata.masked_pixels.buffer);
+#undef FREE
+    bzero(&imgdata.masked_pixels,sizeof(imgdata.masked_pixels));
+    bzero(&imgdata.sizes,sizeof(imgdata.sizes));
+    memmgr.cleanup();
+    imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
+    imgdata.progress_flags = 0;
+    
+    // zero all data fields ???
+//            bzero(&imgdata,sizeof(imgdata));
+//            bzero(&libraw_internal_data,sizeof(libraw_internal_data));
+
+    tls->init();
+}
+
+const char * LibRaw::unpack_function_name()
+{
+    if(!load_raw) return "Function not set";
+
+    // sorted names order
+    if (load_raw == &LibRaw::adobe_dng_load_raw_lj)     return "adobe_dng_load_raw_lj()";
+    if (load_raw == &LibRaw::adobe_dng_load_raw_nc)     return "adobe_dng_load_raw_nc()";
+    if (load_raw == &LibRaw::canon_600_load_raw)        return "canon_600_load_raw()";
+
+    if (load_raw == &LibRaw::canon_a5_load_raw)         return "canon_a5_load_raw()";
+    if (load_raw == &LibRaw::canon_compressed_load_raw) return "canon_compressed_load_raw()";
+    if (load_raw == &LibRaw::canon_sraw_load_raw)       return "canon_sraw_load_raw()";
+
+    if (load_raw == &LibRaw::casio_qv5700_load_raw )    return "casio_qv5700_load_raw()";
+    if (load_raw == &LibRaw::eight_bit_load_raw )       return "eight_bit_load_raw()";
+    if (load_raw == &LibRaw::foveon_load_raw )          return "foveon_load_raw()";
+    if (load_raw == &LibRaw::fuji_load_raw )            return "fuji_load_raw()";
+    // 10
+    if (load_raw == &LibRaw::hasselblad_load_raw )      return "hasselblad_load_raw()";
+    if (load_raw == &LibRaw::imacon_full_load_raw )     return "imacon_full_load_raw()";
+    if (load_raw == &LibRaw::kodak_262_load_raw )       return "kodak_262_load_raw()";
+
+    if (load_raw == &LibRaw::kodak_65000_load_raw )     return "kodak_65000_load_raw()";
+    if (load_raw == &LibRaw::kodak_dc120_load_raw )     return "kodak_dc120_load_raw()";
+    if (load_raw == &LibRaw::kodak_jpeg_load_raw )      return "kodak_jpeg_load_raw()";
+
+    if (load_raw == &LibRaw::kodak_radc_load_raw )      return "kodak_radc_load_raw()";
+    if (load_raw == &LibRaw::kodak_rgb_load_raw )       return "kodak_rgb_load_raw()";
+    if (load_raw == &LibRaw::kodak_yrgb_load_raw )      return "kodak_yrgb_load_raw()";
+    if (load_raw == &LibRaw::kodak_ycbcr_load_raw )     return "kodak_ycbcr_load_raw()";
+    // 20
+    if (load_raw == &LibRaw::leaf_hdr_load_raw )        return "leaf_hdr_load_raw()";
+    if (load_raw == &LibRaw::lossless_jpeg_load_raw)    return "lossless_jpeg_load_raw()";
+    if (load_raw == &LibRaw::minolta_rd175_load_raw )   return "minolta_rd175_load_raw()";
+
+    if (load_raw == &LibRaw::nikon_compressed_load_raw) return "nikon_compressed_load_raw()";
+    if (load_raw == &LibRaw::nikon_e900_load_raw )      return "nikon_e900_load_raw()";
+    if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";
+
+    if (load_raw == &LibRaw::olympus_e300_load_raw )    return "olympus_e300_load_raw()";
+    if (load_raw == &LibRaw::olympus_e410_load_raw )    return "olympus_e410_load_raw()";
+    if (load_raw == &LibRaw::packed_12_load_raw )       return "packed_12_load_raw()";
+    if (load_raw == &LibRaw::panasonic_load_raw )       return "panasonic_load_raw()";
+    // 30
+    if (load_raw == &LibRaw::pentax_k10_load_raw )      return "pentax_k10_load_raw()";
+    if (load_raw == &LibRaw::phase_one_load_raw )       return "phase_one_load_raw()";
+    if (load_raw == &LibRaw::phase_one_load_raw_c )     return "phase_one_load_raw_c()";
+
+    if (load_raw == &LibRaw::quicktake_100_load_raw )   return "quicktake_100_load_raw()";
+    if (load_raw == &LibRaw::rollei_load_raw )          return "rollei_load_raw()";
+    if (load_raw == &LibRaw::sinar_4shot_load_raw )     return "sinar_4shot_load_raw()";
+
+    if (load_raw == &LibRaw::smal_v6_load_raw )         return "smal_v6_load_raw()";
+    if (load_raw == &LibRaw::smal_v9_load_raw )         return "smal_v9_load_raw()";
+    if (load_raw == &LibRaw::sony_load_raw )            return "sony_load_raw()";
+    if (load_raw == &LibRaw::sony_arw_load_raw )        return "sony_arw_load_raw()";
+    // 40
+    if (load_raw == &LibRaw::sony_arw2_load_raw )       return "sony_arw2_load_raw()";
+    if (load_raw == &LibRaw::unpacked_load_raw )        return "unpacked_load_raw()";
+    // 42 total
+        
+    return "Unknown unpack function";
+}
+
+
+void LibRaw:: merror (void *ptr, const char *where)
+{
+    if (ptr) return;
+    if(callbacks.mem_cb)(*callbacks.mem_cb)(callbacks.memcb_data,
+                                            libraw_internal_data.internal_data.ifname,where);
+    throw LIBRAW_EXCEPTION_ALLOC;
+}
+
+ushort * LibRaw::get_masked_pointer(int row, int col) 
+{ 
+    if(row<0 || col < 0) return NULL;
+    if(!M.buffer) return NULL; 
+    if(row < S.top_margin)
+        {
+            // top band
+            if(col < S.left_margin)
+                {
+                    return &(M.tl[row*S.left_margin+col]);
+                }
+            else if (col < S.left_margin + S.width)
+                {
+                    int icol = col - S.left_margin;
+                    return &(M.top[row*S.width+icol]);
+                }
+            else if (col < S.raw_width)
+                {
+                    int icol = col - S.left_margin - S.width;
+                    return &(M.tr[row*S.right_margin+icol]);
+                }
+            else
+                return NULL; // out of bounds
+        }
+    else if (row < S.top_margin + S.height)
+        {
+            //normal image height
+            int irow = row - S.top_margin;
+            if(col < S.left_margin)
+                {
+                    return &M.left[irow*S.left_margin + col];
+                }
+            else if (col < S.left_margin + S.width)
+                {
+                    // central image
+                    return NULL;
+                }
+            else if (col < S.raw_width)
+                {
+                    int icol = col - S.left_margin - S.width;
+                    return &M.right[irow*S.right_margin+icol];
+                }
+            else
+                return NULL; // out of bounds
+        }
+    else if (row < S.raw_height)
+        {
+            int irow = row - S.top_margin - S.height;
+            // bottom band
+            if(col < S.left_margin)
+                {
+                    return &M.bl[irow*S.left_margin+col];
+                }
+            else if (col < S.left_margin + S.width)
+                {
+                    int icol = col - S.left_margin;
+                    return &M.bottom[irow*S.width + icol];
+                }
+            else if (col < S.raw_width)
+                {
+                    int icol = col - S.left_margin - S.width;
+                    return &M.br[irow*S.right_margin + icol];
+                }
+            else
+                return NULL; // out of bounds
+        }
+    else
+        {
+            // out of bounds
+            return NULL;
+        }
+    // fallback
+    return NULL;
+}
+
+void LibRaw:: init_masked_ptrs()
+{
+    if(!M.buffer) return;
+    
+    // top band
+    M.tl = M.buffer;
+    M.top = M.tl +(S.top_margin*S.left_margin);
+    M.tr =  M.top + (S.top_margin*S.width);
+    
+    // left-right
+    M.left = M.tr + (S.top_margin * S.right_margin);
+    M.right = M.left + (S.left_margin * S.height);
+
+    // bottom band
+    M.bl = M.right + (S.right_margin * S.height);
+    M.bottom = M.bl + (S.left_margin * S.bottom_margin);
+    M.br = M.bottom + (S.width * S.bottom_margin);
+
+}
+
+int LibRaw::add_masked_borders_to_bitmap()
+{
+    CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
+    CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
+
+    if(S.width != S.iwidth || S.height!=S.iheight)
+        return LIBRAW_CANNOT_ADDMASK;
+
+    if(IO.fuji_width || P1.is_foveon || !P1.filters)
+        return LIBRAW_CANNOT_ADDMASK;
+        
+    if(!imgdata.image)
+        return LIBRAW_OUT_OF_ORDER_CALL;
+
+    if(S.width == S.raw_width && S.height == S.raw_height)
+        return LIBRAW_SUCCESS; // nothing to do or already called
+
+    ushort (*newimage)[4];
+
+    newimage = (ushort (*)[4]) calloc (S.raw_height*S.raw_width, sizeof (*newimage));
+    merror (newimage, "add_masked_borders_to_bitmap()");
+
+    int r,c;
+    // top rows
+    for (r=0; r<S.top_margin;r++)
+        for(c=0;c<S.raw_width;c++)
+            {
+                ushort *p = get_masked_pointer(r,c);
+                if(p)
+                    newimage[r*S.raw_width+c][FC(r,c)] = *p;
+            }
+    // middle rows
+    for (r=S.top_margin; r<S.top_margin+S.height;r++)
+        {
+            int row = r-S.top_margin;
+            for(c=0;c<S.left_margin;c++)
+                {
+                    ushort *p = get_masked_pointer(r,c);
+                    if(p)
+                        newimage[r*S.raw_width+c][FC(r,c)] =  *p;
+                }
+            for(c=S.left_margin; c<S.left_margin+S.iwidth;c++)
+                {
+                    int col = c - S.left_margin;
+                    newimage[r*S.raw_width+c][FC(r,c)] = imgdata.image[row*S.iwidth+col][FC(row,col)];
+                }
+            for(c=S.left_margin+S.iwidth;c<S.raw_width;c++)
+                {
+                    ushort *p = get_masked_pointer(r,c);
+                    if(p)
+                        newimage[r*S.raw_width+c][FC(r,c)] =  *p;
+                }
+        }
+    // bottom rows
+    for (r=S.top_margin+S.height; r<S.raw_height;r++)
+        for(c=0;c<S.raw_width;c++)
+            {
+                ushort *p = get_masked_pointer(r,c);
+                if(p)
+                    newimage[r*S.raw_width+c][FC(r,c)] = *p;
+            }
+    free(imgdata.image);
+    imgdata.image=newimage;
+    S.iwidth = S.width = S.raw_width;
+    S.iheight = S.height = S.raw_height;
+    return LIBRAW_SUCCESS;
+}
+
 
 int LibRaw::open_file(const char *fname)
 {
@@ -129,6 +491,29 @@ int LibRaw::open_file(const char *fname)
             O.use_camera_matrix = O.use_camera_wb;
 
         identify();
+
+        int saved_raw_width = S.raw_width;
+        int saved_width = S.width;
+        // from packed_12_load_raw
+        if ((load_raw == &LibRaw:: packed_12_load_raw) && (S.raw_width * 2 >= S.width * 3))
+            {	
+                // raw_width is in bytes!
+                S.raw_width = S.raw_width * 2 / 3;	
+            }
+        else if (S.pixel_aspect < 0.95 || S.pixel_aspect > 1.05)
+            {
+                S.width*=S.pixel_aspect;
+            }
+
+        if(S.raw_width>S.width + S.left_margin)
+            S.right_margin = S.raw_width - S.width - S.left_margin;
+
+        if(S.raw_height > S.height + S.top_margin)
+            S.bottom_margin = S.raw_height - S.height - S.top_margin;
+
+        S.raw_width = saved_raw_width;
+        S.width = saved_width;
+
         if(C.profile_length)
             {
                 if(C.profile) free(C.profile);
@@ -171,6 +556,7 @@ int LibRaw::open_file(const char *fname)
     
     SET_PROC_FLAG(LIBRAW_PROGRESS_SIZE_ADJUST);
 
+
     return LIBRAW_SUCCESS;
 }
 
@@ -197,6 +583,15 @@ int LibRaw::unpack(void)
         
         imgdata.image = (ushort (*)[4]) calloc (S.iheight*S.iwidth, sizeof (*imgdata.image));
         merror (imgdata.image, "unpack()");
+
+
+        if(S.top_margin || S.left_margin || S.right_margin || S.bottom_margin)
+            {
+                unsigned sz = S.raw_height*(S.left_margin+S.right_margin) 
+                    + S.width*(S.top_margin+S.bottom_margin);
+                imgdata.masked_pixels.buffer = (ushort*) calloc(sz, sizeof(ushort)); 
+                init_masked_ptrs();
+            }
         if (libraw_internal_data.unpacker_data.meta_length) 
             {
                 libraw_internal_data.internal_data.meta_data = 
@@ -208,10 +603,16 @@ int LibRaw::unpack(void)
         // deal with it in dcraw_document_mode_processing
         int save_document_mode = O.document_mode;
         O.document_mode = 0;
+
+        if(!own_filtering_supported() && (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT))
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC_BIT; // turn on black and zeroes filtering
         
         (this->*load_raw)();
         
         O.document_mode = save_document_mode;
+
+        if (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT)
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC; // restore automated mode
         
         SET_PROC_FLAG(LIBRAW_PROGRESS_LOAD_RAW);
         RUN_CALLBACK(LIBRAW_PROGRESS_LOAD_RAW,1,2);
@@ -229,6 +630,10 @@ int LibRaw::dcraw_document_mode_processing(void)
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
 
     try {
+
+        if(!own_filtering_supported() && (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT))
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC_BIT; // turn on black and zeroes filtering
+
         O.document_mode = 2;
         if(P1.is_foveon)
             {
@@ -243,7 +648,7 @@ int LibRaw::dcraw_document_mode_processing(void)
             }
 
         O.use_fuji_rotate = 0;
-        if (IO.zero_is_bad)
+        if (!(O.filtering_mode & LIBRAW_FILTERING_NOZEROES) && IO.zero_is_bad)
             {
                 remove_zeroes();
                 SET_PROC_FLAG(LIBRAW_PROGRESS_REMOVE_ZEROES);
@@ -258,7 +663,9 @@ int LibRaw::dcraw_document_mode_processing(void)
                 subtract (O.dark_frame);
                 SET_PROC_FLAG(LIBRAW_PROGRESS_DARK_FRAME);
             }
-        
+        if(O.filtering_mode & LIBRAW_FILTERING_NOBLACKS)
+            C.black=0;
+
         if (O.user_black >= 0) 
             C.black = O.user_black;
 
@@ -308,6 +715,10 @@ int LibRaw::dcraw_document_mode_processing(void)
         if (O.use_fuji_rotate)
             stretch();
         SET_PROC_FLAG(LIBRAW_PROGRESS_STRETCH);
+
+        if (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT)
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC; // restore automated mode
+
         return 0;
     }
     catch ( LibRaw_exceptions err) {
@@ -423,7 +834,7 @@ libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
         {
             libraw_internal_data.output_data.histogram = 
                 (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
-            merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_ppm_tiff_writer()");
+            merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_make_mem_image()");
         }
 
     unsigned ds = S.height * S.width * (O.output_bps/8) * P1.colors;
@@ -888,10 +1299,14 @@ int LibRaw::dcraw_process(void)
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
 
     try {
+
+        if(!own_filtering_supported() && (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT))
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC_BIT; // turn on black and zeroes filtering
+
         if(O.half_size) 
             O.four_color_rgb = 1;
 
-        if (IO.zero_is_bad) 
+        if (!(O.filtering_mode & LIBRAW_FILTERING_NOZEROES) && IO.zero_is_bad) 
             {
                 remove_zeroes();
                 SET_PROC_FLAG(LIBRAW_PROGRESS_REMOVE_ZEROES);
@@ -908,6 +1323,10 @@ int LibRaw::dcraw_process(void)
             }
 
         quality = 2 + !IO.fuji_width;
+
+        if(O.filtering_mode & LIBRAW_FILTERING_NOBLACKS)
+            C.black=0;
+
         if (O.user_qual >= 0) quality = O.user_qual;
         if (O.user_black >= 0) C.black = O.user_black;
         if (O.user_sat > 0) C.maximum = O.user_sat;
@@ -993,6 +1412,8 @@ int LibRaw::dcraw_process(void)
                 stretch();
                 SET_PROC_FLAG(LIBRAW_PROGRESS_STRETCH);
             }
+        if (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT)
+            O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC; // restore automated mode
         return 0;
     }
     catch ( LibRaw_exceptions err) {

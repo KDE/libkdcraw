@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: identify.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C++ demo (emulates dcraw -i [-v])
@@ -28,15 +28,22 @@
 
 #include "libraw/libraw.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
+
 int main(int ac, char *av[])
 {
-    int verbose = 0, ret;
+    int verbose = 0, ret,print_unpack=0,print_frame=0;
     LibRaw MyCoolRawProcessor;
 
     for (int i=1;i<ac;i++) {
         if(av[i][0]=='-')
             {
                 if(av[i][1]=='v' && av[i][2]==0) verbose++;
+                if(av[i][1]=='u' && av[i][2]==0) print_unpack++;
+                if(av[i][1]=='f' && av[i][2]==0) print_frame++;
                 continue;
             }
         if( (ret = MyCoolRawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
@@ -118,8 +125,22 @@ int main(int ac, char *av[])
             for(int i=0; i< 4; i++)
                 printf("%6.4f\t%6.4f\t%6.4f\n",C.cam_xyz[i][0],C.cam_xyz[i][1],C.cam_xyz[i][2]);
         }
-        else // verbose 
-            printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
+        else 
+            {
+                if(print_unpack)
+                    {
+                        char frame[32]="";
+                        if(print_frame)
+                            snprintf(frame,32,"%dx%dx%dx%d",S.left_margin,S.top_margin,S.right_margin,S.bottom_margin);
+                        printf ("%s\t%s\t%s\t%s/%s\n", 
+                                av[i],
+                                MyCoolRawProcessor.unpack_function_name(),
+                                frame,
+                                P1.make, P1.model);
+                    }
+                else
+                    printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
+            }
         MyCoolRawProcessor.recycle();
     }// endfor
     return 0;

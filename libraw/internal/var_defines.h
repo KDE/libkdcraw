@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: var_defines.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8, 2008
  *
  * LibRaw redefinitions of dcraw internal variables
@@ -44,6 +44,8 @@
 #define width           (imgdata.sizes.width)
 #define top_margin      (imgdata.sizes.top_margin)
 #define left_margin     (imgdata.sizes.left_margin)
+#define bottom_margin   (imgdata.sizes.bottom_margin)
+#define right_margin    (imgdata.sizes.right_margin)
 #define iheight         (imgdata.sizes.iheight)
 #define iwidth          (imgdata.sizes.iwidth)
 #define pixel_aspect    (imgdata.sizes.pixel_aspect)
@@ -109,6 +111,7 @@
 #define med_passes      (imgdata.params.med_passes)
 #define no_auto_bright  (imgdata.params.no_auto_bright)
 #define use_fuji_rotate (imgdata.params.use_fuji_rotate)
+#define filtering_mode (imgdata.params.filtering_mode)
 
 //rgb_constants
 #define xyz_rgb         (rgb_constants.xyz_rgb)

@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: dcraw_emu.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sun Mar 23,   2008
  *
  * LibRaw simple C++ API  (almost complete dcraw emulator)

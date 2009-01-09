@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8, 2008 
  *
  * LibRaw C++ interface
@@ -60,6 +60,9 @@ DllDef    int                 libraw_cameraCount();
 DllDef    void                libraw_set_memerror_handler(libraw_data_t*, memory_callback cb, void *datap);
 DllDef    void                libraw_set_dataerror_handler(libraw_data_t*,data_callback func,void *datap);
 DllDef    void                libraw_set_progress_handler(libraw_data_t*,progress_callback cb,void *datap);
+DllDef    int                 libraw_add_masked_borders_to_bitmap(libraw_data_t* lr);
+DllDef    const char *        libraw_unpack_function_name(libraw_data_t* lr);
+
 
     // DCRAW compatibility
 DllDef    int                 libraw_adjust_sizes_info_only(libraw_data_t*);
@@ -83,38 +86,7 @@ class DllDef LibRaw
     libraw_data_t imgdata;
     int verbose;
 
-    LibRaw(unsigned int flags = LIBRAW_OPTIONS_NONE)
-        {
-            double aber[4] = {1,1,1,1};
-            unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
-#ifdef DCRAW_VERBOSE
-            verbose = 1;
-#else
-            verbose = 0;
-#endif
-            bzero(&imgdata,sizeof(imgdata));
-            bzero(&libraw_internal_data,sizeof(libraw_internal_data));
-            bzero(&callbacks,sizeof(callbacks));
-            callbacks.mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
-            callbacks.data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
-            memmove(&imgdata.params.aber,&aber,sizeof(aber));
-            memmove(&imgdata.params.greybox,&greybox,sizeof(greybox));
-
-            imgdata.params.bright=1;
-            imgdata.params.use_camera_matrix=-1;
-            imgdata.params.user_flip=-1;
-            imgdata.params.user_black=-1;
-            imgdata.params.user_sat=-1;
-            imgdata.params.user_qual=-1;
-            imgdata.params.output_color=1;
-            imgdata.params.output_bps=8;
-            imgdata.params.use_fuji_rotate=1;
-            imgdata.parent_class = this;
-            imgdata.progress_flags = 0;
-            tls = new LibRaw_TLS;
-            tls->init();
-        }
-
+    LibRaw(unsigned int flags = LIBRAW_OPTIONS_NONE);
     
     libraw_output_params_t*     output_params_ptr() { return &imgdata.params;}
     int                         open_file(const char *fname);
@@ -143,101 +115,21 @@ class DllDef LibRaw
     libraw_processed_image_t*   dcraw_make_mem_thumb(int *errcode=NULL);  
 
     // free all internal data structures
-    void         recycle() 
-        {
-            if(libraw_internal_data.internal_data.input) 
-                { 
-                    fclose(libraw_internal_data.internal_data.input); 
-                    libraw_internal_data.internal_data.input = NULL;
-                }
-#define FREE(a) do { if(a) { free(a); a = NULL;} }while(0)
-            
-            FREE(imgdata.image); 
-            FREE(imgdata.thumbnail.thumb);
-            FREE(libraw_internal_data.internal_data.meta_data);
-            FREE(libraw_internal_data.output_data.histogram);
-            FREE(libraw_internal_data.output_data.oprof);
-            FREE(imgdata.color.profile);
-#undef FREE
-            memmgr.cleanup();
-            imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
-            imgdata.progress_flags = 0;
-            tls->init();
-       }
-    ~LibRaw(void) 
-        { 
-            recycle(); 
-            delete tls;
-        }
+    void         recycle(); 
+    ~LibRaw(void) { recycle(); delete tls; }
 
     int FC(int row,int col) { return (imgdata.idata.filters >> ((((row) << 1 & 14) + ((col) & 1)) << 1) & 3);}
-
-    int         fc (int row, int col)
-        {
-            static const char filter[16][16] =
-                { { 2,1,1,3,2,3,2,0,3,2,3,0,1,2,1,0 },
-                  { 0,3,0,2,0,1,3,1,0,1,1,2,0,3,3,2 },
-                  { 2,3,3,2,3,1,1,3,3,1,2,1,2,0,0,3 },
-                  { 0,1,0,1,0,2,0,2,2,0,3,0,1,3,2,1 },
-                  { 3,1,1,2,0,1,0,2,1,3,1,3,0,1,3,0 },
-                  { 2,0,0,3,3,2,3,1,2,0,2,0,3,2,2,1 },
-                  { 2,3,3,1,2,1,2,1,2,1,1,2,3,0,0,1 },
-                  { 1,0,0,2,3,0,0,3,0,3,0,3,2,1,2,3 },
-                  { 2,3,3,1,1,2,1,0,3,2,3,0,2,3,1,3 },
-                  { 1,0,2,0,3,0,3,2,0,1,1,2,0,1,0,2 },
-                  { 0,1,1,3,3,2,2,1,1,3,3,0,2,1,3,2 },
-                  { 2,3,2,0,0,1,3,0,2,0,1,2,3,0,1,0 },
-                  { 1,3,1,2,3,2,3,2,0,2,0,1,1,0,3,0 },
-                  { 0,2,0,3,1,0,0,1,1,3,3,2,3,2,2,1 },
-                  { 2,1,3,2,3,1,2,1,0,3,0,2,0,2,0,2 },
-                  { 0,3,1,0,0,2,0,3,2,1,3,1,1,3,1,3 } };
-            
-            if (imgdata.idata.filters != 1) return FC(row,col);
-            return filter[(row+imgdata.sizes.top_margin) & 15][(col+imgdata.sizes.left_margin) & 15];
-        }
+    int         fc (int row, int col);
+    int add_masked_borders_to_bitmap();
+    
+    const char *unpack_function_name();
 
   private:
-    void*        malloc(size_t t)
-        {
-            void *p = memmgr.malloc(t);
-            return p;
-        }
-    void*        calloc(size_t n,size_t t)
-        {
-            void *p = memmgr.calloc(n,t);
-            return p;
-        }
-    void        free(void *p)
-        {
-            memmgr.free(p);
-        }
-    void        merror (void *ptr, const char *where)
-        {
-            if (ptr) return;
-            if(callbacks.mem_cb)(*callbacks.mem_cb)(callbacks.memcb_data,
-                                                    libraw_internal_data.internal_data.ifname,where);
-            throw LIBRAW_EXCEPTION_ALLOC;
-        }
-    void        derror()
-        {
-            if (!libraw_internal_data.unpacker_data.data_error) 
-                {
-                    if (feof(libraw_internal_data.internal_data.input))
-                        {
-                            if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
-                                                                      libraw_internal_data.internal_data.ifname,-1);
-                            throw LIBRAW_EXCEPTION_IO_EOF;
-                        }
-                    else
-                        {
-                            if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
-                                                                      libraw_internal_data.internal_data.ifname,
-                                                                      ftell(libraw_internal_data.internal_data.input));
-                            throw LIBRAW_EXCEPTION_IO_CORRUPT;
-                        }
-                }
-            libraw_internal_data.unpacker_data.data_error = 1;
-        }
+    void*        malloc(size_t t);
+    void*        calloc(size_t n,size_t t);
+    void        free(void *p);
+    void        merror (void *ptr, const char *where);
+    void        derror();
 
 // data
 
@@ -260,6 +152,11 @@ class DllDef LibRaw
 
     
     // moved from implementation level to private: visibility
+    void init_masked_ptrs();
+    ushort *get_masked_pointer(int row, int col); 
+    
+    int  own_filtering_supported(){ return 0;}
+
     void        identify();
     void        write_ppm_tiff (FILE *ofp);
     void        convert_to_rgb();
