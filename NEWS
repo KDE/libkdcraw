@@ -1,6 +1,8 @@
 0.1.8
 ------------------------------------------------------------------------
 Fix PPM color preview extraction.
+Updated to libraw 0.6.6:
+ -Changes in Panasonic FZ50 processing code
 Updated to libraw 0.6.5:
  -Fixed file descriptor and buffer memory leak when thumbnail extractor is called,
   but library object is not properly initialized.
