@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Jan  4 16:41:18 2009
+   Generated from dcraw/dcraw.c at Tue Jan  6 15:32:20 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -6861,14 +6861,14 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
 	zero_is_bad = 1;
 	adobe_coeff ("Panasonic","DMC-FZ18");  break;
       case 3690:
-	height += 36;
+	height -= 2;
 	left_margin = -14;
-	filters = 0x49494949;
 	maximum = 0xf7f0;
       case 3770:
 	width = 3672;
-	if ((height -= 39) == 2760)
+	if (--height == 2798 && (height = 2760))
 	  top_margin = 15;
+	else filters = 0x49494949;
 	left_margin += 17;
 	zero_is_bad = 1;
 	adobe_coeff ("Panasonic","DMC-FZ50");  break;
