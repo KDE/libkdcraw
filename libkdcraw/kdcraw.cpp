@@ -374,6 +374,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
     QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
 
+    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make  better noise/etc filtration.
+    raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
+
     if (m_rawDecodingSettings.gamma16bit)
     {
         // 16 bits color depth auto-gamma is not implemented in dcraw.
