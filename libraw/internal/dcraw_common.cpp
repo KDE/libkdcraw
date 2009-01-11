@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Jan  6 15:32:20 2009
+   Generated from dcraw/dcraw.c at Sun Jan 11 10:58:58 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -3698,7 +3698,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,(top-2)/(TS-6)+1,(height-7)/(TS-6)+1);
 #endif
 #undef TS
 
-void CLASS median_filter ()
+void CLASS median_filter()
 {
   ushort (*pix)[4];
   int pass, c, i, j, k, med[9];
@@ -4662,6 +4662,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
       case 50706:			/* DNGVersion */
 	FORC4 dng_version = (dng_version << 8) + fgetc(ifp);
 	if (!make[0]) strcpy (make, "DNG");
+	is_raw = 1;
 	break;
       case 50710:			/* CFAPlaneColor */
 	if (len > 4) len = 4;
@@ -4942,7 +4943,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5972 "dcraw/dcraw.c"
+#line 5973 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4950,14 +4951,16 @@ void CLASS parse_external_jpeg()
   file++;
   if (!ext || strlen(ext) != 4 || ext-file != 8) return;
   jname = (char *) malloc (strlen(ifname) + 1);
-  merror (jname, "parse_external()");
+  merror (jname, "parse_external_jpeg()");
   strcpy (jname, ifname);
   jfile = file - ifname + jname;
   jext  = ext  - ifname + jname;
   if (strcasecmp (ext, ".jpg")) {
     strcpy (jext, isupper(ext[1]) ? ".JPG":".jpg");
-    memcpy (jfile, file+4, 4);
-    memcpy (jfile+4, file, 4);
+    if (isdigit(*file)) {
+      memcpy (jfile, file+4, 4);
+      memcpy (jfile+4, file, 4);
+    }
   } else
     while (isdigit(*--jext)) {
       if (*jext != '9') {
@@ -4985,7 +4988,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 6017 "dcraw/dcraw.c"
+#line 6020 "dcraw/dcraw.c"
 }
 
 /*
@@ -5426,7 +5429,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6562 "dcraw/dcraw.c"
+#line 6565 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -5987,6 +5990,7 @@ void CLASS identify()
     {  4841984, "PENTAX",   "Optio S"         ,1 },
     {  6114240, "PENTAX",   "Optio S4"        ,1 },  /* or S4i, CASIO EX-Z4 */
     { 10702848, "PENTAX",   "Optio 750Z"      ,1 },
+    { 16098048, "SAMSUNG",  "S85"             ,1 },
     { 12582980, "Sinar",    ""                ,0 },
     { 33292868, "Sinar",    ""                ,0 },
     { 44390468, "Sinar",    ""                ,0 } };
@@ -6666,6 +6670,13 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
     width  = 3072;
     load_raw = &CLASS packed_12_load_raw;
     load_flags = 7;
+  } else if (!strcmp(model,"S85")) {
+    height = 2448;
+    width  = 3264;
+    raw_width = 3288;
+    order = 0x4d4d;
+    load_raw = &CLASS unpacked_load_raw;
+    maximum = 0xfef8;
   } else if (!strcmp(model,"STV680 VGA")) {
     height = 484;
     width  = 644;
@@ -7254,7 +7265,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8397 "dcraw/dcraw.c"
+#line 8408 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7404,7 +7415,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8549 "dcraw/dcraw.c"
+#line 8560 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7545,7 +7556,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8714 "dcraw/dcraw.c"
+#line 8725 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
