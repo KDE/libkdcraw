@@ -1,5 +1,7 @@
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
+- Updated to libraw 0.6.7 : Added support for Samsung S85.                                        
+                            Changes in external jpeg (metadata) processing.
 - Updated to LibRaw 0.6.6 : Changes in Panasonic FZ50 files processing.
 - Updated to LibRaw 0.6.5 : Fixed file descriptor and buffer memory leak when thumbnail extractor is called, 
                             but library object is not properly initialized.

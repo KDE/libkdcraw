@@ -1259,6 +1259,7 @@ static const char  *static_camera_list[] =
 "Olympus SP510UZ",
 "Olympus SP550UZ",
 "Olympus SP560UZ",
+"Olympus SP570UZ",
 "Panasonic DMC-FZ8",
 "Panasonic DMC-FZ18",
 "Panasonic DMC-FZ28",
@@ -1300,6 +1301,7 @@ static const char  *static_camera_list[] =
 "RoverShot 3320af",
 "Samsung GX-1S",
 "Samsung GX-10",
+"Samsung S85",
 "Sarnoff 4096x5440",
 "Sigma SD9",
 "Sigma SD10",
@@ -1322,7 +1324,7 @@ static const char  *static_camera_list[] =
 "Sony DSLR-A900",
 "Sony XCD-SX910CR",
 "STV680 VGA",
-   NULL
+NULL
 };
 
 const char** LibRaw::cameraList() { return static_camera_list;}
