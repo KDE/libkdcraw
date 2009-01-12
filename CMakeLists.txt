@@ -3,7 +3,7 @@ PROJECT(libkdcraw)
 OPTION(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaicing operation" OFF)
 
 # =======================================================
-# Informations to update before to release this library.
+# Information to update before to release this library.
 
 # Library version history:
 # API      ABI
