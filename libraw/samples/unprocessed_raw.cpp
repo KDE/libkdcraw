@@ -48,8 +48,9 @@ int main(int ac, char *av[])
         {
             printf(
                 "docmode_withmask - LibRaw %s sample. %d cameras supported\n"
-                "Usage: %s [-q] [-S] [-g] raw-files....\n"
+                "Usage: %s [-q] [-A] [-g] [-s N] raw-files....\n"
                 "\t-q - be quiet\n"
+                "\t-s N - select Nth image in file (default=0)\n"
                 "\t-g - use gamma correction with gamma 2.2 (not precise,use for visual inspection only)\n"
                 "\t-A - autoscaling (by integer factor)\n"
                 ,LibRaw::version(),
@@ -81,6 +82,11 @@ int main(int ac, char *av[])
                         autoscale=1;
                     if(av[i][1]=='g' && av[i][2]==0)
                         OUT.gamma_16bit=1;
+                    if(av[i][1]=='s' && av[i][2]==0)
+                        {
+                            i++;
+                            OUT.shot_select=atoi(av[i]);
+                        }
                     continue;
                 }
             int r,c;
@@ -108,18 +114,18 @@ int main(int ac, char *av[])
             if( (ret = RawProcessor.add_masked_borders_to_bitmap() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot add mask data to bitmap %s\n",av[i]);
-                    continue;
+//                    continue;
                 }
-            for(int r=0;r<S.raw_height;r++)
-                for(c=0;c<S.raw_width;c++)
-                    RawProcessor.imgdata.image[r*S.raw_width+c][0] 
-                        = RawProcessor.imgdata.image[r*S.raw_width+c][RawProcessor.FC(r,c)];
+            for(int r=0;r<S.iheight;r++)
+                for(c=0;c<S.iwidth;c++)
+                    RawProcessor.imgdata.image[r*S.iwidth+c][0] 
+                        = RawProcessor.imgdata.image[r*S.iwidth+c][RawProcessor.FC(r,c)];
 
             P1.colors=1;
             if(autoscale)
                 {
                     unsigned max=0,scale;
-                    for(int j=0; j<S.raw_height*S.raw_width; j++)
+                    for(int j=0; j<S.iheight*S.iwidth; j++)
                         if(max < RawProcessor.imgdata.image[j][0])
                             max = RawProcessor.imgdata.image[j][0]; 
                     if (max >0 && max< 1<<15)
@@ -128,17 +134,19 @@ int main(int ac, char *av[])
                             if(verbose)
                                 printf("Scaling with multiplier=%d (max=%d)\n",scale,max);
                             
-                            for(int j=0; j<S.raw_height*S.raw_width; j++)
+                            for(int j=0; j<S.iheight*S.iwidth; j++)
                                 RawProcessor.imgdata.image[j][0] *= scale;
                         }
                 }
-
-            snprintf(outfn,sizeof(outfn),"%s.tiff",av[i]);
+            
+            if(OUT.shot_select)
+                snprintf(outfn,sizeof(outfn),"%s-%d.tiff",av[i],OUT.shot_select);
+            else
+                snprintf(outfn,sizeof(outfn),"%s.tiff",av[i]);
 
             if(verbose) printf("Writing file %s\n",outfn);
             if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
                 fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
-            RawProcessor.recycle(); // just for show this call
         }
     return 0;
 }

@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Thu Jan  8 19:26:36 2009
+   Generated from dcraw/dcraw.c at Wed Jan 14 18:06:12 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -1160,6 +1160,7 @@ void CLASS nikon_e900_load_raw()
 void CLASS fuji_load_raw()
 {
   ushort *pixel;
+#ifndef LIBRAW_LIBRARY_BUILD
   int wide, row, col, r, c;
 
   fseek (ifp, (top_margin*raw_width + left_margin) * 2, SEEK_CUR);
@@ -1181,6 +1182,27 @@ void CLASS fuji_load_raw()
     }
   }
   free (pixel);
+#else
+  int row,col;
+  pixel = (ushort *) calloc (raw_width, sizeof *pixel);
+  merror (pixel, "fuji_load_raw()");
+  for (row=0; row < raw_height; row++) {
+    read_shorts (pixel, raw_width);
+    for (col=0; col < raw_width; col++) {
+        if(col >= left_margin && col < width+left_margin
+           && row >= top_margin && row < height+top_margin)
+            {
+                BAYER(row-top_margin,col-left_margin) = pixel[col];
+            }
+        else
+            {
+                ushort *dfp = get_masked_pointer(row,col);
+                if(dfp) *dfp = pixel[col];
+            }
+    }
+  }
+  free (pixel);
+#endif
 }
 void CLASS ppm_thumb (FILE *tfp)
 {
@@ -1484,6 +1506,7 @@ void CLASS phase_one_load_raw()
         }
   }
   free (pixel);
+  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
 #endif
   phase_one_correct();
 }
@@ -1527,7 +1550,14 @@ void CLASS phase_one_load_raw_c()
   t_black = (short (*)[2]) offset + raw_height;
   fseek (ifp, ph1.black_off, SEEK_SET);
   if (ph1.black_off)
+      {
     read_shorts ((ushort *) t_black[0], raw_height*2);
+#ifdef LIBRAW_LIBRARY_BUILD
+    imgdata.masked_pixels.ph1_black = (ushort (*)[2])calloc(raw_height*2,sizeof(ushort));
+    merror (imgdata.masked_pixels.ph1_black, "phase_one_load_raw_c()");
+    memmove(imgdata.masked_pixels.ph1_black,(ushort *) t_black[0],raw_height*2*sizeof(ushort));
+#endif
+      }
   for (i=0; i < 256; i++)
     curve[i] = i*i / 3.969 + 0.5;
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -1550,6 +1580,9 @@ void CLASS phase_one_load_raw_c()
       else
 	pixel[col] = pred[col & 1] += ph1_bits(i) + 1 - (1 << (i - 1));
       if (pred[col & 1] >> 16) derror();
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
+#endif
       if (ph1.format == 5 && pixel[col] < 256)
 	pixel[col] = curve[pixel[col]];
     }
@@ -1563,8 +1596,11 @@ void CLASS phase_one_load_raw_c()
 #else
     {
       for (col=0; col < raw_width; col++) {
-          i = (pixel[col] << 2)
-              - ph1.t_black + t_black[row][col+left_margin >= ph1.split_col];
+          if( filtering_mode & LIBRAW_FILTERING_NOBLACKS)  
+              i = (pixel[col] << 2);
+          else
+              i = (pixel[col] << 2)
+                  - ph1.t_black + t_black[row][(col /* - left_margin */) >= ph1.split_col]; // changed to fix Coffin's bug!
           if(col >= left_margin && col < width+left_margin)
               {
                   if (i > 0) BAYER(row-top_margin,col-left_margin) = i;
@@ -1592,6 +1628,9 @@ void CLASS phase_one_load_raw_c()
 #endif
   }
   free (pixel);
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
+#endif
   phase_one_correct();
   maximum = 0xfffc - ph1.t_black;
 }
@@ -4041,7 +4080,7 @@ void CLASS ahd_interpolate()
 #endif
 #undef TS
 
-void CLASS median_filter ()
+void CLASS median_filter()
 {
   ushort (*pix)[4];
   int pass, c, i, j, k, med[9];
@@ -5071,6 +5110,7 @@ int CLASS parse_tiff_ifd (int base)
       case 50706:			/* DNGVersion */
 	FORC4 dng_version = (dng_version << 8) + fgetc(ifp);
 	if (!make[0]) strcpy (make, "DNG");
+	is_raw = 1;
 	break;
       case 50710:			/* CFAPlaneColor */
 	if (len > 4) len = 4;
@@ -5367,14 +5407,16 @@ void CLASS parse_external_jpeg()
   file++;
   if (!ext || strlen(ext) != 4 || ext-file != 8) return;
   jname = (char *) malloc (strlen(ifname) + 1);
-  merror (jname, "parse_external()");
+  merror (jname, "parse_external_jpeg()");
   strcpy (jname, ifname);
   jfile = file - ifname + jname;
   jext  = ext  - ifname + jname;
   if (strcasecmp (ext, ".jpg")) {
     strcpy (jext, isupper(ext[1]) ? ".JPG":".jpg");
-    memcpy (jfile, file+4, 4);
-    memcpy (jfile+4, file, 4);
+    if (isdigit(*file)) {
+      memcpy (jfile, file+4, 4);
+      memcpy (jfile+4, file, 4);
+    }
   } else
     while (isdigit(*--jext)) {
       if (*jext != '9') {
@@ -6431,6 +6473,7 @@ void CLASS identify()
     {  4841984, "PENTAX",   "Optio S"         ,1 },
     {  6114240, "PENTAX",   "Optio S4"        ,1 },  /* or S4i, CASIO EX-Z4 */
     { 10702848, "PENTAX",   "Optio 750Z"      ,1 },
+    { 16098048, "SAMSUNG",  "S85"             ,1 },
     { 12582980, "Sinar",    ""                ,0 },
     { 33292868, "Sinar",    ""                ,0 },
     { 44390468, "Sinar",    ""                ,0 } };
@@ -7132,6 +7175,13 @@ konica_400z:
     width  = 3072;
     load_raw = &CLASS packed_12_load_raw;
     load_flags = 7;
+  } else if (!strcmp(model,"S85")) {
+    height = 2448;
+    width  = 3264;
+    raw_width = 3288;
+    order = 0x4d4d;
+    load_raw = &CLASS unpacked_load_raw;
+    maximum = 0xfef8;
   } else if (!strcmp(model,"STV680 VGA")) {
     height = 484;
     width  = 644;
@@ -7567,14 +7617,21 @@ c603:
     filters = 0x61616161;
     simple_coeff(2);
   } else if (!strcmp(model,"QuickTake 100")) {
-    data_offset = 736;
+    fseek (ifp, 544, SEEK_SET);
+    height = get2();
+    width  = get2();
+    data_offset = (get4(),get2()) == 30 ? 738:736;
+    if (height > width) {
+      SWAP(height,width);
+      fseek (ifp, data_offset-6, SEEK_SET);
+      flip = ~get2() & 3 ? 5:6;
+    }
     load_raw = &CLASS quicktake_100_load_raw;
-    goto qt_common;
+    filters = 0x61616161;
   } else if (!strcmp(model,"QuickTake 150")) {
     data_offset = 738 - head[5];
     if (head[5]) strcpy (model+10, "200");
     load_raw = &CLASS kodak_radc_load_raw;
-qt_common:
     height = 480;
     width  = 640;
     filters = 0x61616161;

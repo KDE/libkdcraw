@@ -62,7 +62,7 @@ DllDef    void                libraw_set_dataerror_handler(libraw_data_t*,data_c
 DllDef    void                libraw_set_progress_handler(libraw_data_t*,progress_callback cb,void *datap);
 DllDef    int                 libraw_add_masked_borders_to_bitmap(libraw_data_t* lr);
 DllDef    const char *        libraw_unpack_function_name(libraw_data_t* lr);
-
+DllDef    int                 libraw_rotate_fuji_raw(libraw_data_t* lr);
 
     // DCRAW compatibility
 DllDef    int                 libraw_adjust_sizes_info_only(libraw_data_t*);
@@ -123,6 +123,7 @@ class DllDef LibRaw
     int add_masked_borders_to_bitmap();
     
     const char *unpack_function_name();
+    int         rotate_fuji_raw();
 
   private:
     void*        malloc(size_t t);
@@ -155,8 +156,7 @@ class DllDef LibRaw
     void init_masked_ptrs();
     ushort *get_masked_pointer(int row, int col); 
     
-    int  own_filtering_supported(){ return 0;}
-
+    int         own_filtering_supported(){ return 0;}
     void        identify();
     void        write_ppm_tiff (FILE *ofp);
     void        convert_to_rgb();

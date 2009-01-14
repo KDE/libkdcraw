@@ -73,14 +73,14 @@ enum LibRaw_colorstate
 
 enum LibRaw_filtering
 {
-    LIBRAW_FILTERING_DEFAULT    =0,
-    // with exception of foveon and some hasselblad cameras
-    LIBRAW_FILTERING_NOZEROES   =1,  //  no remove zeroes
-    LIBRAW_FILTERING_NOBLACKS   =2,  //  no black subtraction
-    LIBRAW_FILTERING_NONE       =3,  //  (1+2) no filtering 
-    LIBRAW_FILTERING_LIBRAWOWN  =7,  //  (4+1+2) own filtering routines
-    LIBRAW_FILTERING_AUTOMATIC  =15,  // (8+4+2+1) own filtering routines with fallback to dcraw
-    LIBRAW_FILTERING_AUTOMATIC_BIT  =8  // (8) - restore automatic mode after processing
+    LIBRAW_FILTERING_DEFAULT            =0,
+    LIBRAW_FILTERING_NOZEROES           =1,  //  no remove zeroes
+    LIBRAW_FILTERING_NOBLACKS           =2,  //  no black subtraction
+    LIBRAW_FILTERING_NOPOSTPROCESS      =4,  //  no raw data postprocessing (e.g. PhaseOne corrections etc)
+    LIBRAW_FILTERING_NONE               =7,  //  (1+2+4) => no filtering 
+    LIBRAW_FILTERING_LIBRAWOWN          =15,  //  NONE + OWN postprocessing if any
+    LIBRAW_FILTERING_AUTOMATIC_BIT      =16,  //  - restore automatic mode after processing
+    LIBRAW_FILTERING_AUTOMATIC          =31  // (OWN + Automatic bit)
 };
 
 

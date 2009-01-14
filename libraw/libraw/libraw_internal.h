@@ -115,6 +115,7 @@ typedef struct
     unsigned    zero_is_bad;
     ushort      shrink;
     ushort      fuji_width;
+    ushort      fwidth,fheight;
 } internal_output_params_t;
 
 #define LIBRAW_HISTOGRAM_SIZE 0x2000

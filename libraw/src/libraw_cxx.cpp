@@ -222,17 +222,17 @@ void LibRaw:: recycle()
     FREE(libraw_internal_data.output_data.oprof);
     FREE(imgdata.color.profile);
     FREE(imgdata.masked_pixels.buffer);
+    FREE(imgdata.masked_pixels.ph1_black);
 #undef FREE
-    bzero(&imgdata.masked_pixels,sizeof(imgdata.masked_pixels));
-    bzero(&imgdata.sizes,sizeof(imgdata.sizes));
+#define ZERO(a) bzero(&a,sizeof(a))
+    ZERO(imgdata.masked_pixels);
+    ZERO(imgdata.sizes);
+    ZERO(libraw_internal_data.internal_output_params);
+#undef ZERO
     memmgr.cleanup();
     imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
     imgdata.progress_flags = 0;
     
-    // zero all data fields ???
-//            bzero(&imgdata,sizeof(imgdata));
-//            bzero(&libraw_internal_data,sizeof(libraw_internal_data));
-
     tls->init();
 }
 
@@ -412,11 +412,14 @@ int LibRaw::add_masked_borders_to_bitmap()
     if(S.width != S.iwidth || S.height!=S.iheight)
         return LIBRAW_CANNOT_ADDMASK;
 
-    if(IO.fuji_width || P1.is_foveon || !P1.filters)
+    if(P1.is_foveon || !P1.filters)
         return LIBRAW_CANNOT_ADDMASK;
         
     if(!imgdata.image)
         return LIBRAW_OUT_OF_ORDER_CALL;
+
+    if(S.raw_width < S.width || S.raw_height < S.height)
+        return LIBRAW_SUCCESS; // nothing to do or already called
 
     if(S.width == S.raw_width && S.height == S.raw_height)
         return LIBRAW_SUCCESS; // nothing to do or already called
@@ -491,6 +494,15 @@ int LibRaw::open_file(const char *fname)
             O.use_camera_matrix = O.use_camera_wb;
 
         identify();
+
+        if(IO.fuji_width)
+            {
+                IO.fwidth = S.width;
+                IO.fheight = S.height;
+                S.iwidth = S.width = IO.fuji_width << !libraw_internal_data.unpacker_data.fuji_layout;
+                S.iheight = S.height = S.raw_height;
+                S.raw_height += 2*S.top_margin;
+            }
 
         int saved_raw_width = S.raw_width;
         int saved_width = S.width;
@@ -590,6 +602,7 @@ int LibRaw::unpack(void)
                 unsigned sz = S.raw_height*(S.left_margin+S.right_margin) 
                     + S.width*(S.top_margin+S.bottom_margin);
                 imgdata.masked_pixels.buffer = (ushort*) calloc(sz, sizeof(ushort)); 
+                merror (imgdata.masked_pixels.buffer, "unpack()");
                 init_masked_ptrs();
             }
         if (libraw_internal_data.unpacker_data.meta_length) 
@@ -630,6 +643,9 @@ int LibRaw::dcraw_document_mode_processing(void)
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
 
     try {
+
+        if(IO.fwidth) 
+            rotate_fuji_raw();
 
         if(!own_filtering_supported() && (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT))
             O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC_BIT; // turn on black and zeroes filtering
@@ -1269,6 +1285,17 @@ int LibRaw::adjust_sizes_info_only(void)
         {
             if (IO.fuji_width) 
                 {
+                    // restore saved values
+                    if(IO.fheight)
+                        {
+                            S.height = IO.fheight;
+                            S.width = IO.fwidth;
+                            S.iheight = (S.height + IO.shrink) >> IO.shrink;
+                            S.iwidth  = (S.width  + IO.shrink) >> IO.shrink;
+                            S.raw_height -= 2*S.top_margin;
+                            IO.fheight = IO.fwidth = 0; // prevent repeated calls
+                        }
+                    // dcraw code
                     IO.fuji_width = (IO.fuji_width - 1 + IO.shrink) >> IO.shrink;
                     S.iwidth = (ushort)(IO.fuji_width / sqrt(0.5));
                     S.iheight = (ushort)( (S.iheight - IO.fuji_width) / sqrt(0.5));
@@ -1290,6 +1317,53 @@ int LibRaw::adjust_sizes_info_only(void)
     return 0;
 }
 
+int LibRaw::rotate_fuji_raw(void)
+{
+    CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
+    CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
+
+
+    if(!IO.fwidth) return LIBRAW_SUCCESS;
+    int row,col,r,c;
+    ushort (*newimage)[4];
+    ushort fiwidth,fiheight;
+
+    fiheight = (IO.fheight + IO.shrink) >> IO.shrink;
+    fiwidth = (IO.fwidth + IO.shrink) >> IO.shrink;
+    
+    newimage = (ushort (*)[4]) calloc (fiheight*fiwidth, sizeof (*newimage));
+    merror(newimage,"rotate_fuji_raw()");
+    for(row=0;row<S.height;row++)
+        {
+            for(col=0;col<S.width;col++)
+                {
+
+                    if (libraw_internal_data.unpacker_data.fuji_layout) {
+                        r = IO.fuji_width - 1 - col + (row >> 1);
+                        c = col + ((row+1) >> 1);
+                    } else {
+                        r = IO.fuji_width - 1 + row - (col >> 1);
+                        c = row + ((col+1) >> 1);
+                    }
+                    newimage[((r) >> IO.shrink)*fiwidth + ((c) >> IO.shrink)][FC(r,c)] = 
+                        imgdata.image[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][FC(row,col)];
+                }
+        }
+    // restore fuji sizes!
+    S.height = IO.fheight;
+    S.width = IO.fwidth;
+    S.iheight = (S.height + IO.shrink) >> IO.shrink;
+    S.iwidth  = (S.width  + IO.shrink) >> IO.shrink;
+    S.raw_height -= 2*S.top_margin;
+    IO.fheight = IO.fwidth = 0; // prevent repeated calls
+
+    free(imgdata.image);
+    imgdata.image = newimage;
+    return LIBRAW_SUCCESS;
+    
+}
+
+
 int LibRaw::dcraw_process(void)
 {
     int quality,i;
@@ -1299,6 +1373,10 @@ int LibRaw::dcraw_process(void)
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
 
     try {
+
+        if(IO.fwidth) 
+            rotate_fuji_raw();
+
 
         if(!own_filtering_supported() && (O.filtering_mode & LIBRAW_FILTERING_AUTOMATIC_BIT))
             O.filtering_mode = LIBRAW_FILTERING_AUTOMATIC_BIT; // turn on black and zeroes filtering
@@ -1680,6 +1758,7 @@ static const char  *static_camera_list[] =
 "Olympus SP510UZ",
 "Olympus SP550UZ",
 "Olympus SP560UZ",
+"Olympus SP570UZ",
 "Panasonic DMC-FZ8",
 "Panasonic DMC-FZ18",
 "Panasonic DMC-FZ28",
@@ -1721,6 +1800,7 @@ static const char  *static_camera_list[] =
 "RoverShot 3320af",
 "Samsung GX-1S",
 "Samsung GX-10",
+"Samsung S85",
 "Sarnoff 4096x5440",
 "Sigma SD9",
 "Sigma SD10",

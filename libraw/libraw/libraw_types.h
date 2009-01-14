@@ -261,7 +261,7 @@ typedef struct
     ushort  *bl;     // bottom left size=(raw_height-height-top_margin)*left_margin
     ushort  *bottom; // bottom      size=(raw_height-height-top_margin)*width
     ushort  *br;     // bottom right size=(raw_height-height-top_margin)*
-
+    ushort  (*ph1_black)[2]; // Phase One black
 }libraw_masked_t;
 
 typedef struct
