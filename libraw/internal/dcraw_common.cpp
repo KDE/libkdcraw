@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Jan 11 10:58:58 2009
+   Generated from dcraw/dcraw.c at Wed Jan 14 09:49:32 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -7100,14 +7100,21 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
     filters = 0x61616161;
     simple_coeff(2);
   } else if (!strcmp(model,"QuickTake 100")) {
-    data_offset = 736;
+    fseek (ifp, 544, SEEK_SET);
+    height = get2();
+    width  = get2();
+    data_offset = (get4(),get2()) == 30 ? 738:736;
+    if (height > width) {
+      SWAP(height,width);
+      fseek (ifp, data_offset-6, SEEK_SET);
+      flip = ~get2() & 3 ? 5:6;
+    }
     load_raw = &CLASS quicktake_100_load_raw;
-    goto qt_common;
+    filters = 0x61616161;
   } else if (!strcmp(model,"QuickTake 150")) {
     data_offset = 738 - head[5];
     if (head[5]) strcpy (model+10, "200");
     load_raw = &CLASS kodak_radc_load_raw;
-qt_common:
     height = 480;
     width  = 640;
     filters = 0x61616161;
@@ -7265,7 +7272,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8408 "dcraw/dcraw.c"
+#line 8415 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7415,7 +7422,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8560 "dcraw/dcraw.c"
+#line 8567 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7556,7 +7563,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8725 "dcraw/dcraw.c"
+#line 8732 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
