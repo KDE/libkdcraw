@@ -6,7 +6,7 @@
  * Date        : 2008-10-09
  * Description : internal private container for KDcraw
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -71,7 +71,7 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
-        qDebug() << "LibRaw process terminaison invoked...";
+        kDebug(51002) << "LibRaw process terminaison invoked..." << endl;
         m_parent->m_cancel = true;
         m_progress = 0.0;
         return 1;
