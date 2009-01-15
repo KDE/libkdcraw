@@ -4,10 +4,10 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2006-12-09
- * Description : a tread-safe dcraw program interface
+ * Description : a tread-safe libraw C++ program interface
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com> 
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
@@ -140,7 +140,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 
     if ( imgData.isEmpty() )
     {
-        qDebug("Failed to load JPEG thumb from LibRaw!");
+        kDebug(51002) << "Failed to load JPEG thumb from LibRaw!" << endl;
         return false;
     }
 
@@ -156,7 +156,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    qDebug("Try to use reduced RAW picture extraction");
+    kDebug(51002) << "Try to use reduced RAW picture extraction" << endl;
 
     LibRaw raw;
     raw.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
@@ -202,11 +202,11 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
     if (!image.loadFromData(imgData))
     {
-        qDebug("Failed to load PPM data from LibRaw!");
+        kDebug(51002) << "Failed to load PPM data from LibRaw!" << endl;
         return false;
     }
 
-    qDebug("Using reduced RAW picture extraction");
+    kDebug(51002) << "Using reduced RAW picture extraction" << endl;
     return true;
 }
 
@@ -533,7 +533,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
                 RGB[0] = 1.0 / RGB[0];
                 RGB[1] = 1.0 / RGB[1];
                 RGB[2] = 1.0 / RGB[2];
-                qDebug("Warning: cannot get daylight multipliers");
+                kDebug(51002) << "Warning: cannot get daylight multipliers" << endl;
             }
 
             // (-r) set Raw Color Balance Multipliers.
@@ -703,7 +703,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
         return false;
     d->setProgress(0.4);
 
-    qDebug("LibRaw: data info: width %i height %i rgbmax %i", width, height, rgbmax);
+    kDebug(51002) << "LibRaw: data info: width=" << width 
+                  << " height=" << height 
+                  << " rgbmax=" << rgbmax << endl;
 
     return true;
 }
