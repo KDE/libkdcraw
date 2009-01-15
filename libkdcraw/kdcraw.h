@@ -4,10 +4,10 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2006-12-09
- * Description : a tread-safe dcraw program interface
+ * Description : a tread-safe libraw C++ program interface
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
@@ -82,7 +82,7 @@ public:
     /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h 
         for more details. This is a fast and non cancelable method witch do not require 
         a class instance to run.
-    */ 
+    */
     static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
     /** Return the string of all RAW file type mime supported. */
@@ -103,7 +103,7 @@ public:
     /** Return LibRaw version string. */
     static QString librawVersion();
 
-public: 
+public:
 
     /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file. 
         This is a cancelable method which require a class instance to run because RAW pictures loading 
@@ -197,7 +197,7 @@ private:
 
 private:
 
-    KDcrawPriv *d;
+    KDcrawPriv* const d;
 
     friend class KDcrawPriv;
 };
