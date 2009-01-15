@@ -8,7 +8,7 @@
  *               re-implemented with a reset button to switch to
  *               a default value.
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,10 +61,8 @@ public:
 };
 
 RIntNumInput::RIntNumInput(QWidget *parent)
-            : KHBox(parent)
+            : KHBox(parent), d(new RIntNumInputPriv)
 {
-    d = new RIntNumInputPriv;
-
     d->input       = new KIntNumInput(this);
     d->resetButton = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
@@ -164,10 +162,8 @@ public:
 };
 
 RDoubleNumInput::RDoubleNumInput(QWidget *parent)
-               : KHBox(parent)
+               : KHBox(parent), d(new RDoubleNumInputPriv)
 {
-    d = new RDoubleNumInputPriv;
-
     d->input       = new KDoubleNumInput(this);
     d->resetButton = new QToolButton(this);
     d->resetButton->setAutoRaise(true);

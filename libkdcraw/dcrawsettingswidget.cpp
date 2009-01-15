@@ -4,10 +4,10 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2006-09-13
- * Description : dcraw settings widgets
+ * Description : LibRaw settings widgets
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
@@ -148,15 +148,15 @@ public:
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
-                   : QToolBox(parent)
+                   : QToolBox(parent), d(new DcrawSettingsWidgetPriv)
 {
     setup(advSettings);
 }
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption, 
-                                         bool outputColorSpaceOption, 
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption,
+                                         bool outputColorSpaceOption,
                                          bool postProcessingOptions)
-                   : QToolBox(parent)
+                   : QToolBox(parent), d(new DcrawSettingsWidgetPriv)
 {
     int advSettings = 0;
 
@@ -169,8 +169,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption
 
 void DcrawSettingsWidget::setup(int advSettings)
 {
-    d = new DcrawSettingsWidgetPriv;
-
     // ---------------------------------------------------------------
     // DEMOSAICING Settings panel
 
