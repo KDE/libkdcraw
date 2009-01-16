@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Wed Jan 14 09:49:32 2009
+   Generated from dcraw/dcraw.c at Fri Jan 16 12:04:06 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -2854,7 +2854,7 @@ void CLASS wavelet_denoise()
   if ((nc = colors) == 3 && filters) nc++;
   FORC(nc) {			/* denoise R,G1,B,G3 individually */
     for (i=0; i < size; i++)
-        fimg[i] = sqrt((double)((unsigned) (image[i][c] << (scale+16))));
+        fimg[i] = 256 * sqrt((double)(image[i][c] << scale));
     for (hpass=lev=0; lev < 5; lev++) {
       lpass = size*((lev & 1)+1);
       for (row=0; row < iheight; row++) {
@@ -2935,7 +2935,7 @@ void CLASS wavelet_denoise()
     FORC(nc) {			/* denoise R,G1,B,G3 individually */
 #pragma omp for 
       for (i=0; i < size; i++)
-	fimg[i] = sqrt((unsigned) (image[i][c] << (scale+16)));
+          fimg[i] = 256 * sqrt((double)(image[i][c] << scale));
       for (hpass=lev=0; lev < 5; lev++) {
 	lpass = size*((lev & 1)+1);
 #pragma omp for 
@@ -5991,6 +5991,7 @@ void CLASS identify()
     {  6114240, "PENTAX",   "Optio S4"        ,1 },  /* or S4i, CASIO EX-Z4 */
     { 10702848, "PENTAX",   "Optio 750Z"      ,1 },
     { 16098048, "SAMSUNG",  "S85"             ,1 },
+    { 16215552, "SAMSUNG",  "S85"             ,1 },
     { 12582980, "Sinar",    ""                ,0 },
     { 33292868, "Sinar",    ""                ,0 },
     { 44390468, "Sinar",    ""                ,0 } };
@@ -6673,10 +6674,10 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
   } else if (!strcmp(model,"S85")) {
     height = 2448;
     width  = 3264;
-    raw_width = 3288;
+    raw_width = fsize/height/2;
     order = 0x4d4d;
     load_raw = &CLASS unpacked_load_raw;
-    maximum = 0xfef8;
+    maximum = 0xffff;
   } else if (!strcmp(model,"STV680 VGA")) {
     height = 484;
     width  = 644;
@@ -7272,7 +7273,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8415 "dcraw/dcraw.c"
+#line 8416 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7422,7 +7423,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8567 "dcraw/dcraw.c"
+#line 8568 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7563,7 +7564,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8732 "dcraw/dcraw.c"
+#line 8733 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
