@@ -46,13 +46,15 @@ int main(int ac, char *av[])
     LibRaw RawProcessor;
     if(ac<2) 
         {
+          usage:
             printf(
-                "docmode_withmask - LibRaw %s sample. %d cameras supported\n"
-                "Usage: %s [-q] [-A] [-g] [-s N] raw-files....\n"
+                "unprocessed_raw - LibRaw %s sample. %d cameras supported\n"
+                "Usage: %s [-q] [-A] [-g] [-s N] [-N] raw-files....\n"
                 "\t-q - be quiet\n"
                 "\t-s N - select Nth image in file (default=0)\n"
                 "\t-g - use gamma correction with gamma 2.2 (not precise,use for visual inspection only)\n"
                 "\t-A - autoscaling (by integer factor)\n"
+                "\t-N - no raw curve\n"
                 ,LibRaw::version(),
                 LibRaw::cameraCount(),
                 av[0]);
@@ -71,22 +73,26 @@ int main(int ac, char *av[])
     OUT.output_tiff=1;
     OUT.user_flip=0;
     OUT.no_auto_bright = 1;
-    OUT.filtering_mode=LIBRAW_FILTERING_NONE;
+    OUT.filtering_mode=(LibRaw_filtering)( LIBRAW_FILTERING_NOBLACKS|LIBRAW_FILTERING_NOZEROES);
     for (i=1;i<ac;i++)
         {
             if(av[i][0]=='-')
                 {
                     if(av[i][1]=='q' && av[i][2]==0)
                         verbose=0;
-                    if(av[i][1]=='A' && av[i][2]==0)
+                    else if(av[i][1]=='A' && av[i][2]==0)
                         autoscale=1;
-                    if(av[i][1]=='g' && av[i][2]==0)
+                    else if(av[i][1]=='g' && av[i][2]==0)
                         OUT.gamma_16bit=1;
-                    if(av[i][1]=='s' && av[i][2]==0)
+                    else if(av[i][1]=='N' && av[i][2]==0)
+                        OUT.filtering_mode=LIBRAW_FILTERING_NONE;
+                    else if(av[i][1]=='s' && av[i][2]==0)
                         {
                             i++;
                             OUT.shot_select=atoi(av[i]);
                         }
+                    else
+                        goto usage;
                     continue;
                 }
             int r,c;
@@ -114,7 +120,6 @@ int main(int ac, char *av[])
             if( (ret = RawProcessor.add_masked_borders_to_bitmap() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot add mask data to bitmap %s\n",av[i]);
-//                    continue;
                 }
             for(int r=0;r<S.iheight;r++)
                 for(c=0;c<S.iwidth;c++)

@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Wed Jan 14 18:06:12 2009
+   Generated from dcraw/dcraw.c at Sat Jan 17 21:36:32 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -750,6 +750,9 @@ void CLASS lossless_jpeg_load_raw()
     for (jcol=0; jcol < jwide; jcol++) {
       val = *rp++;
       if (jh.bits <= 12)
+#ifdef LIBRAW_LIBRARY_BUILD
+          if( !(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+#endif
 	val = curve[val & 0xfff];
       if (cr2_slice[0]) {
 	jidx = jrow*jwide + jcol;
@@ -853,19 +856,27 @@ void CLASS adobe_copy_pixel (int row, int col, ushort **rp)
   c = col -= left_margin;
   if (is_raw == 2 && shot_select) (*rp)++;
   if (filters) {
+#ifndef LIBRAW_LIBRARY_BUILD
     if (fuji_width) {
       r = row + fuji_width - 1 - (col >> 1);
       c = row + ((col+1) >> 1);
     }
-#ifdef LIBRAW_LIBRARY_BUILD
-    if(!fuji_width)
-        {
-          ushort *dfp = get_masked_pointer(row+top_margin,col+left_margin);
-          if(dfp) *dfp = **rp < 0x1000 ? curve[**rp] : **rp;
-        }
 #endif
+#ifdef LIBRAW_LIBRARY_BUILD
+    ushort val = **rp;
+    if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+        val = **rp < 0x1000 ? curve[**rp] : **rp;
+    if (r < height && c < width)
+        BAYER(r,c) = val;
+    else
+        {
+            ushort *dfp = get_masked_pointer(row+top_margin,col+left_margin);
+            if(dfp) *dfp = val;
+        }
+#else
     if (r < height && c < width)
       BAYER(r,c) = **rp < 0x1000 ? curve[**rp] : **rp;
+#endif
     *rp += is_raw;
   } else {
     if (r < height && c < width)
@@ -955,9 +966,9 @@ void CLASS pentax_k10_load_raw()
           if(dfp) *dfp = hpred[col & 1];
         }
       
-//      if (col < width && row < height)
+      if (col < width && row < height)
 #endif
-//      if (hpred[col & 1] >> 12) derror();
+        if (hpred[col & 1] >> 12) derror();
     }
       }
 }
@@ -1032,13 +1043,21 @@ void CLASS nikon_compressed_load_raw()
       if (col < 2) hpred[col] = vpred[row & 1][col] += diff;
       else	   hpred[col & 1] += diff;
       if ((ushort)(hpred[col & 1] + min) >= max) derror();
+#ifndef LIBRAW_LIBRARY_BUILD
       if ((unsigned) (col-left_margin) < width)
 	BAYER(row,col-left_margin) =  curve[LIM((short)hpred[col & 1],0,0x3fff)];
-#ifdef LIBRAW_LIBRARY_BUILD
+#else
+      ushort xval = hpred[col & 1];
+      if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+          xval = curve[LIM((short)xval,0,0x3fff)];
+      if ((unsigned) (col-left_margin) < width)
+          {
+              BAYER(row,col-left_margin) =  xval;
+          }
       else
         {
           ushort *dfp = get_masked_pointer(row,col);
-          if(dfp) *dfp = curve[LIM((short)hpred[col & 1],0,0x3fff)];                ;
+          if(dfp) *dfp = xval;
         }
 #endif
 
@@ -1506,7 +1525,7 @@ void CLASS phase_one_load_raw()
         }
   }
   free (pixel);
-  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
+  if(!( filtering_mode & LIBRAW_FILTERING_NORAWCURVE) )
 #endif
   phase_one_correct();
 }
@@ -1581,7 +1600,7 @@ void CLASS phase_one_load_raw_c()
 	pixel[col] = pred[col & 1] += ph1_bits(i) + 1 - (1 << (i - 1));
       if (pred[col & 1] >> 16) derror();
 #ifdef LIBRAW_LIBRARY_BUILD
-  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
+  if(!( filtering_mode & LIBRAW_FILTERING_NORAWCURVE) )
 #endif
       if (ph1.format == 5 && pixel[col] < 256)
 	pixel[col] = curve[pixel[col]];
@@ -1629,7 +1648,7 @@ void CLASS phase_one_load_raw_c()
   }
   free (pixel);
 #ifdef LIBRAW_LIBRARY_BUILD
-  if(!( filtering_mode & LIBRAW_FILTERING_NOPOSTPROCESS) )
+  if(!( filtering_mode & LIBRAW_FILTERING_NORAWCURVE) )
 #endif
   phase_one_correct();
   maximum = 0xfffc - ph1.t_black;
@@ -2377,7 +2396,13 @@ void CLASS eight_bit_load_raw()
   for (row=0; row < raw_height; row++) {
     if (fread (pixel, 1, raw_width, ifp) < raw_width) derror();
     for (col=0; col < raw_width; col++) {
-      val = curve[pixel[col]];
+        if(filtering_mode & LIBRAW_FILTERING_NORAWCURVE)
+            {
+                val = pixel[col];
+                if(val>maximum) maximum = val;
+            }
+        else
+            val = curve[pixel[col]];
       if((unsigned) (row-top_margin)< height)
           {
               if ((unsigned) (col-left_margin) < width)
@@ -2403,6 +2428,9 @@ void CLASS eight_bit_load_raw()
     black = lblack / ((raw_width - width) * height);
   if (!strncmp(model,"DC2",3))
     black = 0;
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+#endif
   maximum = curve[0xff];
 }
 
@@ -2468,7 +2496,14 @@ void CLASS kodak_262_load_raw()
       pred = (pi1 < 0) ? 0 : (pixel[pi1] + pixel[pi2]) >> 1;
       pixel[pi] = val = pred + ljpeg_diff (decode[chess]);
       if (val >> 8) derror();
+#ifdef LIBRAW_LIBRARY_BUILD
+      if(filtering_mode & LIBRAW_FILTERING_NORAWCURVE)
+          val = pixel[pi++];
+      else
+          val = curve[pixel[pi++]];
+#else
       val = curve[pixel[pi++]];
+#endif
       if ((unsigned) (col-left_margin) < width)
 	BAYER(row,col-left_margin) = val;
       else
@@ -2545,8 +2580,18 @@ void CLASS kodak_65000_load_raw()
       len = MIN (256, width-col);
       ret = kodak_65000_decode (buf, len);
       for (i=0; i < len; i++)
+#ifndef LIBRAW_LIBRARY_BUILD
 	if ((BAYER(row,col+i) =	curve[ret ? buf[i] :
 		(pred[i & 1] += buf[i])]) >> 12) derror();
+#else
+      {
+          ushort val = ret ? buf[i] : (pred[i & 1] += buf[i]);
+          if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+              val = curve[val];
+          BAYER(row,col+i)=val;
+          if(curve[val]>>12) derror();
+      }
+#endif
     }
 }
 
@@ -2571,7 +2616,14 @@ void CLASS kodak_ycbcr_load_raw()
 	  for (k=0; k < 2; k++) {
 	    if ((y[j][k] = y[j][k^1] + *bp++) >> 10) derror();
 	    ip = image[(row+j)*width + col+i+k];
+#ifndef LIBRAW_LIBRARY_BUILD
 	    FORC3 ip[c] = curve[LIM(y[j][k]+rgb[c], 0, 0xfff)];
+#else
+          if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+              FORC3 ip[c] = curve[LIM(y[j][k]+rgb[c], 0, 0xfff)];
+          else
+              FORC3 ip[c] = y[j][k]+rgb[c];;
+#endif
 	  }
       }
     }
@@ -2709,6 +2761,7 @@ void CLASS sony_arw2_load_raw()
 
   data = (uchar *) malloc (raw_width*tiff_bps >> 3);
   merror (data, "sony_arw2_load_raw()");
+  printf("BPS=%d\n",tiff_bps);
   for (row=0; row < height; row++) {
     fread (data, 1, raw_width*tiff_bps >> 3, ifp);
     if (tiff_bps == 8) {
@@ -2727,7 +2780,16 @@ void CLASS sony_arw2_load_raw()
 	    bit += 7;
 	  }
 	for (i=0; i < 16; i++, col+=2)
+#ifndef LIBRAW_LIBRARY_BUILD
 	  BAYER(row,col) = curve[pix[i] << 1] >> 1;
+#else
+        {
+            ushort val = pix[i];
+            if(!(filtering_mode & LIBRAW_FILTERING_NORAWCURVE))
+                val = curve[val<<1]>>1;
+            BAYER(row,col)=val;
+        }
+#endif
 	col -= col & 1 ? 1:31;
       }
     } else if (tiff_bps == 12)
@@ -3185,7 +3247,7 @@ void CLASS wavelet_denoise()
   if ((nc = colors) == 3 && filters) nc++;
   FORC(nc) {			/* denoise R,G1,B,G3 individually */
     for (i=0; i < size; i++)
-        fimg[i] = sqrt((double)((unsigned) (image[i][c] << (scale+16))));
+        fimg[i] = 256 * sqrt((double)(image[i][c] << scale));
     for (hpass=lev=0; lev < 5; lev++) {
       lpass = size*((lev & 1)+1);
       for (row=0; row < iheight; row++) {
@@ -3270,7 +3332,7 @@ void CLASS wavelet_denoise()
 #pragma omp for
 #endif
       for (i=0; i < size; i++)
-	fimg[i] = sqrt((unsigned) (image[i][c] << (scale+16)));
+        fimg[i] = 256 * sqrt((double)(image[i][c] << scale));
       for (hpass=lev=0; lev < 5; lev++) {
 	lpass = size*((lev & 1)+1);
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -6474,6 +6536,7 @@ void CLASS identify()
     {  6114240, "PENTAX",   "Optio S4"        ,1 },  /* or S4i, CASIO EX-Z4 */
     { 10702848, "PENTAX",   "Optio 750Z"      ,1 },
     { 16098048, "SAMSUNG",  "S85"             ,1 },
+    { 16215552, "SAMSUNG",  "S85"             ,1 },
     { 12582980, "Sinar",    ""                ,0 },
     { 33292868, "Sinar",    ""                ,0 },
     { 44390468, "Sinar",    ""                ,0 } };
@@ -7178,10 +7241,10 @@ konica_400z:
   } else if (!strcmp(model,"S85")) {
     height = 2448;
     width  = 3264;
-    raw_width = 3288;
+    raw_width = fsize/height/2;
     order = 0x4d4d;
     load_raw = &CLASS unpacked_load_raw;
-    maximum = 0xfef8;
+    maximum = 0xffff;
   } else if (!strcmp(model,"STV680 VGA")) {
     height = 484;
     width  = 644;
