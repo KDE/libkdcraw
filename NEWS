@@ -1,5 +1,6 @@
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
+- Updated to libraw 0.6.10: Support for loading White Balance data from Sony ARW files edited with Sony IDC software.
 - Updated to libraw 0.6.9 : Better support for Samsung S85.
                             Fixed possible integer overflow in wavelet denoising code.
 - Updated to libraw 0.6.8 : changes in QuickTake 100 files processing.                                        
