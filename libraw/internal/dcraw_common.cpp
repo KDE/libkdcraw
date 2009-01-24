@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Fri Jan 16 12:04:06 2009
+   Generated from dcraw/dcraw.c at Sat Jan 24 19:18:47 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -4526,6 +4526,10 @@ color_flags.curve_state = LIBRAW_COLORSTATE_LOADED;
 	FORC4 cam_mul[c ^ (c < 2)] = get2();
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
 	break;
+      case 29459:
+	FORC4 cam_mul[c ^ (c >> 1)] = get2();
+color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; 
+	break;
       case 33405:			/* Model2 */
 	fgets (model2, 64, ifp);
 	break;
@@ -4943,7 +4947,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 void CLASS parse_external_jpeg()
 {
   char *file, *ext, *jname, *jfile, *jext;
-#line 5973 "dcraw/dcraw.c"
+#line 5977 "dcraw/dcraw.c"
   ext  = strrchr (ifname, '.');
   file = strrchr (ifname, '/');
   if (!file) file = strrchr (ifname, '\\');
@@ -4988,7 +4992,7 @@ void CLASS parse_external_jpeg()
 #endif
 } 
   free (jname);
-#line 6020 "dcraw/dcraw.c"
+#line 6024 "dcraw/dcraw.c"
 }
 
 /*
@@ -5429,7 +5433,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6565 "dcraw/dcraw.c"
+#line 6569 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -7273,7 +7277,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8416 "dcraw/dcraw.c"
+#line 8420 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7423,7 +7427,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8568 "dcraw/dcraw.c"
+#line 8572 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7564,7 +7568,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8733 "dcraw/dcraw.c"
+#line 8737 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Fri Jan 16 12:04:06 2009
+   Generated from dcraw/dcraw.c at Sat Jan 24 19:18:47 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -692,7 +692,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_FOVEON_INTERPOLATE,8,9);
 #undef image
 
 /* RESTRICTED code ends here */
-#line 6463 "dcraw/dcraw.c"
+#line 6467 "dcraw/dcraw.c"
 char * CLASS foveon_gets (int offset, char *str, int len)
 {
   int i;

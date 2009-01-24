@@ -1,6 +1,7 @@
 0.1.8
 ------------------------------------------------------------------------
-Fix PPM color preview extraction.
+Updated to libraw 0.6.10:
+ - Support for loading White Balance data from Sony ARW files edited with Sony IDC software.
 Updated to libraw 0.6.9:
  - Better support for Samsung S85.
  - Fixed possible integer overflow in wavelet denoising code.
@@ -16,6 +17,8 @@ Updated to libraw 0.6.5:
   but library object is not properly initialized.
  -Fixes in Imacon files unpacking.
  -Fixes in Hasselblad .fff files unpacking.
+
+Fix PPM color preview extraction.
 
 0.1.7
 ------------------------------------------------------------------------
