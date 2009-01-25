@@ -1,5 +1,7 @@
 0.1.8
 ------------------------------------------------------------------------
+Updated to libraw 0.6.11: 
+ - Fixed serious bug in loading metadata from external JPG file.
 Updated to libraw 0.6.10:
  - Support for loading White Balance data from Sony ARW files edited with Sony IDC software.
 Updated to libraw 0.6.9:
