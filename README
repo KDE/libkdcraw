@@ -22,7 +22,7 @@ This library is used by kipi-plugins, digiKam and others kipi host programs.
 
 AutoConf   >= 2.5.x                        http://www.gnu.org/software/autoconf
 AutoMake   >= 1.7.x                        http://www.gnu.org/software/automake
-libqt      >= 3.3.x                        http://www.trolltech.com
+libqt      >= 3.3.x                        http://www.qtsoftware.com
 libkde     >= 3.4.x (>=3.5.x recommended)  http://www.kde.org
 liblcms    >= 1.14.x (used by libraw)      http://www.littlecms.com
 libjpeg    >= 6b     (used by libraw)      http://www.ijg.org
