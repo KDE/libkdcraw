@@ -50,6 +50,12 @@ extern "C"
         LibRaw *ip = (LibRaw*) lr->parent_class;
         return ip->open_file(file);
     }
+    int libraw_open_buffer(libraw_data_t* lr, void *buffer, size_t size)
+    {
+        if(!lr) return EINVAL;
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        return ip->open_buffer(buffer,size);
+    }
     int libraw_unpack(libraw_data_t* lr)
     {
         if(!lr) return EINVAL;

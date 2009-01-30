@@ -23,15 +23,15 @@ extern "C"
 #endif
     void default_memory_callback(void *,const char *file,const char *where)
     {
-        fprintf (stderr,"%s: Out of memory in %s\n", file, where);
+        fprintf (stderr,"%s: Out of memory in %s\n", file?file:"unknown file", where);
     }
 
     void default_data_callback(void*,const char *file, const int offset)
     {
         if(offset < 0)
-            fprintf (stderr,"%s: Unexpected end of file\n", file);
+            fprintf (stderr,"%s: Unexpected end of file\n", file?file:"unknown file");
         else
-            fprintf (stderr,"%s: data corrupted at %d\n",file,offset); 
+            fprintf (stderr,"%s: data corrupted at %d\n",file?file:"unknown file",offset); 
     }
     const char *libraw_strerror(int e)
     {
@@ -105,9 +105,9 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
             case LIBRAW_EXCEPTION_IO_CORRUPT:           \
                 recycle();                              \
                 return LIBRAW_IO_ERROR;                 \
-            case LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK: \
+            case LIBRAW_EXCEPTION_CANCELLED_BY_CALLBACK:\
                 recycle();                              \
-                return LIBRAW_CANCELLED_BY_CALLBACK;     \
+                return LIBRAW_CANCELLED_BY_CALLBACK;    \
             default:                                    \
                 return LIBRAW_UNSPECIFIED_ERROR;        \
             } \
@@ -115,19 +115,19 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
 
 void LibRaw::derror()
 {
-    if (!libraw_internal_data.unpacker_data.data_error) 
+    if (!libraw_internal_data.unpacker_data.data_error && libraw_internal_data.internal_data.input) 
         {
-            if (feof(libraw_internal_data.internal_data.input))
+            if (libraw_internal_data.internal_data.input->eof())
                 {
                     if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
-                                                              libraw_internal_data.internal_data.ifname,-1);
+                                                              libraw_internal_data.internal_data.input->fname(),-1);
                     throw LIBRAW_EXCEPTION_IO_EOF;
                 }
             else
                 {
                     if(callbacks.data_cb)(*callbacks.data_cb)(callbacks.datacb_data,
-                                                              libraw_internal_data.internal_data.ifname,
-                                                              ftell(libraw_internal_data.internal_data.input));
+                                                              libraw_internal_data.internal_data.input->fname(),
+                                                              libraw_internal_data.internal_data.input->tell());
                     throw LIBRAW_EXCEPTION_IO_CORRUPT;
                 }
         }
@@ -208,11 +208,12 @@ int LibRaw:: fc (int row, int col)
 
 void LibRaw:: recycle() 
 {
-    if(libraw_internal_data.internal_data.input) 
+    if(libraw_internal_data.internal_data.input && libraw_internal_data.internal_data.input_internal) 
         { 
-            fclose(libraw_internal_data.internal_data.input); 
+            delete libraw_internal_data.internal_data.input; 
             libraw_internal_data.internal_data.input = NULL;
         }
+    libraw_internal_data.internal_data.input_internal = 0;
 #define FREE(a) do { if(a) { free(a); a = NULL;} }while(0)
             
     FREE(imgdata.image); 
@@ -305,7 +306,10 @@ void LibRaw:: merror (void *ptr, const char *where)
 {
     if (ptr) return;
     if(callbacks.mem_cb)(*callbacks.mem_cb)(callbacks.memcb_data,
-                                            libraw_internal_data.internal_data.ifname,where);
+                                            libraw_internal_data.internal_data.input
+                                            ?libraw_internal_data.internal_data.input->fname()
+                                            :NULL,
+                                            where);
     throw LIBRAW_EXCEPTION_ALLOC;
 }
 
@@ -475,19 +479,67 @@ int LibRaw::add_masked_borders_to_bitmap()
     return LIBRAW_SUCCESS;
 }
 
-
 int LibRaw::open_file(const char *fname)
 {
+    // this stream will close on recycle()
+    LibRaw_file_datastream *stream = new LibRaw_file_datastream(fname);
+    if(!stream->valid())
+        {
+            delete stream;
+            return LIBRAW_IO_ERROR;
+        }
+    ID.input_internal = 0; // preserve from deletion on error
+    int ret = open_datastream(stream);
+    if (ret == LIBRAW_SUCCESS)
+        {
+            ID.input_internal =1 ; // flag to delete datastream on recycle
+        }
+    else
+        {
+            delete stream;
+            ID.input_internal = 0;
+        }
+    return ret;
+}
 
-    if(!fname)
+int LibRaw::open_buffer(void *buffer, size_t size)
+{
+    // this stream will close on recycle()
+    if(!buffer  || buffer==(void*)-1)
+        return LIBRAW_IO_ERROR;
+
+    LibRaw_buffer_datastream *stream = new LibRaw_buffer_datastream(buffer,size);
+    if(!stream->valid())
+        {
+            delete stream;
+            return LIBRAW_IO_ERROR;
+        }
+    ID.input_internal = 0; // preserve from deletion on error
+    int ret = open_datastream(stream);
+    if (ret == LIBRAW_SUCCESS)
+        {
+            ID.input_internal =1 ; // flag to delete datastream on recycle
+        }
+    else
+        {
+            delete stream;
+            ID.input_internal = 0;
+        }
+    return ret;
+}
+
+
+int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
+{
+
+    if(!stream)
         return ENOENT;
-        
+    if(!stream->valid())
+        return LIBRAW_IO_ERROR;
     recycle();
-    libraw_internal_data.internal_data.ifname = (char*)fname;
-    try {
-        if(!(ID.input = fopen(ID.ifname,"rb")))
-            return errno;
 
+    try {
+        ID.input = stream;
         SET_PROC_FLAG(LIBRAW_PROGRESS_OPEN);
 
         if (O.use_camera_matrix < 0)
@@ -531,8 +583,8 @@ int LibRaw::open_file(const char *fname)
                 if(C.profile) free(C.profile);
                 C.profile = malloc(C.profile_length);
                 merror(C.profile,"LibRaw::open_file()");
-                fseek(ID.input,ID.profile_offset,SEEK_SET);
-                fread(C.profile,C.profile_length,1,ID.input);
+                ID.input->seek(ID.profile_offset,SEEK_SET);
+                ID.input->read(C.profile,C.profile_length,1);
             }
         
         SET_PROC_FLAG(LIBRAW_PROGRESS_IDENTIFY);
@@ -611,7 +663,7 @@ int LibRaw::unpack(void)
                     (char *) malloc (libraw_internal_data.unpacker_data.meta_length);
                 merror (libraw_internal_data.internal_data.meta_data, "LibRaw::unpack()");
             }
-        fseek (ID.input, libraw_internal_data.unpacker_data.data_offset, SEEK_SET);
+        ID.input->seek(libraw_internal_data.unpacker_data.data_offset, SEEK_SET);
         // foveon_load_raw produces different data for document_mode, we'll
         // deal with it in dcraw_document_mode_processing
         int save_document_mode = O.document_mode;
@@ -979,7 +1031,7 @@ void LibRaw::kodak_thumb_loader()
     imgdata.image = (ushort (*)[4]) calloc (S.iheight*S.iwidth, sizeof (*imgdata.image));
     merror (imgdata.image, "LibRaw::kodak_thumb_loader()");
 
-    fseek (ID.input,ID.toffset, SEEK_SET);
+    ID.input->seek(ID.toffset, SEEK_SET);
     // read kodak thumbnail into T.image[]
     (this->*thumb_load_raw)();
 
@@ -1127,7 +1179,7 @@ void LibRaw::foveon_thumb_loader (void)
             merror (buf, "foveon_thumb()");
             for (row=0; row < T.theight; row++) 
                 {
-                    fread(buf, 1, bwide, ID.input);
+                    ID.input->read(buf, 1, bwide);
                     memmove(T.thumb+(row*T.twidth*3),buf,T.twidth*3);
                 }
             free(buf);
@@ -1152,7 +1204,7 @@ void LibRaw::foveon_thumb_loader (void)
                                     {
                                         if ((bit = (bit-1) & 31) == 31)
                                             for (i=0; i < 4; i++)
-                                                bitbuf = (bitbuf << 8) + fgetc(ID.input);
+                                                bitbuf = (bitbuf << 8) + ID.input->get_char();
                                         dindex = dindex->branch[bitbuf >> bit & 1];
                                     }
                                 pred[c] += dindex->leaf;
@@ -1186,13 +1238,13 @@ int LibRaw::unpack_thumb(void)
             } 
         else 
             {
-                fseek (ID.input,ID.toffset, SEEK_SET);
+                ID.input->seek(ID.toffset, SEEK_SET);
                 if ( write_thumb == &LibRaw::jpeg_thumb)
                     {
                         if(T.thumb) free(T.thumb);
                         T.thumb = (char *) malloc (T.tlength);
                         merror (T.thumb, "jpeg_thumb()");
-                        fread (T.thumb, 1, T.tlength, ID.input);
+                        ID.input->read (T.thumb, 1, T.tlength);
                         T.tcolors = 3;
                         T.tformat = LIBRAW_THUMBNAIL_JPEG;
                         SET_PROC_FLAG(LIBRAW_PROGRESS_THUMB_LOAD);
@@ -1206,7 +1258,7 @@ int LibRaw::unpack_thumb(void)
                         T.thumb = (char *) malloc (T.tlength);
                         merror (T.thumb, "ppm_thumb()");
 
-                        fread (T.thumb, 1, T.tlength, ID.input);
+                        ID.input->read(T.thumb, 1, T.tlength);
 
                         T.tformat = LIBRAW_THUMBNAIL_BITMAP;
                         SET_PROC_FLAG(LIBRAW_PROGRESS_THUMB_LOAD);

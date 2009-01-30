@@ -118,9 +118,9 @@
 #define d65_white       (rgb_constants.d65_white)
 
 //libraw_internal_data.internal_data
-#define ifname          (libraw_internal_data.internal_data.ifname)
 #define meta_data       (libraw_internal_data.internal_data.meta_data)
-#define ifp             (libraw_internal_data.internal_data.input)
+#define ifp             libraw_internal_data.internal_data.input
+#define ifname          ((char*)libraw_internal_data.internal_data.input->fname())
 #define profile_offset  (libraw_internal_data.internal_data.profile_offset)
 #define thumb_offset    (libraw_internal_data.internal_data.toffset)
 
@@ -164,5 +164,17 @@
 #define tile_width      (libraw_internal_data.unpacker_data.tile_width)
 #define tile_length     (libraw_internal_data.unpacker_data.tile_length)
 #define load_flags      (libraw_internal_data.unpacker_data.load_flags)
+
+#ifdef LIBRAW_IO_REDEFINED
+#define fread(ptr,size,n,stream) stream->read(ptr,size,n)
+#define fseek(stream,o,w)	 stream->seek(o,w)
+#define fseeko(stream,o,w)	 stream->seek(o,w)
+#define ftell(stream)		 stream->tell()
+#define ftello(stream)		 stream->tell()
+#define getc(stream)		 stream->get_char()
+#define fgetc(stream)		 stream->get_char()
+#define fgets(str,n,stream)	 stream->gets(str,n)
+#define fscanf(stream,fmt,ptr)	 stream->scanf_one(fmt,ptr)
+#endif
 
 #endif

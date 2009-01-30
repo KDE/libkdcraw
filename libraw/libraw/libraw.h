@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 
+#include "libraw_datastream.h"
 #include "libraw_types.h"
 #include "libraw_const.h"
 #include "libraw_internal.h"
@@ -46,6 +47,7 @@ DllDef    const char          *libraw_strprogress(enum LibRaw_progress);
     // LibRaw C API
 DllDef    libraw_data_t       *libraw_init(unsigned int flags);
 DllDef    int                 libraw_open_file(libraw_data_t*, const char *);
+DllDef    int                 libraw_open_buffer(libraw_data_t*, void * buffer, size_t size);
 DllDef    int                 libraw_unpack(libraw_data_t*);
 DllDef    int                 libraw_unpack_thumb(libraw_data_t*);
 DllDef    void                libraw_recycle(libraw_data_t*);
@@ -90,6 +92,8 @@ class DllDef LibRaw
     
     libraw_output_params_t*     output_params_ptr() { return &imgdata.params;}
     int                         open_file(const char *fname);
+    int                         open_buffer(void *buffer, size_t size);
+    int                         open_datastream(LibRaw_abstract_datastream *);
     int                         unpack(void);
     int                         unpack_thumb(void);
 

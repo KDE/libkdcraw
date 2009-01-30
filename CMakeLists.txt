@@ -85,6 +85,7 @@ INCLUDE_DIRECTORIES(
 KDE4_NO_ENABLE_FINAL(libraw)
 
 SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_fileio.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/foveon.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
