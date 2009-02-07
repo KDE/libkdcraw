@@ -1,3 +1,8 @@
+0.4.1 - Released with KDE 4.2.1
+------------------------------------------------------------------------
+- Updated to libraw 0.6.12: .
+
+
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
 - Updated to libraw 0.6.11: Fixed serious bug in loading metadata from external JPG file.

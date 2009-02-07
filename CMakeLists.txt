@@ -16,11 +16,12 @@ OPTION(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaici
 # 0.2.0 => 5.0.0  (released with KDE 4.1.0)
 # 0.3.0 => 6.0.0  (released with KDE 4.1.2)
 # 0.4.0 => 7.0.0  (using libRaw-Released with KDE 4.2.0)
+# 0.4.1 => 7.0.0  (Released with KDE 4.2.1)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "0")
 SET(DCRAW_LIB_MINOR_VERSION "4")
-SET(DCRAW_LIB_PATCH_VERSION "0")
+SET(DCRAW_LIB_PATCH_VERSION "1")
 
 # Suffix to add at end of version string. Usual values are:
 # "-svn"   : alpha code unstable from svn. Do not use in production
