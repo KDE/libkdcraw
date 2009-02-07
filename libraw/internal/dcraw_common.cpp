@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Jan 25 11:47:44 2009
+   Generated from dcraw/dcraw.c at Sat Feb  7 09:42:17 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -4652,6 +4652,9 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
 color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
 	free (cbuf);
 	break;
+      case 50458:
+	if (!make[0]) strcpy (make, "Hasselblad");
+	break;
       case 50459:			/* Hasselblad tag */
 	i = order;
 	j = ftell(ifp);
@@ -5434,7 +5437,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6565 "dcraw/dcraw.c"
+#line 6568 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -6783,6 +6786,11 @@ color_flags.pre_mul_state = LIBRAW_COLORSTATE_CONST;
       top_margin  = 4;
       left_margin = 7;
       filters = 0x61616161;
+    } else if (raw_width == 4090) {
+      strcpy (model, "V96C");
+      height -= (top_margin = 6);
+      width -= (left_margin = 3) + 7;
+      filters = 0x61616161;
     }
   } else if (!strcmp(make,"Sinar")) {
     if (!memcmp(head,"8BPS",4)) {
@@ -7278,7 +7286,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8416 "dcraw/dcraw.c"
+#line 8424 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7428,7 +7436,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8568 "dcraw/dcraw.c"
+#line 8576 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7569,7 +7577,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 8733 "dcraw/dcraw.c"
+#line 8741 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

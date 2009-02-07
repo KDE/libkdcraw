@@ -1,5 +1,8 @@
 0.1.8
 ------------------------------------------------------------------------
+
+Updated to libraw 0.6.12: 
+ - Hasselblad V96C support. 
 Updated to libraw 0.6.11: 
  - Fixed serious bug in loading metadata from external JPG file.
 Updated to libraw 0.6.10:
