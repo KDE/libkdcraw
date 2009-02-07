@@ -217,10 +217,10 @@ public:
     QString          owner;
     /** The demosaising filter pattern. */
     QString          filterPattern;
-    /** The DNG version. NOTE: its only show with DNG RAW files. */
+    /** The DNG version. NOTE: it is only shown with DNG RAW files. */
     QString          DNGVersion;
 
-    /** Date & time when have been taken the picture. */
+    /** Date & time when the picture has been taken. */
     QDateTime        dateTime;
 
     /** The image dimensions in pixels. */
