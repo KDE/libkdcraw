@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Fri Jan 30 09:55:00 2009
+   Generated from dcraw/dcraw.c at Sat Feb  7 20:23:43 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -5062,6 +5062,9 @@ int CLASS parse_tiff_ifd (int base)
               }
 	free (cbuf);
 	break;
+      case 50458:
+	if (!make[0]) strcpy (make, "Hasselblad");
+	break;
       case 50459:			/* Hasselblad tag */
 	i = order;
 	j = ftell(ifp);
@@ -5908,7 +5911,7 @@ void CLASS parse_cine()
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 7184 "dcraw/dcraw.c"
+#line 7187 "dcraw/dcraw.c"
 #ifdef LIBRAW_LIBRARY_BUILD
 void CLASS adobe_coeff (const char *p_make, const char *p_model)
 #else
@@ -7295,6 +7298,11 @@ konica_400z:
       top_margin  = 4;
       left_margin = 7;
       filters = 0x61616161;
+    } else if (raw_width == 4090) {
+      strcpy (model, "V96C");
+      height -= (top_margin = 6);
+      width -= (left_margin = 3) + 7;
+      filters = 0x61616161;
     }
   } else if (!strcmp(make,"Sinar")) {
     if (!memcmp(head,"8BPS",4)) {
@@ -7802,7 +7810,7 @@ notraw:
   RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,1,2);
 #endif
 }
-#line 9169 "dcraw/dcraw.c"
+#line 9177 "dcraw/dcraw.c"
 void CLASS convert_to_rgb()
 {
   int row, col, c, i, j, k;
@@ -8054,7 +8062,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 9445 "dcraw/dcraw.c"
+#line 9453 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

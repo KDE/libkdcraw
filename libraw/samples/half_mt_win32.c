@@ -1,9 +1,10 @@
 /* -*- C++ -*-
- * File: simple_dcraw_c.c
+ * File: halt_mt_win32.c
  * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw  C API mutithreaded sample  (emulates call to "dcraw  -h [-w] [-a] [-v]")
+ * Win32 version
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

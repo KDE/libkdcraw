@@ -1,10 +1,10 @@
 /* -*- C++ -*-
- * File: unprocessed_raw.cpp
+ * File: 4channels.cpp
  * Copyright 2009 Alex Tutubalin <lexa@lexa.ru>
- * Created: Fri Jan 02, 2009
+ * Created: Mon Feb 09, 2009
  *
  * LibRaw sample
- * Generates unprocessed raw image: with masked pixels and without black subtraction
+ * Generates 4 TIFF file from RAW data, one file per channel
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@
 int main(int ac, char *av[])
 {
     int  i, ret;
-    int verbose=1,autoscale=0;
+    int autoscale=0,filtering_mode=LIBRAW_FILTERING_NONE;
     char outfn[1024],thumbfn[1024]; 
 
     LibRaw RawProcessor;
@@ -47,12 +47,12 @@ int main(int ac, char *av[])
         {
           usage:
             printf(
-                "unprocessed_raw - LibRaw %s sample. %d cameras supported\n"
-                "Usage: %s [-q] [-A] [-g] [-s N] [-N] raw-files....\n"
-                "\t-q - be quiet\n"
+                "4channeld - LibRaw %s sample. %d cameras supported\n"
+                "Usage: %s [-s N] [-g] [-A] [-B] [-N] raw-files....\n"
                 "\t-s N - select Nth image in file (default=0)\n"
                 "\t-g - use gamma correction with gamma 2.2 (not precise,use for visual inspection only)\n"
                 "\t-A - autoscaling (by integer factor)\n"
+                "\t-B - no black subtraction\n"
                 "\t-N - no raw curve\n"
                 ,LibRaw::version(),
                 LibRaw::cameraCount(),
@@ -72,85 +72,92 @@ int main(int ac, char *av[])
     OUT.output_tiff=1;
     OUT.user_flip=0;
     OUT.no_auto_bright = 1;
-    OUT.filtering_mode=(LibRaw_filtering)( LIBRAW_FILTERING_NOBLACKS|LIBRAW_FILTERING_NOZEROES);
+    OUT.half_size=1;
+    OUT.filtering_mode= LIBRAW_FILTERING_AUTOMATIC;
+
     for (i=1;i<ac;i++)
         {
             if(av[i][0]=='-')
                 {
-                    if(av[i][1]=='q' && av[i][2]==0)
-                        verbose=0;
-                    else if(av[i][1]=='A' && av[i][2]==0)
-                        autoscale=1;
-                    else if(av[i][1]=='g' && av[i][2]==0)
-                        OUT.gamma_16bit=1;
-                    else if(av[i][1]=='N' && av[i][2]==0)
-                        OUT.filtering_mode=LIBRAW_FILTERING_NONE;
-                    else if(av[i][1]=='s' && av[i][2]==0)
+                    if(av[i][1]=='s' && av[i][2]==0)
                         {
                             i++;
                             OUT.shot_select=atoi(av[i]);
                         }
+                    else if(av[i][1]=='g' && av[i][2]==0)
+                        OUT.gamma_16bit=1;
+                    else if(av[i][1]=='A' && av[i][2]==0)
+                        autoscale=1;
+                    else if(av[i][1]=='B' && av[i][2]==0)
+                        filtering_mode |= (LIBRAW_FILTERING_NOZEROES | LIBRAW_FILTERING_NOBLACKS);
+                    else if(av[i][1]=='N' && av[i][2]==0)
+                        filtering_mode |= LIBRAW_FILTERING_NORAWCURVE;
                     else
                         goto usage;
                     continue;
                 }
+            if(filtering_mode)
+                OUT.filtering_mode = (LibRaw_filtering) filtering_mode;
+
             int r,c;
-            if(verbose) printf("Processing file %s\n",av[i]);
+            printf("Processing file %s\n",av[i]);
             if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot open %s: %s\n",av[i],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-            if(verbose)
+            if(P1.is_foveon)
                 {
-                    printf("Image size: %dx%d\nRaw size: %dx%d\n",S.width,S.height,S.raw_width,S.raw_height);
-                    printf("Margins: top=%d, left=%d, right=%d, bottom=%d\n",
-                           S.top_margin,S.left_margin,S.right_margin,S.bottom_margin);
+                    printf("Cannot process foveon image %s\n",av[i]);
+                    continue ;
                 }
-
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
                     continue;
                 }
-            if(verbose)
-                printf("Unpacked....\n");
 
-            if( (ret = RawProcessor.add_masked_borders_to_bitmap() ) != LIBRAW_SUCCESS)
-                {
-                    fprintf(stderr,"Cannot add mask data to bitmap %s\n",av[i]);
-                }
-            for(int r=0;r<S.iheight;r++)
-                for(c=0;c<S.iwidth;c++)
-                    RawProcessor.imgdata.image[r*S.iwidth+c][0] 
-                        = RawProcessor.imgdata.image[r*S.iwidth+c][RawProcessor.FC(r,c)];
 
-            P1.colors=1;
             if(autoscale)
                 {
                     unsigned max=0,scale;
                     for(int j=0; j<S.iheight*S.iwidth; j++)
-                        if(max < RawProcessor.imgdata.image[j][0])
-                            max = RawProcessor.imgdata.image[j][0]; 
+                        for(int c = 0; c< 4; c++)
+                            if(max < RawProcessor.imgdata.image[j][c])
+                                max = RawProcessor.imgdata.image[j][c]; 
                     if (max >0 && max< 1<<15)
                         {
                             scale = (1<<16)/max;
-                            if(verbose)
-                                printf("Scaling with multiplier=%d (max=%d)\n",scale,max);
-                            
+                            printf("Scaling with multiplier=%d (max=%d)\n",scale,max);
                             for(int j=0; j<S.iheight*S.iwidth; j++)
-                                RawProcessor.imgdata.image[j][0] *= scale;
+                                for(c=0;c<4;c++)
+                                    RawProcessor.imgdata.image[j][c] *= scale;
                         }
                 }
-            
-            if(OUT.shot_select)
-                snprintf(outfn,sizeof(outfn),"%s-%d.tiff",av[i],OUT.shot_select);
-            else
-                snprintf(outfn,sizeof(outfn),"%s.tiff",av[i]);
 
-            if(verbose) printf("Writing file %s\n",outfn);
-            if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
-                fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
+            // hack to make dcraw tiff writer happy
+            P1.colors = 1;
+            S.width = S.iwidth;
+            S.height = S.iheight;
+
+            for (int layer=0;layer<4;layer++)
+                {
+                    if(layer>0)
+                        {
+                            for (int rc = 0; rc < S.iheight*S.iwidth; rc++)
+                                RawProcessor.imgdata.image[rc][0] = RawProcessor.imgdata.image[rc][layer];
+                        }
+
+                    if(OUT.shot_select)
+                        snprintf(outfn,sizeof(outfn),"%s-%d.%d.tiff",av[i],OUT.shot_select,layer);
+                    else
+                        snprintf(outfn,sizeof(outfn),"%s.%d.tiff",av[i],layer);
+                    
+                    printf("Writing file %s\n",outfn);
+                    if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
+                        fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
+                }
+
         }
     return 0;
 }

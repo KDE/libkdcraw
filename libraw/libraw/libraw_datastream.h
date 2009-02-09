@@ -46,18 +46,18 @@ class LibRaw_abstract_datastream
     virtual             ~LibRaw_abstract_datastream(void){if(substream) delete substream;}
     virtual int         valid(){return 0;}
     // file input emulation
-    virtual int         read(void * ptr,size_t size, size_t nmemb){ return -1;}
+    virtual int         read(void *,size_t, size_t ){ return -1;}
     virtual int         seek(off_t o, int whence){return -1;}
     virtual int         tell(){return -1;}
     virtual int         get_char(){return -1;}
-    virtual char*       gets(char *s, int n){ return NULL;}
-    virtual int         scanf_one(const char *fmt, void *val){return -1;}
+    virtual char*       gets(char *, int){ return NULL;}
+    virtual int         scanf_one(const char *, void *){return -1;}
     virtual int         eof(){return -1;}
 
     virtual const char* fname(){ return NULL;};
-    virtual int         subfile_open(const char *fn){ return EINVAL;}
+    virtual int         subfile_open(const char*){ return EINVAL;}
     virtual void        subfile_close(){}
-    virtual int		tempbuffer_open(void  *buf, size_t size);
+    virtual int		tempbuffer_open(void*, size_t);
     virtual void	tempbuffer_close()
     {
         if(substream) delete substream;
@@ -84,7 +84,6 @@ class LibRaw_file_datastream : public LibRaw_abstract_datastream
     virtual ~LibRaw_file_datastream() {if(f)fclose(f); if(sav)fclose(sav);}
 
     virtual int valid() { return f?1:0;}
-    virtual int has_subfile_open() { return 1;}
 
 #define CHK() do {if(!f) throw LIBRAW_EXCEPTION_IO_EOF;}while(0)
     virtual int read(void * ptr,size_t size, size_t nmemb) 
@@ -131,7 +130,14 @@ class LibRaw_file_datastream : public LibRaw_abstract_datastream
         if(sav) return EBUSY;
         sav = f;
         f = fopen(fn,"rb");
-        return f?0:ENOENT;
+        if(!f)
+            {
+                f = sav;
+                sav = NULL;
+                return ENOENT;
+            }
+        else
+            return 0;
     }
     virtual void subfile_close()
     {
