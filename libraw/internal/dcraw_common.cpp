@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sat Feb  7 20:23:43 2009
+   Generated from dcraw/dcraw.c at Thu Feb 12 10:17:47 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -111,10 +111,17 @@ void CLASS canon_black (double dark[2])
 
   if (raw_width < width+4) return;
   FORC(2) dark[c] /= (raw_width-width-2) * height >> 1;
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(!( filtering_mode & LIBRAW_FILTERING_NOBLACKS) )
+      {
+#endif
   if ((diff = dark[0] - dark[1]))
     for (row=0; row < height; row++)
       for (col=1; col < width; col+=2)
 	BAYER(row,col) += diff;
+#ifdef LIBRAW_LIBRARY_BUILD
+      }
+#endif
   dark[1] += diff;
   black = (dark[0] + dark[1] + 1) / 2;
 }
@@ -629,13 +636,10 @@ void CLASS canon_compressed_load_raw()
     }
   }
   free (pixel);
-#ifdef LIBRAW_LIBRARY_BUILD
-  if(!( filtering_mode & LIBRAW_FILTERING_NOBLACKS) )
-#endif
-      canon_black (dark);
+  canon_black (dark);
 }
 
-#line 922 "dcraw/dcraw.c"
+#line 926 "dcraw/dcraw.c"
 int CLASS ljpeg_start (struct jhead *jh, int info_only)
 {
   int c, tag, len;
@@ -787,10 +791,7 @@ void CLASS lossless_jpeg_load_raw()
     }
   }
   free (jh.row);
-#ifdef LIBRAW_LIBRARY_BUILD
-  if(!(filtering_mode & LIBRAW_FILTERING_NOBLACKS))
-#endif
-      canon_black (dark);
+  canon_black (dark);
   if (!strcasecmp(make,"KODAK"))
     black = min;
 }
@@ -1229,7 +1230,7 @@ void CLASS fuji_load_raw()
   free (pixel);
 #endif
 }
-#line 1520 "dcraw/dcraw.c"
+#line 1521 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1727,7 +1728,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 2021 "dcraw/dcraw.c"
+#line 2022 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2955,7 +2956,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 4122 "dcraw/dcraw.c"
+#line 4123 "dcraw/dcraw.c"
 
 void CLASS pseudoinverse (double (*in)[3], double (*out)[3], int size)
 {
@@ -4223,7 +4224,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 5393 "dcraw/dcraw.c"
+#line 5394 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4749,7 +4750,7 @@ void CLASS parse_kodak_ifd (int base)
   }
 }
 
-#line 5922 "dcraw/dcraw.c"
+#line 5923 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -5911,7 +5912,7 @@ void CLASS parse_cine()
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 7187 "dcraw/dcraw.c"
+#line 7188 "dcraw/dcraw.c"
 #ifdef LIBRAW_LIBRARY_BUILD
 void CLASS adobe_coeff (const char *p_make, const char *p_model)
 #else
@@ -7810,7 +7811,7 @@ notraw:
   RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,1,2);
 #endif
 }
-#line 9177 "dcraw/dcraw.c"
+#line 9178 "dcraw/dcraw.c"
 void CLASS convert_to_rgb()
 {
   int row, col, c, i, j, k;
@@ -8062,7 +8063,7 @@ void CLASS gamma_lut (ushort lut[0x10000])
 }
 
 
-#line 9453 "dcraw/dcraw.c"
+#line 9454 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {

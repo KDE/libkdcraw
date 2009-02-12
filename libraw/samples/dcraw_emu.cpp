@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
               }
       }
   putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
-
+  OUT.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 #define P1 RawProcessor.imgdata.idata
 #define S RawProcessor.imgdata.sizes
 #define C RawProcessor.imgdata.color

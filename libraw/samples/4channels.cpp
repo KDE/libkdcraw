@@ -39,7 +39,7 @@
 int main(int ac, char *av[])
 {
     int  i, ret;
-    int autoscale=0,filtering_mode=LIBRAW_FILTERING_NONE;
+    int autoscale=0,filtering_mode=LIBRAW_FILTERING_DEFAULT;
     char outfn[1024],thumbfn[1024]; 
 
     LibRaw RawProcessor;
@@ -98,7 +98,6 @@ int main(int ac, char *av[])
                 }
             if(filtering_mode)
                 OUT.filtering_mode = (LibRaw_filtering) filtering_mode;
-
             int r,c;
             printf("Processing file %s\n",av[i]);
             if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
@@ -117,7 +116,6 @@ int main(int ac, char *av[])
                     continue;
                 }
 
-
             if(autoscale)
                 {
                     unsigned max=0,scale;
@@ -133,9 +131,13 @@ int main(int ac, char *av[])
                                 for(c=0;c<4;c++)
                                     RawProcessor.imgdata.image[j][c] *= scale;
                         }
+		   printf("Black level (scaled)=%d\n",C.black*scale);
                 }
+		else
+		   printf("Black level (unscaled)=%d\n",C.black);
 
             // hack to make dcraw tiff writer happy
+	    int isrgb=(P1.colors==4?0:1);
             P1.colors = 1;
             S.width = S.iwidth;
             S.height = S.iheight;
@@ -147,11 +149,20 @@ int main(int ac, char *av[])
                             for (int rc = 0; rc < S.iheight*S.iwidth; rc++)
                                 RawProcessor.imgdata.image[rc][0] = RawProcessor.imgdata.image[rc][layer];
                         }
+		    char lname[8];
+		    if(isrgb)
+		      {
+			snprintf(lname,7,"%c",(char*)("RGBG")[layer]);
+			if(layer==3)
+			  strcat(lname,"2");
+		      }
+		    else
+		      snprintf(lname,7,"%c",(char*)("GCMY")[layer]);
 
                     if(OUT.shot_select)
-                        snprintf(outfn,sizeof(outfn),"%s-%d.%d.tiff",av[i],OUT.shot_select,layer);
+                        snprintf(outfn,sizeof(outfn),"%s-%d.%s.tiff",av[i],OUT.shot_select,lname);
                     else
-                        snprintf(outfn,sizeof(outfn),"%s.%d.tiff",av[i],layer);
+                        snprintf(outfn,sizeof(outfn),"%s.%s.tiff",av[i],lname);
                     
                     printf("Writing file %s\n",outfn);
                     if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
