@@ -1,6 +1,7 @@
 0.1.8
 ------------------------------------------------------------------------
-
+Updated to libraw 0.6.13:
+ - Bugfixes in RIFF reading code. . 
 Updated to libraw 0.6.12: 
  - Hasselblad V96C support. 
 Updated to libraw 0.6.11: 
