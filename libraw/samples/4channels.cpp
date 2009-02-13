@@ -39,7 +39,7 @@
 int main(int ac, char *av[])
 {
     int  i, ret;
-    int autoscale=0,filtering_mode=LIBRAW_FILTERING_DEFAULT;
+    int autoscale=0,filtering_mode=LIBRAW_FILTERING_DEFAULT,black_subtraction=1;
     char outfn[1024],thumbfn[1024]; 
 
     LibRaw RawProcessor;
@@ -89,7 +89,10 @@ int main(int ac, char *av[])
                     else if(av[i][1]=='A' && av[i][2]==0)
                         autoscale=1;
                     else if(av[i][1]=='B' && av[i][2]==0)
-                        filtering_mode |= (LIBRAW_FILTERING_NOZEROES | LIBRAW_FILTERING_NOBLACKS);
+                        {
+                            filtering_mode |= (LIBRAW_FILTERING_NOZEROES | LIBRAW_FILTERING_NOBLACKS);
+                            black_subtraction=0;
+                        }
                     else if(av[i][1]=='N' && av[i][2]==0)
                         filtering_mode |= LIBRAW_FILTERING_NORAWCURVE;
                     else
@@ -114,6 +117,15 @@ int main(int ac, char *av[])
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
                     continue;
+                }
+            if(black_subtraction && C.black>0)
+                {
+                    for(int j=0; j<S.iheight*S.iwidth; j++)
+                        for(int c = 0; c< 4; c++)
+                            if(RawProcessor.imgdata.image[j][c]>C.black)
+                                RawProcessor.imgdata.image[j][c]-=C.black;
+                            else
+                                RawProcessor.imgdata.image[j][c]=0;
                 }
 
             if(autoscale)
