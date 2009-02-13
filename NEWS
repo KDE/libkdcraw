@@ -1,5 +1,6 @@
 0.4.1 - Released with KDE 4.2.1
 ------------------------------------------------------------------------
+- Updated to libraw 0.6.13: Bugfixes in RIFF reading code.
 - Updated to libraw 0.6.12: Hasselblad V96C support.
 
 0.4.0 - Released with KDE 4.2.0
