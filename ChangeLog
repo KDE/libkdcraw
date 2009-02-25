@@ -1,3 +1,129 @@
+V 0.1.8 - 2009-02-25
+----------------------------------------------------------------------------
+
+2009-02-13 09:39  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h: update internal libraw to 0.6.13.
+	  BC preserved
+
+2009-02-07 18:10  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h, libraw/src/libraw_cxx.cpp:
+	  libkdcraw from KDE3 branch : update interanal LibRaw to 0.6.12
+	  release. BC preserved
+
+2009-01-27 14:47  cgilles
+
+	* README: fix qt url
+
+2009-01-25 11:10  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h: updated internal LibRaw to 0.6.11
+
+2009-01-24 20:39  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h: update libraw to 0.6.10
+
+2009-01-16 19:31  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h: libkdcraw from KDE3 branch:
+	  updated internal LibRaw to 0.6.9
+
+2009-01-14 09:30  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h: libkdcraw from KDE3 branch :
+	  update to LibRaw 0.6.8
+
+2009-01-11 18:24  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h, libraw/src/libraw_cxx.cpp:
+	  libkdcraw from KDE3 branch : updated to LibRaw 0.6.7:
+	  * Added support for Samsung S85
+	  * Changes in external jpeg (metadata) processing
+
+2009-01-09 07:42  cgilles
+
+	* libraw/internal/dcraw_common.cpp, libraw/internal/defines.h,
+	  libraw/internal/foveon.cpp, libraw/libraw/libraw_version.h,
+	  libraw/samples/dcraw_half.c, libraw/samples/dcraw_half.cpp,
+	  libraw/samples/half_mt.c, libraw/samples/half_mt.cpp,
+	  libraw/samples/half_mt_win32.c, libraw/samples/half_mt_win32.cpp:
+	  libkdcraw from KDE3 branch : updated internal libraw to 0.6.6
+	  stable release:
+	  Imported dcraw 8.89/1.411: changes in Panasonic FZ50 processing
+	  code
+
+2009-01-09 07:41  cgilles
+
+	* NEWS: libkdcraw from KDE3 branch : updated internal libraw to
+	  0.6.6 stable release:
+	  Imported dcraw 8.89/1.411: changes in Panasonic FZ50 processing
+	  code
+	  CCMAIL: digikam-devel@kde.org
+
+2009-01-04 16:52  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/libraw/libraw_version.h, libraw/samples/dcraw_half.c,
+	  libraw/samples/dcraw_half.cpp, libraw/samples/half_mt.c,
+	  libraw/samples/half_mt.cpp, libraw/samples/half_mt_win32.cpp,
+	  libraw/src/libraw_cxx.cpp: libkdcraw from KDE3 branch: updated to
+	  libraw to 0.6.5:
+	  -Fixed file descriptor and buffer memory leak when thumbnail
+	  extractor is called,
+	  but library object is not properly initialized.
+	  -Fixes in Imacon files unpacking.
+	  -Fixes in Hasselblad .fff files unpacking.
+	  
+	  CCMAIL: digikam-devel@kde.org
+	  
+
+2009-01-01 15:47  cgilles
+
+	* libraw/src/libraw_cxx.cpp: sync with trunk
+
+2008-12-16 12:25  cgilles
+
+	* NEWS: update
+
+2008-12-15 20:55  cgilles
+
+	* libkdcraw/kdcrawprivate.cpp: fix index. No PPM preview from RAW
+	  image are not broken anymore...
+
+2008-12-15 20:49  cgilles
+
+	* libkdcraw/kdcrawprivate.cpp: do not include #00 char at end of
+	  QCString data to generate ppm preview
+
+2008-12-14 18:44  cgilles
+
+	* NEWS, libkdcraw.lsm, libkdcraw.pc.in, libkdcraw/version.h: update
+	  release version
+
+2008-12-13 09:55  cgilles
+
+	* ChangeLog: update
+
+2008-12-13 09:41  cgilles
+
+	* libkdcraw.lsm: prepare libkdcraw 0.1.7 for KDE3
+
 V 0.1.7 - 2008-12-13
 ----------------------------------------------------------------------------
 
