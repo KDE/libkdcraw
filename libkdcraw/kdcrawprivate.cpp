@@ -6,7 +6,7 @@
  * Date        : 2008-10-09
  * Description : internal private container for KDcraw
  *
- * Copyright (C) 2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * NOTE: Do not use kdDebug() in this implementation because 
  *       it will be multithreaded. Use qDebug() instead. 

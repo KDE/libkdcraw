@@ -6,7 +6,7 @@
  * Date        : 2007-02-12
  * Description : dcraw program interface for KDE
  *
- * Copyright (C) 2007-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,9 +23,9 @@
 #ifndef KDCRAW_VERSION_H
 #define KDCRAW_VERSION_H
 
-static const char kdcraw_version[] = "0.1.8";
+static const char kdcraw_version[] = "0.1.9";
 
-#define KDCRAW_VERSION 0x000108
+#define KDCRAW_VERSION 0x000109
 
 #endif // KDCRAW_VERSION_H
 
