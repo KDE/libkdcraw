@@ -473,7 +473,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->inputColorSpaceComboBox->setWhatsThis(i18n("<p><b>Camera Profile</b><p>"
                 "Select here the input color space used to decode RAW data.<p>"
                 "<b>None</b>: no input color profile is used during RAW decoding.<p>"
-                "<b>Embedded</b>: use embedded color profile from RAW file if exist.<p>"
+                "<b>Embedded</b>: use embedded color profile from RAW file, if it exists.<p>"
                 "<b>Custom</b>: use a custom input color space profile."));
 
     d->inIccUrlEdit = new KUrlRequester(d->colormanSettings);
@@ -493,7 +493,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                 "Select here the output color space used to decode RAW data.<p>"
                 "<b>Raw (linear)</b>: in this mode, no output color space is used "
                 "during RAW decoding.<p>"
-                "<b>sRGB</b>: this is a RGB color space, created "
+                "<b>sRGB</b>: this is an RGB color space, created "
                 "cooperatively by Hewlett-Packard and Microsoft. It is the "
                 "best choice for images destined for the Web and portrait photography.<p>"
                 "<b>Adobe RGB</b>: this color space is an extended RGB color space, developed by "
