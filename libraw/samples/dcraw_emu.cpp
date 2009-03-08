@@ -65,6 +65,7 @@ void usage(const char *prog)
 "-m <num>  Apply a 3x3 median filter to R-G and B-G\n"
 "-s [0..N-1] Select one raw image from input file\n"
 "-4        Write 16-bit linear instead of 8-bit with gamma\n"
+"-g pow ts Set gamma curve to gamma pow and toe slope ts (default = 2.222 4.5)\n"
 "-T        Write TIFF instead of PPM\n"
         );
     exit(1);
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
   for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
       {
           opt = argv[arg++][1];
-          if ((cp = strchr (sp="nbrkStqmHAC", opt)))
+          if ((cp = strchr (sp="nbrkStqmHACg", opt)))
               for (i=0; i < "11411111142"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0])) 
                       {
@@ -129,6 +130,9 @@ int main(int argc, char *argv[])
                   OUT.aber[0] = 1 / atof(argv[arg++]);
                   OUT.aber[2] = 1 / atof(argv[arg++]);  
                   break;
+              case 'g':  
+                  OUT.gamm[0] = 1 / atof(argv[arg++]);
+                  OUT.gamm[1] =     atof(argv[arg++]);  break;
               case 'k':  OUT.user_black  = atoi(argv[arg++]);  break;
               case 'S':  OUT.user_sat    = atoi(argv[arg++]);  break;
               case 't':  OUT.user_flip   = atoi(argv[arg++]);  break;

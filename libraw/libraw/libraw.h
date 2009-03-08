@@ -86,6 +86,7 @@ class DllDef LibRaw
     LibRaw(unsigned int flags = LIBRAW_OPTIONS_NONE)
         {
             double aber[4] = {1,1,1,1};
+            double gamm[5] = { 0.45,4.5,0,0,0 };
             unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
 #ifdef DCRAW_VERBOSE
             verbose = 1;
@@ -98,6 +99,7 @@ class DllDef LibRaw
             callbacks.mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
             callbacks.data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
             memmove(&imgdata.params.aber,&aber,sizeof(aber));
+            memmove(&imgdata.params.gamm,&gamm,sizeof(gamm));
             memmove(&imgdata.params.greybox,&greybox,sizeof(greybox));
 
             imgdata.params.bright=1;

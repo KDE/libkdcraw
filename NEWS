@@ -1,3 +1,9 @@
+0.4.2 - Released with KDE 4.2.3
+------------------------------------------------------------------------
+- Updated to libraw 0.6.14: user-specified gamma curve.
+                            Pentax K2000/Km support.
+                            Changes in Canon sRAW processing (support for 5D2 fw 1.07).
+
 0.4.1 - Released with KDE 4.2.1
 ------------------------------------------------------------------------
 - Updated to libraw 0.6.13: Bugfixes in RIFF reading code.
