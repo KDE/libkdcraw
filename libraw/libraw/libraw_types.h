@@ -213,6 +213,7 @@ typedef struct
 {
     unsigned    greybox[4];     /* -A  x1 y1 x2 y2 */
     double      aber[4];        /* -C */
+    double      gamm[5];        /* -g */
     float       user_mul[4];    /* -r mul0 mul1 mul2 mul3 */
     unsigned    shot_select;    /* -s */
     float       bright;         /* -b */
