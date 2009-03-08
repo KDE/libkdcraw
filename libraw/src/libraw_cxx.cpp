@@ -136,6 +136,7 @@ void LibRaw::derror()
 LibRaw:: LibRaw(unsigned int flags)
 {
     double aber[4] = {1,1,1,1};
+    double gamm[5] = { 0.45,4.5,0,0,0 };
     unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
 #ifdef DCRAW_VERBOSE
     verbose = 1;
@@ -148,6 +149,7 @@ LibRaw:: LibRaw(unsigned int flags)
     callbacks.mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
     callbacks.data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
     memmove(&imgdata.params.aber,&aber,sizeof(aber));
+    memmove(&imgdata.params.gamm,&gamm,sizeof(gamm));
     memmove(&imgdata.params.greybox,&greybox,sizeof(greybox));
     
     imgdata.params.bright=1;
@@ -1750,6 +1752,7 @@ static const char  *static_camera_list[] =
 "Nikon D2X",
 "Nikon D2Xs",
 "Nikon D3",
+"Nikon D3X",
 "Nikon D40",
 "Nikon D40X",
 "Nikon D50",
@@ -1835,6 +1838,7 @@ static const char  *static_camera_list[] =
 "Pentax K100D",
 "Pentax K100D Super",
 "Pentax K200D",
+"Pentax K2000/K-m",
 "Pentax Optio S",
 "Pentax Optio S4",
 "Pentax Optio 33WR",

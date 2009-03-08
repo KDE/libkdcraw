@@ -92,6 +92,7 @@
 //imgdata.output
 #define greybox         (imgdata.params.greybox)
 #define aber            (imgdata.params.aber)
+#define gamm            (imgdata.params.gamm)
 #define user_mul        (imgdata.params.user_mul)
 #define shot_select     (imgdata.params.shot_select)
 #define bright          (imgdata.params.bright)

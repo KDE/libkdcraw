@@ -1,11 +1,11 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Fri Feb 13 10:44:56 2009
+   Generated from dcraw/dcraw.c at Sun Mar  8 17:46:19 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
-#line 3251 "dcraw/dcraw.c"
+#line 3260 "dcraw/dcraw.c"
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_IO_REDEFINED
@@ -17,7 +17,7 @@
 #define SRC_USES_CURVE
 #include "internal/var_defines.h"
 #define sget4(s) sget4((uchar *)s)
-#line 3264 "dcraw/dcraw.c"
+#line 3273 "dcraw/dcraw.c"
 
 /* RESTRICTED code starts here */
 
@@ -277,12 +277,12 @@ int CLASS foveon_apply_curve (short *curve, int i)
   return i < 0 ? -curve[1-i] : curve[1+i];
 }
 
-#line 3526 "dcraw/dcraw.c"
+#line 3535 "dcraw/dcraw.c"
 #ifdef image
 #undef image
 #endif
 #define image ((short(*)[4]) imgdata.image)
-#line 3533 "dcraw/dcraw.c"
+#line 3542 "dcraw/dcraw.c"
 
 void CLASS foveon_interpolate()
 {
@@ -719,7 +719,7 @@ void CLASS foveon_interpolate()
 #undef image
 
 /* RESTRICTED code ends here */
-#line 7087 "dcraw/dcraw.c"
+#line 7098 "dcraw/dcraw.c"
 char * CLASS foveon_gets (int offset, char *str, int len)
 {
   int i;
