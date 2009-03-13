@@ -1,5 +1,11 @@
 0.1.9
 ------------------------------------------------------------------------
+Updated to libraw 0.6.15: 
+ - more accurate pentax dSLR support
+ - fixes in Kodak 620x/720x identification
+ - faster identification procedure for some formats.
+ - Fixed bug in custom gamma curve creation
+
 Updated to libraw 0.6.14: 
  - user-specified gamma curve.                 
  - Pentax K2000/Km support.                    

@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Mar  8 14:39:19 2009
+   Generated from dcraw/dcraw.c at Fri Mar 13 20:12:19 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -597,7 +597,7 @@ int CLASS ljpeg_start (struct jhead *jh, int info_only)
   int c, tag, len;
   uchar data[0x10000], *dp;
 
-  init_decoder();
+  if (!info_only) init_decoder();
   memset (jh, 0, sizeof *jh);
   FORC(6) jh->huff[c] = free_decode;
   jh->restart = INT_MAX;
@@ -882,17 +882,31 @@ void CLASS adobe_dng_load_raw_nc()
   free (pixel);
 }
 
+void CLASS pentax_tree()
+{
+  ushort bit[2][13];
+  struct decode *cur;
+  int c, i, j;
+
+  init_decoder();
+  FORC(13) bit[0][c] = get2();
+  FORC(13) bit[1][c] = fgetc(ifp) & 15;
+  FORC(13) {
+    cur = first_decode;
+    for (i=0; i < bit[1][c]; i++) {
+      j = bit[0][c] >> (11-i) & 1;
+      if (!cur->branch[j]) cur->branch[j] = ++free_decode;
+      cur = cur->branch[j];
+    }
+    cur->leaf = c;
+  }
+}
+
 void CLASS pentax_k10_load_raw()
 {
-  static const uchar pentax_tree[2][30] =
-  { { 0,2,3,1,1,1,1,1,1,2,0,0,0,0,0,0, 3,4,2,5,1,6,0,7,8,9,10,11,12 },
-    { 0,2,3,1,1,1,1,1,1,2,0,0,0,0,0,0, 1,2,0,3,4,5,6,7,8,9,10,11,12 } };
   int row, col, diff;
   ushort vpred[2][2] = {{0,0},{0,0}}, hpred[2];
 
-  init_decoder();
-  row = !strcmp(model,"K2000") || !strcmp(model,"K-m");
-  make_decoder (pentax_tree[row], 0);
   getbits(-1);
   for (row=0; row < height; row++)
     for (col=0; col < raw_width; col++) {
@@ -1112,7 +1126,7 @@ void CLASS fuji_load_raw()
   }
   free (pixel);
 }
-#line 1406 "dcraw/dcraw.c"
+#line 1420 "dcraw/dcraw.c"
 void CLASS ppm_thumb (FILE *tfp)
 {
   char *thumb;
@@ -1522,7 +1536,7 @@ void CLASS leaf_hdr_load_raw()
   }
 }
 
-#line 1819 "dcraw/dcraw.c"
+#line 1833 "dcraw/dcraw.c"
 void CLASS sinar_4shot_load_raw()
 {
   ushort *pixel;
@@ -2069,7 +2083,7 @@ void CLASS kodak_jpeg_load_raw()
 #endif
     jpeg_destroy_decompress (&cinfo);
 throw LIBRAW_EXCEPTION_DECODE_JPEG; 
-#line 2368 "dcraw/dcraw.c"
+#line 2382 "dcraw/dcraw.c"
   }
   buf = (*cinfo.mem->alloc_sarray)
 		((j_common_ptr) &cinfo, JPOOL_IMAGE, width*3, 1);
@@ -2577,7 +2591,7 @@ void CLASS smal_v9_load_raw()
     smal_decode_segment (seg+i, holes);
   if (holes) fill_holes (holes);
 }
-#line 3573 "dcraw/dcraw.c"
+#line 3587 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -2593,7 +2607,7 @@ void CLASS bad_pixels (char *fname)
 RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2); 
   if (fname)
     fp = fopen (fname, "r");
-#line 3614 "dcraw/dcraw.c"
+#line 3628 "dcraw/dcraw.c"
   if (!fp) 
       {
 imgdata.process_warnings |= LIBRAW_WARN_NO_BADPIXELMAP; 
@@ -3884,7 +3898,7 @@ void CLASS parse_thumb_note (int base, unsigned toff, unsigned tlen)
   }
 }
 
-#line 4908 "dcraw/dcraw.c"
+#line 4922 "dcraw/dcraw.c"
 void CLASS parse_makernote (int base, int uptag)
 {
   static const uchar xlat[2][256] = {
@@ -4088,6 +4102,10 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
       black = (get2()+get2()+get2()+get2())/4;
     if (tag == 0x201 && len == 4)
       goto get2_rggb;
+    if (tag == 0x220 && len == 53) {
+      fseek (ifp, 14, SEEK_CUR);
+      pentax_tree();
+    }
     if (tag == 0x401 && len == 4) {
       black = (get4()+get4()+get4()+get4())/4;
     }
@@ -4372,7 +4390,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED; }
   }
 }
 
-#line 5399 "dcraw/dcraw.c"
+#line 5417 "dcraw/dcraw.c"
 int CLASS parse_tiff_ifd (int base)
 {
   unsigned entries, tag, type, len, plen=16, save;
@@ -5448,7 +5466,7 @@ color_flags.cam_mul_state = LIBRAW_COLORSTATE_LOADED;
   data_offset  = (INT64) get4() + 8;
   data_offset += (INT64) get4() << 32;
 }
-#line 6579 "dcraw/dcraw.c"
+#line 6597 "dcraw/dcraw.c"
 void CLASS adobe_coeff (const char *p_make, const char *p_model) 
 {
   static const struct {
@@ -7066,6 +7084,8 @@ color_flags.curve_state = LIBRAW_COLORSTATE_LOADED;
       colors = 1;
       filters = 0;
     }
+    if (!strcmp(model+4,"20X"))
+      strcpy (cdesc, "MYCY");
     if (strstr(model,"DC25")) {
       strcpy (model, "DC25");
       data_offset = 15424;
@@ -7299,7 +7319,7 @@ void CLASS apply_profile (char *input, char *output)
   if (strcmp (input, "embed"))
     hInProfile = cmsOpenProfileFromFile (input, "r");
   else if (profile_length) {
-#line 8437 "dcraw/dcraw.c"
+#line 8457 "dcraw/dcraw.c"
 hInProfile = cmsOpenProfileFromMem (imgdata.color.profile, profile_length); 
   } else
       {
@@ -7457,7 +7477,7 @@ RUN_CALLBACK(LIBRAW_PROGRESS_CONVERT_RGB,0,2);
 
 #endif
 memset(histogram,0,sizeof(int)*LIBRAW_HISTOGRAM_SIZE*4); 
-#line 8597 "dcraw/dcraw.c"
+#line 8617 "dcraw/dcraw.c"
   for (img=image[0], row=0; row < height; row++)
     for (col=0; col < width; col++, img+=4) {
       if (!raw_color) {
@@ -7586,15 +7606,15 @@ void CLASS gamma_lut (ushort lut[0x10000])
   t_white *= 8 / bright;
   for (i=0; i < 0x10000; i++) {
     r = i / t_white;
-    val = 65536 * ( !use_gamma ? r :
+    val = 65535 * ( !use_gamma ? r :
                     r <= gamm[2] ? r*gamm[1] : pow((double)r,gamm[0])*(1+gamm[3])-gamm[3]);
-    if (val > 65536) val = 65536;
+    if (val > 65535) val = 65535;
     lut[i] = val;
   }
 }
 
 
-#line 8758 "dcraw/dcraw.c"
+#line 8778 "dcraw/dcraw.c"
 void CLASS tiff_set (ushort *ntag,
 	ushort tag, ushort type, int count, int val)
 {
