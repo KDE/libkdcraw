@@ -148,6 +148,7 @@ int main(int ac, char *av[])
 		else
 		   printf("Black level (unscaled)=%d\n",C.black);
 
+
             // hack to make dcraw tiff writer happy
 	    int isrgb=(P1.colors==4?0:1);
             P1.colors = 1;

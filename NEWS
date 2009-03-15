@@ -1,8 +1,14 @@
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
-- Updated to LibRaw 0.7.0-beta5. 
-  See http://www.libraw.org/download#changelog-beta for details.
-
+- Updated to LibRaw 0.7.0 : Black (masked) pixels data extracted from RAW and avaliable in application.
+                            Application can turn off RAW data filtering (black level subtraction, 
+                            zero pixels removal and raw tone curve).
+                            New 'input framewrok' released. Reading raw data from file and memory buffer supported from scratch. 
+                            LibRaw-using application can implement own data reading functions (e.g. reading from network stream).
+                            Fuji SuperCCD: raw data extracted without 45-degree rotation.
+                            New sample applications: 4channels and unprocessed_raw
+                            Imported (subsequentally) new dcraw versions from 8.89 to 8.93 (up to date) 
+                        
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
 - Updated to LibRaw 0.6.5 : Fixed file descriptor and buffer memory leak when thumbnail extractor is called, 

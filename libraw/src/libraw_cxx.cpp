@@ -1400,7 +1400,7 @@ int LibRaw::rotate_fuji_raw(void)
                         c = row + ((col+1) >> 1);
                     }
                     newimage[((r) >> IO.shrink)*fiwidth + ((c) >> IO.shrink)][FC(r,c)] = 
-                        imgdata.image[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][FC(row,col)];
+                        imgdata.image[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][FC(r,c)];
                 }
         }
     // restore fuji sizes!
