@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: var_defines.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8, 2008
  *
  * LibRaw redefinitions of dcraw internal variables
@@ -44,6 +44,8 @@
 #define width           (imgdata.sizes.width)
 #define top_margin      (imgdata.sizes.top_margin)
 #define left_margin     (imgdata.sizes.left_margin)
+#define bottom_margin   (imgdata.sizes.bottom_margin)
+#define right_margin    (imgdata.sizes.right_margin)
 #define iheight         (imgdata.sizes.iheight)
 #define iwidth          (imgdata.sizes.iwidth)
 #define pixel_aspect    (imgdata.sizes.pixel_aspect)
@@ -110,15 +112,16 @@
 #define med_passes      (imgdata.params.med_passes)
 #define no_auto_bright  (imgdata.params.no_auto_bright)
 #define use_fuji_rotate (imgdata.params.use_fuji_rotate)
+#define filtering_mode (imgdata.params.filtering_mode)
 
 //rgb_constants
 #define xyz_rgb         (rgb_constants.xyz_rgb)
 #define d65_white       (rgb_constants.d65_white)
 
 //libraw_internal_data.internal_data
-#define ifname          (libraw_internal_data.internal_data.ifname)
 #define meta_data       (libraw_internal_data.internal_data.meta_data)
-#define ifp             (libraw_internal_data.internal_data.input)
+#define ifp             libraw_internal_data.internal_data.input
+#define ifname          ((char*)libraw_internal_data.internal_data.input->fname())
 #define profile_offset  (libraw_internal_data.internal_data.profile_offset)
 #define thumb_offset    (libraw_internal_data.internal_data.toffset)
 
@@ -162,5 +165,17 @@
 #define tile_width      (libraw_internal_data.unpacker_data.tile_width)
 #define tile_length     (libraw_internal_data.unpacker_data.tile_length)
 #define load_flags      (libraw_internal_data.unpacker_data.load_flags)
+
+#ifdef LIBRAW_IO_REDEFINED
+#define fread(ptr,size,n,stream) stream->read(ptr,size,n)
+#define fseek(stream,o,w)	 stream->seek(o,w)
+#define fseeko(stream,o,w)	 stream->seek(o,w)
+#define ftell(stream)		 stream->tell()
+#define ftello(stream)		 stream->tell()
+#define getc(stream)		 stream->get_char()
+#define fgetc(stream)		 stream->get_char()
+#define fgets(str,n,stream)	 stream->gets(str,n)
+#define fscanf(stream,fmt,ptr)	 stream->scanf_one(fmt,ptr)
+#endif
 
 #endif

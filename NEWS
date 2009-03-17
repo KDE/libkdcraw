@@ -1,5 +1,15 @@
 0.1.9
 ------------------------------------------------------------------------
+Updated to LibRaw 0.7.0 :
+ - Black (masked) pixels data extracted from RAW and avaliable in application.
+ - Application can turn off RAW data filtering (black level subtraction,
+   zero pixels removal and raw tone curve).
+ - New 'input framework' released. Reading raw data from file and memory buffer supported from scratch.
+   LibRaw-using application can implement own data reading functions (e.g. reading from network stream).
+ - Fuji SuperCCD: raw data extracted without 45-degree rotation.
+ - New sample applications: 4channels and unprocessed_raw.
+ - Imported (subsequentally) new dcraw versions from 8.89 to 8.93 (up to date) 
+
 Updated to libraw 0.6.15: 
  - more accurate pentax dSLR support
  - fixes in Kodak 620x/720x identification
@@ -7,8 +17,8 @@ Updated to libraw 0.6.15:
  - Fixed bug in custom gamma curve creation
 
 Updated to libraw 0.6.14: 
- - user-specified gamma curve.                 
- - Pentax K2000/Km support.                    
+ - user-specified gamma curve.
+ - Pentax K2000/Km support.
  - Changes in Canon sRAW processing (support for 5D2 fw 1.07).
 
 0.1.8

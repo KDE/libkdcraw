@@ -69,7 +69,7 @@
 
 // Pentax
     void        pentax_k10_load_raw();
-void        pentax_tree();
+    void        pentax_tree();
 
 // Nikon (and Minolta Z2)
     void        nikon_compressed_load_raw();

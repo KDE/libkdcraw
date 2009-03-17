@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: simple_dcraw.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw simple C++ API  (emulates call to "dcraw  [-D]  [-T] [-v] [-e] [-4]")
@@ -24,6 +24,13 @@
 #include <string.h>
 #include <math.h>
 
+#ifndef WIN32
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#endif
+
 #include "libraw/libraw.h"
 
 #ifdef WIN32
@@ -40,7 +47,8 @@ int my_progress_callback(void *unused_data,enum LibRaw_progress state,int iter, 
 
 int main(int ac, char *av[])
 {
-    int  i, ret, verbose=0, output_thumbs=0;
+    int  i, ret, verbose=0, output_thumbs=0,use_mmap=0,msize;
+    void *file_buffer;
 
     // don't use fixed size buffers in real apps!
     char outfn[1024],thumbfn[1024]; 
@@ -49,13 +57,16 @@ int main(int ac, char *av[])
     if(ac<2) 
         {
             printf(
-                "simple_dcraw - LibRaw %s sample. Emulates dcraw [-D] [-T] [-v] [-e]\n"
+                "simple_dcraw - LibRaw %s sample. Emulates dcraw [-D] [-T] [-v] [-e] [-B]\n"
                 " %d cameras supported\n"
                 "Usage: %s [-D] [-T] [-v] [-e] raw-files....\n"
                 "\t-D - document mode emulation\n"
                 "\t-4 - 16-bit mode\n"
                 "\t-v - verbose output\n"
                 "\t-T - output TIFF files instead of .pgm/ppm\n"
+#ifndef WIN32
+                "\t-B - use mmap()-ed I/O (Unix only)\n"
+#endif
                 "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",LibRaw::version(),
                 LibRaw::cameraCount(),
                 av[0]);
@@ -84,6 +95,8 @@ int main(int ac, char *av[])
                         output_thumbs++;
                     if(av[i][1]=='D' && av[i][2]==0)
                         OUT.document_mode=2;
+                    if(av[i][1]=='B' && av[i][2]==0)
+                        use_mmap=1;
                     if(av[i][1]=='4' && av[i][2]==0)
                         OUT.output_bps=16;
                     if(av[i][1]=='C' && av[i][2]==0)
@@ -92,12 +105,48 @@ int main(int ac, char *av[])
                 }
 
             if(verbose) printf("Processing file %s\n",av[i]);
-            if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
-                {
-                    fprintf(stderr,"Cannot open %s: %s\n",av[i],libraw_strerror(ret));
-                    continue; // no recycle b/c open file will recycle itself
-                }
 
+#ifndef WIN32
+            if(use_mmap)
+                {
+                    int file = open(av[i],O_RDONLY);
+                    struct stat st;
+                    if(file<0)
+                        {
+                            fprintf(stderr,"Cannot open %s: %s\n",av[i],strerror(errno));
+                            continue;
+                        }
+                    if(fstat(file,&st))
+                        {
+                            fprintf(stderr,"Cannot stat %s: %s\n",av[i],strerror(errno));
+                            close(file);
+                            continue;
+                        }
+                    int pgsz = getpagesize();
+                    msize = ((st.st_size+pgsz-1)/pgsz)*pgsz;
+                    file_buffer = mmap(NULL,msize,PROT_READ,MAP_PRIVATE,file,0);
+                    if(!file_buffer)
+                        {
+                            fprintf(stderr,"Cannot mmap %s: %s\n",av[i],strerror(errno));
+                            close(file);
+                            continue;
+                        }
+                    close(file);
+                    if( (ret = RawProcessor.open_buffer(file_buffer,st.st_size) != LIBRAW_SUCCESS))
+                        {
+                            fprintf(stderr,"Cannot open_buffer %s: %s\n",av[i],libraw_strerror(ret));
+                            continue; // no recycle b/c open file will recycle itself
+                        }
+                }
+            else
+#endif
+                {
+                    if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
+                        {
+                            fprintf(stderr,"Cannot open_file %s: %s\n",av[i],libraw_strerror(ret));
+                            continue; // no recycle b/c open file will recycle itself
+                        }
+                }
 
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
@@ -150,7 +199,14 @@ int main(int ac, char *av[])
 
             if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
                 fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
-            
+
+#ifndef WIN32            
+            if(use_mmap && file_buffer)
+                {
+                    munmap(file_buffer,msize);
+                    file_buffer=0;
+                }
+#endif
             RawProcessor.recycle(); // just for show this call
         }
     return 0;

@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_types.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C data structures
@@ -140,6 +140,9 @@ typedef struct
     double      pixel_aspect;
     int         flip;
 
+    // masked border sizes
+    ushort      right_margin,bottom_margin; // right masked width and bottom height, inited after idendify()
+
 } libraw_image_sizes_t;
 
 //Phase One  data
@@ -245,7 +248,22 @@ typedef struct
     int         med_passes;     /* -m */
     int         no_auto_bright; /* -W */
     int         use_fuji_rotate;/* -j */
+    enum LibRaw_filtering    filtering_mode; 
 }libraw_output_params_t;
+
+typedef struct
+{
+    ushort  *buffer; // actual pixel buffer size=(raw_width*raw_height - width*height)
+    ushort  *tl;     // top left   size=(top_margin*left_margin)
+    ushort  *top;    // top        size=(top_margin*width)
+    ushort  *tr;     // top right  size=((raw_width-width-left_margin)*top_margin)
+    ushort  *left;   // left       size=(left_margin*height)
+    ushort  *right;  // right      size=(raw_width-width-left_margin)*height;
+    ushort  *bl;     // bottom left size=(raw_height-height-top_margin)*left_margin
+    ushort  *bottom; // bottom      size=(raw_height-height-top_margin)*width
+    ushort  *br;     // bottom right size=(raw_height-height-top_margin)*
+    ushort  (*ph1_black)[2]; // Phase One black
+}libraw_masked_t;
 
 typedef struct
 {
@@ -256,6 +274,7 @@ typedef struct
     libraw_colordata_t          color;
     libraw_imgother_t           other;
     libraw_thumbnail_t          thumbnail;
+    libraw_masked_t             masked_pixels;
     ushort                      (*image)[4] ;
 #ifdef _OPENMP
 #pragma omp shared(image)

@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_internal.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw internal data structures (not visible outside)
@@ -25,7 +25,6 @@
 #define _LIBRAW_INTERNAL_TYPES_H
 
 #include <stdio.h>
-
 #ifdef __cplusplus
 
 
@@ -42,6 +41,8 @@
 
 
 #ifdef __cplusplus
+
+#include "libraw_datastream.h"
 
 class LibRaw_TLS
 {
@@ -91,7 +92,7 @@ class LibRaw_constants
     static const float d65_white[3];
     static const double xyz_rgb[3][3];
 };
-#endif
+#endif // __cplusplus
 
 #ifdef WIN32
 typedef long off_t;
@@ -99,8 +100,12 @@ typedef long off_t;
 
 typedef struct
 {
-    FILE         *input;
-    char        *ifname;
+#ifndef __cplusplus
+    struct
+#endif
+    LibRaw_abstract_datastream *input;
+    int         input_internal;
+//    char        *ifname;
     char        *meta_data;
     off_t       profile_offset;
     off_t       toffset;
@@ -115,6 +120,7 @@ typedef struct
     unsigned    zero_is_bad;
     ushort      shrink;
     ushort      fuji_width;
+    ushort      fwidth,fheight;
 } internal_output_params_t;
 
 #define LIBRAW_HISTOGRAM_SIZE 0x2000

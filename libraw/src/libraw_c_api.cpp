@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_c_api.cpp
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C++ interface (implementation)
@@ -24,11 +24,37 @@ extern "C"
     int     libraw_versionNumber() { return LibRaw::versionNumber();}
     const char**  libraw_cameraList() { return LibRaw::cameraList();}
     int   libraw_cameraCount() { return LibRaw::cameraCount(); }
+    const char* libraw_unpack_function_name(libraw_data_t* lr)
+    {
+        if(!lr) return "NULL parameter passed";
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        return ip->unpack_function_name();
+    }
+    int libraw_rotate_fuji_raw(libraw_data_t* lr)
+    {
+        if(!lr) return EINVAL;
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        return ip->rotate_fuji_raw();
+    }
+
+    int libraw_add_masked_borders_to_bitmap(libraw_data_t* lr)
+    {
+        if(!lr) return EINVAL;
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        return ip->add_masked_borders_to_bitmap();
+    }
+
     int libraw_open_file(libraw_data_t* lr, const char *file)
     {
         if(!lr) return EINVAL;
         LibRaw *ip = (LibRaw*) lr->parent_class;
         return ip->open_file(file);
+    }
+    int libraw_open_buffer(libraw_data_t* lr, void *buffer, size_t size)
+    {
+        if(!lr) return EINVAL;
+        LibRaw *ip = (LibRaw*) lr->parent_class;
+        return ip->open_buffer(buffer,size);
     }
     int libraw_unpack(libraw_data_t* lr)
     {

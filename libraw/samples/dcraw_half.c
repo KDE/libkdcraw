@@ -1,6 +1,6 @@
 /* -*- C++ -*-
- * File: simple_dcraw_c.c
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * File: dcraw_half.c
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw  C API sample  (emulates call to "dcraw  -h")

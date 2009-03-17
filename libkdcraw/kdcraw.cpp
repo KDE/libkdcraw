@@ -168,9 +168,12 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     qDebug("Try to use reduced RAW picture extraction");
 
     LibRaw raw;
-    raw.imgdata.params.use_auto_wb   = 1; // Use automatic white balance.
-    raw.imgdata.params.use_camera_wb = 1; // Use camera white balance, if possible.
-    raw.imgdata.params.half_size     = 1; // Half-size color image (3x faster than -q).
+    raw.imgdata.params.use_auto_wb    = 1; // Use automatic white balance.
+    raw.imgdata.params.use_camera_wb  = 1; // Use camera white balance, if possible.
+    raw.imgdata.params.half_size      = 1; // Half-size color image (3x faster than -q).
+
+    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
+    raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
     int ret = raw.open_file((const char*)(QFile::encodeName(path)));
     if (ret != LIBRAW_SUCCESS)
@@ -382,6 +385,9 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     QByteArray deadpixelPath = QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
     QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
     QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
+
+    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise/etc filtration.
+    raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
     if (m_rawDecodingSettings.gamma16bit)
     {

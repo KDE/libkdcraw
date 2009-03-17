@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_const.h
- * Copyright 2008 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw error codes
@@ -71,6 +71,18 @@ enum LibRaw_colorstate
     LIBRAW_COLORSTATE_RESERVED3 =7
 };
 
+enum LibRaw_filtering
+{
+    LIBRAW_FILTERING_DEFAULT            =0,
+    LIBRAW_FILTERING_NOZEROES           =1,  //  no remove zeroes
+    LIBRAW_FILTERING_NOBLACKS           =2,  //  no black subtraction
+    LIBRAW_FILTERING_NORAWCURVE         =4,  //  no raw data postprocessing (e.g. PhaseOne corrections etc)
+    LIBRAW_FILTERING_NONE               =7,  //  (_NOZEROES | _NOBLACKS | _NORAWCURVE)
+    LIBRAW_FILTERING_LIBRAWOWN          =(8 | LIBRAW_FILTERING_NONE), // NONE + 8 
+    LIBRAW_FILTERING_AUTOMATIC_BIT      =16,  //  - restore automatic mode after processing
+    LIBRAW_FILTERING_AUTOMATIC          = (LIBRAW_FILTERING_LIBRAWOWN | LIBRAW_FILTERING_AUTOMATIC_BIT)
+};
+
 
 enum LibRaw_progress
 {
@@ -121,6 +133,7 @@ enum LibRaw_errors
     LIBRAW_OUT_OF_ORDER_CALL=-4,
     LIBRAW_NO_THUMBNAIL=-5,
     LIBRAW_UNSUPPORTED_THUMBNAIL=-6,
+    LIBRAW_CANNOT_ADDMASK=-7,
     LIBRAW_UNSUFFICIENT_MEMORY=-100007,
     LIBRAW_DATA_ERROR=-100008,
     LIBRAW_IO_ERROR=-100009,

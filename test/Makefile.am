@@ -6,7 +6,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DDCRAW_VERBOSE -DUSE_LCMS
 
 INCLUDES = -I../libraw -I../libkdcraw $(all_includes)
 
-check_PROGRAMS = raw2png identify simple_dcraw mem_image dcraw_emu
+check_PROGRAMS = raw2png identify simple_dcraw mem_image dcraw_emu 4channels unprocessed_raw
 
 # -------------------------------------------------------------
 
@@ -37,3 +37,15 @@ mem_image_LDFLAGS = $(all_libraries) ../libraw/libraw.la
 dcraw_emu_CFLAGS = $(all_includes)
 dcraw_emu_SOURCES = ../libraw/samples/dcraw_emu.cpp
 dcraw_emu_LDFLAGS = $(all_libraries) ../libraw/libraw.la
+
+# -------------------------------------------------------------
+
+4channels_CFLAGS = $(all_includes)
+4channels_SOURCES = ../libraw/samples/4channels.cpp
+4channels_LDFLAGS = $(all_libraries) ../libraw/libraw.la
+
+# -------------------------------------------------------------
+
+unprocessed_raw_CFLAGS = $(all_includes)
+unprocessed_raw_SOURCES = ../libraw/samples/unprocessed_raw.cpp
+unprocessed_raw_LDFLAGS = $(all_libraries) ../libraw/libraw.la
