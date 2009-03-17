@@ -1,4 +1,4 @@
-/* ============================================================
+// /* ============================================================
  *
  * This file is a part of kipi-plugins project
  * http://www.kipi-plugins.org
@@ -377,7 +377,7 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
     QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
 
-    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise/etc filtration.
+    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
     raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
     if (m_rawDecodingSettings.gamma16bit)
