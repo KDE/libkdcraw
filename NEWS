@@ -3,7 +3,7 @@
 - Updated to LibRaw 0.7.0 : Black (masked) pixels data extracted from RAW and avaliable in application.
                             Application can turn off RAW data filtering (black level subtraction, 
                             zero pixels removal and raw tone curve).
-                            New 'input framewrok' released. Reading raw data from file and memory buffer supported from scratch. 
+                            New 'input framework' released. Reading raw data from file and memory buffer supported from scratch. 
                             LibRaw-using application can implement own data reading functions (e.g. reading from network stream).
                             Fuji SuperCCD: raw data extracted without 45-degree rotation.
                             New sample applications: 4channels and unprocessed_raw
