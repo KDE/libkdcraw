@@ -163,7 +163,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     raw.imgdata.params.use_camera_wb  = 1; // Use camera white balance, if possible.
     raw.imgdata.params.half_size      = 1; // Half-size color image (3x faster than -q).
 
-    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make  better noise/etc filtration.
+    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
     raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
     int ret = raw.open_file(QFile::encodeName(path));
