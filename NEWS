@@ -1,5 +1,6 @@
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
+- Updated to LibRaw 0.7.1 : Fixed broken OpenMP support.
 - Updated to LibRaw 0.7.0 : Black (masked) pixels data extracted from RAW and avaliable in application.
                             Application can turn off RAW data filtering (black level subtraction, 
                             zero pixels removal and raw tone curve).

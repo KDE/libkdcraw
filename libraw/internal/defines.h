@@ -1,13 +1,11 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Mar 15 13:33:55 2009
+   Generated from dcraw/dcraw.c at Sun Mar 22 20:07:52 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
-#line 28 "dcraw/dcraw.c"
 #define NO_JPEG
-#line 33 "dcraw/dcraw.c"
 #define VERSION "8.93"
 
 #define _GNU_SOURCE
@@ -43,7 +41,6 @@
 #else
 #define _(String) (String)
 #endif
-#line 76 "dcraw/dcraw.c"
 #ifdef __CYGWIN__
 #include <io.h>
 #endif
@@ -72,7 +69,6 @@ typedef unsigned long long UINT64;
 #ifndef LONG_BIT
 #define LONG_BIT (8 * sizeof (long))
 #endif
-#line 170 "dcraw/dcraw.c"
 #define FORC(cnt) for (c=0; c < cnt; c++)
 #define FORC3 FORC(3)
 #define FORC4 FORC(4)
@@ -126,7 +122,6 @@ typedef unsigned long long UINT64;
 	3 G R G R G R	3 B G B G B G	3 R G R G R G	3 G B G B G B
  */
 
-#line 228 "dcraw/dcraw.c"
 #define BAYER(row,col) \
 	image[((row) >> shrink)*iwidth + ((col) >> shrink)][FC(row,col)]
 
