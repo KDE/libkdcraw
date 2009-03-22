@@ -1,5 +1,7 @@
 0.1.9
 ------------------------------------------------------------------------
+Updated to LibRaw 0.7.1 :
+ - Fixed broken OpenMP support.
 Updated to LibRaw 0.7.0 :
  - Black (masked) pixels data extracted from RAW and avaliable in application.
  - Application can turn off RAW data filtering (black level subtraction,
