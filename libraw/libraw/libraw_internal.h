@@ -24,6 +24,7 @@
 #ifndef _LIBRAW_INTERNAL_TYPES_H
 #define _LIBRAW_INTERNAL_TYPES_H
 
+#include <sys/types.h>
 #include <stdio.h>
 #ifdef __cplusplus
 
