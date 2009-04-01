@@ -288,7 +288,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
     d->whiteBalanceComboBox->setWhatsThis(i18n("<p><b>White Balance</b><p>"
                                           "Configure the raw white balance :<p>"
-                                          "<b>Default D65</b>: Use a standard daylight D65 white balance (dcraw defaults)<p>"
+                                          "<b>Default D65</b>: Use a standard daylight D65 white balance.<p>"
                                           "<b>Camera</b>: Use the white balance specified by the camera. "
                                           "If not available, reverts to default neutral white balance<p>"
                                           "<b>Automatic</b>: Calculates an automatic white balance "
