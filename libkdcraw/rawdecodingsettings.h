@@ -69,7 +69,7 @@ public:
     };
 
     /** White balances alternatives
-        NONE:     no white balance used : dcraw reverts to standard daylight D65 WB.
+        NONE:     no white balance used : reverts to standard daylight D65 WB.
         CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
         AUTO:     Averages an auto WB on the entire image.
         CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
