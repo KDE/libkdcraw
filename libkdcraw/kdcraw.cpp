@@ -380,6 +380,13 @@ bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData,
     // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
     raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
+    if (!m_rawDecodingSettings.autoBrightness)
+    {
+        // Use a fixed white level, ignoring the image histogram.
+        args.append("-W");
+        raw.imgdata.params.no_auto_bright = 1;
+    }
+
     if (m_rawDecodingSettings.gamma16bit)
     {
         // 16 bits color depth auto-gamma is not implemented in dcraw.

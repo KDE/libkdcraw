@@ -90,6 +90,7 @@ public:
     bool   useBlackPoint();
     bool   useWhitePoint();
     int    unclipColor();
+    bool   useAutoBrightness();
     double brightness();
     int    blackPoint();
     int    whitePoint();
@@ -118,6 +119,7 @@ public:
     void   setUseBlackPoint(bool b);
     void   setUseWhitePoint(bool b);
     void   setUnclipColor(int v);
+    void   setAutoBrightness(bool b);
     void   setBrightness(double b);
     void   setBlackPoint(int b);
     void   setWhitePoint(int b);

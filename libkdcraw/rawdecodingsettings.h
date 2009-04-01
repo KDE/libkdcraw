@@ -6,8 +6,8 @@
  * Date        : 2006-12-09
  * Description : Raw decoding settings
  *
- * Copyright (C) 2006-2008 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2008 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
@@ -89,7 +89,7 @@ public:
         EMBEDDED:      Use the camera profile embedded in RAW file if exist.
         CUSTOMINPUTCS: Use a custom input color space profile.
     */
-    enum InputColorSpace 
+    enum InputColorSpace
     {
         NOINPUTCS = 0,
         EMBEDDED,
@@ -117,6 +117,7 @@ public:
     /** Standard constructor with default settings */
     RawDecodingSettings()
     {
+        autoBrightness             = true;
         gamma16bit                 = true;
         sixteenBitsImage           = false;
         brightness                 = 1.0;
@@ -157,7 +158,8 @@ public:
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const
     {
-        return gamma16bit              == o.gamma16bit
+        return autoBrightness          == o.autoBrightness
+            && gamma16bit              == o.gamma16bit
             && sixteenBitsImage        == o.sixteenBitsImage
             && brightness              == o.brightness
             && RAWQuality              == o.RAWQuality
@@ -193,6 +195,7 @@ public:
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
     void optimizeTimeLoading()
     {
+        autoBrightness             = true;
         gamma16bit                 = true;
         sixteenBitsImage           = true;
         brightness                 = 1.0;
@@ -230,6 +233,10 @@ public:
     };
 
 public:
+
+    /** If false, use a fixed white level, ignoring the image histogram.
+    */
+    bool autoBrightness;
 
     /** If true, perform an auto-gamma with 16 bits color depth image, as in 8 bits.
     */

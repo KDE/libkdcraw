@@ -55,6 +55,7 @@ public:
 
     DcrawSettingsWidgetPriv()
     {
+        autoBrightnessBox              = 0;
         sixteenBitsImage               = 0;
         fourColorCheckBox              = 0;
         brightnessLabel                = 0;
@@ -120,6 +121,7 @@ public:
     QCheckBox       *blackPointCheckBox;
     QCheckBox       *whitePointCheckBox;
     QCheckBox       *sixteenBitsImage;
+    QCheckBox       *autoBrightnessBox;
     QCheckBox       *fourColorCheckBox;
     QCheckBox       *dontStretchPixelsCheckBox;
     QCheckBox       *enableNoiseReduction;
@@ -337,6 +339,10 @@ void DcrawSettingsWidget::setup(int advSettings)
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
 
+    d->autoBrightnessBox = new QCheckBox(i18n("Auto Brightness"), d->whiteBalanceSettings);
+    d->autoBrightnessBox->setWhatsThis(i18n("<p>If disable, use a fixed white level "
+                                            "and ignore the image histogram to adjust brightness."));
+
     d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->whiteBalanceSettings);
     d->brightnessSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->brightnessSpinBox->setDecimals(2);
@@ -394,12 +400,13 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->unclipColorComboBox,            3, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->reconstructLabel,               4, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->reconstructSpinBox,             4, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->brightnessLabel,                5, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              5, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             6, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              6, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             7, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              7, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              5, 0, 1, 2);
+    whiteBalanceLayout->addWidget(d->brightnessLabel,                6, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              6, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             7, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              7, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             8, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              8, 1, 1, 2);
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
@@ -596,6 +603,9 @@ void DcrawSettingsWidget::setup(int advSettings)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->autoBrightnessBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->fourColorCheckBox, SIGNAL(toggled(bool)),
@@ -869,6 +879,18 @@ bool DcrawSettingsWidget::useFourColor()
 void DcrawSettingsWidget::setFourColor(bool b)
 {
     d->fourColorCheckBox->setChecked(b);
+}
+
+// ---------------------------------------------------------------
+
+bool DcrawSettingsWidget::useAutoBrightness()
+{
+    return d->autoBrightnessBox->isChecked();
+}
+
+void DcrawSettingsWidget::setAutoBrightness(bool b)
+{
+    d->autoBrightnessBox->setChecked(b);
 }
 
 // ---------------------------------------------------------------
