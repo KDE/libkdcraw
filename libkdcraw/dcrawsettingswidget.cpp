@@ -289,13 +289,13 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18n("Manual"));
     d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
     d->whiteBalanceComboBox->setWhatsThis(i18n("<p><b>White Balance</b><p>"
-                                          "Configure the raw white balance :<p>"
+                                          "Configure the raw white balance:<p>"
                                           "<b>Default D65</b>: Use a standard daylight D65 white balance.<p>"
                                           "<b>Camera</b>: Use the white balance specified by the camera. "
-                                          "If not available, reverts to default neutral white balance<p>"
+                                          "If not available, reverts to default neutral white balance.<p>"
                                           "<b>Automatic</b>: Calculates an automatic white balance "
-                                          "averaging the entire image<p>"
-                                          "<b>Manual</b>: Set a custom temperature and green level values"));
+                                          "averaging the entire image.<p>"
+                                          "<b>Manual</b>: Set a custom temperature and green level values."));
 
     d->customWhiteBalanceSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
