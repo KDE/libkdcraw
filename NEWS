@@ -1,5 +1,9 @@
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
+- Updated to LibRaw 0.7.2 : More accurate types conversion in libraw_datastream.h to make compilers happy.
+                            New postprocessing parameter auto_bright_thr: set portion of clipped pixels for 
+                            auto brightening code (instead of dcraw-derived hardcoded 1%).
+                            -U option for dcraw_emu sample sets auto_bright_thr parameter.
 - Updated to LibRaw 0.7.1 : Fixed broken OpenMP support.
 - Updated to LibRaw 0.7.0 : Black (masked) pixels data extracted from RAW and avaliable in application.
                             Application can turn off RAW data filtering (black level subtraction, 

@@ -246,6 +246,7 @@ typedef struct
     int         user_sat;       /* -S */
 
     int         med_passes;     /* -m */
+    float       auto_bright_thr; 
     int         no_auto_bright; /* -W */
     int         use_fuji_rotate;/* -j */
     enum LibRaw_filtering    filtering_mode; 

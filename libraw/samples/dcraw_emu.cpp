@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
   for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
       {
           opt = argv[arg++][1];
-          if ((cp = strchr (sp="nbrkStqmHACg", opt)))
+          if ((cp = strchr (sp="nbrkStqmHACgU", opt)))
               for (i=0; i < "11411111142"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0])) 
                       {
@@ -129,6 +129,7 @@ int main(int argc, char *argv[])
               {
               case 'v':  verbosity++;  break;
                   
+              case 'U':  OUT.auto_bright_thr   = atof(argv[arg++]);  break;
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
               case 'b':  OUT.bright      = atof(argv[arg++]);  break;
               case 'P':  OUT.bad_pixels  = argv[arg++];        break;
