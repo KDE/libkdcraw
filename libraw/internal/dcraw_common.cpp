@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Mar 22 20:07:52 2009
+   Generated from dcraw/dcraw.c at Tue Apr  7 15:14:48 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -8080,7 +8080,11 @@ void CLASS gamma_lut (ushort lut[0x10000])
   int perc, c, val, total, i;
   float t_white=0, r;
 
+#ifdef LIBRAW_LIBRARY_BUILD
+  perc = width * height * imgdata.params.auto_bright_thr;
+#else
   perc = width * height * 0.01;		/* 99th percentile white level */
+#endif
   if (fuji_width) perc /= 2;
   if ((highlight & ~2) || no_auto_bright) perc = -1;
   FORCC {
