@@ -14,7 +14,8 @@
                             New sample applications: 4channels and unprocessed_raw
                             Imported (subsequentally) new dcraw versions from 8.89 to 8.93 (up to date) 
 - New option to switch on/off auto brightness adjsutements.
-                        
+- Add support of Leica Raw files (RWL).
+
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
 - Updated to LibRaw 0.6.5 : Fixed file descriptor and buffer memory leak when thumbnail extractor is called, 
