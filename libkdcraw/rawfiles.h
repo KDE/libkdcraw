@@ -4,8 +4,7 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2005-11-06
- * Description : list of RAW file extensions supported by 
- *               dcraw program.
+ * Description : list of RAW file extensions supported by libraw
  * 
  * Copyright (C) 2005-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -72,7 +71,11 @@ static const char raw_file_extentions[] =
                                           "*.nrw "  // Nikon Digital Camera Raw Image Format.
                                           "*.qtk "  // Apple Quicktake 100/150 Digital Camera Raw Image Format.
                                           "*.rw2 "  // Panasonic LX3 Digital Camera Raw Image Format.
-                                          "*.sti";  // Sinar Capture Shop Raw Image File.
+                                          "*.sti"   // Sinar Capture Shop Raw Image File.
+
+// NOTE: VERSION 3
+
+                                          "*.rwl";  // Leica Digital Camera Raw Image Format.
 
 /* TODO: check if these format are supported
                                           "*.drf "  // Kodak Digital Camera Raw Image Format.
