@@ -1,5 +1,6 @@
 0.1.9
 ------------------------------------------------------------------------
+Added Leica RWL raw format in list of supported files.
 Updated to LibRaw 0.7.2 :
  - More accurate types conversion in libraw_datastream.h to make compilers happy.
  - New postprocessing parameter auto_bright_thr: set portion of clipped pixels for 
