@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#include "rcombobox.h"
+#include "rcombobox.moc"
+
 // Qt includes.
 
 #include <QToolButton>
@@ -31,11 +34,6 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
-
-// Local includes.
-
-#include "rcombobox.h"
-#include "rcombobox.moc"
 
 namespace KDcrawIface
 {

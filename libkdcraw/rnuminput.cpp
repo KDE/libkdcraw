@@ -23,20 +23,18 @@
  *
  * ============================================================ */
 
+#include "rnuminput.h"
+#include "rnuminput.moc"
+
 // Qt includes.
 
-#include <qtoolbutton.h>
+#include <QToolButton>
 
 // KDE includes.
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-
-// Local includes.
-
-#include "rnuminput.h"
-#include "rnuminput.moc"
 
 namespace KDcrawIface
 {

@@ -27,7 +27,7 @@
 // Local includes.
 
 #include "kdcraw.h"
-#include "kdcrawprivate.h"
+#include "kdcraw_p.h"
 
 namespace KDcrawIface
 {

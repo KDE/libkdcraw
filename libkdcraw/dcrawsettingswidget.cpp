@@ -22,6 +22,9 @@
  *
  * ============================================================ */
 
+#include "dcrawsettingswidget.h"
+#include "dcrawsettingswidget.moc"
+
 // Qt includes.
 
 #include <QCheckBox>
@@ -43,8 +46,6 @@
 #include "kdcraw.h"
 #include "rnuminput.h"
 #include "rcombobox.h"
-#include "dcrawsettingswidget.h"
-#include "dcrawsettingswidget.moc"
 
 namespace KDcrawIface
 {

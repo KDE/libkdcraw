@@ -24,6 +24,9 @@
  *
  * ============================================================ */
 
+#include "squeezedcombobox.h"
+#include "squeezedcombobox.moc"
+
 // Qt includes.
 
 #include <QComboBox>
@@ -33,11 +36,6 @@
 #include <QApplication>
 #include <QToolTip>
 #include <QResizeEvent>
-
-// Local includes.
-
-#include "squeezedcombobox.h"
-#include "squeezedcombobox.moc"
 
 namespace KDcrawIface
 {
