@@ -15,6 +15,7 @@
                             Imported (subsequentally) new dcraw versions from 8.89 to 8.93 (up to date) 
 - New option to switch on/off auto brightness adjsutements.
 - Add support of Leica Raw files (RWL).
+- New method to see if Libraw use OpenMP shared library to perform parallel demosaicing.
 
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
