@@ -39,6 +39,7 @@
 
 #include "version.h"
 #include "rawfiles.h"
+#include "libraw_config.h"
 #include "kdcraw_p.h"
 
 namespace KDcrawIface
