@@ -755,4 +755,13 @@ QString KDcraw::librawVersion()
     return QString(LIBRAW_VERSION_STR);
 }
 
+bool KDcraw::librawUseGomp()
+{
+#ifdef ENABLE_OPENMP
+    return true;
+#else
+    return false;
+#endif
+}
+
 }  // namespace KDcrawIface

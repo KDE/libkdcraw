@@ -1,5 +1,6 @@
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libraw_config.h)
 
 # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
 FOREACH(_curentfile ${libraw_LIB_SRCS})
@@ -14,7 +15,7 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     squeezedcombobox.cpp
                     ${libraw_LIB_SRCS}
    )
-   
+
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdcraw ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${MATH_LIBRARY} ${LCMS_LIBRARIES} ${JPEG_LIBRARY} ${OPENMP_LDFLAGS})
