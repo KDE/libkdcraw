@@ -4,7 +4,7 @@
  * http://www.kipi-plugins.org
  *
  * Date        : 2007-02-12
- * Description : dcraw program interface for KDE
+ * Description : libraw program interface for KDE
  *
  * Copyright (C) 2007-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
