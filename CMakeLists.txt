@@ -1,8 +1,8 @@
 PROJECT(libkdcraw)
 
-OPTION(ENABLE_OPENMP "Build with OpenMP support to use LibRaw parallel demosaicing operation" OFF)
+OPTION(DISABLE_OPENMP "Build without LibRaw OpenMP support" OFF)
 
-# =======================================================
+# ==================================================================================================
 # Information to update before to release this library.
 
 # Library version history:
@@ -38,7 +38,7 @@ SET(DCRAW_LIB_SO_CUR_VERSION "7")
 SET(DCRAW_LIB_SO_REV_VERSION "1")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
-# =======================================================
+# ==================================================================================================
 # Set env. variables accordinly.
 
 SET(DCRAW_LIB_VERSION_STRING "${DCRAW_LIB_MAJOR_VERSION}.${DCRAW_LIB_MINOR_VERSION}.${DCRAW_LIB_PATCH_VERSION}${DCRAW_LIB_SUFFIX_VERSION}")
@@ -46,12 +46,12 @@ SET(DCRAW_LIB_VERSION_ID "0x0${DCRAW_LIB_MAJOR_VERSION}0${DCRAW_LIB_MINOR_VERSIO
 
 SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_VERSION}.${DCRAW_LIB_SO_AGE_VERSION}")
 
-# =======================================================
+# ==================================================================================================
 # LibRAW source code
 
-IF( NOT WIN32)
+IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
-ENDIF( NOT WIN32 )
+ENDIF(NOT WIN32)
 
 find_package(LCMS REQUIRED)
 
@@ -64,16 +64,43 @@ ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 # LibRaw use C++ exception.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
-# OpenMP support to use parallelized code.
-IF(ENABLE_OPENMP)
-    ADD_DEFINITIONS(-fopenmp)
-    SET(OPENMP_LDFLAGS -lgomp)
-ENDIF(ENABLE_OPENMP)
-
 # Under Windows, use specific flag to compile.
 IF( WIN32 )
     ADD_DEFINITIONS( -DDJGPP )
 ENDIF( WIN32 )
+
+# ==================================================================================================
+# get the gcc version                                                                               
+
+# Check gcc version to see if OpenMP support is available to perform parallelized
+# demosaicing with LibRaw
+
+IF (NOT DISABLE_OPENMP)
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+        EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
+        STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")      
+
+        # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
+        IF(NOT GCC_VERSION)
+            STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
+        ENDIF (NOT GCC_VERSION)
+
+        #Only GCC >= 4.3.2 support properly OpenMP, especially with KIOSlave.
+        MACRO_ENSURE_VERSION("4.3.2" "${GCC_VERSION}" GCC_VERSION_GOOD)
+
+        IF(GCC_VERSION_GOOD)
+
+            MESSAGE(STATUS "GCC version (${GCC_VERSION} ) detected: we will use OpenMP extension with LibRaw.")
+            ADD_DEFINITIONS(-fopenmp)
+            SET(OPENMP_LDFLAGS -lgomp)
+
+        ENDIF(GCC_VERSION_GOOD)
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+ELSEIF(NOT DISABLE_OPENMP)
+    MESSAGE(STATUS "OpenMP extension support with LibRaw is disabled.")
+ENDIF(NOT DISABLE_OPENMP)
+
+# ==================================================================================================
 
 INCLUDE_DIRECTORIES(
                     ${JPEG_INCLUDE_DIR}

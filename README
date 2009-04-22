@@ -22,13 +22,14 @@ libqt      >= 4.2.x                    http://www.qtsoftware.com
 libkde     >= 4.0.x                    http://www.kde.org
 liblcms    >= 1.14.x (used by libraw)  http://www.littlecms.com
 libjpeg    >= 6b     (used by libraw)  http://www.ijg.org
+libgomp    >= 4.3.x  (used by libraw)  http://gcc.gnu.org/projects/gomp
+
+Note: OpenMP support is hightly recommended to speed-up RAW demosaicing 
+operations using parallelized code.
 
 Optional:
 
-"-DENABLE_OPENMP=yes" CMake option set on parallelized LibRaw code to
-speed-up RAW demosaicing operations.
-libgomp    >= 4.3.x  (used by libraw)  http://gcc.gnu.org/projects/gomp
-
+"-DDISABLE_OPENMP=yes" CMake option to disable OpenMP support with LibRaw.
 
 -- INSTALL ------------------------------------------------------------
 
