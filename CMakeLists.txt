@@ -75,8 +75,10 @@ ENDIF( WIN32 )
 # Check gcc version to see if OpenMP support is available to perform parallelized
 # demosaicing with LibRaw
 
-IF (NOT DISABLE_OPENMP)
+IF(NOT DISABLE_OPENMP)
+
     IF(CMAKE_COMPILER_IS_GNUCXX)
+
         EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
         STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")      
 
@@ -93,11 +95,27 @@ IF (NOT DISABLE_OPENMP)
             MESSAGE(STATUS "GCC version (${GCC_VERSION} ) detected: we will use OpenMP extension with LibRaw.")
             ADD_DEFINITIONS(-fopenmp)
             SET(OPENMP_LDFLAGS -lgomp)
+	    SET(USE_OPENMP TRUE)
 
+        ELSEIF(GCC_VERSION_GOOD)
+
+            MESSAGE(STATUS "Compiler is an older GCC. OpenMP extension support with LibRaw is disabled.")
+            SET(USE_OPENMP FALSE)
+	
         ENDIF(GCC_VERSION_GOOD)
+
+    ELSEIF(CMAKE_COMPILER_IS_GNUCXX)
+
+        MESSAGE(STATUS "Compiler is not GCC. OpenMP extension support with LibRaw is disabled.")
+        SET(USE_OPENMP FALSE)
+	
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 ELSEIF(NOT DISABLE_OPENMP)
+
     MESSAGE(STATUS "OpenMP extension support with LibRaw is disabled.")
+    SET(USE_OPENMP FALSE)
+
 ENDIF(NOT DISABLE_OPENMP)
 
 # ==================================================================================================

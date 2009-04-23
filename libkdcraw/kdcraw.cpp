@@ -758,10 +758,10 @@ QString KDcraw::librawVersion()
 
 bool KDcraw::librawUseGomp()
 {
-#ifdef DISABLE_OPENMP
-    return false;
-#else
+#ifdef USE_OPENMP
     return true;
+#else
+    return false;
 #endif
 }
 
