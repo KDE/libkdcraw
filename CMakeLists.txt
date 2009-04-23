@@ -60,6 +60,9 @@ MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
 IF(OPENMP_FOUND)
     MESSAGE(STATUS "OpenMP detected: LibRaw will be compiled with parallelized code.")
     SET(USE_OPENMP TRUE)
+ELSEIF(OPENMP_FOUND)
+    MESSAGE(STATUS "OpenMP not detected: LibRaw will not be compiled with parallelized code.")
+    SET(USE_OPENMP FALSE)
 ENDIF(OPENMP_FOUND)
 
 # Flag to debug LibRaw
@@ -91,14 +94,16 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
    )
 
-SET_SOURCE_FILES_PROPERTIES(${libraw_LIB_SRCS} PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
+IF(OPENMP_FOUND)
+    SET_SOURCE_FILES_PROPERTIES(${libraw_LIB_SRCS} PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
+ENDIF(OPENMP_FOUND)
 
 # =======================================================
 
 IF(NOT WIN32)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
-  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
+    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 ENDIF(NOT WIN32)
 
 SUBDIRS(icons)
