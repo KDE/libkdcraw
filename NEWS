@@ -16,7 +16,7 @@
 - New option to switch on/off auto brightness adjsutements.
 - Add support of Leica Raw files (RWL).
 - New method to see if Libraw use OpenMP shared library to perform parallel demosaicing.
-- OpenMP support auto detection based on check of GCC version.
+- OpenMP support auto detection based on FindOpenMP Cmake script.
 
 0.4.0 - Released with KDE 4.2.0
 ------------------------------------------------------------------------
