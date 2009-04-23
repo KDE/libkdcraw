@@ -27,10 +27,6 @@ libgomp    >= 4.3.x  (used by libraw)  http://gcc.gnu.org/projects/gomp
 Note: OpenMP support is hightly recommended to speed-up RAW demosaicing 
 operations using parallelized code.
 
-Optional:
-
-"-DDISABLE_OPENMP=yes" CMake option to disable OpenMP support with LibRaw.
-
 -- INSTALL ------------------------------------------------------------
 
 In order to compile, especially when QT3/Qt4 are installed at the same time, 

@@ -1,7 +1,5 @@
 PROJECT(libkdcraw)
 
-OPTION(DISABLE_OPENMP "Build without LibRaw OpenMP support" OFF)
-
 # ==================================================================================================
 # Information to update before to release this library.
 
@@ -53,10 +51,16 @@ IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
 
-find_package(LCMS REQUIRED)
+FIND_PACKAGE(LCMS REQUIRED)
 
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
+
+MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+    MESSAGE(STATUS "OpenMP detected: LibRaw will be compiled with parallelized code.")
+    SET(USE_OPENMP TRUE)
+ENDIF(OPENMP_FOUND)
 
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
@@ -68,55 +72,6 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 IF( WIN32 )
     ADD_DEFINITIONS( -DDJGPP )
 ENDIF( WIN32 )
-
-# ==================================================================================================
-# get the gcc version                                                                               
-
-# Check gcc version to see if OpenMP support is available to perform parallelized
-# demosaicing with LibRaw
-
-IF(NOT DISABLE_OPENMP)
-
-    IF(CMAKE_COMPILER_IS_GNUCXX)
-
-        EXEC_PROGRAM(${CMAKE_CXX_COMPILER} ARGS --version OUTPUT_VARIABLE VERSION_GCC_INFO)
-        STRING(REGEX MATCH " [34]\\.[0-9]\\.[0-9]" GCC_VERSION "${VERSION_GCC_INFO}")      
-
-        # gcc on mac just reports: "gcc (GCC) 3.3 20030304 ..." without the patch level, handle this here:
-        IF(NOT GCC_VERSION)
-            STRING(REGEX REPLACE ".*\\(GCC\\).* ([34]\\.[0-9]) .*" "\\1.0" GCC_VERSION "${VERSION_GCC_INFO}")
-        ENDIF (NOT GCC_VERSION)
-
-        #Only GCC >= 4.3.2 support properly OpenMP, especially with KIOSlave.
-        MACRO_ENSURE_VERSION("4.3.2" "${GCC_VERSION}" GCC_VERSION_GOOD)
-
-        IF(GCC_VERSION_GOOD)
-
-            MESSAGE(STATUS "GCC version (${GCC_VERSION} ) detected: we will use OpenMP extension with LibRaw.")
-            ADD_DEFINITIONS(-fopenmp)
-            SET(OPENMP_LDFLAGS -lgomp)
-	    SET(USE_OPENMP TRUE)
-
-        ELSEIF(GCC_VERSION_GOOD)
-
-            MESSAGE(STATUS "Compiler is an older GCC. OpenMP extension support with LibRaw is disabled.")
-            SET(USE_OPENMP FALSE)
-	
-        ENDIF(GCC_VERSION_GOOD)
-
-    ELSEIF(CMAKE_COMPILER_IS_GNUCXX)
-
-        MESSAGE(STATUS "Compiler is not GCC. OpenMP extension support with LibRaw is disabled.")
-        SET(USE_OPENMP FALSE)
-	
-    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-
-ELSEIF(NOT DISABLE_OPENMP)
-
-    MESSAGE(STATUS "OpenMP extension support with LibRaw is disabled.")
-    SET(USE_OPENMP FALSE)
-
-ENDIF(NOT DISABLE_OPENMP)
 
 # ==================================================================================================
 
@@ -135,6 +90,8 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
    )
+
+SET_SOURCE_FILES_PROPERTIES(${libraw_LIB_SRCS} PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
 
 # =======================================================
 
