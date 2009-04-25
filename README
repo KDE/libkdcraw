@@ -17,7 +17,7 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.4.x                    http://www.cmake.org
+CMake      >= 2.4.3                    http://www.cmake.org
 libqt      >= 4.2.x                    http://www.qtsoftware.com
 libkde     >= 4.0.x                    http://www.kde.org
 liblcms    >= 1.14.x (used by libraw)  http://www.littlecms.com
