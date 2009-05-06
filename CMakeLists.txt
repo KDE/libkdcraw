@@ -56,14 +56,21 @@ FIND_PACKAGE(LCMS REQUIRED)
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
 
-MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
-IF(OPENMP_FOUND)
-    MESSAGE(STATUS "OpenMP detected: LibRaw will be compiled with parallelized code.")
-    SET(USE_OPENMP TRUE)
-ELSEIF(OPENMP_FOUND)
-    MESSAGE(STATUS "OpenMP not detected: LibRaw will not be compiled with parallelized code.")
+# OpenMP detection requires CMake > 2.6.
+
+IF(cmake_version GREATER 20600)
+    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
+    IF(OPENMP_FOUND)
+        MESSAGE(STATUS "OpenMP detected: LibRaw will be compiled with parallelized code.")
+        SET(USE_OPENMP TRUE)
+    ELSEIF(OPENMP_FOUND)
+        MESSAGE(STATUS "OpenMP not detected: LibRaw will not be compiled with parallelized code.")
+        SET(USE_OPENMP FALSE)
+    ENDIF(OPENMP_FOUND)
+ELSE(cmake_version GREATER 20600)
+    MESSAGE(STATUS "CMake version too old: cannot detected OpenMP: LibRaw will not be compiled with parallelized code.")
     SET(USE_OPENMP FALSE)
-ENDIF(OPENMP_FOUND)
+ENDIF(cmake_version GREATER 20600)
 
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
@@ -72,9 +79,9 @@ ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 # Under Windows, use specific flag to compile.
-IF( WIN32 )
+IF(WIN32)
     ADD_DEFINITIONS( -DDJGPP )
-ENDIF( WIN32 )
+ENDIF(WIN32)
 
 # ==================================================================================================
 
