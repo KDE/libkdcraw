@@ -56,9 +56,15 @@ FIND_PACKAGE(LCMS REQUIRED)
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
 
-# OpenMP detection requires CMake > 2.6.
+# OpenMP detection requires CMake >= 2.6.3
 
-IF(cmake_version GREATER 20600)
+EXEC_PROGRAM(${CMAKE_COMMAND} ARGS --version OUTPUT_VARIABLE VERSION_CMAKE_INFO)
+MESSAGE(STATUS "CMake version: ${VERSION_CMAKE_INFO}")
+STRING(REPLACE "-patch " "." VERSION_CMAKE_INFO ${CMAKE_VERSION})
+MESSAGE(STATUS "CMake version (cleaned): ${CMAKE_VERSION}")
+MACRO_ENSURE_VERSION("2.6.3" "${CMAKE_VERSION}" VERSION_CMAKE)
+
+IF(VERSION_CMAKE)
     MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
     IF(OPENMP_FOUND)
         MESSAGE(STATUS "OpenMP detected: LibRaw will be compiled with parallelized code.")
@@ -67,10 +73,10 @@ IF(cmake_version GREATER 20600)
         MESSAGE(STATUS "OpenMP not detected: LibRaw will not be compiled with parallelized code.")
         SET(USE_OPENMP FALSE)
     ENDIF(OPENMP_FOUND)
-ELSE(cmake_version GREATER 20600)
+ELSE(VERSION_CMAKE)
     MESSAGE(STATUS "CMake version too old: cannot detected OpenMP: LibRaw will not be compiled with parallelized code.")
     SET(USE_OPENMP FALSE)
-ENDIF(cmake_version GREATER 20600)
+ENDIF(VERSION_CMAKE)
 
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
