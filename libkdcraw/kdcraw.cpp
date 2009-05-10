@@ -748,7 +748,7 @@ QStringList KDcraw::supportedCamera()
 
 QString KDcraw::librawVersion()
 {
-    return QString(LIBRAW_VERSION_STR);
+    return QString(LIBRAW_VERSION_STR).remove("-Release");
 }
 
 }  // namespace KDcrawIface
