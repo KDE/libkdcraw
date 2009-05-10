@@ -1,3 +1,93 @@
+V 0.1.9 - 2009-05-10
+----------------------------------------------------------------------------
+
+2009-05-10 09:20  cgilles
+
+	* libkdcraw/kdcraw.cpp: backport commit #965982 from trunk
+
+2009-04-19 15:02  cgilles
+
+	* NEWS: update
+
+2009-04-19 15:01  cgilles
+
+	* libkdcraw/rawfiles.h: add rwl Leica raw format as supported
+	  officially
+
+2009-04-07 18:36  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/dcraw_fileio.cpp, libraw/internal/defines.h,
+	  libraw/internal/foveon.cpp, libraw/libraw/libraw_datastream.h,
+	  libraw/libraw/libraw_types.h, libraw/libraw/libraw_version.h,
+	  libraw/samples/dcraw_emu.cpp, libraw/src/libraw_cxx.cpp:
+	  libkdcraw from KDE3 branch : update internal Libraw to 0.7.2
+	  release
+
+2009-03-22 20:58  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/dcraw_fileio.cpp, libraw/internal/defines.h,
+	  libraw/internal/foveon.cpp, libraw/libraw/libraw_version.h:
+	  update interanal LibRaw to 0.7.1
+
+2009-03-17 07:22  cgilles
+
+	* NEWS, libkdcraw/kdcraw.cpp, libraw/Makefile.am,
+	  libraw/internal/dcraw_common.cpp,
+	  libraw/internal/dcraw_fileio.cpp, libraw/internal/defines.h,
+	  libraw/internal/foveon.cpp,
+	  libraw/internal/libraw_internal_funcs.h,
+	  libraw/internal/var_defines.h, libraw/libraw/libraw.h,
+	  libraw/libraw/libraw_alloc.h, libraw/libraw/libraw_const.h,
+	  libraw/libraw/libraw_datastream.h,
+	  libraw/libraw/libraw_internal.h, libraw/libraw/libraw_types.h,
+	  libraw/libraw/libraw_version.h, libraw/samples/4channels.cpp,
+	  libraw/samples/dcraw_emu.cpp, libraw/samples/dcraw_half.c,
+	  libraw/samples/half_mt.c, libraw/samples/half_mt_win32.c,
+	  libraw/samples/identify.cpp, libraw/samples/mem_image.cpp,
+	  libraw/samples/simple_dcraw.cpp,
+	  libraw/samples/unprocessed_raw.cpp, libraw/src/libraw_c_api.cpp,
+	  libraw/src/libraw_cxx.cpp, test/Makefile.am: update internal
+	  Libraw to 0.7.0 release
+
+2009-03-13 20:17  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/internal/libraw_internal_funcs.h,
+	  libraw/libraw/libraw_version.h: update internal libraw to 0.6.15
+
+2009-03-08 20:04  cgilles
+
+	* NEWS, libraw/internal/dcraw_common.cpp,
+	  libraw/internal/defines.h, libraw/internal/foveon.cpp,
+	  libraw/internal/var_defines.h, libraw/libraw/libraw.h,
+	  libraw/libraw/libraw_types.h, libraw/libraw/libraw_version.h,
+	  libraw/samples/dcraw_emu.cpp, libraw/src/libraw_cxx.cpp: updated
+	  internal libraw to 0.6.14. BC preserved
+
+2009-02-25 12:50  cgilles
+
+	* NEWS, configure.in.in, libkdcraw.lsm, libkdcraw.pc.in,
+	  libkdcraw/dcrawinfocontainer.h,
+	  libkdcraw/dcrawsettingswidget.cpp,
+	  libkdcraw/dcrawsettingswidget.h, libkdcraw/kdcraw.cpp,
+	  libkdcraw/kdcraw.h, libkdcraw/kdcrawprivate.cpp,
+	  libkdcraw/kdcrawprivate.h, libkdcraw/rawdecodingsettings.h,
+	  libkdcraw/rawfiles.h, libkdcraw/rcombobox.cpp,
+	  libkdcraw/rcombobox.h, libkdcraw/rnuminput.cpp,
+	  libkdcraw/rnuminput.h, libkdcraw/version.h: let's go to libkdcraw
+	  0.1.9
+
+2009-02-25 10:23  cgilles
+
+	* libkdcraw.lsm: update
+
+2009-02-25 10:21  cgilles
+
+	* ChangeLog: update
+
 V 0.1.8 - 2009-02-25
 ----------------------------------------------------------------------------
 
