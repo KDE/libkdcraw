@@ -7,6 +7,6 @@ Name: libkdcraw
 Description: A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins. kipi-plugins. 
 URL: http://www.kipi-plugins.org
 Requires:
-Version: 0.1.9
+Version: 0.1.10
 Libs: -L${libdir} -lkdcraw
 Cflags: -I${includedir}
