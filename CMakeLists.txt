@@ -1,5 +1,14 @@
 PROJECT(libkdcraw)
 
+FIND_PACKAGE(KDE4 REQUIRED)
+INCLUDE(KDE4Defaults)
+INCLUDE(MacroLibrary)
+INCLUDE(MacroOptionalAddSubdirectory)
+INCLUDE(FindPackageHandleStandardArgs)
+
+ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
+INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+
 # ==================================================================================================
 # Information to update before to release this library.
 
@@ -15,10 +24,11 @@ PROJECT(libkdcraw)
 # 0.3.0 => 6.0.0  (released with KDE 4.1.2)
 # 0.4.0 => 7.0.0  (using libRaw-Released with KDE 4.2.0)
 # 0.5.0 => 7.1.0  (Released with KDE 4.3.0)
+# 1.0.0 => 8.0.0  (Released with KDE 4.4.0
 
 # Library API version
-SET(DCRAW_LIB_MAJOR_VERSION "0")
-SET(DCRAW_LIB_MINOR_VERSION "5")
+SET(DCRAW_LIB_MAJOR_VERSION "1")
+SET(DCRAW_LIB_MINOR_VERSION "0")
 SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -32,8 +42,8 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "7")
-SET(DCRAW_LIB_SO_REV_VERSION "1")
+SET(DCRAW_LIB_SO_CUR_VERSION "8")
+SET(DCRAW_LIB_SO_REV_VERSION "0")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
 # ==================================================================================================

@@ -12,6 +12,7 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     dcrawsettingswidget.cpp
                     rcombobox.cpp
                     rnuminput.cpp
+                    rexpanderbox.cpp
                     squeezedcombobox.cpp
                     ${libraw_LIB_SRCS}
    )
@@ -29,7 +30,8 @@ INSTALL(FILES rawdecodingsettings.h
               kdcraw.h 
               dcrawsettingswidget.h
               rnuminput.h
-              rcombobox.h 
+              rcombobox.h
+              rexpanderbox.h
               squeezedcombobox.h
               dcrawinfocontainer.h 
               rawfiles.h 

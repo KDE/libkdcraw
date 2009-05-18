@@ -1,3 +1,7 @@
+1.0.0 - Released with KDE 4.4.0
+------------------------------------------------------------------------
+- New widget to host settings : RExpanderBox.
+
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
 - Updated to LibRaw 0.7.2 : More accurate types conversion in libraw_datastream.h to make compilers happy.
@@ -26,7 +30,7 @@
                             Fixes in Hasselblad .fff files unpacking.
 - Updated to LibRaw 0.6.3 : NEF processing code changed (some overflow control added).
 - Updated to LibRaw 0.6.2.
-- New cameras: Canon G10 & 5D Mk2, Leaf AFi 7, Leica D-LUX4,              
+- New cameras: Canon G10 & 5D Mk2, Leaf AFi 7, Leica D-LUX4,
                Panasonic FX150 & G 1, Fujifilm IS Pro.
 - Updated to LibRaw 0.6.1.
 - New cameras: Canon 50D, Sony A900, Nikon D90 & P6000, Panasonic LX3 FZ28.
