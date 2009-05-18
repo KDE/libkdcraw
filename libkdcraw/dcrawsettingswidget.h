@@ -28,7 +28,6 @@
 // Qt includes.
 
 #include <QtCore/QString>
-#include <QtGui/QToolBox>
 
 // KDE includes.
 
@@ -38,13 +37,14 @@
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"
+#include "rexpanderbox.h"
 
 namespace KDcrawIface
 {
 
 class DcrawSettingsWidgetPriv;
 
-class LIBKDCRAW_EXPORT DcrawSettingsWidget : public QToolBox
+class LIBKDCRAW_EXPORT DcrawSettingsWidget : public RExpanderBox
 {
     Q_OBJECT
 

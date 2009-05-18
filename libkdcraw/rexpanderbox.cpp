@@ -44,7 +44,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-namespace Digikam
+namespace KDcrawIface
 {
 
 RClickLabel::RClickLabel(QWidget *parent)
@@ -428,6 +428,25 @@ void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
     d->wList.append(exp);
 }
 
+void RExpanderBox::addItem(QWidget *w, const QString& txt,
+                           const QString& objName, bool expandBydefault)
+{
+    addItem(w, QPixmap(), txt, objName, expandBydefault);
+}
+
+void RExpanderBox::removeItem(int index)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->hide();
+    d->wList.removeAt(index);
+}
+
+void RExpanderBox::setItemIcon(int index, const QPixmap& pix)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setPixmap(pix);
+}
+
 void RExpanderBox::addStretch()
 {
     QLabel *space = new QLabel(d->vbox);
@@ -492,4 +511,4 @@ void RExpanderBox::writeSettings(KConfigGroup& group)
     }
 }
 
-} // namespace Digikam
+} // namespace KDcrawIface

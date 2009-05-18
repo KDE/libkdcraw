@@ -42,7 +42,7 @@
 
 #include "libkdcraw_export.h"
 
-namespace Digikam
+namespace KDcrawIface
 {
 
 class LIBKDCRAW_EXPORT RClickLabel : public QLabel
@@ -180,6 +180,12 @@ public:
      */
     void addItem(QWidget *w, const QPixmap& pix, const QString& txt,
                  const QString& objName, bool expandBydefault);
+    void addItem(QWidget *w, const QString& txt,
+                 const QString& objName, bool expandBydefault);
+
+    void removeItem(int index);
+
+    void setItemIcon(int index, const QPixmap& pix);
     void addStretch();
 
     int  count();
@@ -197,6 +203,6 @@ private:
     RExpanderBoxPriv* const d;
 };
 
-} // namespace Digikam
+} // namespace KDcrawIface
 
 #endif // REXPANDERBOX_H
