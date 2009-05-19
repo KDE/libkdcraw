@@ -275,7 +275,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
 
-    addItem(d->demosaicingSettings, i18n("Demosaicing"), QString("demosaicing"), true);
+    addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18n("Demosaicing"), QString("demosaicing"), true);
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -412,7 +412,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->whiteBalanceSettings, i18n("White Balance"), QString("whitebalance"), true);
+    addItem(d->whiteBalanceSettings, SmallIcon("kdcraw"), i18n("White Balance"), QString("whitebalance"), true);
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -465,7 +465,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->correctionsSettings, i18n("Corrections"), QString("corrections"), false);
+    addItem(d->correctionsSettings, SmallIcon("kdcraw"), i18n("Corrections"), QString("corrections"), false);
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -529,7 +529,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->colormanSettings, i18n("Color Management"), QString("colormanagement"), false);
+    addItem(d->colormanSettings, SmallIcon("kdcraw"), i18n("Color Management"), QString("colormanagement"), false);
 
     if (! (advSettings & COLORSPACE))
         removeItem(COLORMANAGEMENT);
