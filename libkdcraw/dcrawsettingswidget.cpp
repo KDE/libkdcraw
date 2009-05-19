@@ -473,8 +473,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->colormanSettings         = new QWidget(this);
     QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings);
 
-    d->inputColorSpaceLabel    = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
-    d->inputColorSpaceComboBox = new RComboBox(d->colormanSettings);
+    d->inputColorSpaceLabel     = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
+    d->inputColorSpaceComboBox  = new RComboBox(d->colormanSettings);
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18n("None"));
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18n("Embedded"));
     d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18n("Custom"));
@@ -533,6 +533,8 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     if (! (advSettings & COLORSPACE))
         removeItem(COLORMANAGEMENT);
+
+    addStretch();
 
     // ---------------------------------------------------------------
 
