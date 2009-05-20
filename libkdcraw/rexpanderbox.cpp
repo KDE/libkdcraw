@@ -34,11 +34,10 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QGridLayout>
-#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 // KDE includes
 
-#include <khbox.h>
 #include <kseparator.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
@@ -180,21 +179,21 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
         return; // don't draw arrows if we are too small
 
     unsigned int x = 0, y = 0;
-    if (m_arrowType == Qt::DownArrow) 
+    if (m_arrowType == Qt::DownArrow)
     {
         x = (width() - m_size) / 2;
         y = height() - (m_size + m_margin);
-    } 
-    else if (m_arrowType == Qt::UpArrow) 
+    }
+    else if (m_arrowType == Qt::UpArrow)
     {
         x = (width() - m_size) / 2;
         y = m_margin;
     }
-    else if (m_arrowType == Qt::RightArrow) 
+    else if (m_arrowType == Qt::RightArrow)
     {
         x = width() - (m_size + m_margin);
         y = (height() - m_size) / 2;
-    } 
+    }
     else // arrowType == LeftArrow
     {
         x = m_margin;
@@ -202,7 +201,7 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
     }
 
     /*
-    if (isDown()) 
+    if (isDown())
     {
         ++x;
         ++y;
@@ -258,14 +257,14 @@ public:
         expandByDefault = true;
     }
 
-    bool             expandByDefault;
+    bool              expandByDefault;
 
-    QLabel          *pixmapLabel;
-    QWidget         *containerWidget;
-    QGridLayout     *grid;
+    QLabel           *pixmapLabel;
+    QWidget          *containerWidget;
+    QGridLayout      *grid;
 
-    KSeparator      *line;
-    KHBox           *hbox;
+    KSeparator       *line;
+    QWidget          *hbox;
 
     RArrowClickLabel *arrow;
     RClickLabel      *clickLabel;
@@ -276,18 +275,22 @@ RLabelExpander::RLabelExpander(QWidget *parent)
 {
     d->grid        = new QGridLayout(this);
     d->line        = new KSeparator(Qt::Horizontal, this);
-    d->hbox        = new KHBox(this);
+    d->hbox        = new QWidget(this);
     d->arrow       = new RArrowClickLabel(d->hbox);
     d->pixmapLabel = new QLabel(d->hbox);
     d->clickLabel  = new RClickLabel(d->hbox);
 
+    QHBoxLayout *hlay = new QHBoxLayout(d->hbox);
+    hlay->addWidget(d->arrow);
+    hlay->addWidget(d->pixmapLabel);
+    hlay->addWidget(d->clickLabel, 10);
+    hlay->setMargin(0);
+    hlay->setSpacing(KDialog::spacingHint());
+
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
-    d->hbox->installEventFilter(this);
     d->hbox->setCursor(Qt::PointingHandCursor);
-    d->hbox->setMargin(0);
-    d->hbox->setSpacing(KDialog::spacingHint());
 
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
@@ -390,7 +393,7 @@ void RLabelExpander::slotToggleContainer()
 
 bool RLabelExpander::eventFilter(QObject *obj, QEvent *ev)
 {
-    if ( obj == d->pixmapLabel || obj == d->hbox)
+    if ( obj == d->pixmapLabel)
     {
         if ( ev->type() == QEvent::MouseButtonRelease)
         {
