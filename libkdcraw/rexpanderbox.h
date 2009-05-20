@@ -152,7 +152,7 @@ public:
     void setExpandByDefault(bool b);
     bool isExpandByDefault() const;
 
-private slots:
+private Q_SLOTS:
 
     void slotToggleContainer();
 
