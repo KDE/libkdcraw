@@ -273,6 +273,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                                      "interpolation to Red-Green and Blue-Green channels."));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
+    demosaicingLayout->setRowStretch(line + 1, 10);
 
     insertItem(DEMOSAICING, d->demosaicingSettings, i18n("Demosaicing"));
 
@@ -318,7 +319,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->unclipColorComboBox = new RComboBox(d->whiteBalanceSettings);
     d->unclipColorComboBox->insertItem(0, i18n("Solid white"));
     d->unclipColorComboBox->insertItem(1, i18n("Unclip"));
-    d->unclipColorComboBox->insertItem(2, i18n("Blend")); 
+    d->unclipColorComboBox->insertItem(2, i18n("Blend"));
     d->unclipColorComboBox->insertItem(3, i18n("Rebuild"));
     d->unclipColorComboBox->setDefaultIndex(0);
     d->unclipColorComboBox->setWhatsThis(i18n("<p><b>Highlights</b><p>"
@@ -408,6 +409,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->blackPointSpinBox,              7, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->whitePointCheckBox,             8, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->whitePointSpinBox,              8, 1, 1, 2);
+    whiteBalanceLayout->setRowStretch(9, 10);
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
