@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_cxx.cpp
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C++ interface (implementation)
@@ -136,7 +136,7 @@ void LibRaw::derror()
 LibRaw:: LibRaw(unsigned int flags)
 {
     double aber[4] = {1,1,1,1};
-    double gamm[5] = { 0.45,4.5,0,0,0 };
+    double gamm[6] = { 0.45,4.5,0,0,0,0 };
     unsigned greybox[4] =  { 0, 0, UINT_MAX, UINT_MAX };
 #ifdef DCRAW_VERBOSE
     verbose = 1;
@@ -279,7 +279,6 @@ const char * LibRaw::unpack_function_name()
     if (load_raw == &LibRaw::nikon_e900_load_raw )      return "nikon_e900_load_raw()";
     if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";
 
-    if (load_raw == &LibRaw::olympus_e300_load_raw )    return "olympus_e300_load_raw()";
     if (load_raw == &LibRaw::olympus_e410_load_raw )    return "olympus_e410_load_raw()";
     if (load_raw == &LibRaw::packed_12_load_raw )       return "packed_12_load_raw()";
     if (load_raw == &LibRaw::panasonic_load_raw )       return "panasonic_load_raw()";
@@ -835,7 +834,6 @@ libraw_processed_image_t * LibRaw::dcraw_make_mem_thumb(int *errcode)
             ret->width  = T.twidth;
             ret->colors = 3; 
             ret->bits   = 8;
-            ret->gamma_corrected = 1;
             ret->data_size = T.tlength;
             memmove(ret->data,T.thumb,T.tlength);
             if(errcode) *errcode= 0;
@@ -935,18 +933,16 @@ libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
     ret->width  = S.width;
     ret->colors = P1.colors;
     ret->bits   = O.output_bps;
-    ret->gamma_corrected = (O.output_bps == 8)?1:O.gamma_16bit;
 
     ret->data_size = ds;
 
     // Cut'n'paste from write_tiff_ppm, should be generalized later
     uchar *bufp = ret->data;
     uchar *ppm;
-    ushort *ppm2,lut16[0x10000];
+    ushort *ppm2;
     int c, row, col, soff, rstep, cstep;
 
 
-    if (ret->bits == 8 || ret->gamma_corrected ) gamma_lut (lut16);
     soff  = flip_index (0, 0);
     cstep = flip_index (0, 1) - soff;
     rstep = flip_index (1, 0) - flip_index (0, S.width);
@@ -957,11 +953,9 @@ libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
             ppm2 = (ushort*) (ppm = bufp);
             for (col=0; col < ret->width; col++, soff += cstep)
                 if (ret->bits == 8)
-                    FORCC ppm [col*ret->colors+c] = lut16[imgdata.image[soff][c]]/256;
-                else if(ret->gamma_corrected) 
-                    FORCC ppm2[col*ret->colors+c] =     lut16[imgdata.image[soff][c]];
-                else 
-                    FORCC ppm2[col*ret->colors+c] =     imgdata.image[soff][c];
+                    FORCC ppm [col*ret->colors+c] = imgdata.color.curve[imgdata.image[soff][c]]>>8;
+                else
+                    FORCC ppm2[col*ret->colors+c] =     imgdata.color.curve[imgdata.image[soff][c]];
             bufp+=ret->colors*(ret->bits/8)*ret->width;
         }
     if(errcode) *errcode= 0;
@@ -1001,8 +995,10 @@ int LibRaw::dcraw_ppm_tiff_writer(const char *filename)
                     (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
                 merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_ppm_tiff_writer()");
             }
-        write_ppm_tiff(f);
+        libraw_internal_data.internal_data.output = f;
+        write_ppm_tiff();
         SET_PROC_FLAG(LIBRAW_PROGRESS_FLIP);
+        libraw_internal_data.internal_data.output = NULL;
         fclose(f);
         return 0;
     }
@@ -1059,7 +1055,7 @@ void LibRaw::kodak_thumb_loader()
         scale_mul[3] = scale_mul[1];
 
         size_t size = S.height * S.width;
-        for (int i=0; i < size*4 ; i++) 
+        for (unsigned i=0; i < size*4 ; i++) 
             {
                 val = imgdata.image[0][i];
                 if(!val) continue;
@@ -1104,10 +1100,6 @@ void LibRaw::kodak_thumb_loader()
     int  (*save_hist)[LIBRAW_HISTOGRAM_SIZE] = libraw_internal_data.output_data.histogram;
     libraw_internal_data.output_data.histogram = t_hist;
     
-    ushort *lut16 = (ushort*)calloc(0x10000,sizeof(ushort));
-    merror(lut16,"LibRaw::kodak_thumb_loader()");
-    gamma_lut(lut16);
-    
     libraw_internal_data.output_data.histogram = save_hist;
 
     free(t_hist);
@@ -1134,10 +1126,9 @@ void LibRaw::kodak_thumb_loader()
                 char *ppm = T.thumb + row*S.width*P1.colors;
                 for (int col=0; col < S.width; col++, soff += cstep)
                     for(int c = 0; c < P1.colors; c++)
-                        ppm [col*P1.colors+c] = lut16[imgdata.image[soff][c]]/256;
+                        ppm [col*P1.colors+c] = imgdata.color.curve[imgdata.image[soff][c]]>>8;
             }
     }
-    free(lut16);
     // restore variables
     free(imgdata.image);
     imgdata.image  = s_image;
@@ -1175,7 +1166,7 @@ void LibRaw::foveon_thumb_loader (void)
     bwide = get4();
     if (bwide > 0) 
         {
-            if (bwide < T.twidth*3) return;
+            if (bwide < (unsigned)T.twidth*3) return;
             T.thumb = (char*)malloc(3*T.twidth * T.theight);
             merror (T.thumb, "foveon_thumb()");
             char *buf = (char*)malloc(bwide); 
@@ -1572,6 +1563,8 @@ static const char  *static_camera_list[] =
 "Canon PowerShot A50",
 "Canon PowerShot A460 (CHDK hack)",
 "Canon PowerShot A530 (CHDK hack)",
+"Canon PowerShot A570 (CHDK hack)",
+"Canon PowerShot A590 (CHDK hack)",
 "Canon PowerShot A610 (CHDK hack)",
 "Canon PowerShot A620 (CHDK hack)",
 "Canon PowerShot A630 (CHDK hack)",
@@ -1581,6 +1574,7 @@ static const char  *static_camera_list[] =
 "Canon PowerShot A720 IS (CHDK hack)",
 "Canon PowerShot Pro70",
 "Canon PowerShot Pro90 IS",
+"Canon PowerShot Pro1",
 "Canon PowerShot G1",
 "Canon PowerShot G2",
 "Canon PowerShot G3",
@@ -1599,7 +1593,8 @@ static const char  *static_camera_list[] =
 "Canon PowerShot S50",
 "Canon PowerShot S60",
 "Canon PowerShot S70",
-"Canon PowerShot Pro1",
+"Canon PowerShot SX1 IS",
+"Canon PowerShot SX110 IS (CHDK hack)",
 "Canon EOS D30",
 "Canon EOS D60",
 "Canon EOS 5D",
@@ -1613,6 +1608,7 @@ static const char  *static_camera_list[] =
 "Canon EOS 350D / Digital Rebel XT / Kiss Digital N",
 "Canon EOS 400D / Digital Rebel XTi / Kiss Digital X",
 "Canon EOS 450D / Digital Rebel XSi / Kiss Digital X2",
+"Canon EOS 500D / Digital Rebel T1i / Kiss Digital X3",
 "Canon EOS 1000D / Digital Rebel XS / Kiss Digital F",
 "Canon EOS D2000C",
 "Canon EOS-1D",
@@ -1702,6 +1698,7 @@ static const char  *static_camera_list[] =
 "Kodak C603",
 "Kodak P850",
 "Kodak P880",
+"Kodak Z1015",
 "Kodak KAI-0340",
 "Konica KD-400Z",
 "Konica KD-510Z",
@@ -1745,6 +1742,7 @@ static const char  *static_camera_list[] =
 "Minolta DiMAGE Z2",
 "Minolta Alpha/Dynax/Maxxum 5D",
 "Minolta Alpha/Dynax/Maxxum 7D",
+"Motorola PIXL",
 "Nikon D1",
 "Nikon D1H",
 "Nikon D1X",
@@ -1800,6 +1798,7 @@ static const char  *static_camera_list[] =
 "Olympus E-3",
 "Olympus E-10",
 "Olympus E-20",
+"Olympus E-30",
 "Olympus E-300",
 "Olympus E-330",
 "Olympus E-400",
@@ -1823,6 +1822,7 @@ static const char  *static_camera_list[] =
 "Panasonic DMC-FZ50",
 "Panasonic DMC-FX150",
 "Panasonic DMC-G1",
+"Panasonic DMC-GH1",
 "Panasonic DMC-L1",
 "Panasonic DMC-L10",
 "Panasonic DMC-LC1",

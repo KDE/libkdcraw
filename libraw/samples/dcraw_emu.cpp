@@ -1,9 +1,9 @@
 /* -*- C++ -*-
  * File: dcraw_emu.cpp
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sun Mar 23,   2008
  *
- * LibRaw simple C++ API  (almost complete dcraw emulator)
+ * LibRaw simple C++ API sample: almost complete dcraw emulator
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,7 +70,8 @@ void usage(const char *prog)
 "-f        Interpolate RGGB as four colors\n"
 "-m <num>  Apply a 3x3 median filter to R-G and B-G\n"
 "-s [0..N-1] Select one raw image from input file\n"
-"-4        Write 16-bit linear instead of 8-bit with gamma\n"
+"-4        Linear 16-bit, same as \"-6 -W -g 1 1\""
+"-6        Write 16-bit linear instead of 8-bit with gamma\n"
 "-g pow ts Set gamma curve to gamma pow and toe slope ts (default = 2.222 4.5)\n"
 "-T        Write TIFF instead of PPM\n"
 #ifndef WIN32
@@ -114,11 +115,11 @@ int main(int argc, char *argv[])
 
 #define OUT RawProcessor.imgdata.params
     
-  argv[argc] = "";
+  argv[argc] = (char*)"";
   for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
       {
           opt = argv[arg++][1];
-          if ((cp = strchr (sp="nbrkStqmHACgU", opt)))
+          if ((cp = strchr (sp=(char*)"nbrkStqmHACgU", opt)))
               for (i=0; i < "11411111142"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0])) 
                       {
@@ -175,8 +176,8 @@ int main(int argc, char *argv[])
               case 'j':  OUT.use_fuji_rotate   = 0;  break;
               case 'W':  OUT.no_auto_bright    = 1;  break;
               case 'T':  OUT.output_tiff       = 1;  break;
-              case '4':  OUT.output_bps       = 16;  break;
-              case '1':  OUT.gamma_16bit       = 1;  break;
+              case '4':  OUT.gamm[0] = OUT.gamm[1] =  OUT.no_auto_bright    = 1; /* no break here! */
+              case '6':  OUT.output_bps = 16;  break;
 #ifndef WIN32
               case 'B':  use_mmap              = 1;  break;
 #endif

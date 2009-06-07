@@ -1,9 +1,9 @@
 /* -*- C++ -*-
  * File: halt_mt.c
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw  C API mutithreaded sample  (emulates call to "dcraw  -h [-w] [-a] [-v]")
+ * LibRaw  C API mutithreaded sample: emulates call to "dcraw  -h [-w] [-a] [-v]"
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,16 +35,14 @@
             if(LIBRAW_FATAL_ERROR(ret))                         \
                 {                                               \
                     libraw_close(iprc);                         \
-                    return -1;                                   \
+                    return NULL ;                               \
                 }                                               \
         }                                                       \
     }while(0)
 
 
-// global settings
 int verbose=0,use_camera_wb=0,use_auto_wb=0,tiff_mode=0;
 
-// global file queue
 pthread_mutex_t qm;
 char **queue=NULL;
 size_t qsize=0,qptr=0;
@@ -61,8 +59,7 @@ char *get_next_file()
 }
 
 
-// thread routine
-int process_files(void *q)
+void * process_files(void *q)
 {
     int ret;
     int count=0;
@@ -72,7 +69,7 @@ int process_files(void *q)
     if(!iprc)
         {
             fprintf(stderr,"Cannot create libraw handle\n");
-            return -1;
+            return NULL ;
         }
 
     while((fn = get_next_file()))
@@ -101,7 +98,7 @@ int process_files(void *q)
             count++;
         }
     libraw_close(iprc);
-    return count;
+    return NULL;
 }
 
 void usage(const char*p)
@@ -120,7 +117,7 @@ int show_files(void *q)
 {
     char *p;
     int cnt = 0;
-    while(p = get_next_file())
+    while((p = get_next_file()))
         {
             printf("%s\n",p);
             cnt++;
@@ -131,7 +128,7 @@ int show_files(void *q)
 
 int main(int ac, char *av[])
 {
-    int i, thread_count,max_threads = 2;
+    int i, max_threads = 2;
     pthread_t *threads;
     if(ac<2)
         usage(av[0]);
@@ -168,9 +165,7 @@ int main(int ac, char *av[])
             int *iptr;
             if(threads[i])
                 {
-                    pthread_join(threads[i],&iptr);
-                    if(iptr)
-                        printf("Thread %d : %d files\n",i,(int)iptr);
+                    pthread_join(threads[i],(void*)&iptr);
                 }
         }
             

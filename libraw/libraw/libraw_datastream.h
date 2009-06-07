@@ -1,6 +1,6 @@
 /* -*- C -*-
  * File: libraw_datastream.h
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sun Jan 18 13:07:35 2009
  *
  * LibRaw Data stream interface
@@ -33,7 +33,7 @@
 
 struct LibRaw_abstract_datastream;
 
-#else // __cplusplus
+#else /* __cplusplus */
 
 #include "libraw_const.h"
 
@@ -45,9 +45,8 @@ class LibRaw_abstract_datastream
     LibRaw_abstract_datastream(){substream=0;};
     virtual             ~LibRaw_abstract_datastream(void){if(substream) delete substream;}
     virtual int         valid(){return 0;}
-    // file input emulation
     virtual int         read(void *,size_t, size_t ){ return -1;}
-    virtual int         seek(off_t /*o*/, int /*whence*/){return -1;}
+    virtual int         seek(off_t o, int whence){return -1;}
     virtual int         tell(){return -1;}
     virtual int         get_char(){return -1;}
     virtual char*       gets(char *, int){ return NULL;}
@@ -124,7 +123,6 @@ class LibRaw_file_datastream : public LibRaw_abstract_datastream
 
     virtual const char *fname() { return filename; }
 
-    // secondary 
     virtual int subfile_open(const char *fn)
     {
         if(sav) return EBUSY;

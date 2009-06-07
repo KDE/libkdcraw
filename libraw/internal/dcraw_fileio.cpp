@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Apr  7 15:14:50 2009
+   Generated from dcraw/dcraw.c at Thu Jun  4 20:44:31 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -16,18 +16,18 @@
    Seach from the current directory up to the root looking for
    a ".badpixels" file, and fix those pixels now.
  */
-void CLASS bad_pixels (char *fname)
+void CLASS bad_pixels (const char *cfname)
 {
   FILE *fp=0;
-  char *cp, line[128];
+  char *fname, *cp, line[128];
   int len, time, row, col, r, c, rad, tot, n, fixed=0;
 
   if (!filters) return;
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_BAD_PIXELS,0,2);
 #endif
-  if (fname)
-    fp = fopen (fname, "r");
+  if (cfname)
+    fp = fopen (cfname, "r");
   if (!fp) 
       {
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -67,7 +67,7 @@ void CLASS bad_pixels (char *fname)
 #endif
 }
 
-void CLASS subtract (char *fname)
+void CLASS subtract (const char *fname)
 {
   FILE *fp;
   int dim[3]={0,0,0}, comment=0, number=0, error=0, nd=0, c, row, col;
@@ -125,7 +125,7 @@ void CLASS subtract (char *fname)
 }
 
 #ifndef NO_LCMS
-void CLASS apply_profile (char *input, char *output)
+void CLASS apply_profile (const char *input, const char *output)
 {
   char *prof;
   cmsHPROFILE hInProfile=0, hOutProfile=0;

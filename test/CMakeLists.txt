@@ -8,7 +8,7 @@ MACRO(libkdcraw_build_test)
         ../libraw/samples/${_target}.cpp
         ${libraw_LIB_SRCS}
        )
-    
+
     # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
     FOREACH(_curentfile ${${_target}_SRCS})
 	SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
@@ -38,6 +38,7 @@ LIBKDCRAW_BUILD_TEST(mem_image)
 LIBKDCRAW_BUILD_TEST(dcraw_emu)
 LIBKDCRAW_BUILD_TEST(4channels)
 LIBKDCRAW_BUILD_TEST(unprocessed_raw)
+LIBKDCRAW_BUILD_TEST(raw-identify)
 #IF(WIN32)
 #    LIBKDCRAW_BUILD_TEST(half_mt_win32)
 #ELSE(WIN32)

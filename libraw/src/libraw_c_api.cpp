@@ -1,9 +1,9 @@
 /* -*- C++ -*-
  * File: libraw_c_api.cpp
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw C++ interface (implementation)
+ * LibRaw C interface 
  */
 #include <errno.h>
 #include "libraw/libraw.h"

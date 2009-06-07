@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: unprocessed_raw.cpp
- * Copyright 2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Fri Jan 02, 2009
  *
  * LibRaw sample
@@ -39,8 +39,8 @@
 int main(int ac, char *av[])
 {
     int  i, ret;
-    int verbose=1,autoscale=0;
-    char outfn[1024],thumbfn[1024]; 
+    int verbose=1,autoscale=0,use_gamma=0;
+    char outfn[1024]; 
 
     LibRaw RawProcessor;
     if(ac<2) 
@@ -82,7 +82,7 @@ int main(int ac, char *av[])
                     else if(av[i][1]=='A' && av[i][2]==0)
                         autoscale=1;
                     else if(av[i][1]=='g' && av[i][2]==0)
-                        OUT.gamma_16bit=1;
+                        use_gamma = 1;
                     else if(av[i][1]=='N' && av[i][2]==0)
                         OUT.filtering_mode=LIBRAW_FILTERING_NONE;
                     else if(av[i][1]=='s' && av[i][2]==0)
@@ -94,7 +94,9 @@ int main(int ac, char *av[])
                         goto usage;
                     continue;
                 }
-            int r,c;
+            int c;
+            if(!use_gamma)
+                OUT.gamm[0] = OUT.gamm[1] = 1;
             if(verbose) printf("Processing file %s\n",av[i]);
             if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
                 {

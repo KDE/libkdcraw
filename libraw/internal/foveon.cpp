@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Apr  7 15:14:48 2009
+   Generated from dcraw/dcraw.c at Thu Jun  4 20:44:29 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -61,7 +61,7 @@ void CLASS foveon_decoder (unsigned size, unsigned code)
 #endif
 }
 
-void CLASS foveon_thumb (FILE *tfp)
+void CLASS foveon_thumb()
 {
   unsigned bwide, row, col, bitbuf=0, bit=1, c, i;
   char *buf;
@@ -69,14 +69,14 @@ void CLASS foveon_thumb (FILE *tfp)
   short pred[3];
 
   bwide = get4();
-  fprintf (tfp, "P6\n%d %d\n255\n", thumb_width, thumb_height);
+  fprintf (ofp, "P6\n%d %d\n255\n", thumb_width, thumb_height);
   if (bwide > 0) {
     if (bwide < thumb_width*3) return;
     buf = (char *) malloc (bwide);
     merror (buf, "foveon_thumb()");
     for (row=0; row < thumb_height; row++) {
       fread  (buf, 1, bwide, ifp);
-      fwrite (buf, 3, thumb_width, tfp);
+      fwrite (buf, 3, thumb_width, ofp);
     }
     free (buf);
     return;
@@ -95,7 +95,7 @@ void CLASS foveon_thumb (FILE *tfp)
 	  dindex = dindex->branch[bitbuf >> bit & 1];
 	}
 	pred[c] += dindex->leaf;
-	fputc (pred[c], tfp);
+	fputc (pred[c], ofp);
       }
   }
 }

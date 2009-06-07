@@ -1,14 +1,16 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Tue Apr  7 15:14:48 2009
+   Generated from dcraw/dcraw.c at Thu Jun  4 20:44:29 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
 #define NO_JPEG
-#define VERSION "8.93"
+#define VERSION "8.94"
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #define _USE_MATH_DEFINES
 #include <ctype.h>
 #include <errno.h>

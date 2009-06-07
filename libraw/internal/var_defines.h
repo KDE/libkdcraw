@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: var_defines.h
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008
  *
  * LibRaw redefinitions of dcraw internal variables
@@ -122,6 +122,7 @@
 #define meta_data       (libraw_internal_data.internal_data.meta_data)
 #define ifp             libraw_internal_data.internal_data.input
 #define ifname          ((char*)libraw_internal_data.internal_data.input->fname())
+#define ofp             libraw_internal_data.internal_data.output
 #define profile_offset  (libraw_internal_data.internal_data.profile_offset)
 #define thumb_offset    (libraw_internal_data.internal_data.toffset)
 

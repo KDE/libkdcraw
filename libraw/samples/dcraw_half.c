@@ -1,9 +1,9 @@
 /* -*- C++ -*-
  * File: dcraw_half.c
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw  C API sample  (emulates call to "dcraw  -h")
+ * LibRaw  C API sample:  emulates "dcraw  -h"
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

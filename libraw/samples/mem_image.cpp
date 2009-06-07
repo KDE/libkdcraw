@@ -1,10 +1,10 @@
 /* -*- C++ -*-
  * File: mem_image.cpp
- * Copyright 2008-2009 Alex Tutubalin <lexa@lexa.ru>
+ * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw mem_image/mem_thumb API test. Resuls should be same (bitwise) as in dcraw [-4] [-e]
- *   Testing note: for ppm-thumbnails you should use dcraw -w -e for thumbnail extraction
+ * LibRaw mem_image/mem_thumb API test. Results should be same (bitwise) to dcraw [-4] [-6] [-e]
+ * Testing note: for ppm-thumbnails you should use dcraw -w -e for thumbnail extraction
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ void write_ppm(libraw_processed_image_t *img, const char *basename)
 */
 #define SWAP(a,b) { a ^= b; a ^= (b ^= a); }
     if (img->bits == 16 && htons(0x55aa) != 0x55aa)
-        for(int i=0; i< img->data_size; i+=2)
+        for(unsigned i=0; i< img->data_size; i+=2)
             SWAP(img->data[i],img->data[i+1]);
 #undef SWAP
 
@@ -91,10 +91,9 @@ void write_thumb(libraw_processed_image_t *img, const char *basename)
 
 int main(int ac, char *av[])
 {
-    int  i, ret, verbose=0, output_thumbs=0;
+    int  i, ret, output_thumbs=0;
 
     // don't use fixed size buffers in real apps!
-    char outfn[1024],thumbfn[1024]; 
 
     LibRaw RawProcessor;
     
@@ -103,8 +102,8 @@ int main(int ac, char *av[])
             printf(
                 "mem_image - LibRaw sample, to illustrate work for memory buffers. Emulates dcraw [-4] [-1] [-e]\n"
                 "Usage: %s [-D] [-T] [-v] [-e] raw-files....\n"
-                "\t-4 - output 16-bit PPM\n"
-                "\t-1 - gamma-correct 16-bit data\n"
+                "\t-6 - output 16-bit PPM\n"
+                "\t-4 - linear 16-bit data\n"
                 "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",
                 av[0]);
             return 0;
@@ -124,10 +123,13 @@ int main(int ac, char *av[])
         {
             if(av[i][0]=='-')
                 {
-                    if(av[i][1]=='4' && av[i][2]==0)
+                    if(av[i][1]=='6' && av[i][2]==0)
                         OUT.output_bps = 16;
-                    if(av[i][1]=='1' && av[i][2]==0)
-                        OUT.gamma_16bit = 1;
+                    if(av[i][1]=='4' && av[i][2]==0)
+                        {
+                            OUT.output_bps = 16;
+                            OUT.gamm[0] = OUT.gamm[1] =  OUT.no_auto_bright    = 1;
+                        }
                     if(av[i][1]=='e' && av[i][2]==0)
                         output_thumbs++;
                     continue;
