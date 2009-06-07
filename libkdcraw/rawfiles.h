@@ -71,8 +71,7 @@ static const char raw_file_extentions[] =
                                           "*.nrw "  // Nikon Digital Camera Raw Image Format.
                                           "*.qtk "  // Apple Quicktake 100/150 Digital Camera Raw Image Format.
                                           "*.rw2 "  // Panasonic LX3 Digital Camera Raw Image Format.
-                                          "*.rwl "  // Leica Digital Camera Raw Image Format.
-                                          "*.sti"   // Sinar Capture Shop Raw Image File.
+                                          "*.sti "  // Sinar Capture Shop Raw Image File.
 
 // NOTE: VERSION 3
 
