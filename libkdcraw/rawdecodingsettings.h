@@ -118,7 +118,7 @@ public:
     RawDecodingSettings()
     {
         autoBrightness             = true;
-        gamma16bit                 = true;
+//        gamma16bit                 = true;
         sixteenBitsImage           = false;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
@@ -159,7 +159,7 @@ public:
     bool operator==(const RawDecodingSettings &o) const
     {
         return autoBrightness          == o.autoBrightness
-            && gamma16bit              == o.gamma16bit
+//            && gamma16bit              == o.gamma16bit
             && sixteenBitsImage        == o.sixteenBitsImage
             && brightness              == o.brightness
             && RAWQuality              == o.RAWQuality
@@ -196,7 +196,7 @@ public:
     void optimizeTimeLoading()
     {
         autoBrightness             = true;
-        gamma16bit                 = true;
+//        gamma16bit                 = true;
         sixteenBitsImage           = true;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
@@ -237,10 +237,6 @@ public:
     /** If false, use a fixed white level, ignoring the image histogram.
     */
     bool autoBrightness;
-
-    /** If true, perform an auto-gamma with 16 bits color depth image, as in 8 bits.
-    */
-    bool gamma16bit;
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
     */
