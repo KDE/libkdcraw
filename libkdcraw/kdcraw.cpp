@@ -164,8 +164,6 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     raw.imgdata.params.use_auto_wb    = 1;         // Use automatic white balance.
     raw.imgdata.params.use_camera_wb  = 1;         // Use camera white balance, if possible.
     raw.imgdata.params.half_size      = 1;         // Half-size color image (3x faster than -q).
-    raw.imgdata.params.gamm[0]        = 1/2.2222;  // sRGB color space.
-    raw.imgdata.params.gamm[1]        = 4.5;       // sRGB color space.
 
     // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
     raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
