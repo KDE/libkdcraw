@@ -46,7 +46,7 @@ class LibRaw_abstract_datastream
     virtual             ~LibRaw_abstract_datastream(void){if(substream) delete substream;}
     virtual int         valid(){return 0;}
     virtual int         read(void *,size_t, size_t ){ return -1;}
-    virtual int         seek(off_t o, int whence){return -1;}
+    virtual int         seek(off_t /*o*/, int /*whence*/){return -1;}
     virtual int         tell(){return -1;}
     virtual int         get_char(){return -1;}
     virtual char*       gets(char *, int){ return NULL;}
