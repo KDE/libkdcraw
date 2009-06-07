@@ -188,24 +188,16 @@ protected:
      */
     virtual bool checkToCancelWaitingData();
 
-    /** This method is obsolete and will be removed in the future.
-     */
-    virtual KDE_DEPRECATED bool checkToCancelReceivingData();
-
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
         internal loop without feedback) with your proper environment. By default, this method do nothing.
         Progress value average for this stage is 0%-n%, with 'n' == 40% max (see setWaitingDataProgress() method).
      */
     virtual void setWaitingDataProgress(double value);
 
-    /** This method is obsolete and will be removed in the future.
-     */
-    virtual KDE_DEPRECATED void setReceivingDataProgress(double value);
-
 private:
 
-    bool loadFromDcraw(const QString& filePath, QByteArray &imageData,
-                       int &width, int &height, int &rgbmax);
+    bool loadFromLibraw(const QString& filePath, QByteArray &imageData,
+                        int &width, int &height, int &rgbmax);
 
 private:
 

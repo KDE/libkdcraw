@@ -336,22 +336,17 @@ bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettin
 {
     m_rawDecodingSettings                    = rawDecodingSettings;
     m_rawDecodingSettings.halfSizeColorImage = true;
-    return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
+    return (loadFromLibraw(filePath, imageData, width, height, rgbmax));
 }
 
 bool KDcraw::decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
                             QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
     m_rawDecodingSettings = rawDecodingSettings;
-    return (loadFromDcraw(filePath, imageData, width, height, rgbmax));
+    return (loadFromLibraw(filePath, imageData, width, height, rgbmax));
 }
 
 bool KDcraw::checkToCancelWaitingData()
-{
-    return m_cancel;
-}
-
-bool KDcraw::checkToCancelReceivingData()
 {
     return m_cancel;
 }
@@ -360,12 +355,8 @@ void KDcraw::setWaitingDataProgress(double)
 {
 }
 
-void KDcraw::setReceivingDataProgress(double)
-{
-}
-
-bool KDcraw::loadFromDcraw(const QString& filePath, QByteArray &imageData, 
-                           int &width, int &height, int &rgbmax)
+bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray &imageData,
+                            int &width, int &height, int &rgbmax)
 {
     m_cancel = false;
 
