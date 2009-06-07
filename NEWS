@@ -2,7 +2,8 @@
 ------------------------------------------------------------------------
 - New widget to host settings : RExpanderBox.
 - Updated to LibRaw 0.8.0.
-- API changed : removed RawDecodingSetting::gamma16bit settings. Obsolete with LibRaw 0.8.0
+- API changed : remove RawDecodingSetting::gamma16bit settings. Obsolete with LibRaw 0.8.0.
+                remove KDcraw depreciated methods.
 
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
