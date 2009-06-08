@@ -899,11 +899,19 @@ libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
                 return NULL;
             }
 
-    if(!libraw_internal_data.output_data.histogram)
+    if(libraw_internal_data.output_data.histogram)
         {
-            libraw_internal_data.output_data.histogram = 
-                (int (*)[LIBRAW_HISTOGRAM_SIZE]) malloc(sizeof(*libraw_internal_data.output_data.histogram)*4);
-            merror(libraw_internal_data.output_data.histogram,"LibRaw::dcraw_make_mem_image()");
+            int perc, val, total, t_white=0x2000,c;
+
+            perc = S.width * S.height * 0.01;		/* 99th percentile white level */
+            if (IO.fuji_width) perc /= 2;
+            if (!((O.highlight & ~2) || O.no_auto_bright))
+                for (t_white=c=0; c < P1.colors; c++) {
+                    for (val=0x2000, total=0; --val > 32; )
+                        if ((total += libraw_internal_data.output_data.histogram[c][val]) > perc) break;
+                    if (t_white < val) t_white = val;
+                }
+            gamma_curve (O.gamm[0], O.gamm[1], 2, (t_white << 3)/O.bright);
         }
 
     unsigned ds = S.height * S.width * (O.output_bps/8) * P1.colors;
@@ -1099,9 +1107,27 @@ void LibRaw::kodak_thumb_loader()
     // from gamma_lut
     int  (*save_hist)[LIBRAW_HISTOGRAM_SIZE] = libraw_internal_data.output_data.histogram;
     libraw_internal_data.output_data.histogram = t_hist;
+
+    // make curve output curve!
+    ushort (*t_curve) = (ushort*) calloc(sizeof(C.curve),1);
+    merror (t_curve, "LibRaw::kodak_thumb_loader()");
+    memmove(t_curve,C.curve,sizeof(C.curve));
+    memset(C.curve,0,sizeof(C.curve));
+        {
+            int perc, val, total, t_white=0x2000,c;
+
+            perc = S.width * S.height * 0.01;		/* 99th percentile white level */
+            if (IO.fuji_width) perc /= 2;
+            if (!((O.highlight & ~2) || O.no_auto_bright))
+                for (t_white=c=0; c < P1.colors; c++) {
+                    for (val=0x2000, total=0; --val > 32; )
+                        if ((total += libraw_internal_data.output_data.histogram[c][val]) > perc) break;
+                    if (t_white < val) t_white = val;
+                }
+            gamma_curve (O.gamm[0], O.gamm[1], 2, (t_white << 3)/O.bright);
+        }
     
     libraw_internal_data.output_data.histogram = save_hist;
-
     free(t_hist);
     
     // from write_ppm_tiff - copy pixels into bitmap
@@ -1129,6 +1155,10 @@ void LibRaw::kodak_thumb_loader()
                         ppm [col*P1.colors+c] = imgdata.color.curve[imgdata.image[soff][c]]>>8;
             }
     }
+
+    memmove(C.curve,t_curve,sizeof(C.curve));
+    free(t_curve);
+
     // restore variables
     free(imgdata.image);
     imgdata.image  = s_image;

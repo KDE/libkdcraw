@@ -140,8 +140,7 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot open %s: %s\n",av[i],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-
-
+            
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
