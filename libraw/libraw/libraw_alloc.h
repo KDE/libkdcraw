@@ -29,6 +29,7 @@
 #ifdef WIN32
 #define bzero(p,sz) memset(p,0,sz)
 #endif
+#include <strings.h>   /* To please Sun Studio compiler. */
 
 #ifdef __cplusplus
 
