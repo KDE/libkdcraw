@@ -248,7 +248,7 @@ public:
     QRect whiteBalanceArea;
 };
 
-//! kDebug() stream operator. Writes settings @a t to the debug output in a nicely formatted way.
+//! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
 LIBKDCRAW_EXPORT QDebug operator<<(QDebug dbg, const RawDecodingSettings& s);
 
 }  // namespace KDcrawIface

@@ -136,9 +136,6 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
         for(int c = 0 ; c < 4 ; c++) 
             identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
     }
-
-    // NOTE: since dcraw.c 8.77, this information has disapear...
-    identify.hasSecondaryPixel = false;
 }
 
 }  // namespace KDcrawIface
