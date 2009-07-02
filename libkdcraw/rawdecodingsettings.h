@@ -25,13 +25,13 @@
 #ifndef RAW_DECODING_SETTINGS_H
 #define RAW_DECODING_SETTINGS_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QRect>
 #include <QtCore/QString>
 #include <QtCore/QDebug>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 
@@ -116,119 +116,16 @@ public:
     };
 
     /** Standard constructor with default settings */
-    RawDecodingSettings()
-    {
-        autoBrightness             = true;
-        sixteenBitsImage           = false;
-        brightness                 = 1.0;
-        RAWQuality                 = BILINEAR;
-        inputColorSpace            = NOINPUTCS;
-        outputColorSpace           = SRGB;
-        RGBInterpolate4Colors      = false;
-        DontStretchPixels          = false;
-        unclipColors               = 0;
-        whiteBalance               = CAMERA;
-        customWhiteBalance         = 6500;
-        customWhiteBalanceGreen    = 1.0;
-        medianFilterPasses         = 0;
-
-        halfSizeColorImage         = false;
-
-        enableBlackPoint           = false;
-        blackPoint                 = 0;
-
-        enableWhitePoint           = false;
-        whitePoint                 = 0;
-
-        enableNoiseReduction       = false;
-        NRThreshold                = 100;
-
-        enableCACorrection         = false;
-        caMultiplier[0]            = 1.0;
-        caMultiplier[1]            = 1.0;
-
-        inputProfile               = QString();
-        outputProfile              = QString();
-
-        deadPixelMap               = QString();
-
-        whiteBalanceArea           = QRect();
-    };
+    RawDecodingSettings();
 
     /** Compare for equality */
-    bool operator==(const RawDecodingSettings &o) const
-    {
-        return autoBrightness          == o.autoBrightness
-            && sixteenBitsImage        == o.sixteenBitsImage
-            && brightness              == o.brightness
-            && RAWQuality              == o.RAWQuality
-            && inputColorSpace         == o.inputColorSpace
-            && outputColorSpace        == o.outputColorSpace
-            && RGBInterpolate4Colors   == o.RGBInterpolate4Colors
-            && DontStretchPixels       == o.DontStretchPixels
-            && unclipColors            == o.unclipColors
-            && whiteBalance            == o.whiteBalance
-            && customWhiteBalance      == o.customWhiteBalance
-            && customWhiteBalanceGreen == o.customWhiteBalanceGreen
-            && halfSizeColorImage      == o.halfSizeColorImage
-            && enableBlackPoint        == o.enableBlackPoint
-            && blackPoint              == o.blackPoint
-            && enableWhitePoint        == o.enableWhitePoint
-            && whitePoint              == o.whitePoint
-            && enableNoiseReduction    == o.enableNoiseReduction
-            && NRThreshold             == o.NRThreshold
-            && enableCACorrection      == o.enableCACorrection
-            && caMultiplier[0]         == o.caMultiplier[0]
-            && caMultiplier[1]         == o.caMultiplier[1]
-            && medianFilterPasses      == o.medianFilterPasses
-            && inputProfile            == o.inputProfile
-            && outputProfile           == o.outputProfile
-            && deadPixelMap            == o.deadPixelMap
-            && whiteBalanceArea        == o.whiteBalanceArea
-          ;
-    };
+    bool operator==(const RawDecodingSettings &o) const;
 
     /** Standard destructor */
-    virtual ~RawDecodingSettings(){};
+    virtual ~RawDecodingSettings();
 
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
-    void optimizeTimeLoading()
-    {
-        autoBrightness             = true;
-        sixteenBitsImage           = true;
-        brightness                 = 1.0;
-        RAWQuality                 = BILINEAR;
-        inputColorSpace            = NOINPUTCS;
-        outputColorSpace           = SRGB;
-        RGBInterpolate4Colors      = false;
-        DontStretchPixels          = false;
-        unclipColors               = 0;
-        whiteBalance               = CAMERA;
-        customWhiteBalance         = 6500;
-        customWhiteBalanceGreen    = 1.0;
-        halfSizeColorImage         = true;
-        medianFilterPasses         = 0;
-
-        enableBlackPoint           = false;
-        blackPoint                 = 0;
-
-        enableWhitePoint           = false;
-        whitePoint                 = 0;
-
-        enableNoiseReduction       = false;
-        NRThreshold                = 100;
-
-        enableCACorrection         = false;
-        caMultiplier[0]            = 1.0;
-        caMultiplier[1]            = 1.0;
-
-        inputProfile               = QString();
-        outputProfile              = QString();
-
-        deadPixelMap               = QString();
-
-        whiteBalanceArea           = QRect();
-    };
+    void optimizeTimeLoading();
 
 public:
 
@@ -351,39 +248,8 @@ public:
     QRect whiteBalanceArea;
 };
 
-/*
 //! kDebug() stream operator. Writes settings @a t to the debug output in a nicely formatted way.
-LIBKDCRAW_EXPORT QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
-{
-    dbg.nospace() << "RawDecodingSettings::autoBrightness: "          << s.autoBrightness   << ", ";
-    dbg.nospace() << "RawDecodingSettings::sixteenBitsImage: "        << s.sixteenBitsImage << ", ";
-    dbg.nospace() << "RawDecodingSettings::brightness: "              << s.brightness << ", ";
-    dbg.nospace() << "RawDecodingSettings::RAWQuality: "              << s.RAWQuality << ", ";
-    dbg.nospace() << "RawDecodingSettings::inputColorSpace: "         << s.inputColorSpace << ", ";
-    dbg.nospace() << "RawDecodingSettings::outputColorSpace: "        << s.outputColorSpace << ", ";
-    dbg.nospace() << "RawDecodingSettings::RGBInterpolate4Colors: "   << s.RGBInterpolate4Colors << ", ";
-    dbg.nospace() << "RawDecodingSettings::DontStretchPixels: "       << s.DontStretchPixels << ", ";
-    dbg.nospace() << "RawDecodingSettings::unclipColors: "            << s.unclipColors << ", ";
-    dbg.nospace() << "RawDecodingSettings::whiteBalance: "            << s.whiteBalance << ", ";
-    dbg.nospace() << "RawDecodingSettings::customWhiteBalance: "      << s.customWhiteBalance << ", ";
-    dbg.nospace() << "RawDecodingSettings::customWhiteBalanceGreen: " << s.customWhiteBalanceGreen << ", ";
-    dbg.nospace() << "RawDecodingSettings::halfSizeColorImage: "      << s.halfSizeColorImage << ", ";
-    dbg.nospace() << "RawDecodingSettings::enableBlackPoint: "        << s.enableBlackPoint << ", ";
-    dbg.nospace() << "RawDecodingSettings::blackPoint: "              << s.blackPoint << ", ";
-    dbg.nospace() << "RawDecodingSettings::enableWhitePoint: "        << s.enableWhitePoint << ", ";
-    dbg.nospace() << "RawDecodingSettings::whitePoint: "              << s.whitePoint << ", ";
-    dbg.nospace() << "RawDecodingSettings::enableNoiseReduction: "    << s.enableNoiseReduction << ", ";
-    dbg.nospace() << "RawDecodingSettings::NRThreshold: "             << s.NRThreshold << ", ";
-    dbg.nospace() << "RawDecodingSettings::enableCACorrection: "      << s.enableCACorrection << ", ";
-    dbg.nospace() << "RawDecodingSettings::caMultiplier: "            << s.caMultiplier << ", ";
-    dbg.nospace() << "RawDecodingSettings::medianFilterPasses: "      << s.medianFilterPasses << ", ";
-    dbg.nospace() << "RawDecodingSettings::inputProfile: "            << s.inputProfile << ", ";
-    dbg.nospace() << "RawDecodingSettings::outputProfile: "           << s.outputProfile << ", ";
-    dbg.nospace() << "RawDecodingSettings::deadPixelMap: "            << s.deadPixelMap << ", ";
-    dbg.nospace() << "RawDecodingSettings::whiteBalanceArea: "        << s.whiteBalanceArea;
-    return dbg.space();
-};
-*/
+LIBKDCRAW_EXPORT QDebug operator<<(QDebug dbg, const RawDecodingSettings& s);
 
 }  // namespace KDcrawIface
 

@@ -10,6 +10,7 @@ ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
 SET(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawsettingswidget.cpp
+                    rawdecodingsettings.cpp
                     rcombobox.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
