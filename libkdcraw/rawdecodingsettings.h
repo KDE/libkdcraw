@@ -118,7 +118,6 @@ public:
     RawDecodingSettings()
     {
         autoBrightness             = true;
-//        gamma16bit                 = true;
         sixteenBitsImage           = false;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
@@ -159,7 +158,6 @@ public:
     bool operator==(const RawDecodingSettings &o) const
     {
         return autoBrightness          == o.autoBrightness
-//            && gamma16bit              == o.gamma16bit
             && sixteenBitsImage        == o.sixteenBitsImage
             && brightness              == o.brightness
             && RAWQuality              == o.RAWQuality
@@ -196,7 +194,6 @@ public:
     void optimizeTimeLoading()
     {
         autoBrightness             = true;
-//        gamma16bit                 = true;
         sixteenBitsImage           = true;
         brightness                 = 1.0;
         RAWQuality                 = BILINEAR;
