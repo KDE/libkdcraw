@@ -29,6 +29,7 @@
 
 #include <QtCore/QRect>
 #include <QtCore/QString>
+#include <QtCore/QDebug>
 
 // Local includes.
 
@@ -348,6 +349,38 @@ public:
     /** Rectangle used to calculate the white balance by averaging the region of image.
     */
     QRect whiteBalanceArea;
+};
+
+//! kDebug() stream operator. Writes settings @a t to the debug output in a nicely formatted way.
+LIBKDCRAW_EXPORT QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
+{
+    dbg.nospace() << "RawDecodingSettings::autoBrightness: "          << s.autoBrightness   << ", ";
+    dbg.nospace() << "RawDecodingSettings::sixteenBitsImage: "        << s.sixteenBitsImage << ", ";
+    dbg.nospace() << "RawDecodingSettings::brightness: "              << s.brightness << ", ";
+    dbg.nospace() << "RawDecodingSettings::RAWQuality: "              << s.RAWQuality << ", ";
+    dbg.nospace() << "RawDecodingSettings::inputColorSpace: "         << s.inputColorSpace << ", ";
+    dbg.nospace() << "RawDecodingSettings::outputColorSpace: "        << s.outputColorSpace << ", ";
+    dbg.nospace() << "RawDecodingSettings::RGBInterpolate4Colors: "   << s.RGBInterpolate4Colors << ", ";
+    dbg.nospace() << "RawDecodingSettings::DontStretchPixels: "       << s.DontStretchPixels << ", ";
+    dbg.nospace() << "RawDecodingSettings::unclipColors: "            << s.unclipColors << ", ";
+    dbg.nospace() << "RawDecodingSettings::whiteBalance: "            << s.whiteBalance << ", ";
+    dbg.nospace() << "RawDecodingSettings::customWhiteBalance: "      << s.customWhiteBalance << ", ";
+    dbg.nospace() << "RawDecodingSettings::customWhiteBalanceGreen: " << s.customWhiteBalanceGreen << ", ";
+    dbg.nospace() << "RawDecodingSettings::halfSizeColorImage: "      << s.halfSizeColorImage << ", ";
+    dbg.nospace() << "RawDecodingSettings::enableBlackPoint: "        << s.enableBlackPoint << ", ";
+    dbg.nospace() << "RawDecodingSettings::blackPoint: "              << s.blackPoint << ", ";
+    dbg.nospace() << "RawDecodingSettings::enableWhitePoint: "        << s.enableWhitePoint << ", ";
+    dbg.nospace() << "RawDecodingSettings::whitePoint: "              << s.whitePoint << ", ";
+    dbg.nospace() << "RawDecodingSettings::enableNoiseReduction: "    << s.enableNoiseReduction << ", ";
+    dbg.nospace() << "RawDecodingSettings::NRThreshold: "             << s.NRThreshold << ", ";
+    dbg.nospace() << "RawDecodingSettings::enableCACorrection: "      << s.enableCACorrection << ", ";
+    dbg.nospace() << "RawDecodingSettings::caMultiplier: "            << s.caMultiplier << ", ";
+    dbg.nospace() << "RawDecodingSettings::medianFilterPasses: "      << s.medianFilterPasses << ", ";
+    dbg.nospace() << "RawDecodingSettings::inputProfile: "            << s.inputProfile << ", ";
+    dbg.nospace() << "RawDecodingSettings::outputProfile: "           << s.outputProfile << ", ";
+    dbg.nospace() << "RawDecodingSettings::deadPixelMap: "            << s.deadPixelMap << ", ";
+    dbg.nospace() << "RawDecodingSettings::whiteBalanceArea: "        << s.whiteBalanceArea;
+    return dbg.space();
 };
 
 }  // namespace KDcrawIface
