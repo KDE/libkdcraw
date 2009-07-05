@@ -155,6 +155,6 @@ QDebug operator<<(QDebug dbg, const DcrawInfoContainer& c)
     dbg.nospace() << "DcrawInfoContainer::leftMargin: "       << c.leftMargin << ", ";
     dbg.nospace() << "DcrawInfoContainer::orientation: "      << c.orientation;
     return dbg.space();
-};
+}
 
 } // namespace KDcrawIface
