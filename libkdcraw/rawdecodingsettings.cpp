@@ -171,6 +171,6 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "RawDecodingSettings::deadPixelMap: "            << s.deadPixelMap << ", ";
     dbg.nospace() << "RawDecodingSettings::whiteBalanceArea: "        << s.whiteBalanceArea;
     return dbg.space();
-};
+}
 
 }  // namespace KDcrawIface
