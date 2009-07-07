@@ -157,20 +157,6 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
     setup(advSettings);
 }
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, bool sixteenBitsOption,
-                                         bool outputColorSpaceOption,
-                                         bool postProcessingOptions)
-                   : RExpanderBox(parent), d(new DcrawSettingsWidgetPriv)
-{
-    int advSettings = 0;
-
-    if (sixteenBitsOption)      advSettings |= SIXTEENBITS;
-    if (outputColorSpaceOption) advSettings |= COLORSPACE;
-    if (postProcessingOptions)  advSettings |= POSTPROCESSING;
-
-    setup(advSettings);
-}
-
 void DcrawSettingsWidget::setup(int advSettings)
 {
     // ---------------------------------------------------------------
@@ -283,8 +269,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceSettings         = new QWidget(this);
     QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
 
-    d->whiteBalanceLabel    = new QLabel(i18n("Method"), d->whiteBalanceSettings);
-    d->whiteBalanceComboBox = new RComboBox(d->whiteBalanceSettings);
+    d->whiteBalanceLabel            = new QLabel(i18n("Method"), d->whiteBalanceSettings);
+    d->whiteBalanceComboBox         = new RComboBox(d->whiteBalanceSettings);
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18n("Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18n("Camera"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18n("Automatic"));
@@ -420,7 +406,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->correctionsSettings         = new QWidget(this);
     QGridLayout* correctionsLayout = new QGridLayout(d->correctionsSettings);
 
-    d->enableNoiseReduction = new QCheckBox(i18n("Enable noise reduction"), d->correctionsSettings);
+    d->enableNoiseReduction        = new QCheckBox(i18n("Enable noise reduction"), d->correctionsSettings);
     d->enableNoiseReduction->setWhatsThis(i18n("<p><b>Enable Noise Reduction</b><p>"
                      "Use wavelets to erase noise while preserving real detail.<p>"));
 
