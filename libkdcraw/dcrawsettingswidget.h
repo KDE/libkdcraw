@@ -71,7 +71,7 @@ public:
     /**
      * @param advSettings the default value is COLORSPACE
      */
-    DcrawSettingsWidget(QWidget *parent, int advSettings);
+    DcrawSettingsWidget(QWidget *parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
     void setup(int advSettings);
