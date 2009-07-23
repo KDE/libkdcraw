@@ -46,7 +46,7 @@
 class LibRaw_TLS
 {
 public:
-    struct 
+    struct
     {
          unsigned bitbuf;
          int vbits, reset;
@@ -57,12 +57,6 @@ public:
          int vbits;
 
     }ph1_bits;
-    int make_decoder_leaf;
-    struct
-    {
-        struct decode *dstart[18], *dindex;
-        const int *s;
-    }radc_token;
     struct
     {
          unsigned pad[128], p;
@@ -179,8 +173,7 @@ struct tiff_ifd_t
 
 struct jhead {
   int bits, high, wide, clrs, sraw, psv, restart, vpred[6];
-  struct decode *huff[6];
-  ushort *row;
+    ushort *huff[6], *free[4], *row;
 };
 struct tiff_tag {
   ushort tag, type;

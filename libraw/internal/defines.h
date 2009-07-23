@@ -1,12 +1,12 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Mon Jun  8 13:24:08 2009
+   Generated from dcraw/dcraw.c at Tue Jul 21 20:35:34 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
 #define NO_JPEG
-#define VERSION "8.94"
+#define VERSION "8.95"
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE

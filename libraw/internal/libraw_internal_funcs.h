@@ -48,15 +48,17 @@
     void        ciff_block_1030();
 
 // LJPEG decoder
-    unsigned    getbits (int nbits);
-    void        init_decoder();
-    uchar *     make_decoder (const uchar *source, int level);
+    unsigned    getbithuff (int nbits, ushort *huff);
+    ushort*     make_decoder_ref (const uchar **source);
+    ushort*     make_decoder (const uchar *source);
     int         ljpeg_start (struct jhead *jh, int info_only);
-    int         ljpeg_diff (struct decode *dindex);
+    void        ljpeg_end(struct jhead *jh);
+    int         ljpeg_diff (ushort *huff);
     ushort *    ljpeg_row (int jrow, struct jhead *jh);
+    unsigned    ph1_bithuff (int nbits, ushort *huff);
 
 // Canon DSLRs
-    void        crw_init_tables (unsigned table);
+void        crw_init_tables (unsigned table, ushort *huff[2]);
     int         canon_has_lowbits();
     void        canon_compressed_load_raw();
     void        lossless_jpeg_load_raw();

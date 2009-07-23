@@ -1579,6 +1579,7 @@ int LibRaw::dcraw_process(void)
 static const char  *static_camera_list[] = 
 {
 "Adobe Digital Negative (DNG)",
+"AgfaPhoto DC-833m",
 "Apple QuickTake 100",
 "Apple QuickTake 150",
 "Apple QuickTake 200",
@@ -1656,6 +1657,7 @@ static const char  *static_camera_list[] =
 "Casio QV-R41",
 "Casio QV-R51",
 "Casio QV-R61",
+"Casio EX-S20",
 "Casio EX-S100",
 "Casio EX-Z4",
 "Casio EX-Z50",
@@ -1882,6 +1884,7 @@ static const char  *static_camera_list[] =
 "Phase One P 25",
 "Phase One P 30",
 "Phase One P 45",
+"Phase One P 45+",
 "Pixelink A782",
 "Polaroid x530",
 "Rollei d530flex",
@@ -1889,6 +1892,7 @@ static const char  *static_camera_list[] =
 "Samsung GX-1S",
 "Samsung GX-10",
 "Samsung S85 (hacked)",
+"Samsung S850 (hacked)",
 "Sarnoff 4096x5440",
 "Sigma SD9",
 "Sigma SD10",

@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Mon Jun  8 13:24:08 2009
+   Generated from dcraw/dcraw.c at Tue Jul 21 20:35:34 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -32,7 +32,8 @@ void CLASS foveon_decoder (unsigned size, unsigned code)
   if (!code) {
     for (i=0; i < size; i++)
       huff[i] = get4();
-    init_decoder();
+    memset (first_decode, 0, sizeof first_decode);
+    free_decode = first_decode;
   }
   cur = free_decode++;
   if (free_decode > first_decode+2048) {
