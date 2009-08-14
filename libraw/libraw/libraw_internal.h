@@ -86,9 +86,6 @@ class LibRaw_constants
 };
 #endif /* __cplusplus */
 
-#ifdef WIN32
-typedef long off_t;
-#endif
 
 typedef struct
 {
@@ -99,8 +96,8 @@ typedef struct
     FILE        *output;
     int         input_internal;
     char        *meta_data;
-    off_t       profile_offset;
-    off_t       toffset;
+    INT64       profile_offset;
+    INT64       toffset;
 
 } internal_data_t;
 
@@ -134,8 +131,8 @@ typedef struct
     short       order; 
     ushort      sraw_mul[4],cr2_slice[3];
     unsigned    kodak_cbpp;
-    off_t       strip_offset, data_offset;
-    off_t       meta_offset;
+    INT64       strip_offset, data_offset;
+    INT64       meta_offset;
     unsigned     meta_length;
     unsigned    thumb_misc;
     unsigned    fuji_layout;

@@ -133,6 +133,10 @@ void LibRaw::derror()
         }
     libraw_internal_data.unpacker_data.data_error = 1;
 }
+
+#define ZERO(a) memset(&a,0,sizeof(a))
+
+
 LibRaw:: LibRaw(unsigned int flags)
 {
     double aber[4] = {1,1,1,1};
@@ -143,9 +147,9 @@ LibRaw:: LibRaw(unsigned int flags)
 #else
     verbose = 0;
 #endif
-    bzero(&imgdata,sizeof(imgdata));
-    bzero(&libraw_internal_data,sizeof(libraw_internal_data));
-    bzero(&callbacks,sizeof(callbacks));
+    ZERO(imgdata);
+    ZERO(libraw_internal_data);
+    ZERO(callbacks);
     callbacks.mem_cb = (flags & LIBRAW_OPIONS_NO_MEMERR_CALLBACK) ? NULL:  &default_memory_callback;
     callbacks.data_cb = (flags & LIBRAW_OPIONS_NO_DATAERR_CALLBACK)? NULL : &default_data_callback;
     memmove(&imgdata.params.aber,&aber,sizeof(aber));
@@ -228,11 +232,9 @@ void LibRaw:: recycle()
     FREE(imgdata.masked_pixels.buffer);
     FREE(imgdata.masked_pixels.ph1_black);
 #undef FREE
-#define ZERO(a) bzero(&a,sizeof(a))
     ZERO(imgdata.masked_pixels);
     ZERO(imgdata.sizes);
     ZERO(libraw_internal_data.internal_output_params);
-#undef ZERO
     memmgr.cleanup();
     imgdata.thumbnail.tformat = LIBRAW_THUMBNAIL_UNKNOWN;
     imgdata.progress_flags = 0;
@@ -828,7 +830,7 @@ libraw_processed_image_t * LibRaw::dcraw_make_mem_thumb(int *errcode)
                     return NULL;
                 }
 
-            bzero(ret,sizeof(libraw_processed_image_t));
+            memset(ret,0,sizeof(libraw_processed_image_t));
             ret->type   = LIBRAW_IMAGE_BITMAP;
             ret->height = T.theight;
             ret->width  = T.twidth;
@@ -856,7 +858,7 @@ libraw_processed_image_t * LibRaw::dcraw_make_mem_thumb(int *errcode)
                     return NULL;
                 }
 
-            bzero(ret,sizeof(libraw_processed_image_t));
+            memset(ret,0,sizeof(libraw_processed_image_t));
 
             ret->type = LIBRAW_IMAGE_JPEG;
             ret->data_size = dsize;
@@ -921,7 +923,7 @@ libraw_processed_image_t *LibRaw::dcraw_make_mem_image(int *errcode)
                 if(errcode) *errcode= ENOMEM;
                 return NULL;
         }
-    bzero(ret,sizeof(libraw_processed_image_t));
+    memset(ret,0,sizeof(libraw_processed_image_t));
     // metadata init
 
     int s_iheight = S.iheight;

@@ -24,6 +24,10 @@
 #ifndef _LIBRAW_CLASS_H
 #define _LIBRAW_CLASS_H
 
+#ifdef __linux__
+#define _FILE_OFFSET_BITS 64
+#endif
+
 #include <limits.h>
 #include <memory.h>
 #include <stdio.h>
