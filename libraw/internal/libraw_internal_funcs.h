@@ -43,7 +43,6 @@
     void        canon_600_coeff();
     void        canon_600_load_raw();
     int         canon_s2is();
-    void        canon_a5_load_raw();
     void        parse_ciff (int offset, int length);
     void        ciff_block_1030();
 
@@ -106,7 +105,8 @@ void        canon_black(double *, int nblack);
     void        leaf_hdr_load_raw();
     void        sinar_4shot_load_raw();
     void        imacon_full_load_raw();
-    void        packed_12_load_raw();
+    void        packed_load_raw();
+    float	find_green(int,int);
     void        unpacked_load_raw();
     void        parse_sinar_ia();
     void        parse_phase_one (int base);
@@ -118,7 +118,6 @@ void        canon_black(double *, int nblack);
     void        olympus_e410_load_raw();
     void        olympus_cseries_load_raw();
     void        minolta_rd175_load_raw();
-    void        casio_qv5700_load_raw();
     void        quicktake_100_load_raw();
     const int*  make_decoder_int (const int *source, int level);
     int         radc_token (int tree);

@@ -251,11 +251,9 @@ const char * LibRaw::unpack_function_name()
     if (load_raw == &LibRaw::adobe_dng_load_raw_nc)     return "adobe_dng_load_raw_nc()";
     if (load_raw == &LibRaw::canon_600_load_raw)        return "canon_600_load_raw()";
 
-    if (load_raw == &LibRaw::canon_a5_load_raw)         return "canon_a5_load_raw()";
     if (load_raw == &LibRaw::canon_compressed_load_raw) return "canon_compressed_load_raw()";
     if (load_raw == &LibRaw::canon_sraw_load_raw)       return "canon_sraw_load_raw()";
 
-    if (load_raw == &LibRaw::casio_qv5700_load_raw )    return "casio_qv5700_load_raw()";
     if (load_raw == &LibRaw::eight_bit_load_raw )       return "eight_bit_load_raw()";
     if (load_raw == &LibRaw::foveon_load_raw )          return "foveon_load_raw()";
     if (load_raw == &LibRaw::fuji_load_raw )            return "fuji_load_raw()";
@@ -282,7 +280,7 @@ const char * LibRaw::unpack_function_name()
     if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";
 
     if (load_raw == &LibRaw::olympus_e410_load_raw )    return "olympus_e410_load_raw()";
-    if (load_raw == &LibRaw::packed_12_load_raw )       return "packed_12_load_raw()";
+    if (load_raw == &LibRaw::packed_load_raw )       return "packed_load_raw()";
     if (load_raw == &LibRaw::panasonic_load_raw )       return "panasonic_load_raw()";
     // 30
     if (load_raw == &LibRaw::pentax_k10_load_raw )      return "pentax_k10_load_raw()";
@@ -563,10 +561,10 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
         int saved_raw_width = S.raw_width;
         int saved_width = S.width;
         // from packed_12_load_raw
-        if ((load_raw == &LibRaw:: packed_12_load_raw) && (S.raw_width * 2 >= S.width * 3))
+        if ((load_raw == &LibRaw:: packed_load_raw) && (S.raw_width * 8U >= S.width * libraw_internal_data.unpacker_data.tiff_bps))
             {	
                 // raw_width is in bytes!
-                S.raw_width = S.raw_width * 2 / 3;	
+                S.raw_width = S.raw_width * 8 / libraw_internal_data.unpacker_data.tiff_bps;	
             }
         else if (S.pixel_aspect < 0.95 || S.pixel_aspect > 1.05)
             {
@@ -1664,6 +1662,8 @@ static const char  *static_camera_list[] =
 "Casio EX-Z4",
 "Casio EX-Z50",
 "Casio EX-Z55",
+"Casio EX-Z60",
+"Casio EX-Z75",
 "Casio Exlim Pro 505",
 "Casio Exlim Pro 600",
 "Casio Exlim Pro 700",
@@ -1732,6 +1732,7 @@ static const char  *static_camera_list[] =
 "Kodak C603",
 "Kodak P850",
 "Kodak P880",
+"Kodak Z980",
 "Kodak Z1015",
 "Kodak KAI-0340",
 "Konica KD-400Z",
@@ -1798,6 +1799,7 @@ static const char  *static_camera_list[] =
 "Nikon D200",
 "Nikon D300",
 "Nikon D700",
+"Nikon D5000",
 "Nikon E700 (\"DIAG RAW\" hack)",
 "Nikon E800 (\"DIAG RAW\" hack)",
 "Nikon E880 (\"DIAG RAW\" hack)",
@@ -1828,6 +1830,7 @@ static const char  *static_camera_list[] =
 "Olympus C740UZ",
 "Olympus C770UZ",
 "Olympus C8080WZ",
+"Olympus X200,D560Z,C350Z",
 "Olympus E-1",
 "Olympus E-3",
 "Olympus E-10",
@@ -1841,6 +1844,7 @@ static const char  *static_camera_list[] =
 "Olympus E-500",
 "Olympus E-510",
 "Olympus E-520",
+"Olympus E-620",
 "Olympus SP310",
 "Olympus SP320",
 "Olympus SP350",
@@ -1874,6 +1878,7 @@ static const char  *static_camera_list[] =
 "Pentax K100D Super",
 "Pentax K200D",
 "Pentax K2000/K-m",
+"Pentax K-7",
 "Pentax Optio S",
 "Pentax Optio S4",
 "Pentax Optio 33WR",
@@ -1912,6 +1917,7 @@ static const char  *static_camera_list[] =
 "Sony DSLR-A100",
 "Sony DSLR-A200",
 "Sony DSLR-A300",
+"Sony DSLR-A330",
 "Sony DSLR-A350",
 "Sony DSLR-A700",
 "Sony DSLR-A900",
