@@ -276,14 +276,13 @@ const char * LibRaw::unpack_function_name()
     if (load_raw == &LibRaw::minolta_rd175_load_raw )   return "minolta_rd175_load_raw()";
 
     if (load_raw == &LibRaw::nikon_compressed_load_raw) return "nikon_compressed_load_raw()";
-    if (load_raw == &LibRaw::nikon_e900_load_raw )      return "nikon_e900_load_raw()";
     if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";
 
-    if (load_raw == &LibRaw::olympus_e410_load_raw )    return "olympus_e410_load_raw()";
+    if (load_raw == &LibRaw::olympus_load_raw )    return "olympus_load_raw()";
     if (load_raw == &LibRaw::packed_load_raw )       return "packed_load_raw()";
     if (load_raw == &LibRaw::panasonic_load_raw )       return "panasonic_load_raw()";
     // 30
-    if (load_raw == &LibRaw::pentax_k10_load_raw )      return "pentax_k10_load_raw()";
+    if (load_raw == &LibRaw::pentax_load_raw )          return "pentax_load_raw()";
     if (load_raw == &LibRaw::phase_one_load_raw )       return "phase_one_load_raw()";
     if (load_raw == &LibRaw::phase_one_load_raw_c )     return "phase_one_load_raw_c()";
 
@@ -1091,15 +1090,16 @@ void LibRaw::kodak_thumb_loader()
         for (col=0; col < S.width; col++, img+=4)
             {
                 out[0] = out[1] = out[2] = 0;
-                for(int c=0;c<3;c++) 
+                int c;
+                for(c=0;c<3;c++) 
                     {
                         out[0] += out_cam[0][c] * img[c];
                         out[1] += out_cam[1][c] * img[c];
                         out[2] += out_cam[2][c] * img[c];
                     }
-                for(int c=0; c<3; c++)
+                for(c=0; c<3; c++)
                     img[c] = CLIP((int) out[c]);
-                for(int c=0; c<P1.colors;c++)
+                for(c=0; c<P1.colors;c++)
                     t_hist[c][img[c] >> 3]++;
                     
             }
@@ -1593,6 +1593,7 @@ static const char  *static_camera_list[] =
 "Canon PowerShot A5 Zoom",
 "Canon PowerShot A50",
 "Canon PowerShot A460 (CHDK hack)",
+"Canon PowerShot A470 (CHDK hack)",
 "Canon PowerShot A530 (CHDK hack)",
 "Canon PowerShot A570 (CHDK hack)",
 "Canon PowerShot A590 (CHDK hack)",
@@ -1614,6 +1615,7 @@ static const char  *static_camera_list[] =
 "Canon PowerShot G7 (CHDK hack)",
 "Canon PowerShot G9",
 "Canon PowerShot G10",
+"Canon PowerShot G11",
 "Canon PowerShot S2 IS (CHDK hack)",
 "Canon PowerShot S3 IS (CHDK hack)",
 "Canon PowerShot S5 IS (CHDK hack)",
@@ -1799,6 +1801,7 @@ static const char  *static_camera_list[] =
 "Nikon D200",
 "Nikon D300",
 "Nikon D700",
+"Nikon D3000",
 "Nikon D5000",
 "Nikon E700 (\"DIAG RAW\" hack)",
 "Nikon E800 (\"DIAG RAW\" hack)",
@@ -1845,6 +1848,7 @@ static const char  *static_camera_list[] =
 "Olympus E-510",
 "Olympus E-520",
 "Olympus E-620",
+"Olympus E-P1",
 "Olympus SP310",
 "Olympus SP320",
 "Olympus SP350",
@@ -1857,6 +1861,7 @@ static const char  *static_camera_list[] =
 "Panasonic DMC-FZ18",
 "Panasonic DMC-FZ28",
 "Panasonic DMC-FZ30",
+"Panasonic DMC-FZ35/FZ38",
 "Panasonic DMC-FZ50",
 "Panasonic DMC-FX150",
 "Panasonic DMC-G1",

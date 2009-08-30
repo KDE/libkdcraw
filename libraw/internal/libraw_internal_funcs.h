@@ -69,7 +69,7 @@ void        canon_black(double *, int nblack);
     void        adobe_dng_load_raw_nc();
 
 // Pentax
-    void        pentax_k10_load_raw();
+    void        pentax_load_raw();
     void        pentax_tree();
 
 // Nikon (and Minolta Z2)
@@ -80,7 +80,6 @@ void        canon_black(double *, int nblack);
     int         nikon_e2100();
     void        nikon_3700();
     int         minolta_z2();
-    void        nikon_e900_load_raw();
     void        nikon_e2100_load_raw();
 
 // Fuji
@@ -106,7 +105,7 @@ void        canon_black(double *, int nblack);
     void        sinar_4shot_load_raw();
     void        imacon_full_load_raw();
     void        packed_load_raw();
-    float	find_green(int,int);
+    float	find_green(int,int,int,int);
     void        unpacked_load_raw();
     void        parse_sinar_ia();
     void        parse_phase_one (int base);
@@ -115,7 +114,7 @@ void        canon_black(double *, int nblack);
     void        nokia_load_raw();
     unsigned    pana_bits (int nbits);
     void        panasonic_load_raw();
-    void        olympus_e410_load_raw();
+    void        olympus_load_raw();
     void        olympus_cseries_load_raw();
     void        minolta_rd175_load_raw();
     void        quicktake_100_load_raw();

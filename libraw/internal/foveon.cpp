@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Wed Aug 26 13:42:30 2009
+   Generated from dcraw/dcraw.c at Sun Aug 30 16:37:42 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -16,6 +16,9 @@
 #define SRC_USES_CURVE
 #include "internal/var_defines.h"
 #define sget4(s) sget4((uchar *)s)
+#ifndef M_PI
+#define	M_PI		3.14159265358979323846
+#endif
 
 /* RESTRICTED code starts here */
 

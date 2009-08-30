@@ -24,6 +24,7 @@
 #ifndef _LIBRAW_TYPES_H
 #define _LIBRAW_TYPES_H
 
+#include <sys/types.h>
 #ifndef WIN32
 #include <sys/time.h>
 #endif
@@ -44,8 +45,14 @@ extern "C" {
 #include "libraw_const.h"
 #include "libraw_version.h"
 
+#ifdef WIN32
+typedef __int64 INT64;
+typedef unsigned __int64 UINT64;
+#else
 typedef long long INT64;
 typedef unsigned long long UINT64;
+#endif
+
 typedef unsigned char uchar;
 typedef unsigned short ushort;
 
