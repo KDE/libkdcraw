@@ -1,6 +1,10 @@
 1.0.0 - Released with KDE 4.4.0
 ------------------------------------------------------------------------
-- New widget to host settings : RExpanderBox.
+- Updated to LibRaw 0.8.1:
+# Imported dcraw 8.97/1.427: new cameras: Canon A470, Canon G11 (without color data), Nikon D3000, Olympus E-P1, Panasonic DMC-FZ35/FZ38
+# Fixes for Microsoft Visual C++ 6.0 compatibility
+# C-API libraw_dcraw_make_mem_thumb() call finally exported in API
+
 - Updated to LibRaw 0.8.0:
 # Support of RAW files larger than 2Gb
 # dcraw 8.86/1.426 imported:
@@ -16,7 +20,6 @@
     * Generalized unpacking code for many formats.
     * Removed hardcoded white-balance data for many P&S cameras. It is recommended to set params.use_camera_wb to 1 for safe WB.
     * Canon cameras: black level is not subtracted if params.document_mode =2 
-
 # API changes: params.gamma_16bit field removed. Gamma curve is set via params.gamm[0]/gamm[1] values (see documentation and samples for details)
 # Many cosmetic changes to support more platforms/compilers.
 # Samples: dcraw_emu and mem_image samples supports new dcraw 16bit/gamma semantics:
@@ -26,6 +29,7 @@
 
 - API changed : remove RawDecodingSetting::gamma16bit settings. Obsolete with LibRaw 0.8.0.
                 remove KDcraw depreciated methods.
+- New widget to host settings : RExpanderBox.
 
 0.5.0 - Released with KDE 4.3.0
 ------------------------------------------------------------------------
