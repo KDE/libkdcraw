@@ -1,5 +1,11 @@
 1.0.0 - Released with KDE 4.4.0
 ------------------------------------------------------------------------
+
+- Updated to LibRaw 0.8.2:
+# Fixed bug in Hasselblad .3FR unpacking code
+# Imported dcraw 8.97/1.428: Nikon D3000 image width fix
+# Enum LibRaw_thumbnail_formats (LIBRAW_IMAGE_*) values changed to match values in  enum LibRaw_image_formats (LIBRAW_THUMBNAIL_*).
+
 - Updated to LibRaw 0.8.1:
 # Imported dcraw 8.97/1.427: new cameras: Canon A470, Canon G11 (without color data), Nikon D3000, Olympus E-P1, Panasonic DMC-FZ35/FZ38
 # Fixes for Microsoft Visual C++ 6.0 compatibility

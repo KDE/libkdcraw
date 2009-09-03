@@ -48,7 +48,7 @@ int main(int ac, char *av[])
 {
     int i;
     libraw_data_t *iprc = libraw_init(0);
-    
+
     if(!iprc)
         {
             fprintf(stderr,"Cannot create libraw handle\n");

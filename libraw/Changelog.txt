@@ -1,5 +1,15 @@
+2009-09-02 Alex Tutubalin <lexa@lexa.ru>
+           + Fixed bug in Hasselblad .3FR unpacking code
+           * Imported dcraw 8.97/1.428: Nikon D3000 image width fix
+           * LibRaw 0.8.2
+           
+2009-08-31 Alex Tutubalin <lexa@lexa.ru>
+           + Enum LibRaw_thumbnail_formats (LIBRAW_IMAGE_*) values changed to
+             match values in  enum LibRaw_image_formats (LIBRAW_THUMBNAIL_*).
+             You need to recompile all sources using these constants.
+
 2009-08-30 Alex Tutubalin <lexa@lexa.ru>
-           * Imported dcraw 8.87/1.427:
+           * Imported dcraw 8.97/1.427:
              + new cameras: Canon A470, Canon G11 (without color data),
                 Nikon D3000, Olympus E-P1, Panasonic DMC-FZ35/FZ38
              + some changes in decoding code.
@@ -8,7 +18,7 @@
            * LibRaw 0.8.1
 
 2009-08-24 Alex Tutubalin <lexa@lexa.ru>
-           * Imported dcraw 8.86/1.426
+           * Imported dcraw 8.96/1.426
              + New cameras: Casio EX-Z60 and EX-Z75, Kodak Z980,
                Nikon D5000,  Olympus X200, D560Z,C350Z,E620,
                Pentax K7, Sony A330.

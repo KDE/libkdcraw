@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Aug 30 16:37:42 2009
+   Generated from dcraw/dcraw.c at Wed Sep  2 11:06:05 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -1645,12 +1645,12 @@ void CLASS hasselblad_load_raw()
 	  diff -= (1 << len[c]) - 1;
 	if (diff == 65535) diff = -32768;
 	pred[c] += diff;
-	if (row >= 0 && (unsigned)(col+c) < width)
+	if (row >= 0 && row < height && (unsigned)(col+c) < width)
 	  BAYER(row,col+c) = pred[c];
 #ifdef LIBRAW_LIBRARY_BUILD
         else
             {
-                ushort *dfp = get_masked_pointer(row+top_margin,col+left_margin);
+                ushort *dfp = get_masked_pointer(row+top_margin,col+left_margin+c);
                 if(dfp) *dfp = pred[c];
             }
 #endif
@@ -6982,7 +6982,7 @@ canon_cr2:
   } else if (!strncmp(model,"D2X",3)) {
     if (width == 3264) width -= 32;
     else width -= 8;
-  } else if (!strcmp(model,"D300")) {
+  } else if (!strncmp(model,"D300",4)) {
     width -= 32;
   } else if (!strcmp(model,"COOLPIX P6000")) {
     load_flags = 24;

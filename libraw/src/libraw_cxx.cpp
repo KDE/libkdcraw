@@ -113,6 +113,11 @@ const float LibRaw_constants::d65_white[3] =  { 0.950456, 1, 1.088754 };
             } \
     }while(0)
 
+const char* LibRaw::version() { return LIBRAW_VERSION_STR;}
+int LibRaw::versionNumber() { return LIBRAW_VERSION; }
+const char* LibRaw::strerror(int p) { return libraw_strerror(p);}
+
+
 void LibRaw::derror()
 {
     if (!libraw_internal_data.unpacker_data.data_error && libraw_internal_data.internal_data.input) 
