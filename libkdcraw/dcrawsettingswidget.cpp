@@ -492,7 +492,7 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->outputColorSpaceLabel    = new QLabel(i18n("Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18n("Raw (linear)"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18n("Raw (no profile)"));
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18n("sRGB"));
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18n("Adobe RGB"));
     d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18n("Wide Gamut"));
