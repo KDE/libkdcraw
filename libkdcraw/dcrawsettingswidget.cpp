@@ -461,9 +461,9 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->inputColorSpaceLabel     = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
     d->inputColorSpaceComboBox  = new RComboBox(d->colormanSettings);
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18n("None"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18n("Embedded"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18n("Custom"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18nc("Camera Profile", "None"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18nc("Camera Profile", "Embedded"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18nc("Camera Profile", "Custom"));
     d->inputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::NOINPUTCS);
     d->inputColorSpaceComboBox->setWhatsThis(i18n("<p><b>Camera Profile</b><p>"
                 "Select here the input color space used to decode RAW data.<p>"
@@ -477,12 +477,12 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->outputColorSpaceLabel    = new QLabel(i18n("Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18n("Raw (no profile)"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18n("sRGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18n("Adobe RGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18n("Wide Gamut"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::PROPHOTO,       i18n("Pro-Photo"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMOUTPUTCS, i18n("Custom"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18nc("Workspace", "Raw (no profile)"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18nc("Workspace", "sRGB"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18nc("Workspace", "Adobe RGB"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18nc("Workspace", "Wide Gamut"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::PROPHOTO,       i18nc("Workspace", "Pro-Photo"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMOUTPUTCS, i18nc("Workspace", "Custom"));
     d->outputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::SRGB);
     d->outputColorSpaceComboBox->setWhatsThis(i18n("<p><b>Workspace</b><p>"
                 "Select here the output color space used to decode RAW data.<p>"
