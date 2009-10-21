@@ -159,6 +159,8 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
 
 void DcrawSettingsWidget::setup(int advSettings)
 {
+    setObjectName("DCRawSettings Expander");
+
     // ---------------------------------------------------------------
     // DEMOSAICING Settings panel
 
@@ -305,7 +307,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->unclipColorComboBox = new RComboBox(d->whiteBalanceSettings);
     d->unclipColorComboBox->insertItem(0, i18n("Solid white"));
     d->unclipColorComboBox->insertItem(1, i18n("Unclip"));
-    d->unclipColorComboBox->insertItem(2, i18n("Blend")); 
+    d->unclipColorComboBox->insertItem(2, i18n("Blend"));
     d->unclipColorComboBox->insertItem(3, i18n("Rebuild"));
     d->unclipColorComboBox->setDefaultIndex(0);
     d->unclipColorComboBox->setWhatsThis(i18n("<p><b>Highlights</b><p>"
