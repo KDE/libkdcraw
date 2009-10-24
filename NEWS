@@ -1,6 +1,9 @@
 1.0.0 - Released with KDE 4.4.0
 ------------------------------------------------------------------------
 
+- Updated to LibRaw 0.8.3:
+# New cameras : Canon 7D, Panasonic GF1, Sony A850 and A380, Casio Z850, Nikon D300s
+
 - Updated to LibRaw 0.8.2:
 # Fixed bug in Hasselblad .3FR unpacking code
 # Imported dcraw 8.97/1.428: Nikon D3000 image width fix
