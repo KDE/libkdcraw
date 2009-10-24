@@ -136,7 +136,7 @@ void LibRaw::derror()
                     throw LIBRAW_EXCEPTION_IO_CORRUPT;
                 }
         }
-    libraw_internal_data.unpacker_data.data_error = 1;
+    libraw_internal_data.unpacker_data.data_error++;
 }
 
 #define ZERO(a) memset(&a,0,sizeof(a))
@@ -1637,6 +1637,7 @@ static const char  *static_camera_list[] =
 "Canon EOS D60",
 "Canon EOS 5D",
 "Canon EOS 5D Mark II",
+"Canon EOS 7D",
 "Canon EOS 10D",
 "Canon EOS 20D",
 "Canon EOS 30D",
@@ -1671,6 +1672,7 @@ static const char  *static_camera_list[] =
 "Casio EX-Z55",
 "Casio EX-Z60",
 "Casio EX-Z75",
+"Casio EX-Z850",
 "Casio Exlim Pro 505",
 "Casio Exlim Pro 600",
 "Casio Exlim Pro 700",
@@ -1805,6 +1807,7 @@ static const char  *static_camera_list[] =
 "Nikon D100",
 "Nikon D200",
 "Nikon D300",
+"Nikon D300s",
 "Nikon D700",
 "Nikon D3000",
 "Nikon D5000",
@@ -1929,7 +1932,9 @@ static const char  *static_camera_list[] =
 "Sony DSLR-A300",
 "Sony DSLR-A330",
 "Sony DSLR-A350",
+"Sony DSLR-A380",
 "Sony DSLR-A700",
+"Sony DSLR-A850",
 "Sony DSLR-A900",
 "Sony XCD-SX910CR",
 "STV680 VGA",

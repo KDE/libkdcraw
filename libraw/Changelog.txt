@@ -1,3 +1,10 @@
+2009-10-24 Alex Tutubalin <lexa@lexa.ru>
+           + Imported dcraw 8.98/1.431:
+             * New Cameras: Canon 7D, Panasonic GF1, Sony A850 and A380, 
+             Casio Z850, Nikon D300s
+           + changes in libraw_datastream.h to make compilers more happy
+           * LibRaw 0.8.3
+
 2009-09-02 Alex Tutubalin <lexa@lexa.ru>
            + Fixed bug in Hasselblad .3FR unpacking code
            * Imported dcraw 8.97/1.428: Nikon D3000 image width fix

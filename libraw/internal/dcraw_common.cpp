@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Wed Sep  2 11:06:05 2009
+   Generated from dcraw/dcraw.c at Sat Oct 24 12:44:56 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -5832,6 +5832,8 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
 	{ 4716,603,-830,-7798,15474,2480,-1496,1937,6651 } },
     { "Canon EOS 5D", 0, 0xe6c,
 	{ 6347,-479,-972,-8297,15954,2480,-1968,2131,7649 } },
+    { "Canon EOS 7D", 0, 0x3510,	/* DJC */
+	{ 7956,-1490,-850,-2896,10428,2469,-827,1800,5680 } },
     { "Canon EOS 10D", 0, 0xfa0,
 	{ 8197,-2000,-1118,-6714,14335,2592,-2536,3178,8266 } },
     { "Canon EOS 20Da", 0, 0,
@@ -6248,7 +6250,9 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
 	{ 9082,-2907,-925,-6119,13377,3058,-1797,2641,5609 } },
     { "Panasonic DMC-G1", 15, 0xfff,
 	{ 8199,-2065,-1056,-8124,16156,2033,-2458,3022,7220 } },
-    { "Panasonic DMC-GH1", 15, 0xfff,
+    { "Panasonic DMC-GF1", 15, 0xf92,
+	{ 7888,-1902,-1011,-8106,16085,2099,-2353,2866,7330 } },
+    { "Panasonic DMC-GH1", 15, 0xf92,
 	{ 6299,-1466,-532,-6535,13852,2969,-2331,3112,5984 } },
     { "Phase One H 20", 0, 0,		/* DJC */
 	{ 1313,1855,-109,-6715,15908,808,-327,1840,6020 } },
@@ -6284,10 +6288,12 @@ void CLASS adobe_coeff (const char *p_make, const char *p_model)
 	{ 9847,-3091,-929,-8485,16346,2225,-714,595,7103 } },
     { "SONY DSLR-A350", 0, 0xffc,
 	{ 6038,-1484,-578,-9146,16746,2513,-875,746,7217 } },
-    { "SONY DSLR-A380", 0, 0,	/* copied */
-	{ 6038,-1484,-578,-9146,16746,2513,-875,746,7217 } },
+    { "SONY DSLR-A380", 0, 0,
+	{ 6038,-1484,-579,-9145,16746,2512,-875,746,7218 } },
     { "SONY DSLR-A700", 254, 0x1ffe,
 	{ 5775,-805,-359,-8574,16295,2391,-1943,2341,7249 } },
+    { "SONY DSLR-A850", 256, 0x1ffe,
+	{ 5209,-1072,-397,-8845,16121,2919,-1618,1802,8654 } },
     { "SONY DSLR-A900", 254, 0x1ffe,
 	{ 5209,-1072,-397,-8845,16120,2919,-1618,1803,8654 } }
   };
@@ -6453,6 +6459,7 @@ void CLASS identify()
     {  7753344, "CASIO",    "EX-Z55"          ,1 },
     {  7816704, "CASIO",    "EX-Z60"          ,1 },
     { 10843712, "CASIO",    "EX-Z75"          ,1 },
+    { 12310144, "CASIO",    "EX-Z850"         ,1 },
     {  7426656, "CASIO",    "EX-P505"         ,1 },
     {  9313536, "CASIO",    "EX-P600"         ,1 },
     { 10979200, "CASIO",    "EX-P700"         ,1 },
@@ -6926,6 +6933,11 @@ canon_a5:
     if (unique_id == 0x80000252)
       adobe_coeff ("Canon","EOS 500D");
     goto canon_cr2;
+  } else if (is_canon && raw_width == 1340) {
+    top_margin = 51;
+    left_margin = 158;
+    raw_width = width *= 4;
+    goto canon_cr2;
   } else if (is_canon && raw_width == 1448) {
     top_margin  = 51;
     left_margin = 158;
@@ -7162,6 +7174,8 @@ konica_400z:
       maximum = 0x3df;
       order = 0x4d4d;
     }
+  } else if (!strcmp(model,"*ist D")) {
+    data_error = -1;
   } else if (!strcmp(model,"*ist DS")) {
     height -= 2;
   } else if (!strcmp(model,"K20D")) {
@@ -7759,6 +7773,12 @@ ezshare:
     height = 2321;
     width  = 3089;
     raw_width = 4672;
+    maximum = 0xfff;
+  } else if (!strcmp(model,"EX-Z850")) {
+    height = 2468;
+    width  = 3279;
+    raw_width = 4928;
+    maximum = 0xfff;
   } else if (!strcmp(model,"EX-P505")) {
     height = 1928;
     width  = 2568;
@@ -7879,6 +7899,11 @@ void CLASS identify2(unsigned fsize)
     height = 2321;
     width  = 3089;
     raw_width = 4672;
+  } else if (!strcmp(model,"EX-Z850")) {
+    height = 2468;
+    width  = 3279;
+    raw_width = 4928;
+    maximum = 0xfff;
   } else if (!strcmp(model,"EX-P505")) {
     height = 1928;
     width  = 2568;
