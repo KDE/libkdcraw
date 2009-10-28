@@ -132,11 +132,7 @@ void RIntNumInput::slotReset()
 
 void RIntNumInput::slotValueChanged(int v)
 {
-    if (v != d->defaultValue)
-        d->resetButton->setEnabled(true);
-    else
-        d->resetButton->setEnabled(false);
-
+    d->resetButton->setEnabled(v != d->defaultValue);
     emit valueChanged(v);
 }
 
@@ -235,9 +231,7 @@ void RDoubleNumInput::slotReset()
 
 void RDoubleNumInput::slotValueChanged(double v)
 {
-    if (v != d->defaultValue)
-        d->resetButton->setEnabled(true);
-
+    d->resetButton->setEnabled(v != d->defaultValue);
     emit valueChanged(v);
 }
 
