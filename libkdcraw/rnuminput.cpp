@@ -134,6 +134,8 @@ void RIntNumInput::slotValueChanged(int v)
 {
     if (v != d->defaultValue)
         d->resetButton->setEnabled(true);
+    else
+        d->resetButton->setEnabled(false);
 
     emit valueChanged(v);
 }

@@ -137,6 +137,8 @@ void RComboBox::slotItemActivated(int v)
 {
     if (v != d->defaultIndex)
         d->resetButton->setEnabled(true);
+    else
+        d->resetButton->setEnabled(false);
 
     emit activated(v);
 }
