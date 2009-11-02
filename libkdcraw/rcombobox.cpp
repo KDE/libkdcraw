@@ -80,7 +80,7 @@ RComboBox::RComboBox(QWidget *parent)
             this, SLOT(slotItemActivated(int)));
 
     connect(d->combo, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(currentIndexChanged(int)));
+            this, SLOT(slotCurrentIndexChanged(int)));
 }
 
 RComboBox::~RComboBox()
@@ -137,6 +137,12 @@ void RComboBox::slotItemActivated(int v)
 {
     d->resetButton->setEnabled(v != d->defaultIndex);
     emit activated(v);
+}
+
+void RComboBox::slotCurrentIndexChanged(int v)
+{
+    d->resetButton->setEnabled(v != d->defaultIndex);
+    emit currentIndexChanged(v);
 }
 
 }  // namespace KDcrawIface

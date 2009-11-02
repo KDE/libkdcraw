@@ -73,6 +73,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotItemActivated(int);
+    void slotCurrentIndexChanged(int);
 
 private:
 
