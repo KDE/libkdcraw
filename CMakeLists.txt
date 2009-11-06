@@ -41,7 +41,7 @@ SET(DCRAW_LIB_PATCH_VERSION "0")
 SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
-# For details : http://www.gnu.org/software/libtool/manual.html#Updating-version-info
+# For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(DCRAW_LIB_SO_CUR_VERSION "8")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
