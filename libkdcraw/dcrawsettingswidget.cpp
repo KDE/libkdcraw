@@ -276,7 +276,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18n("Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18n("Camera"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18n("Automatic"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18n("Manual"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18nc("set white balance manually", "Manual"));
     d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
     d->whiteBalanceComboBox->setWhatsThis(i18n("<p><b>White Balance</b><p>"
                                           "Configure the raw white balance:<p>"
