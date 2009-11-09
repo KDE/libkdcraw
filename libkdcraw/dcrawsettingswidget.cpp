@@ -271,7 +271,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceSettings         = new QWidget(this);
     QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
 
-    d->whiteBalanceLabel            = new QLabel(i18n("Method"), d->whiteBalanceSettings);
+    d->whiteBalanceLabel            = new QLabel(i18n("Method:"), d->whiteBalanceSettings);
     d->whiteBalanceComboBox         = new RComboBox(d->whiteBalanceSettings);
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18n("Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18n("Camera"));
