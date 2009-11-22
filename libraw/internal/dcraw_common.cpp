@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sat Oct 24 12:44:56 2009
+   Generated from dcraw/dcraw.c at Sat Nov 21 12:39:09 2009
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -1484,7 +1484,7 @@ void CLASS phase_one_load_raw()
             if(dfp)
                 *dfp = pixel[col];
             else
-                BAYER(row,col-left_margin) = pixel[col];
+                BAYER(row-top_margin,col-left_margin) = pixel[col];
         }
   }
   free (pixel);
