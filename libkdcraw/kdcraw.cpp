@@ -250,7 +250,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 // ----------------------------------------------------------------------------------
 
-bool KDcraw::extractRAWData(const QString& filePath, QByteArray &rawData, DcrawInfoContainer& identify)
+bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify)
 {
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
@@ -340,7 +340,7 @@ bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettin
 }
 
 bool KDcraw::decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
-                            QByteArray &imageData, int &width, int &height, int &rgbmax)
+                            QByteArray& imageData, int& width, int& height, int& rgbmax)
 {
     m_rawDecodingSettings = rawDecodingSettings;
     return (loadFromLibraw(filePath, imageData, width, height, rgbmax));
@@ -355,8 +355,8 @@ void KDcraw::setWaitingDataProgress(double)
 {
 }
 
-bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray &imageData,
-                            int &width, int &height, int &rgbmax)
+bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
+                            int& width, int& height, int& rgbmax)
 {
     m_cancel = false;
 

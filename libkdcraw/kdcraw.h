@@ -127,7 +127,7 @@ public:
             - All info about Raw image into 'identify' container. 
             - 'false' is returned if loadding failed, else 'true'.  
      */
-    bool extractRAWData(const QString& filePath, QByteArray &rawData, DcrawInfoContainer& identify);
+    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using 
         'rawDecodingSettings' settings. This is a cancelable method which require 
@@ -144,7 +144,7 @@ public:
             - 'false' is returned if decoding failed, else 'true'.  
      */
     bool decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
-                            QByteArray &imageData, int &width, int &height, int &rgbmax);
+                            QByteArray& imageData, int& width, int& height, int& rgbmax);
 
     /** Extract a full size of RAW data from 'filePath' picture file using 
         'rawDecodingSettings' settings. This is a cancelable method which require 
@@ -161,7 +161,7 @@ public:
             - 'false' is returned if decoding failed, else 'true'.  
      */
     bool decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
-                        QByteArray &imageData, int &width, int &height, int &rgbmax);
+                        QByteArray& imageData, int& width, int& height, int& rgbmax);
 
     /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
         in a separate thread.
@@ -196,8 +196,8 @@ protected:
 
 private:
 
-    bool loadFromLibraw(const QString& filePath, QByteArray &imageData,
-                        int &width, int &height, int &rgbmax);
+    bool loadFromLibraw(const QString& filePath, QByteArray& imageData,
+                        int& width, int& height, int& rgbmax);
 
 private:
 
