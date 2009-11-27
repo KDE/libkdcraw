@@ -88,6 +88,13 @@ ELSE(VERSION_CMAKE)
     SET(USE_OPENMP FALSE)
 ENDIF(VERSION_CMAKE)
 
+IF(OPENMP_FOUND)
+    ADD_DEFINITIONS(${OpenMP_CXX_FLAGS}) 
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+        SET(OPENMP_LDFLAGS "-lgomp")
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(OPENMP_FOUND)
+
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
@@ -116,10 +123,6 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
    )
-
-IF(OPENMP_FOUND)
-    SET_SOURCE_FILES_PROPERTIES(${libraw_LIB_SRCS} PROPERTIES COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-ENDIF(OPENMP_FOUND)
 
 # =======================================================
 
