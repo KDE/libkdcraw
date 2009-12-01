@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include "rcombobox.h"
 #include "rcombobox.moc"
 
 // Qt includes.

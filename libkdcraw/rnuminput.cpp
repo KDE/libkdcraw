@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-#include "rnuminput.h"
 #include "rnuminput.moc"
 
 // Qt includes.

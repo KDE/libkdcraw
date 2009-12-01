@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include "dcrawsettingswidget.h"
 #include "dcrawsettingswidget.moc"
 
 // Qt includes.
