@@ -1124,7 +1124,7 @@ void DcrawSettingsWidget::setcaBlueMultiplier(double b)
 
 QString DcrawSettingsWidget::inputColorProfile()
 {
-    return d->inIccUrlEdit->url().path();
+    return d->inIccUrlEdit->url().toLocalFile();
 }
 
 void DcrawSettingsWidget::setInputColorProfile(const QString& path)
@@ -1136,7 +1136,7 @@ void DcrawSettingsWidget::setInputColorProfile(const QString& path)
 
 QString DcrawSettingsWidget::outputColorProfile()
 {
-    return d->outIccUrlEdit->url().path();
+    return d->outIccUrlEdit->url().toLocalFile();
 }
 
 void DcrawSettingsWidget::setOutputColorProfile(const QString& path)
