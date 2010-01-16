@@ -30,15 +30,9 @@
 
 #include "kdeversion.h"
 
-#if KDE_IS_VERSION(4,0,0)
 #include "qdebug.h"
 #define PRINT_DEBUG qDebug()
 #define ENDL
-#else
-#include "kdebug.h"
-#define PRINT_DEBUG kdDebug()
-#define ENDL << endl
-#endif
 
 // Local includes.
 
