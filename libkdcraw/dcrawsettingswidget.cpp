@@ -6,8 +6,8 @@
  * Date        : 2006-09-13
  * Description : LibRaw settings widgets
  *
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
@@ -100,57 +100,57 @@ public:
         inputColorSpaceComboBox        = 0;
     }
 
-    QWidget         *demosaicingSettings;
-    QWidget         *whiteBalanceSettings;
-    QWidget         *correctionsSettings;
-    QWidget         *colormanSettings;
+    QWidget*         demosaicingSettings;
+    QWidget*         whiteBalanceSettings;
+    QWidget*         correctionsSettings;
+    QWidget*         colormanSettings;
 
-    QLabel          *whiteBalanceLabel;
-    QLabel          *customWhiteBalanceLabel;
-    QLabel          *customWhiteBalanceGreenLabel;
-    QLabel          *brightnessLabel;
-    QLabel          *RAWQualityLabel;
-    QLabel          *NRThresholdLabel;
-    QLabel          *caRedMultLabel;
-    QLabel          *caBlueMultLabel;
-    QLabel          *unclipColorLabel;
-    QLabel          *reconstructLabel;
-    QLabel          *inputColorSpaceLabel;
-    QLabel          *outputColorSpaceLabel;
-    QLabel          *medianFilterPassesLabel;
+    QLabel*          whiteBalanceLabel;
+    QLabel*          customWhiteBalanceLabel;
+    QLabel*          customWhiteBalanceGreenLabel;
+    QLabel*          brightnessLabel;
+    QLabel*          RAWQualityLabel;
+    QLabel*          NRThresholdLabel;
+    QLabel*          caRedMultLabel;
+    QLabel*          caBlueMultLabel;
+    QLabel*          unclipColorLabel;
+    QLabel*          reconstructLabel;
+    QLabel*          inputColorSpaceLabel;
+    QLabel*          outputColorSpaceLabel;
+    QLabel*          medianFilterPassesLabel;
 
-    QCheckBox       *blackPointCheckBox;
-    QCheckBox       *whitePointCheckBox;
-    QCheckBox       *sixteenBitsImage;
-    QCheckBox       *autoBrightnessBox;
-    QCheckBox       *fourColorCheckBox;
-    QCheckBox       *dontStretchPixelsCheckBox;
-    QCheckBox       *enableNoiseReduction;
-    QCheckBox       *enableCACorrection;
+    QCheckBox*       blackPointCheckBox;
+    QCheckBox*       whitePointCheckBox;
+    QCheckBox*       sixteenBitsImage;
+    QCheckBox*       autoBrightnessBox;
+    QCheckBox*       fourColorCheckBox;
+    QCheckBox*       dontStretchPixelsCheckBox;
+    QCheckBox*       enableNoiseReduction;
+    QCheckBox*       enableCACorrection;
 
-    KUrlRequester   *inIccUrlEdit;
-    KUrlRequester   *outIccUrlEdit;
+    KUrlRequester*   inIccUrlEdit;
+    KUrlRequester*   outIccUrlEdit;
 
-    RComboBox       *whiteBalanceComboBox;
-    RComboBox       *RAWQualityComboBox;
-    RComboBox       *unclipColorComboBox;
-    RComboBox       *inputColorSpaceComboBox;
-    RComboBox       *outputColorSpaceComboBox;
+    RComboBox*       whiteBalanceComboBox;
+    RComboBox*       RAWQualityComboBox;
+    RComboBox*       unclipColorComboBox;
+    RComboBox*       inputColorSpaceComboBox;
+    RComboBox*       outputColorSpaceComboBox;
 
-    RIntNumInput    *customWhiteBalanceSpinBox;
-    RIntNumInput    *reconstructSpinBox;
-    RIntNumInput    *blackPointSpinBox;
-    RIntNumInput    *whitePointSpinBox;
-    RIntNumInput    *NRThresholdSpinBox;
-    RIntNumInput    *medianFilterPassesSpinBox;
+    RIntNumInput*    customWhiteBalanceSpinBox;
+    RIntNumInput*    reconstructSpinBox;
+    RIntNumInput*    blackPointSpinBox;
+    RIntNumInput*    whitePointSpinBox;
+    RIntNumInput*    NRThresholdSpinBox;
+    RIntNumInput*    medianFilterPassesSpinBox;
 
-    RDoubleNumInput *customWhiteBalanceGreenSpinBox;
-    RDoubleNumInput *caRedMultSpinBox;
-    RDoubleNumInput *caBlueMultSpinBox;
-    RDoubleNumInput *brightnessSpinBox;
+    RDoubleNumInput* customWhiteBalanceGreenSpinBox;
+    RDoubleNumInput* caRedMultSpinBox;
+    RDoubleNumInput* caBlueMultSpinBox;
+    RDoubleNumInput* brightnessSpinBox;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget *parent, int advSettings)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget* parent, int advSettings)
                    : RExpanderBox(parent), d(new DcrawSettingsWidgetPriv)
 {
     setup(advSettings);
