@@ -268,7 +268,7 @@ const char * LibRaw::unpack_function_name()
     // sorted names order
     if (load_raw == &LibRaw::adobe_dng_load_raw_lj)     return "adobe_dng_load_raw_lj()"; //+
     if (load_raw == &LibRaw::adobe_dng_load_raw_nc)     return "adobe_dng_load_raw_nc()"; //+
-    if (load_raw == &LibRaw::canon_600_load_raw)        return "canon_600_load_raw()";    //-
+    if (load_raw == &LibRaw::canon_600_load_raw)        return "canon_600_load_raw()";    //+
 
     if (load_raw == &LibRaw::canon_compressed_load_raw) return "canon_compressed_load_raw()"; //+
     if (load_raw == &LibRaw::canon_sraw_load_raw)       return "canon_sraw_load_raw()"; //+
@@ -282,19 +282,19 @@ const char * LibRaw::unpack_function_name()
 
     if (load_raw == &LibRaw::kodak_65000_load_raw )     return "kodak_65000_load_raw()";//+
     if (load_raw == &LibRaw::kodak_dc120_load_raw )     return "kodak_dc120_load_raw()"; //+
-    if (load_raw == &LibRaw::kodak_jpeg_load_raw )      return "kodak_jpeg_load_raw()"; //-
+    if (load_raw == &LibRaw::kodak_jpeg_load_raw )      return "kodak_jpeg_load_raw()"; //+ (untested)
 
     if (load_raw == &LibRaw::kodak_radc_load_raw )      return "kodak_radc_load_raw()"; //+
     if (load_raw == &LibRaw::kodak_rgb_load_raw )       return "kodak_rgb_load_raw()"; //+ (untested)
     if (load_raw == &LibRaw::kodak_yrgb_load_raw )      return "kodak_yrgb_load_raw()"; //+
-    if (load_raw == &LibRaw::kodak_ycbcr_load_raw )     return "kodak_ycbcr_load_raw()"; //-
+    if (load_raw == &LibRaw::kodak_ycbcr_load_raw )     return "kodak_ycbcr_load_raw()"; //+ (untested)
     // 20
     if (load_raw == &LibRaw::leaf_hdr_load_raw )        return "leaf_hdr_load_raw()"; //+
     if (load_raw == &LibRaw::lossless_jpeg_load_raw)    return "lossless_jpeg_load_raw()"; //+
-    if (load_raw == &LibRaw::minolta_rd175_load_raw )   return "minolta_rd175_load_raw()"; //-
+    if (load_raw == &LibRaw::minolta_rd175_load_raw )   return "minolta_rd175_load_raw()"; //+
 
     if (load_raw == &LibRaw::nikon_compressed_load_raw) return "nikon_compressed_load_raw()";//+
-    if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";//-
+    if (load_raw == &LibRaw::nokia_load_raw )           return "nokia_load_raw()";//+ (untested)
 
     if (load_raw == &LibRaw::olympus_load_raw )    return "olympus_load_raw()"; //+
     if (load_raw == &LibRaw::packed_load_raw )       return "packed_load_raw()"; //+
@@ -304,12 +304,12 @@ const char * LibRaw::unpack_function_name()
     if (load_raw == &LibRaw::phase_one_load_raw )       return "phase_one_load_raw()"; //+
     if (load_raw == &LibRaw::phase_one_load_raw_c )     return "phase_one_load_raw_c()"; //+
 
-    if (load_raw == &LibRaw::quicktake_100_load_raw )   return "quicktake_100_load_raw()";//-
-    if (load_raw == &LibRaw::rollei_load_raw )          return "rollei_load_raw()"; //-
+    if (load_raw == &LibRaw::quicktake_100_load_raw )   return "quicktake_100_load_raw()";//+ (untested)
+    if (load_raw == &LibRaw::rollei_load_raw )          return "rollei_load_raw()"; //+ (untested)
     if (load_raw == &LibRaw::sinar_4shot_load_raw )     return "sinar_4shot_load_raw()";//+
 
-    if (load_raw == &LibRaw::smal_v6_load_raw )         return "smal_v6_load_raw()";//-
-    if (load_raw == &LibRaw::smal_v9_load_raw )         return "smal_v9_load_raw()";//-
+    if (load_raw == &LibRaw::smal_v6_load_raw )         return "smal_v6_load_raw()";//+ (untested)
+    if (load_raw == &LibRaw::smal_v9_load_raw )         return "smal_v9_load_raw()";//+ (untested)
     if (load_raw == &LibRaw::sony_load_raw )            return "sony_load_raw()"; //+
     if (load_raw == &LibRaw::sony_arw_load_raw )        return "sony_arw_load_raw()";//+
     // 40

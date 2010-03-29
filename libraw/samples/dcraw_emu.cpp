@@ -271,8 +271,6 @@ int main(int argc, char *argv[])
             if(verbosity)
                 {
                     printf("Writing file %s\n",outfn);
-                    printf("Maximum: %u, Channel maximums: %u %u %u %u\n",C.maximum, C.channel_maximum[0],C.channel_maximum[1],
-                           C.channel_maximum[2],C.channel_maximum[3]);
                 }
 
             if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))

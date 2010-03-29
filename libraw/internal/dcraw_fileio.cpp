@@ -1,18 +1,18 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Sun Mar 28 22:11:38 2010
+   Generated from dcraw/dcraw.c at Mon Mar 29 15:20:19 2010
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
 
-#line 3936 "dcraw/dcraw.c"
+#line 3985 "dcraw/dcraw.c"
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_LIBRARY_BUILD
 #include "libraw/libraw.h"
 #include "internal/defines.h"
 #include "internal/var_defines.h"
-#line 3946 "dcraw/dcraw.c"
+#line 3995 "dcraw/dcraw.c"
 
 /*
    Seach from the current directory up to the root looking for
@@ -30,7 +30,7 @@ void CLASS bad_pixels (const char *cfname)
 #endif
   if (cfname)
     fp = fopen (cfname, "r");
-#line 3989 "dcraw/dcraw.c"
+#line 4038 "dcraw/dcraw.c"
   if (!fp) 
       {
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -126,7 +126,7 @@ void CLASS subtract (const char *fname)
   RUN_CALLBACK(LIBRAW_PROGRESS_DARK_FRAME,1,2);
 #endif
 }
-#line 9508 "dcraw/dcraw.c"
+#line 9559 "dcraw/dcraw.c"
 
 #ifndef NO_LCMS
 void CLASS apply_profile (const char *input, const char *output)

@@ -173,6 +173,9 @@
 #define fseeko(stream,o,w)	 stream->seek(o,w)
 #define ftell(stream)		 stream->tell()
 #define ftello(stream)		 stream->tell()
+#ifdef getc
+#undef getc
+#endif
 #define getc(stream)		 stream->get_char()
 #define fgetc(stream)		 stream->get_char()
 #define fgets(str,n,stream)	 stream->gets(str,n)

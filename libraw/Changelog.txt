@@ -1,4 +1,13 @@
-2010-03-30 Alex Tutubalin <lexa@lexa.ru>
+2010-03-29 Alex Tutubalin <lexa@lexa.ru>
+           * Fixed a bug in channel_maximum[] calculation for
+             Panasonic cameras.
+           * channel_maximum[] data now calculated for ALL cameras.
+           * OpenMP warnings suppressed.
+           * Documented the -c command-line switch for dcraw_emu sample.
+           * Removed extra messages from dcraw_emu sample.
+           * LibRaw 0.9.0-Beta2
+
+2010-03-28 Alex Tutubalin <lexa@lexa.ru>
            
            New licensing:
 
@@ -30,8 +39,8 @@
 
            * New call LibRaw::adjust_maximum() (and libraw_adjust_maximum() in C API).
              This call changes hardcoded colordata.maximum value to calculated
-             at unpack stage. This helps suppress parasite tone in highlights
-             (pink clouds and so).
+             at unpack stage. This helps suppress false color in highlights
+             (magenta clouds and so).
 
            * New command line parameter -c for dcraw_emu sample. Calls adjust_maximum()
              for each processed file.
