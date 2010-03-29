@@ -1,3 +1,67 @@
+2010-03-30 Alex Tutubalin <lexa@lexa.ru>
+           
+           New licensing:
+
+           * Triple licensing (selected by LibRaw user):
+
+              + LGPL 2.1 (http://www.gnu.org/licenses/lgpl-2.1.html)
+              + CDDL 1.0 (http://www.opensource.org/licenses/cddl1.txt)
+              + LibRaw Software License (27 March 2010 version)
+               (http://www.libraw.org/data/LICENSE.LibRaw.pdf)
+
+           * There is no separate LibRaw-Lite and LibRaw-Commercial versions,
+             only single LibRaw.
+             Current LibRaw-Lite and LibRaw-Commercial users should switch
+             to LibRaw without loss of functionality.
+             It is possible to change licensig too (e.g. from LGPL to CDDL
+             for LibRaw-Lite users and from LibRaw License to LGPL or CDDL
+             for LibRaw-Commercial users).
+
+           * No Foveon support :(
+             It is not possible to get good color from Foveon sensors with
+             *any* converter. So, there is no need to support these cameras.
+             Dcraw's Foveon-processing code is too strict licensed (GPL),
+             so we choose to drop it.
+             
+           New Features:
+
+           * New data field  colordata.channel_maximum[4] - per channel data
+            maximum (calculated for most cameras, 0 for others).
+
+           * New call LibRaw::adjust_maximum() (and libraw_adjust_maximum() in C API).
+             This call changes hardcoded colordata.maximum value to calculated
+             at unpack stage. This helps suppress parasite tone in highlights
+             (pink clouds and so).
+
+           * New command line parameter -c for dcraw_emu sample. Calls adjust_maximum()
+             for each processed file.
+
+           * all client code should be recompiled due to structures size 
+             change
+
+           * LibRaw 0.9.0-Beta1
+
+2010-02-06 Alex Tutubalin <lexa@lexa.ru>
+           * Fixed ambiguity in pow/sqrt calls (to make Sun C++ compiler happy)
+           * OpenMP is not supported under MS Visual Studio
+           * Masked a bug in RIFF format parser 
+           * LibRaw 0.8.6
+
+2009-12-30 Alex Tutubalin <lexa@lexa.ru>
+           * Fixed bug in simple_dcraw sample parameters processing
+           * Imported dcraw 8.99 (1.432):
+             + New cameras: Canon:  1D mk IV, Canon S90; Casio Z750, 
+               Nikon D3S, Pentax K-x, Sony A-500/550, Fuji S200EXR
+             + New color data for Canon G11 and Sony A850
+             + Changes in Canon sRAW processing
+             + Changes in Kodak metadata processing
+             + Changes in uncompressed Fuji files processing (FinePix S5xxx)
+           * LibRaw 0.8.5
+
+2009-11-21 Alex Tutubalin <lexa@lexa.ru>
+           + Fixed a bug in processing of uncompressed Phase One files 
+           * LibRaw 0.8.4
+
 2009-10-24 Alex Tutubalin <lexa@lexa.ru>
            + Imported dcraw 8.98/1.431:
              * New Cameras: Canon 7D, Panasonic GF1, Sony A850 and A380, 

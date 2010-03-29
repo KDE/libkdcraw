@@ -1,25 +1,24 @@
 /* -*- C++ -*-
  * File: libraw.h
- * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2010 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008 
  *
  * LibRaw C++ interface
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
- */
+
+LibRaw is free software; you can redistribute it and/or modify
+it under the terms of the one of three licenses as you choose:
+
+1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
+   (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
+
+2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+   (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
+
+3. LibRaw Software License 27032010
+   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
+
+*/
 
 #ifndef _LIBRAW_CLASS_H
 #define _LIBRAW_CLASS_H
@@ -70,6 +69,7 @@ DllDef    int                 libraw_rotate_fuji_raw(libraw_data_t* lr);
 
     /* DCRAW compatibility */
 DllDef    int                 libraw_adjust_sizes_info_only(libraw_data_t*);
+DllDef    int                 libraw_adjust_maximum(libraw_data_t*);
 DllDef    int                 libraw_dcraw_document_mode_processing(libraw_data_t*);
 DllDef    int                 libraw_dcraw_ppm_tiff_writer(libraw_data_t* lr,const char *filename);
 DllDef    int                 libraw_dcraw_thumb_writer(libraw_data_t* lr,const char *fname);
@@ -100,6 +100,7 @@ class DllDef LibRaw
     int                         unpack_thumb(void);
 
     int                         adjust_sizes_info_only(void);
+    int                         adjust_maximum();
     void                        set_memerror_handler( memory_callback cb,void *data) {callbacks.memcb_data = data; callbacks.mem_cb = cb; }
     void                        set_dataerror_handler(data_callback func, void *data) { callbacks.datacb_data = data; callbacks.data_cb = func;}
     void                        set_progress_handler(progress_callback pcb, void *data) { callbacks.progresscb_data = data; callbacks.progress_cb = pcb;}
@@ -153,8 +154,6 @@ class DllDef LibRaw
 
     void        kodak_thumb_loader();
     void        write_thumb_ppm_tiff(FILE *); 
-    void        foveon_thumb_loader (void);
-
     
     void init_masked_ptrs();
     ushort *get_masked_pointer(int row, int col); 
@@ -188,7 +187,6 @@ class DllDef LibRaw
     void        fuji_rotate();
     void        stretch();
 
-    void        foveon_thumb ();
     void        jpeg_thumb_writer (FILE *tfp,char *thumb,int thumb_length);
     void        jpeg_thumb ();
     void        ppm_thumb ();
@@ -196,7 +194,6 @@ class DllDef LibRaw
     void        rollei_thumb ();
     void        kodak_thumb_load_raw();
 
-    void        foveon_decoder (unsigned size, unsigned code);
     unsigned    get4();
 
     int         flip_index (int row, int col);

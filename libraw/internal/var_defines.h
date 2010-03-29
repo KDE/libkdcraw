@@ -29,7 +29,6 @@
 #define model           (imgdata.idata.model)
 #define is_raw          (imgdata.idata.raw_count)
 #define dng_version     (imgdata.idata.dng_version)
-#define is_foveon       (imgdata.idata.is_foveon)
 #define colors          (imgdata.idata.colors)
 #define cdesc           (imgdata.idata.cdesc)
 #define filters         (imgdata.idata.filters)
@@ -64,6 +63,7 @@
 #define black           (imgdata.color.black)
 #endif
 #define maximum         (imgdata.color.maximum)
+#define channel_maximum         (imgdata.color.channel_maximum)
 #define profile_length  (imgdata.color.profile_length)
 #define color_flags     (imgdata.color.color_flags)
 #define ph1             (imgdata.color.phase_one_data)

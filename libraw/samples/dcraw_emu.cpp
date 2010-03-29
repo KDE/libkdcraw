@@ -1,24 +1,25 @@
 /* -*- C++ -*-
  * File: dcraw_emu.cpp
- * Copyright 2008-2009 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2010 LibRaw LLC (info@libraw.org)
  * Created: Sun Mar 23,   2008
  *
  * LibRaw simple C++ API sample: almost complete dcraw emulator
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
- * 02111-1307, USA.
+
+LibRaw is free software; you can redistribute it and/or modify
+it under the terms of the one of three licenses as you choose:
+
+1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
+   (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
+
+2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
+   (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
+
+3. LibRaw Software License 27032010
+   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
+
+
+
  */
 #include <stdio.h>
 #include <string.h>
@@ -43,6 +44,7 @@ void usage(const char *prog)
     printf("dcraw_emu: almost complete dcraw emulator\n");
     printf("Usage:  %s [OPTION]... [FILE]...\n", prog);
     printf(
+"-c        Use channel_maximum valus to adjust RAW maximum\n"
 "-v        Verbose: print progress messages (repeated -v will add verbosity)\n"
 "-w        Use camera white balance, if possible\n"
 "-a        Average the whole image for white balance\n"
@@ -111,6 +113,7 @@ int main(int argc, char *argv[])
     int i,arg,c,ret;
     char opm,opt,*cp,*sp;
     int use_mmap=0, msize;
+    int use_channel_max = 0;
     void *iobuffer;
 
 #define OUT RawProcessor.imgdata.params
@@ -129,7 +132,7 @@ int main(int argc, char *argv[])
           switch (opt) 
               {
               case 'v':  verbosity++;  break;
-                  
+              case 'c':  use_channel_max++; break;
               case 'U':  OUT.auto_bright_thr   = atof(argv[arg++]);  break;
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
               case 'b':  OUT.bright      = atof(argv[arg++]);  break;
@@ -253,6 +256,8 @@ int main(int argc, char *argv[])
                     fprintf(stderr,"Cannot unpack %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue;
                 }
+            if (use_channel_max)
+                RawProcessor.adjust_maximum();
             if (LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_process()))
                 {
                     fprintf(stderr,"Cannot do postpocessing on %s: %s\n",argv[arg],libraw_strerror(ret));
@@ -263,7 +268,12 @@ int main(int argc, char *argv[])
                      "%s.%s",
                      argv[arg], OUT.output_tiff ? "tiff" : (P1.colors>1?"ppm":"pgm"));
 
-            if(verbosity) printf("Writing file %s\n",outfn);
+            if(verbosity)
+                {
+                    printf("Writing file %s\n",outfn);
+                    printf("Maximum: %u, Channel maximums: %u %u %u %u\n",C.maximum, C.channel_maximum[0],C.channel_maximum[1],
+                           C.channel_maximum[2],C.channel_maximum[3]);
+                }
 
             if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
                 fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
