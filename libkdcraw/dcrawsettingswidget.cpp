@@ -754,8 +754,6 @@ void DcrawSettingsWidget::slotOutputColorSpaceChanged(int item)
     d->outIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMOUTPUTCS);
 }
 
-// ---------------------------------------------------------------
-
 void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
 {
     d->brightnessLabel->setEnabled(b);
@@ -766,8 +764,6 @@ bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
 {
     return d->brightnessSpinBox->isEnabled();
 }
-
-// ---------------------------------------------------------------
 
 void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
 {
@@ -814,7 +810,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     }
     slotUnclipColorActivated(d->unclipColorComboBox->currentIndex());
 
-    d->dontStretchPixelsCheckBox->setChecked(settings.DontStretchPixels);
+    d->dontStretchPixelsCheckBox->setChecked(settings.dontStretchPixels);
     d->brightnessSpinBox->setValue(settings.brightness);
     d->blackPointCheckBox->setChecked(settings.enableBlackPoint);
     d->blackPointSpinBox->setEnabled(settings.enableBlackPoint);
@@ -852,13 +848,6 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->caBlueMultSpinBox->setValue(settings.caMultiplier[1]);
     d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
     d->outIccUrlEdit->setUrl(KUrl(settings.outputProfile));
-          
-/*
-    bool halfSizeColorImage;
-    OutputColorSpace outputColorSpace;
-    QString deadPixelMap;
-    QRect whiteBalanceArea;    
-*/
 }
 
 RawDecodingSettings DcrawSettingsWidget::settings() const
@@ -904,7 +893,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }    
     
-    prm.DontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
+    prm.dontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
     prm.brightness        = d->brightnessSpinBox->value();
     prm.enableBlackPoint  = d->blackPointCheckBox->isChecked();
     prm.blackPoint        = d->blackPointSpinBox->value();
@@ -938,6 +927,37 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
     
     return prm;
+}
+
+void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
+{
+    RawDecodingSettings prm = settings();
+    
+    group.writeEntry("Sixteen Bits",               prm.sixteenBitsImage);
+    group.writeEntry("White Balance",              (int)prm.whiteBalance);
+    group.writeEntry("Custom White Balance",       prm.customWhiteBalance);
+    group.writeEntry("Custom White Balance Green", prm.customWhiteBalanceGreen);
+    group.writeEntry("Four Color RGB",             prm.RGBInterpolate4Colors);
+    group.writeEntry("Unclip Color",               prm.unclipColors);
+    group.writeEntry("Dont Stretch Pixels",        prm.dontStretchPixels);
+    group.writeEntry("Use Noise Reduction",        prm.enableNoiseReduction);
+    group.writeEntry("Brightness Multiplier",      prm.brightness);
+    group.writeEntry("Use Black Point",            prm.enableBlackPoint);
+    group.writeEntry("Black Point",                prm.blackPoint);
+    group.writeEntry("Use White Point",            prm.enableWhitePoint);
+    group.writeEntry("White Point",                prm.whitePoint);
+    group.writeEntry("Median Filter Passes",       prm.medianFilterPasses);
+    group.writeEntry("NR Threshold",               prm.NRThreshold);
+    group.writeEntry("EnableCACorrection",         prm.enableCACorrection);
+    group.writeEntry("caRedMultiplier",            prm.caMultiplier[0]);
+    group.writeEntry("caBlueMultiplier",           prm.caMultiplier[1]);
+    group.writeEntry("Decoding Quality",           (int)prm.RAWQuality);
+    group.writeEntry("Output Color Space",         (int)prm.outputColorSpace);
+    group.writeEntry("AutoBrightness",             prm.autoBrightness);
+}
+
+void DcrawSettingsWidget::readSettings(KConfigGroup& group)
+{
 }
 
 // -- DEPRECATED METHODS -------------------------------------------------------------

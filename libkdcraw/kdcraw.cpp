@@ -400,7 +400,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         raw.imgdata.params.four_color_rgb = 1;
     }
 
-    if (m_rawDecodingSettings.DontStretchPixels)
+    if (m_rawDecodingSettings.dontStretchPixels)
     {
         // (-j) Do not stretch the image to its correct aspect ratio.
         args.append("-j");

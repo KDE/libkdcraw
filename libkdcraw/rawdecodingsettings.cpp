@@ -38,7 +38,7 @@ RawDecodingSettings::RawDecodingSettings()
     inputColorSpace            = NOINPUTCS;
     outputColorSpace           = SRGB;
     RGBInterpolate4Colors      = false;
-    DontStretchPixels          = false;
+    dontStretchPixels          = false;
     unclipColors               = 0;
     whiteBalance               = CAMERA;
     customWhiteBalance         = 6500;
@@ -77,7 +77,7 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings &o) const
         && inputColorSpace         == o.inputColorSpace
         && outputColorSpace        == o.outputColorSpace
         && RGBInterpolate4Colors   == o.RGBInterpolate4Colors
-        && DontStretchPixels       == o.DontStretchPixels
+        && dontStretchPixels       == o.dontStretchPixels
         && unclipColors            == o.unclipColors
         && whiteBalance            == o.whiteBalance
         && customWhiteBalance      == o.customWhiteBalance
@@ -113,7 +113,7 @@ void RawDecodingSettings::optimizeTimeLoading()
     inputColorSpace         = NOINPUTCS;
     outputColorSpace        = SRGB;
     RGBInterpolate4Colors   = false;
-    DontStretchPixels       = false;
+    dontStretchPixels       = false;
     unclipColors            = 0;
     whiteBalance            = CAMERA;
     customWhiteBalance      = 6500;
@@ -151,7 +151,7 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "RawDecodingSettings::inputColorSpace: "         << s.inputColorSpace << ", ";
     dbg.nospace() << "RawDecodingSettings::outputColorSpace: "        << s.outputColorSpace << ", ";
     dbg.nospace() << "RawDecodingSettings::RGBInterpolate4Colors: "   << s.RGBInterpolate4Colors << ", ";
-    dbg.nospace() << "RawDecodingSettings::DontStretchPixels: "       << s.DontStretchPixels << ", ";
+    dbg.nospace() << "RawDecodingSettings::dontStretchPixels: "       << s.dontStretchPixels << ", ";
     dbg.nospace() << "RawDecodingSettings::unclipColors: "            << s.unclipColors << ", ";
     dbg.nospace() << "RawDecodingSettings::whiteBalance: "            << s.whiteBalance << ", ";
     dbg.nospace() << "RawDecodingSettings::customWhiteBalance: "      << s.customWhiteBalance << ", ";

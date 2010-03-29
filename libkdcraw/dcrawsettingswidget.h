@@ -32,6 +32,7 @@
 // KDE includes.
 
 #include <kurlrequester.h>
+#include <kconfig.h>
 
 // Local includes.
 
@@ -91,6 +92,9 @@ public:
     
     void setSettings(const RawDecodingSettings& settings);
     RawDecodingSettings settings() const;
+    
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
     /** All methods below are deprecated and will be remove for 1.1.0. 
         Use settings() and setSettings() instead.
