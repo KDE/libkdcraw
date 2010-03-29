@@ -665,6 +665,11 @@ KUrlRequester* DcrawSettingsWidget::outputProfileUrlEdit() const
 
 void DcrawSettingsWidget::setDefaultSettings()
 {
+    resetToDefault();
+}
+
+void DcrawSettingsWidget::resetToDefault()
+{
     setWhiteBalance((RawDecodingSettings::WhiteBalance)d->whiteBalanceComboBox->defaultIndex());
     setCustomWhiteBalance(d->customWhiteBalanceSpinBox->defaultValue());
     setCustomWhiteBalanceGreen(d->customWhiteBalanceGreenSpinBox->defaultValue());
@@ -764,6 +769,179 @@ bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
 
 // ---------------------------------------------------------------
 
+void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
+{
+    d->sixteenBitsImage->setChecked(settings.sixteenBitsImage);
+  
+    switch(settings.whiteBalance)
+    {
+        case RawDecodingSettings::CAMERA:
+            d->whiteBalanceComboBox->setCurrentIndex(1);
+            break;
+        case RawDecodingSettings::AUTO:
+            d->whiteBalanceComboBox->setCurrentIndex(2);
+            break;
+        case RawDecodingSettings::CUSTOM:
+            d->whiteBalanceComboBox->setCurrentIndex(3);
+            break;
+        default:
+            d->whiteBalanceComboBox->setCurrentIndex(0);
+            break;
+    }
+    slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentIndex());
+
+    d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
+    d->customWhiteBalanceSpinBox->setValue(settings.customWhiteBalance);
+    d->customWhiteBalanceGreenSpinBox->setValue(settings.customWhiteBalanceGreen);
+    d->fourColorCheckBox->setChecked(settings.RGBInterpolate4Colors);
+    d->autoBrightnessBox->setChecked(settings.autoBrightness);
+
+    switch(settings.unclipColors)
+    {
+        case 0:
+            d->unclipColorComboBox->setCurrentIndex(0);
+            break;
+        case 1:
+            d->unclipColorComboBox->setCurrentIndex(1);
+            break;
+        case 2:
+            d->unclipColorComboBox->setCurrentIndex(2);
+            break;
+        default:         // Reconstruct Highlight method
+            d->unclipColorComboBox->setCurrentIndex(3);
+            d->reconstructSpinBox->setValue(settings.unclipColors-3);
+            break;
+    }
+    slotUnclipColorActivated(d->unclipColorComboBox->currentIndex());
+
+    d->dontStretchPixelsCheckBox->setChecked(settings.DontStretchPixels);
+    d->brightnessSpinBox->setValue(settings.brightness);
+    d->blackPointCheckBox->setChecked(settings.enableBlackPoint);
+    d->blackPointSpinBox->setEnabled(settings.enableBlackPoint);
+    d->blackPointSpinBox->setValue(settings.blackPoint);
+    d->whitePointCheckBox->setChecked(settings.enableWhitePoint);
+    d->whitePointSpinBox->setEnabled(settings.enableWhitePoint);
+    d->whitePointSpinBox->setValue(settings.whitePoint);
+
+    switch(settings.RAWQuality)
+    {
+        case RawDecodingSettings::VNG:
+            d->RAWQualityComboBox->setCurrentIndex(1);
+            break;
+        case RawDecodingSettings::PPG:
+            d->RAWQualityComboBox->setCurrentIndex(2);
+            break;
+        case RawDecodingSettings::AHD:
+            d->RAWQualityComboBox->setCurrentIndex(3);
+            break;
+        default:
+            d->RAWQualityComboBox->setCurrentIndex(0);
+            break;
+    }
+
+    d->inputColorSpaceComboBox->setCurrentIndex((int)settings.inputColorSpace);
+    slotInputColorSpaceChanged((int)settings.inputColorSpace);
+    d->outputColorSpaceComboBox->setCurrentIndex((int)settings.outputColorSpace);
+    slotOutputColorSpaceChanged((int)settings.outputColorSpace);
+    d->enableNoiseReduction->setChecked(settings.enableNoiseReduction);
+    slotNoiseReductionToggled(settings.enableNoiseReduction);
+    d->NRThresholdSpinBox->setValue(settings.NRThreshold);
+    d->enableCACorrection->setChecked(settings.enableCACorrection);
+    slotCACorrectionToggled(settings.enableCACorrection);
+    d->caRedMultSpinBox->setValue(settings.caMultiplier[0]);
+    d->caBlueMultSpinBox->setValue(settings.caMultiplier[1]);
+    d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
+    d->outIccUrlEdit->setUrl(KUrl(settings.outputProfile));
+          
+/*
+    bool halfSizeColorImage;
+    OutputColorSpace outputColorSpace;
+    QString deadPixelMap;
+    QRect whiteBalanceArea;    
+*/
+}
+
+RawDecodingSettings DcrawSettingsWidget::settings() const
+{
+    RawDecodingSettings prm;
+    prm.sixteenBitsImage = d->sixteenBitsImage->isChecked();
+
+    switch(d->whiteBalanceComboBox->currentIndex())
+    {
+        case 1:
+            prm.whiteBalance = RawDecodingSettings::CAMERA;
+            break;
+        case 2:
+            prm.whiteBalance = RawDecodingSettings::AUTO;
+            break;
+        case 3:
+            prm.whiteBalance = RawDecodingSettings::CUSTOM;
+            break;
+        default:
+            prm.whiteBalance = RawDecodingSettings::NONE;
+            break;
+    }
+
+    prm.medianFilterPasses      = d->medianFilterPassesSpinBox->value();
+    prm.customWhiteBalance      = d->customWhiteBalanceSpinBox->value();
+    prm.customWhiteBalanceGreen = d->customWhiteBalanceGreenSpinBox->value();
+    prm.RGBInterpolate4Colors   = d->fourColorCheckBox->isChecked();
+    prm.autoBrightness          = d->autoBrightnessBox->isChecked();
+    
+    switch(d->unclipColorComboBox->currentIndex())
+    {
+        case 0:
+            prm.unclipColors = 0;
+            break;
+        case 1:
+            prm.unclipColors = 1;
+            break;
+        case 2:
+            prm.unclipColors = 2;
+            break;
+        default:         // Reconstruct Highlight method
+            prm.unclipColors =  d->reconstructSpinBox->value()+3;
+            break;
+    }    
+    
+    prm.DontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
+    prm.brightness        = d->brightnessSpinBox->value();
+    prm.enableBlackPoint  = d->blackPointCheckBox->isChecked();
+    prm.blackPoint        = d->blackPointSpinBox->value();
+    prm.enableWhitePoint  = d->whitePointCheckBox->isChecked();
+    prm.whitePoint        = d->whitePointSpinBox->value();
+
+    switch(d->RAWQualityComboBox->currentIndex())
+    {
+        case 1:
+            prm.RAWQuality = RawDecodingSettings::VNG;
+            break;
+        case 2:
+            prm.RAWQuality = RawDecodingSettings::PPG;
+            break;
+        case 3:
+            prm.RAWQuality = RawDecodingSettings::AHD;
+            break;
+        default:
+            prm.RAWQuality = RawDecodingSettings::BILINEAR;
+            break;
+    }
+
+    prm.inputColorSpace      = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
+    prm.outputColorSpace     = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
+    prm.enableNoiseReduction = d->enableNoiseReduction->isChecked();
+    prm.NRThreshold          = d->NRThresholdSpinBox->value();
+    prm.enableCACorrection   = d->enableCACorrection->isChecked();
+    prm.caMultiplier[0]      = d->caRedMultSpinBox->value();
+    prm.caMultiplier[1]      = d->caBlueMultSpinBox->value();
+    prm.inputProfile         = d->inIccUrlEdit->url().toLocalFile();
+    prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
+    
+    return prm;
+}
+
+// -- DEPRECATED METHODS -------------------------------------------------------------
+
 bool DcrawSettingsWidget::sixteenBits()
 {
     return d->sixteenBitsImage->isChecked();
@@ -773,8 +951,6 @@ void DcrawSettingsWidget::setSixteenBits(bool b)
 {
     d->sixteenBitsImage->setChecked(b);
 }
-
-// ---------------------------------------------------------------
 
 RawDecodingSettings::WhiteBalance DcrawSettingsWidget::whiteBalance()
 {
@@ -815,8 +991,6 @@ void DcrawSettingsWidget::setWhiteBalance(RawDecodingSettings::WhiteBalance v)
     slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentIndex());
 }
 
-// ---------------------------------------------------------------
-
 int DcrawSettingsWidget::medianFilterPasses()
 {
     return d->medianFilterPassesSpinBox->value();
@@ -826,8 +1000,6 @@ void DcrawSettingsWidget::setMedianFilterPasses(int p)
 {
     d->medianFilterPassesSpinBox->setValue(p);
 }
-
-// ---------------------------------------------------------------
 
 int DcrawSettingsWidget::customWhiteBalance()
 {
@@ -839,8 +1011,6 @@ void DcrawSettingsWidget::setCustomWhiteBalance(int v)
     d->customWhiteBalanceSpinBox->setValue(v);
 }
 
-// ---------------------------------------------------------------
-
 double DcrawSettingsWidget::customWhiteBalanceGreen()
 {
     return d->customWhiteBalanceGreenSpinBox->value();
@@ -850,8 +1020,6 @@ void DcrawSettingsWidget::setCustomWhiteBalanceGreen(double v)
 {
     d->customWhiteBalanceGreenSpinBox->setValue(v);
 }
-
-// ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::useFourColor()
 {
@@ -863,8 +1031,6 @@ void DcrawSettingsWidget::setFourColor(bool b)
     d->fourColorCheckBox->setChecked(b);
 }
 
-// ---------------------------------------------------------------
-
 bool DcrawSettingsWidget::useAutoBrightness()
 {
     return d->autoBrightnessBox->isChecked();
@@ -874,8 +1040,6 @@ void DcrawSettingsWidget::setAutoBrightness(bool b)
 {
     d->autoBrightnessBox->setChecked(b);
 }
-
-// ---------------------------------------------------------------
 
 int DcrawSettingsWidget::unclipColor()
 {
@@ -918,8 +1082,6 @@ void DcrawSettingsWidget::setUnclipColor(int v)
     slotUnclipColorActivated(d->unclipColorComboBox->currentIndex());
 }
 
-// ---------------------------------------------------------------
-
 bool DcrawSettingsWidget::useDontStretchPixels()
 {
     return d->dontStretchPixelsCheckBox->isChecked();
@@ -930,8 +1092,6 @@ void DcrawSettingsWidget::setDontStretchPixels(bool b)
     d->dontStretchPixelsCheckBox->setChecked(b);
 }
 
-// ---------------------------------------------------------------
-
 double DcrawSettingsWidget::brightness()
 {
     return d->brightnessSpinBox->value();
@@ -941,8 +1101,6 @@ void DcrawSettingsWidget::setBrightness(double b)
 {
     d->brightnessSpinBox->setValue(b);
 }
-
-// ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::useBlackPoint()
 {
@@ -955,8 +1113,6 @@ void DcrawSettingsWidget::setUseBlackPoint(bool b)
     d->blackPointSpinBox->setEnabled(b);
 }
 
-// ---------------------------------------------------------------
-
 int DcrawSettingsWidget::blackPoint()
 {
     return d->blackPointSpinBox->value();
@@ -966,8 +1122,6 @@ void DcrawSettingsWidget::setBlackPoint(int b)
 {
     d->blackPointSpinBox->setValue(b);
 }
-
-// ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::useWhitePoint()
 {
@@ -980,8 +1134,6 @@ void DcrawSettingsWidget::setUseWhitePoint(bool b)
     d->whitePointSpinBox->setEnabled(b);
 }
 
-// ---------------------------------------------------------------
-
 int DcrawSettingsWidget::whitePoint()
 {
     return d->whitePointSpinBox->value();
@@ -991,8 +1143,6 @@ void DcrawSettingsWidget::setWhitePoint(int b)
 {
     d->whitePointSpinBox->setValue(b);
 }
-
-// ---------------------------------------------------------------
 
 RawDecodingSettings::DecodingQuality DcrawSettingsWidget::quality()
 {
@@ -1032,8 +1182,6 @@ void DcrawSettingsWidget::setQuality(RawDecodingSettings::DecodingQuality q)
     }
 }
 
-// ---------------------------------------------------------------
-
 RawDecodingSettings::InputColorSpace DcrawSettingsWidget::inputColorSpace()
 {
     return (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
@@ -1044,8 +1192,6 @@ void DcrawSettingsWidget::setInputColorSpace(RawDecodingSettings::InputColorSpac
     d->inputColorSpaceComboBox->setCurrentIndex((int)c);
     slotInputColorSpaceChanged((int)c);
 }
-
-// ---------------------------------------------------------------
 
 RawDecodingSettings::OutputColorSpace DcrawSettingsWidget::outputColorSpace()
 {
@@ -1058,8 +1204,6 @@ void DcrawSettingsWidget::setOutputColorSpace(RawDecodingSettings::OutputColorSp
     slotOutputColorSpaceChanged((int)c);
 }
 
-// ---------------------------------------------------------------
-
 bool DcrawSettingsWidget::useNoiseReduction()
 {
     return d->enableNoiseReduction->isChecked();
@@ -1071,8 +1215,6 @@ void DcrawSettingsWidget::setNoiseReduction(bool b)
     slotNoiseReductionToggled(b);
 }
 
-// ---------------------------------------------------------------
-
 int DcrawSettingsWidget::NRThreshold()
 {
     return d->NRThresholdSpinBox->value();
@@ -1082,8 +1224,6 @@ void DcrawSettingsWidget::setNRThreshold(int b)
 {
     d->NRThresholdSpinBox->setValue(b);
 }
-
-// ---------------------------------------------------------------
 
 bool DcrawSettingsWidget::useCACorrection()
 {
@@ -1096,8 +1236,6 @@ void DcrawSettingsWidget::setUseCACorrection(bool b)
     slotCACorrectionToggled(b);
 }
 
-// ---------------------------------------------------------------
-
 double DcrawSettingsWidget::caRedMultiplier()
 {
     return d->caRedMultSpinBox->value();
@@ -1107,8 +1245,6 @@ void DcrawSettingsWidget::setcaRedMultiplier(double b)
 {
     d->caRedMultSpinBox->setValue(b);
 }
-
-// ---------------------------------------------------------------
 
 double DcrawSettingsWidget::caBlueMultiplier()
 {
@@ -1120,8 +1256,6 @@ void DcrawSettingsWidget::setcaBlueMultiplier(double b)
     d->caBlueMultSpinBox->setValue(b);
 }
 
-// ---------------------------------------------------------------
-
 QString DcrawSettingsWidget::inputColorProfile()
 {
     return d->inIccUrlEdit->url().toLocalFile();
@@ -1131,8 +1265,6 @@ void DcrawSettingsWidget::setInputColorProfile(const QString& path)
 {
     d->inIccUrlEdit->setUrl(KUrl(path));
 }
-
-// ---------------------------------------------------------------
 
 QString DcrawSettingsWidget::outputColorProfile()
 {

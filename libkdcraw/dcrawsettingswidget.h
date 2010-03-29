@@ -74,70 +74,80 @@ public:
     DcrawSettingsWidget(QWidget* parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
-    void setup(int advSettings);
-
-    bool   sixteenBits();
-    int    customWhiteBalance();
-    double customWhiteBalanceGreen();
-    bool   useFourColor();
-    bool   useDontStretchPixels();
-    bool   useNoiseReduction();
-    bool   useCACorrection();
-    bool   useBlackPoint();
-    bool   useWhitePoint();
-    int    unclipColor();
-    bool   useAutoBrightness();
-    double brightness();
-    int    blackPoint();
-    int    whitePoint();
-    int    NRThreshold();
-    double caRedMultiplier();
-    double caBlueMultiplier();
-    int    medianFilterPasses();
-
-    RawDecodingSettings::WhiteBalance     whiteBalance();
-    RawDecodingSettings::DecodingQuality  quality();
-    RawDecodingSettings::InputColorSpace  inputColorSpace();
-    RawDecodingSettings::OutputColorSpace outputColorSpace();
-
-    QString inputColorProfile();
-    QString outputColorProfile();
-
-    void   setSixteenBits(bool b);
-    void   setCameraWB(bool b);
-    void   setWhiteBalance(RawDecodingSettings::WhiteBalance v);
-    void   setCustomWhiteBalance(int v);
-    void   setCustomWhiteBalanceGreen(double v);
-    void   setFourColor(bool b);
-    void   setDontStretchPixels(bool b);
-    void   setNoiseReduction(bool b);
-    void   setUseCACorrection(bool b);
-    void   setUseBlackPoint(bool b);
-    void   setUseWhitePoint(bool b);
-    void   setUnclipColor(int v);
-    void   setAutoBrightness(bool b);
-    void   setBrightness(double b);
-    void   setBlackPoint(int b);
-    void   setWhitePoint(int b);
-    void   setNRThreshold(int b);
-    void   setcaRedMultiplier(double b);
-    void   setcaBlueMultiplier(double b);
-    void   setMedianFilterPasses(int p);
-    void   setQuality(RawDecodingSettings::DecodingQuality q);
-    void   setInputColorSpace(RawDecodingSettings::InputColorSpace c);
-    void   setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
-    void   setInputColorProfile(const QString& path);
-    void   setOutputColorProfile(const QString& path);
-
-    void   setDefaultSettings();
-
-    void   setEnabledBrightnessSettings(bool b);
-    bool   brightnessSettingsIsEnabled();
-
-    void   updateMinimumWidth();
-
     KUrlRequester* inputProfileUrlEdit() const;
     KUrlRequester* outputProfileUrlEdit() const;
+
+    void setup(int advSettings);
+
+    void setEnabledBrightnessSettings(bool b);
+    bool brightnessSettingsIsEnabled();
+
+    void updateMinimumWidth();
+
+    /** deprecated. use resetToDefault() instead.
+     */
+    KDE_DEPRECATED void setDefaultSettings();
+    void resetToDefault();
+    
+    void setSettings(const RawDecodingSettings& settings);
+    RawDecodingSettings settings() const;
+
+    /** All methods below are deprecated and will be remove for 1.1.0. 
+        Use settings() and setSettings() instead.
+     */
+    
+    KDE_DEPRECATED bool   sixteenBits();
+    KDE_DEPRECATED int    customWhiteBalance();
+    KDE_DEPRECATED double customWhiteBalanceGreen();
+    KDE_DEPRECATED bool   useFourColor();
+    KDE_DEPRECATED bool   useDontStretchPixels();
+    KDE_DEPRECATED bool   useNoiseReduction();
+    KDE_DEPRECATED bool   useCACorrection();
+    KDE_DEPRECATED bool   useBlackPoint();
+    KDE_DEPRECATED bool   useWhitePoint();
+    KDE_DEPRECATED int    unclipColor();
+    KDE_DEPRECATED bool   useAutoBrightness();
+    KDE_DEPRECATED double brightness();
+    KDE_DEPRECATED int    blackPoint();
+    KDE_DEPRECATED int    whitePoint();
+    KDE_DEPRECATED int    NRThreshold();
+    KDE_DEPRECATED double caRedMultiplier();
+    KDE_DEPRECATED double caBlueMultiplier();
+    KDE_DEPRECATED int    medianFilterPasses();
+
+    KDE_DEPRECATED RawDecodingSettings::WhiteBalance     whiteBalance();
+    KDE_DEPRECATED RawDecodingSettings::DecodingQuality  quality();
+    KDE_DEPRECATED RawDecodingSettings::InputColorSpace  inputColorSpace();
+    KDE_DEPRECATED RawDecodingSettings::OutputColorSpace outputColorSpace();
+
+    KDE_DEPRECATED QString inputColorProfile();
+    KDE_DEPRECATED QString outputColorProfile();
+
+    KDE_DEPRECATED void setSixteenBits(bool b);
+    KDE_DEPRECATED void setCameraWB(bool b);
+    KDE_DEPRECATED void setWhiteBalance(RawDecodingSettings::WhiteBalance v);
+    KDE_DEPRECATED void setCustomWhiteBalance(int v);
+    KDE_DEPRECATED void setCustomWhiteBalanceGreen(double v);
+    KDE_DEPRECATED void setFourColor(bool b);
+    KDE_DEPRECATED void setDontStretchPixels(bool b);
+    KDE_DEPRECATED void setNoiseReduction(bool b);
+    KDE_DEPRECATED void setUseCACorrection(bool b);
+    KDE_DEPRECATED void setUseBlackPoint(bool b);
+    KDE_DEPRECATED void setUseWhitePoint(bool b);
+    KDE_DEPRECATED void setUnclipColor(int v);
+    KDE_DEPRECATED void setAutoBrightness(bool b);
+    KDE_DEPRECATED void setBrightness(double b);
+    KDE_DEPRECATED void setBlackPoint(int b);
+    KDE_DEPRECATED void setWhitePoint(int b);
+    KDE_DEPRECATED void setNRThreshold(int b);
+    KDE_DEPRECATED void setcaRedMultiplier(double b);
+    KDE_DEPRECATED void setcaBlueMultiplier(double b);
+    KDE_DEPRECATED void setMedianFilterPasses(int p);
+    KDE_DEPRECATED void setQuality(RawDecodingSettings::DecodingQuality q);
+    KDE_DEPRECATED void setInputColorSpace(RawDecodingSettings::InputColorSpace c);
+    KDE_DEPRECATED void setOutputColorSpace(RawDecodingSettings::OutputColorSpace c);
+    KDE_DEPRECATED void setInputColorProfile(const QString& path);
+    KDE_DEPRECATED void setOutputColorProfile(const QString& path);    
 
 Q_SIGNALS:
 
