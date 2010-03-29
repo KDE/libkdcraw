@@ -958,6 +958,32 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
 {
+    RawDecodingSettings prm;
+    RawDecodingSettings defaultPrm;
+    
+    prm.sixteenBitsImage        = group.readEntry("Sixteen Bits", defaultPrm.sixteenBitsImage);
+    prm.whiteBalance            = (RawDecodingSettings::WhiteBalance)group.readEntry("White Balance", (int)defaultPrm.whiteBalance);
+    prm.customWhiteBalance      = group.readEntry("Custom White Balance", defaultPrm.customWhiteBalance);
+    prm.customWhiteBalanceGreen = group.readEntry("Custom White Balance Green", defaultPrm.customWhiteBalanceGreen);
+    prm.RGBInterpolate4Colors   = group.readEntry("Four Color RGB", defaultPrm.RGBInterpolate4Colors);
+    prm.unclipColors            = group.readEntry("Unclip Color", defaultPrm.unclipColors);
+    prm.dontStretchPixels       = group.readEntry("Dont Stretch Pixels", defaultPrm.dontStretchPixels);
+    prm.enableNoiseReduction    = group.readEntry("Use Noise Reduction", defaultPrm.enableNoiseReduction);
+    prm.brightness              = group.readEntry("Brightness Multiplier", defaultPrm.brightness);
+    prm.enableBlackPoint        = group.readEntry("Use Black Point", defaultPrm.enableBlackPoint);
+    prm.blackPoint              = group.readEntry("Black Point", defaultPrm.blackPoint);
+    prm.enableWhitePoint        = group.readEntry("Use White Point", defaultPrm.enableWhitePoint);
+    prm.whitePoint              = group.readEntry("White Point", defaultPrm.whitePoint);
+    prm.medianFilterPasses      = group.readEntry("Median Filter Passes", defaultPrm.medianFilterPasses);
+    prm.NRThreshold             = group.readEntry("NR Threshold", defaultPrm.NRThreshold);
+    prm.enableCACorrection      = group.readEntry("EnableCACorrection", defaultPrm.enableCACorrection);
+    prm.caMultiplier[0]         = group.readEntry("caRedMultiplier", defaultPrm.caMultiplier[0]);
+    prm.caMultiplier[1]         = group.readEntry("caBlueMultiplier", defaultPrm.caMultiplier[1]);
+    prm.RAWQuality              = (RawDecodingSettings::DecodingQuality)group.readEntry("Decoding Quality", (int)defaultPrm.RAWQuality);
+    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)group.readEntry("Output Color Space", (int)defaultPrm.outputColorSpace);
+    prm.autoBrightness          = group.readEntry("AutoBrightness", defaultPrm.autoBrightness);
+            
+    setSettings(prm);
 }
 
 // -- DEPRECATED METHODS -------------------------------------------------------------
