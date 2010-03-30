@@ -22,73 +22,40 @@
  *
  * ============================================================ */
 
-// Local includes
+#define OPTIONFIXCOLORSHIGHLIGHTSENTRY      "FixColorsHighlights"
+#define OPTIONDECODESIXTEENBITENTRY         "SixteenBitsImage"
+#define OPTIONWHITEBALANCEENTRY             "White Balance"
+#define OPTIONCUSTOMWHITEBALANCEENTRY       "Custom White Balance"
+#define OPTIONCUSTOMWBGREENENTRY            "Custom White Balance Green"
+#define OPTIONFOURCOLORRGBENTRY             "Four Color RGB"
+#define OPTIONUNCLIPCOLORSENTRY             "Unclip Color"
+#define OPTIONDONTSTRETCHPIXELSENTRY        "Dont Stretch Pixels"
+#define OPTIONNOISEREDUCTIONENTRY           "Use Noise Reduction"
+#define OPTIONMEDIANFILTERPASSESENTRY       "Median Filter Passes"
+#define OPTIONNRTHRESHOLDENTRY              "NR Threshold"
+#define OPTIONUSECACORRECTIONENTRY          "EnableCACorrection"
+#define OPTIONCAREDMULTIPLIERENTRY          "caRedMultiplier"
+#define OPTIONCABLUEMULTIPLIERENTRY         "caBlueMultiplier"
+#define OPTIONAUTOBRIGHTNESSENTRY           "AutoBrightness"
+#define OPTIONDECODINGQUALITYENTRY          "Decoding Quality"
+#define OPTIONINPUTCOLORSPACEENTRY          "Input Color Space"
+#define OPTIONOUTPUTCOLORSPACEENTRY         "Output Color Space"
+#define OPTIONINPUTCOLORPROFILEENTRY        "Input Color Profile"
+#define OPTIONOUTPUTCOLORPROFILEENTRY       "Output Color Profile"
+#define OPTIONBRIGHTNESSMULTIPLIERENTRY     "Brightness Multiplier"
+#define OPTIONUSEBLACKPOINTENTRY            "Use Black Point"
+#define OPTIONBLACKPOINTENTRY               "Black Point"
+#define OPTIONUSEWHITEPOINTENTRY            "Use White Point"
+#define OPTIONWHITEPOINTENTRY               "White Point"
 
 #include "rawdecodingsettings.h"
 
 namespace KDcrawIface
 {
 
-class RawDecodingSettingsPriv
+RawDecodingSettings::RawDecodingSettings()
 {
-public:
-
-    RawDecodingSettingsPriv() :
-        optionDecodeSixteenBitEntry("SixteenBitsImage"),
-        optionWhiteBalanceEntry("White Balance"),
-        optionCustomWhiteBalanceEntry("Custom White Balance"),
-        optionCustomWBGreenEntry("Custom White Balance Green"),
-        optionFourColorRGBEntry("Four Color RGB"),
-        optionUnclipColorsEntry("Unclip Color"),
-        optionDontStretchPixelsEntry("Dont Stretch Pixels"),
-        optionNoiseReductionEntry("Use Noise Reduction"),
-        optionMedianFilterPassesEntry("Median Filter Passes"),
-        optionNRThresholdEntry("NR Threshold"),
-        optionUseCACorrectionEntry("EnableCACorrection"),
-        optionCARedMultiplierEntry("caRedMultiplier"),
-        optionCABlueMultiplierEntry("caBlueMultiplier"),
-        optionAutoBrightnessEntry("AutoBrightness"),
-        optionDecodingQualityEntry("Decoding Quality"),
-        optionInputColorSpaceEntry("Input Color Space"),
-        optionOutputColorSpaceEntry("Output Color Space"),
-        optionInputColorProfileEntry("Input Color Profile"),
-        optionOutputColorProfileEntry("Output Color Profile"),
-        optionBrightnessMultiplierEntry("Brightness Multiplier"),
-        optionUseBlackPointEntry("Use Black Point"),
-        optionBlackPointEntry("Black Point"),
-        optionUseWhitePointEntry("Use White Point"),
-        optionWhitePointEntry("White Point")
-    {}
-
-    const QString optionDecodeSixteenBitEntry;
-    const QString optionWhiteBalanceEntry;
-    const QString optionCustomWhiteBalanceEntry;
-    const QString optionCustomWBGreenEntry;
-    const QString optionFourColorRGBEntry;
-    const QString optionUnclipColorsEntry;
-    const QString optionDontStretchPixelsEntry;
-    const QString optionNoiseReductionEntry;
-    const QString optionMedianFilterPassesEntry;
-    const QString optionNRThresholdEntry;
-    const QString optionUseCACorrectionEntry;
-    const QString optionCARedMultiplierEntry;
-    const QString optionCABlueMultiplierEntry;
-    const QString optionAutoBrightnessEntry;
-    const QString optionDecodingQualityEntry;
-    const QString optionInputColorSpaceEntry;
-    const QString optionOutputColorSpaceEntry;
-    const QString optionInputColorProfileEntry;
-    const QString optionOutputColorProfileEntry;
-    const QString optionBrightnessMultiplierEntry;
-    const QString optionUseBlackPointEntry;
-    const QString optionBlackPointEntry;
-    const QString optionUseWhitePointEntry;
-    const QString optionWhitePointEntry;
-};
-
-RawDecodingSettings::RawDecodingSettings() :
-    d(new RawDecodingSettingsPriv)
-{
+    fixColorsHighlights        = false;
     autoBrightness             = true;
     sixteenBitsImage           = false;
     brightness                 = 1.0;
@@ -128,11 +95,11 @@ RawDecodingSettings::RawDecodingSettings() :
 
 RawDecodingSettings::~RawDecodingSettings()
 {
-    delete d;
 }
 
 RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o)
 {
+    fixColorsHighlights     = o.fixColorsHighlights;
     autoBrightness          = o.autoBrightness;
     sixteenBitsImage        = o.sixteenBitsImage;
     brightness              = o.brightness;
@@ -165,7 +132,8 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
 
 bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
 {
-    return autoBrightness          == o.autoBrightness
+    return fixColorsHighlights     == o.fixColorsHighlights
+        && autoBrightness          == o.autoBrightness
         && sixteenBitsImage        == o.sixteenBitsImage
         && brightness              == o.brightness
         && RAWQuality              == o.RAWQuality
@@ -197,6 +165,7 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
 
 void RawDecodingSettings::optimizeTimeLoading()
 {
+    fixColorsHighlights     = false;
     autoBrightness          = true;
     sixteenBitsImage        = true;
     brightness              = 1.0;
@@ -237,52 +206,54 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
 {
     RawDecodingSettings defaultPrm;
 
-    sixteenBitsImage        = group.readEntry(d->optionDecodeSixteenBitEntry, defaultPrm.sixteenBitsImage);
-    whiteBalance            = (WhiteBalance)group.readEntry(d->optionWhiteBalanceEntry, (int)defaultPrm.whiteBalance);
-    customWhiteBalance      = group.readEntry(d->optionCustomWhiteBalanceEntry, defaultPrm.customWhiteBalance);
-    customWhiteBalanceGreen = group.readEntry(d->optionCustomWBGreenEntry, defaultPrm.customWhiteBalanceGreen);
-    RGBInterpolate4Colors   = group.readEntry(d->optionFourColorRGBEntry, defaultPrm.RGBInterpolate4Colors);
-    unclipColors            = group.readEntry(d->optionUnclipColorsEntry, defaultPrm.unclipColors);
-    DontStretchPixels       = group.readEntry(d->optionDontStretchPixelsEntry, defaultPrm.DontStretchPixels);
-    enableNoiseReduction    = group.readEntry(d->optionNoiseReductionEntry, defaultPrm.enableNoiseReduction);
-    brightness              = group.readEntry(d->optionBrightnessMultiplierEntry, defaultPrm.brightness);
-    enableBlackPoint        = group.readEntry(d->optionUseBlackPointEntry, defaultPrm.enableBlackPoint);
-    blackPoint              = group.readEntry(d->optionBlackPointEntry, defaultPrm.blackPoint);
-    enableWhitePoint        = group.readEntry(d->optionUseWhitePointEntry, defaultPrm.enableWhitePoint);
-    whitePoint              = group.readEntry(d->optionWhitePointEntry, defaultPrm.whitePoint);
-    medianFilterPasses      = group.readEntry(d->optionMedianFilterPassesEntry, defaultPrm.medianFilterPasses);
-    NRThreshold             = group.readEntry(d->optionNRThresholdEntry, defaultPrm.NRThreshold);
-    enableCACorrection      = group.readEntry(d->optionUseCACorrectionEntry, defaultPrm.enableCACorrection);
-    caMultiplier[0]         = group.readEntry(d->optionCARedMultiplierEntry, defaultPrm.caMultiplier[0]);
-    caMultiplier[1]         = group.readEntry(d->optionCABlueMultiplierEntry, defaultPrm.caMultiplier[1]);
-    RAWQuality              = (DecodingQuality)group.readEntry(d->optionDecodingQualityEntry, (int)defaultPrm.RAWQuality);
-    outputColorSpace        = (OutputColorSpace)group.readEntry(d->optionOutputColorSpaceEntry, (int)defaultPrm.outputColorSpace);
-    autoBrightness          = group.readEntry(d->optionAutoBrightnessEntry, defaultPrm.autoBrightness);
+    fixColorsHighlights     = group.readEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY, defaultPrm.fixColorsHighlights);
+    sixteenBitsImage        = group.readEntry(OPTIONDECODESIXTEENBITENTRY, defaultPrm.sixteenBitsImage);
+    whiteBalance            = (WhiteBalance)group.readEntry(OPTIONWHITEBALANCEENTRY, (int)defaultPrm.whiteBalance);
+    customWhiteBalance      = group.readEntry(OPTIONCUSTOMWHITEBALANCEENTRY, defaultPrm.customWhiteBalance);
+    customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY, defaultPrm.customWhiteBalanceGreen);
+    RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY, defaultPrm.RGBInterpolate4Colors);
+    unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY, defaultPrm.unclipColors);
+    DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY, defaultPrm.DontStretchPixels);
+    enableNoiseReduction    = group.readEntry(OPTIONNOISEREDUCTIONENTRY, defaultPrm.enableNoiseReduction);
+    brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY, defaultPrm.brightness);
+    enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY, defaultPrm.enableBlackPoint);
+    blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY, defaultPrm.blackPoint);
+    enableWhitePoint        = group.readEntry(OPTIONUSEWHITEPOINTENTRY, defaultPrm.enableWhitePoint);
+    whitePoint              = group.readEntry(OPTIONWHITEPOINTENTRY, defaultPrm.whitePoint);
+    medianFilterPasses      = group.readEntry(OPTIONMEDIANFILTERPASSESENTRY, defaultPrm.medianFilterPasses);
+    NRThreshold             = group.readEntry(OPTIONNRTHRESHOLDENTRY, defaultPrm.NRThreshold);
+    enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY, defaultPrm.enableCACorrection);
+    caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY, defaultPrm.caMultiplier[0]);
+    caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY, defaultPrm.caMultiplier[1]);
+    RAWQuality              = (DecodingQuality)group.readEntry(OPTIONDECODINGQUALITYENTRY, (int)defaultPrm.RAWQuality);
+    outputColorSpace        = (OutputColorSpace)group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY, (int)defaultPrm.outputColorSpace);
+    autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY, defaultPrm.autoBrightness);
 }
 
 void RawDecodingSettings::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry(d->optionDecodeSixteenBitEntry,     sixteenBitsImage);
-    group.writeEntry(d->optionWhiteBalanceEntry,         (int)whiteBalance);
-    group.writeEntry(d->optionCustomWhiteBalanceEntry,   customWhiteBalance);
-    group.writeEntry(d->optionCustomWBGreenEntry,        customWhiteBalanceGreen);
-    group.writeEntry(d->optionFourColorRGBEntry,         RGBInterpolate4Colors);
-    group.writeEntry(d->optionUnclipColorsEntry,         unclipColors);
-    group.writeEntry(d->optionDontStretchPixelsEntry,    DontStretchPixels);
-    group.writeEntry(d->optionNoiseReductionEntry,       enableNoiseReduction);
-    group.writeEntry(d->optionBrightnessMultiplierEntry, brightness);
-    group.writeEntry(d->optionUseBlackPointEntry,        enableBlackPoint);
-    group.writeEntry(d->optionBlackPointEntry,           blackPoint);
-    group.writeEntry(d->optionUseWhitePointEntry,        enableWhitePoint);
-    group.writeEntry(d->optionWhitePointEntry,           whitePoint);
-    group.writeEntry(d->optionMedianFilterPassesEntry,   medianFilterPasses);
-    group.writeEntry(d->optionNRThresholdEntry,          NRThreshold);
-    group.writeEntry(d->optionUseCACorrectionEntry,      enableCACorrection);
-    group.writeEntry(d->optionCARedMultiplierEntry,      caMultiplier[0]);
-    group.writeEntry(d->optionCABlueMultiplierEntry,     caMultiplier[1]);
-    group.writeEntry(d->optionDecodingQualityEntry,      (int)RAWQuality);
-    group.writeEntry(d->optionOutputColorSpaceEntry,     (int)outputColorSpace);
-    group.writeEntry(d->optionAutoBrightnessEntry,       autoBrightness);  
+    group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,  fixColorsHighlights);
+    group.writeEntry(OPTIONDECODESIXTEENBITENTRY,     sixteenBitsImage);
+    group.writeEntry(OPTIONWHITEBALANCEENTRY,         (int)whiteBalance);
+    group.writeEntry(OPTIONCUSTOMWHITEBALANCEENTRY,   customWhiteBalance);
+    group.writeEntry(OPTIONCUSTOMWBGREENENTRY,        customWhiteBalanceGreen);
+    group.writeEntry(OPTIONFOURCOLORRGBENTRY,         RGBInterpolate4Colors);
+    group.writeEntry(OPTIONUNCLIPCOLORSENTRY,         unclipColors);
+    group.writeEntry(OPTIONDONTSTRETCHPIXELSENTRY,    DontStretchPixels);
+    group.writeEntry(OPTIONNOISEREDUCTIONENTRY,       enableNoiseReduction);
+    group.writeEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY, brightness);
+    group.writeEntry(OPTIONUSEBLACKPOINTENTRY,        enableBlackPoint);
+    group.writeEntry(OPTIONBLACKPOINTENTRY,           blackPoint);
+    group.writeEntry(OPTIONUSEWHITEPOINTENTRY,        enableWhitePoint);
+    group.writeEntry(OPTIONWHITEPOINTENTRY,           whitePoint);
+    group.writeEntry(OPTIONMEDIANFILTERPASSESENTRY,   medianFilterPasses);
+    group.writeEntry(OPTIONNRTHRESHOLDENTRY,          NRThreshold);
+    group.writeEntry(OPTIONUSECACORRECTIONENTRY,      enableCACorrection);
+    group.writeEntry(OPTIONCAREDMULTIPLIERENTRY,      caMultiplier[0]);
+    group.writeEntry(OPTIONCABLUEMULTIPLIERENTRY,     caMultiplier[1]);
+    group.writeEntry(OPTIONDECODINGQUALITYENTRY,      (int)RAWQuality);
+    group.writeEntry(OPTIONOUTPUTCOLORSPACEENTRY,     (int)outputColorSpace);
+    group.writeEntry(OPTIONAUTOBRIGHTNESSENTRY,       autoBrightness);
 }
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)

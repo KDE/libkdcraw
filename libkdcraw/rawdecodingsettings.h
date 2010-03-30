@@ -42,8 +42,6 @@
 namespace KDcrawIface
 {
 
-class RawDecodingSettingsPriv;
-
 class LIBKDCRAW_EXPORT RawDecodingSettings
 {
 
@@ -141,6 +139,11 @@ public:
     void writeSettings(KConfigGroup& group);
 
 public:
+
+    /** If true, images with overblown channels are processed much more accurate, 
+        without 'pink clouds' (and blue highlights under tungsteen lamps).
+     */
+    bool fixColorsHighlights;
 
     /** If false, use a fixed white level, ignoring the image histogram.
     */
@@ -259,10 +262,6 @@ public:
     /** Rectangle used to calculate the white balance by averaging the region of image.
     */
     QRect whiteBalanceArea;
-
-private:
-
-    RawDecodingSettingsPriv* const d;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

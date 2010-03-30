@@ -191,7 +191,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
         return false;
     }
 
-    libraw_processed_image_t *halfImg = raw.dcraw_make_mem_image(&ret);
+    libraw_processed_image_t* halfImg = raw.dcraw_make_mem_image(&ret);
     if(!halfImg)
     {
         kDebug(51002) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
@@ -660,6 +660,9 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     }
     d->setProgress(0.25);
 
+    if (m_rawDecodingSettings.fixColorsHighlights)
+        raw.adjust_maximum();
+
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
@@ -675,7 +678,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     }
     d->setProgress(0.3);
 
-    libraw_processed_image_t *img = raw.dcraw_make_mem_image(&ret);
+    libraw_processed_image_t* img = raw.dcraw_make_mem_image(&ret);
     if(!img)
     {
         kDebug(51002) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
@@ -709,7 +712,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     return true;
 }
 
-const char *KDcraw::rawFiles()
+const char* KDcraw::rawFiles()
 {
     return raw_file_extentions;
 }

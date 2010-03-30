@@ -98,6 +98,7 @@ public:
         outIccUrlEdit                  = 0;
         inputColorSpaceLabel           = 0;
         inputColorSpaceComboBox        = 0;
+        fixColorsHighlights            = 0;
     }
 
     QWidget*         demosaicingSettings;
@@ -127,6 +128,7 @@ public:
     QCheckBox*       dontStretchPixelsCheckBox;
     QCheckBox*       enableNoiseReduction;
     QCheckBox*       enableCACorrection;
+    QCheckBox*       fixColorsHighlights;
 
     KUrlRequester*   inIccUrlEdit;
     KUrlRequester*   outIccUrlEdit;
@@ -328,6 +330,11 @@ void DcrawSettingsWidget::setup(int advSettings)
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
 
+    d->fixColorsHighlights = new QCheckBox(i18n("Correct false colors in highlights"), d->whiteBalanceSettings);
+    d->fixColorsHighlights->setWhatsThis(i18n("<p>If enabled, images with overblown channels are processed much "
+                                              "more accurate, without 'pink clouds' (and blue highlights under "
+                                              "tungsteen lamps)."));
+
     d->autoBrightnessBox = new QCheckBox(i18n("Auto Brightness"), d->whiteBalanceSettings);
     d->autoBrightnessBox->setWhatsThis(i18n("<p>If disable, use a fixed white level "
                                             "and ignore the image histogram to adjust brightness."));
@@ -389,13 +396,14 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->unclipColorComboBox,            3, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->reconstructLabel,               4, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->reconstructSpinBox,             4, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              5, 0, 1, 2);
-    whiteBalanceLayout->addWidget(d->brightnessLabel,                6, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              6, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             7, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              7, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             8, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              8, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->fixColorsHighlights,            5, 0, 1, 2);
+    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              6, 0, 1, 2);
+    whiteBalanceLayout->addWidget(d->brightnessLabel,                7, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              7, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             8, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              8, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             9, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              9, 1, 1, 2);
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
@@ -587,6 +595,9 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
+    connect(d->fixColorsHighlights, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
     connect(d->autoBrightnessBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -772,6 +783,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->customWhiteBalanceGreenSpinBox->setValue(settings.customWhiteBalanceGreen);
     d->fourColorCheckBox->setChecked(settings.RGBInterpolate4Colors);
     d->autoBrightnessBox->setChecked(settings.autoBrightness);
+    d->fixColorsHighlights->setChecked(settings.fixColorsHighlights);
 
     switch(settings.unclipColors)
     {
@@ -857,7 +869,8 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.customWhiteBalanceGreen = d->customWhiteBalanceGreenSpinBox->value();
     prm.RGBInterpolate4Colors   = d->fourColorCheckBox->isChecked();
     prm.autoBrightness          = d->autoBrightnessBox->isChecked();
-    
+    prm.fixColorsHighlights     = d->fixColorsHighlights->isChecked();
+
     switch(d->unclipColorComboBox->currentIndex())
     {
         case 0:
@@ -872,8 +885,8 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
         default:         // Reconstruct Highlight method
             prm.unclipColors =  d->reconstructSpinBox->value()+3;
             break;
-    }    
-    
+    }
+
     prm.DontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
     prm.brightness        = d->brightnessSpinBox->value();
     prm.enableBlackPoint  = d->blackPointCheckBox->isChecked();
@@ -906,7 +919,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.caMultiplier[1]      = d->caBlueMultSpinBox->value();
     prm.inputProfile         = d->inIccUrlEdit->url().toLocalFile();
     prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
-    
+
     return prm;
 }
 
