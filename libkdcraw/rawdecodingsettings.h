@@ -160,7 +160,7 @@ public:
         correct aspect ratio. In any case, this option guarantees that each 
         output pixel corresponds to one RAW pixel.
     */
-    bool dontStretchPixels;
+    bool DontStretchPixels;
 
     /** Unclip Highlight color level:
         0   = Clip all highlights to solid white.

@@ -840,7 +840,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     }
     slotUnclipColorActivated(d->unclipColorComboBox->currentIndex());
 
-    d->dontStretchPixelsCheckBox->setChecked(settings.dontStretchPixels);
+    d->dontStretchPixelsCheckBox->setChecked(settings.DontStretchPixels);
     d->brightnessSpinBox->setValue(settings.brightness);
     d->blackPointCheckBox->setChecked(settings.enableBlackPoint);
     d->blackPointSpinBox->setEnabled(settings.enableBlackPoint);
@@ -923,7 +923,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }    
     
-    prm.dontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
+    prm.DontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
     prm.brightness        = d->brightnessSpinBox->value();
     prm.enableBlackPoint  = d->blackPointCheckBox->isChecked();
     prm.blackPoint        = d->blackPointSpinBox->value();
@@ -969,7 +969,7 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
     group.writeEntry(d->optionCustomWBGreenEntry,        prm.customWhiteBalanceGreen);
     group.writeEntry(d->optionFourColorRGBEntry,         prm.RGBInterpolate4Colors);
     group.writeEntry(d->optionUnclipColorsEntry,         prm.unclipColors);
-    group.writeEntry(d->optionDontStretchPixelsEntry,    prm.dontStretchPixels);
+    group.writeEntry(d->optionDontStretchPixelsEntry,    prm.DontStretchPixels);
     group.writeEntry(d->optionNoiseReductionEntry,       prm.enableNoiseReduction);
     group.writeEntry(d->optionBrightnessMultiplierEntry, prm.brightness);
     group.writeEntry(d->optionUseBlackPointEntry,        prm.enableBlackPoint);
@@ -997,7 +997,7 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
     prm.customWhiteBalanceGreen = group.readEntry(d->optionCustomWBGreenEntry, defaultPrm.customWhiteBalanceGreen);
     prm.RGBInterpolate4Colors   = group.readEntry(d->optionFourColorRGBEntry, defaultPrm.RGBInterpolate4Colors);
     prm.unclipColors            = group.readEntry(d->optionUnclipColorsEntry, defaultPrm.unclipColors);
-    prm.dontStretchPixels       = group.readEntry(d->optionDontStretchPixelsEntry, defaultPrm.dontStretchPixels);
+    prm.DontStretchPixels       = group.readEntry(d->optionDontStretchPixelsEntry, defaultPrm.DontStretchPixels);
     prm.enableNoiseReduction    = group.readEntry(d->optionNoiseReductionEntry, defaultPrm.enableNoiseReduction);
     prm.brightness              = group.readEntry(d->optionBrightnessMultiplierEntry, defaultPrm.brightness);
     prm.enableBlackPoint        = group.readEntry(d->optionUseBlackPointEntry, defaultPrm.enableBlackPoint);
