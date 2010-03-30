@@ -31,12 +31,18 @@
 #include <QtCore/QString>
 #include <QtCore/QDebug>
 
+// KDE includes
+
+#include <kconfiggroup.h>
+
 // Local includes
 
 #include "libkdcraw_export.h"
 
 namespace KDcrawIface
 {
+
+class RawDecodingSettingsPriv;
 
 class LIBKDCRAW_EXPORT RawDecodingSettings
 {
@@ -118,6 +124,9 @@ public:
     /** Standard constructor with default settings */
     RawDecodingSettings();
 
+    /** Equivalent to the copy constructor */
+    RawDecodingSettings& operator=(const RawDecodingSettings& prm);  
+    
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const;
 
@@ -126,6 +135,10 @@ public:
 
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
     void optimizeTimeLoading();
+
+    /** Methods to read/write settings from/to a config file */
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 public:
 
@@ -246,6 +259,10 @@ public:
     /** Rectangle used to calculate the white balance by averaging the region of image.
     */
     QRect whiteBalanceArea;
+    
+private:
+
+    RawDecodingSettingsPriv* d;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

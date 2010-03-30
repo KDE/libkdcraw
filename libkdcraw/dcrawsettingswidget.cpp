@@ -54,32 +54,8 @@ class DcrawSettingsWidgetPriv
 {
 public:
 
-    DcrawSettingsWidgetPriv() :
-        optionDecodeSixteenBitEntry("SixteenBitsImage"),
-        optionWhiteBalanceEntry("White Balance"),
-        optionCustomWhiteBalanceEntry("Custom White Balance"),
-        optionCustomWBGreenEntry("Custom White Balance Green"),
-        optionFourColorRGBEntry("Four Color RGB"),
-        optionUnclipColorsEntry("Unclip Color"),
-        optionDontStretchPixelsEntry("Dont Stretch Pixels"),
-        optionNoiseReductionEntry("Use Noise Reduction"),
-        optionMedianFilterPassesEntry("Median Filter Passes"),
-        optionNRThresholdEntry("NR Threshold"),
-        optionUseCACorrectionEntry("EnableCACorrection"),
-        optionCARedMultiplierEntry("caRedMultiplier"),
-        optionCABlueMultiplierEntry("caBlueMultiplier"),
-        optionAutoBrightnessEntry("AutoBrightness"),
-        optionDecodingQualityEntry("Decoding Quality"),
-        optionInputColorSpaceEntry("Input Color Space"),
-        optionOutputColorSpaceEntry("Output Color Space"),
-        optionInputColorProfileEntry("Input Color Profile"),
-        optionOutputColorProfileEntry("Output Color Profile"),
-        optionBrightnessMultiplierEntry("Brightness Multiplier"),
-        optionUseBlackPointEntry("Use Black Point"),
-        optionBlackPointEntry("Black Point"),
-        optionUseWhitePointEntry("Use White Point"),       
-        optionWhitePointEntry("White Point")
-{
+    DcrawSettingsWidgetPriv()
+    {
         autoBrightnessBox              = 0;
         sixteenBitsImage               = 0;
         fourColorCheckBox              = 0;
@@ -123,31 +99,6 @@ public:
         inputColorSpaceLabel           = 0;
         inputColorSpaceComboBox        = 0;
     }
-
-    const QString optionDecodeSixteenBitEntry;
-    const QString optionWhiteBalanceEntry;
-    const QString optionCustomWhiteBalanceEntry;
-    const QString optionCustomWBGreenEntry;
-    const QString optionFourColorRGBEntry;
-    const QString optionUnclipColorsEntry;
-    const QString optionDontStretchPixelsEntry;
-    const QString optionNoiseReductionEntry;
-    const QString optionMedianFilterPassesEntry;
-    const QString optionNRThresholdEntry;
-    const QString optionUseCACorrectionEntry;
-    const QString optionCARedMultiplierEntry;
-    const QString optionCABlueMultiplierEntry;
-    const QString optionAutoBrightnessEntry;
-    const QString optionDecodingQualityEntry;
-    const QString optionInputColorSpaceEntry;
-    const QString optionOutputColorSpaceEntry;
-    const QString optionInputColorProfileEntry;
-    const QString optionOutputColorProfileEntry;
-    const QString optionBrightnessMultiplierEntry;
-    const QString optionUseBlackPointEntry;
-    const QString optionBlackPointEntry;
-    const QString optionUseWhitePointEntry;
-    const QString optionWhitePointEntry;
 
     QWidget*         demosaicingSettings;
     QWidget*         whiteBalanceSettings;
@@ -962,57 +913,13 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
 void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm = settings();
-    
-    group.writeEntry(d->optionDecodeSixteenBitEntry,     prm.sixteenBitsImage);
-    group.writeEntry(d->optionWhiteBalanceEntry,         (int)prm.whiteBalance);
-    group.writeEntry(d->optionCustomWhiteBalanceEntry,   prm.customWhiteBalance);
-    group.writeEntry(d->optionCustomWBGreenEntry,        prm.customWhiteBalanceGreen);
-    group.writeEntry(d->optionFourColorRGBEntry,         prm.RGBInterpolate4Colors);
-    group.writeEntry(d->optionUnclipColorsEntry,         prm.unclipColors);
-    group.writeEntry(d->optionDontStretchPixelsEntry,    prm.DontStretchPixels);
-    group.writeEntry(d->optionNoiseReductionEntry,       prm.enableNoiseReduction);
-    group.writeEntry(d->optionBrightnessMultiplierEntry, prm.brightness);
-    group.writeEntry(d->optionUseBlackPointEntry,        prm.enableBlackPoint);
-    group.writeEntry(d->optionBlackPointEntry,           prm.blackPoint);
-    group.writeEntry(d->optionUseWhitePointEntry,        prm.enableWhitePoint);
-    group.writeEntry(d->optionWhitePointEntry,           prm.whitePoint);
-    group.writeEntry(d->optionMedianFilterPassesEntry,   prm.medianFilterPasses);
-    group.writeEntry(d->optionNRThresholdEntry,          prm.NRThreshold);
-    group.writeEntry(d->optionUseCACorrectionEntry,      prm.enableCACorrection);
-    group.writeEntry(d->optionCARedMultiplierEntry,      prm.caMultiplier[0]);
-    group.writeEntry(d->optionCABlueMultiplierEntry,     prm.caMultiplier[1]);
-    group.writeEntry(d->optionDecodingQualityEntry,      (int)prm.RAWQuality);
-    group.writeEntry(d->optionOutputColorSpaceEntry,     (int)prm.outputColorSpace);
-    group.writeEntry(d->optionAutoBrightnessEntry,       prm.autoBrightness);
+    prm.writeSettings(group);
 }
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm;
-    RawDecodingSettings defaultPrm;
-    
-    prm.sixteenBitsImage        = group.readEntry(d->optionDecodeSixteenBitEntry, defaultPrm.sixteenBitsImage);
-    prm.whiteBalance            = (RawDecodingSettings::WhiteBalance)group.readEntry(d->optionWhiteBalanceEntry, (int)defaultPrm.whiteBalance);
-    prm.customWhiteBalance      = group.readEntry(d->optionCustomWhiteBalanceEntry, defaultPrm.customWhiteBalance);
-    prm.customWhiteBalanceGreen = group.readEntry(d->optionCustomWBGreenEntry, defaultPrm.customWhiteBalanceGreen);
-    prm.RGBInterpolate4Colors   = group.readEntry(d->optionFourColorRGBEntry, defaultPrm.RGBInterpolate4Colors);
-    prm.unclipColors            = group.readEntry(d->optionUnclipColorsEntry, defaultPrm.unclipColors);
-    prm.DontStretchPixels       = group.readEntry(d->optionDontStretchPixelsEntry, defaultPrm.DontStretchPixels);
-    prm.enableNoiseReduction    = group.readEntry(d->optionNoiseReductionEntry, defaultPrm.enableNoiseReduction);
-    prm.brightness              = group.readEntry(d->optionBrightnessMultiplierEntry, defaultPrm.brightness);
-    prm.enableBlackPoint        = group.readEntry(d->optionUseBlackPointEntry, defaultPrm.enableBlackPoint);
-    prm.blackPoint              = group.readEntry(d->optionBlackPointEntry, defaultPrm.blackPoint);
-    prm.enableWhitePoint        = group.readEntry(d->optionUseWhitePointEntry, defaultPrm.enableWhitePoint);
-    prm.whitePoint              = group.readEntry(d->optionWhitePointEntry, defaultPrm.whitePoint);
-    prm.medianFilterPasses      = group.readEntry(d->optionMedianFilterPassesEntry, defaultPrm.medianFilterPasses);
-    prm.NRThreshold             = group.readEntry(d->optionNRThresholdEntry, defaultPrm.NRThreshold);
-    prm.enableCACorrection      = group.readEntry(d->optionUseCACorrectionEntry, defaultPrm.enableCACorrection);
-    prm.caMultiplier[0]         = group.readEntry(d->optionCARedMultiplierEntry, defaultPrm.caMultiplier[0]);
-    prm.caMultiplier[1]         = group.readEntry(d->optionCABlueMultiplierEntry, defaultPrm.caMultiplier[1]);
-    prm.RAWQuality              = (RawDecodingSettings::DecodingQuality)group.readEntry(d->optionDecodingQualityEntry, (int)defaultPrm.RAWQuality);
-    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)group.readEntry(d->optionOutputColorSpaceEntry, (int)defaultPrm.outputColorSpace);
-    prm.autoBrightness          = group.readEntry(d->optionAutoBrightnessEntry, defaultPrm.autoBrightness);
-            
+    prm.readSettings(group);
     setSettings(prm);
 }
 
