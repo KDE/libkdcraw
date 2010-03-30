@@ -137,8 +137,8 @@ public:
     void optimizeTimeLoading();
 
     /** Methods to read/write settings from/to a config file */
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    virtual void readSettings(KConfigGroup& group);
+    virtual void writeSettings(KConfigGroup& group);
 
 public:
 
