@@ -914,6 +914,7 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm = settings();
     prm.writeSettings(group);
+    RExpanderBox::writeSettings();
 }
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
@@ -921,6 +922,7 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
     RawDecodingSettings prm;
     prm.readSettings(group);
     setSettings(prm);
+    RExpanderBox::readSettings();
 }
 
 // -- DEPRECATED METHODS -------------------------------------------------------------
