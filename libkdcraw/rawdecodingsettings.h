@@ -126,7 +126,7 @@ public:
 
     /** Equivalent to the copy constructor */
     RawDecodingSettings& operator=(const RawDecodingSettings& prm);  
-    
+
     /** Compare for equality */
     bool operator==(const RawDecodingSettings &o) const;
 
@@ -259,7 +259,7 @@ public:
     /** Rectangle used to calculate the white balance by averaging the region of image.
     */
     QRect whiteBalanceArea;
-    
+
 private:
 
     RawDecodingSettingsPriv* d;

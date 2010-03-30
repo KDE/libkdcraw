@@ -56,7 +56,7 @@ public:
         optionBrightnessMultiplierEntry("Brightness Multiplier"),
         optionUseBlackPointEntry("Use Black Point"),
         optionBlackPointEntry("Black Point"),
-        optionUseWhitePointEntry("Use White Point"),       
+        optionUseWhitePointEntry("Use White Point"),
         optionWhitePointEntry("White Point")
     {}
 
@@ -84,8 +84,8 @@ public:
     const QString optionBlackPointEntry;
     const QString optionUseWhitePointEntry;
     const QString optionWhitePointEntry;
-};  
-  
+};
+
 RawDecodingSettings::RawDecodingSettings() :
     d(new RawDecodingSettingsPriv)
 {
@@ -137,7 +137,7 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& p
     return *this;
 }
 
-bool RawDecodingSettings::operator==(const RawDecodingSettings &o) const
+bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
 {
     return autoBrightness          == o.autoBrightness
         && sixteenBitsImage        == o.sixteenBitsImage
