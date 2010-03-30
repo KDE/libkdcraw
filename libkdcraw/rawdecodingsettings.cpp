@@ -131,9 +131,35 @@ RawDecodingSettings::~RawDecodingSettings()
     delete d;
 }
 
-RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& prm)
+RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o)
 {
-    d = prm.d;
+    autoBrightness          = o.autoBrightness;
+    sixteenBitsImage        = o.sixteenBitsImage;
+    brightness              = o.brightness;
+    RAWQuality              = o.RAWQuality;
+    inputColorSpace         = o.inputColorSpace;
+    outputColorSpace        = o.outputColorSpace;
+    RGBInterpolate4Colors   = o.RGBInterpolate4Colors;
+    DontStretchPixels       = o.DontStretchPixels;
+    unclipColors            = o.unclipColors;
+    whiteBalance            = o.whiteBalance;
+    customWhiteBalance      = o.customWhiteBalance;
+    customWhiteBalanceGreen = o.customWhiteBalanceGreen;
+    halfSizeColorImage      = o.halfSizeColorImage;
+    enableBlackPoint        = o.enableBlackPoint;
+    blackPoint              = o.blackPoint;
+    enableWhitePoint        = o.enableWhitePoint;
+    whitePoint              = o.whitePoint;
+    enableNoiseReduction    = o.enableNoiseReduction;
+    NRThreshold             = o.NRThreshold;
+    enableCACorrection      = o.enableCACorrection;
+    caMultiplier[0]         = o.caMultiplier[0];
+    caMultiplier[1]         = o.caMultiplier[1];
+    medianFilterPasses      = o.medianFilterPasses;
+    inputProfile            = o.inputProfile;
+    outputProfile           = o.outputProfile;
+    deadPixelMap            = o.deadPixelMap;
+    whiteBalanceArea        = o.whiteBalanceArea;
     return *this;
 }
 

@@ -137,8 +137,8 @@ public:
     void optimizeTimeLoading();
 
     /** Methods to read/write settings from/to a config file */
-    virtual void readSettings(KConfigGroup& group);
-    virtual void writeSettings(KConfigGroup& group);
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
 
 public:
 
@@ -262,7 +262,7 @@ public:
 
 private:
 
-    RawDecodingSettingsPriv* d;
+    RawDecodingSettingsPriv* const d;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
