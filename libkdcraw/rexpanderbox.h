@@ -230,7 +230,7 @@ public:
     int  count() const;
 
     RLabelExpander* widget(int index) const;
-    int indexOf(RLabelExpander *widget) const;
+    int indexOf(RLabelExpander* widget) const;
 
     void readSettings();
     void writeSettings();
