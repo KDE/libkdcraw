@@ -89,17 +89,17 @@ public:
      */
     KDE_DEPRECATED void setDefaultSettings();
     void resetToDefault();
-    
+
     void setSettings(const RawDecodingSettings& settings);
     RawDecodingSettings settings() const;
-    
+
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
     /** All methods below are deprecated and will be remove for 1.1.0. 
         Use settings() and setSettings() instead.
      */
-    
+
     KDE_DEPRECATED bool   sixteenBits();
     KDE_DEPRECATED int    customWhiteBalance();
     KDE_DEPRECATED double customWhiteBalanceGreen();
