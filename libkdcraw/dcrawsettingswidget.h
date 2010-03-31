@@ -93,6 +93,10 @@ public:
     void setSettings(const RawDecodingSettings& settings);
     RawDecodingSettings settings() const;
 
+    /** deprecated. use KConfigGroup based methods instead.
+     */
+    KDE_DEPRECATED void readSettings() { RExpanderBox::readSettings();  };
+    KDE_DEPRECATED void writeSettings(){ RExpanderBox::writeSettings(); };
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
