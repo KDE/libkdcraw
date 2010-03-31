@@ -6,8 +6,8 @@
  * Date        : 2008-03-14
  * Description : A widget to host settings as expander box
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,13 +47,13 @@
 namespace KDcrawIface
 {
 
-RClickLabel::RClickLabel(QWidget *parent)
+RClickLabel::RClickLabel(QWidget* parent)
            : QLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
-RClickLabel::RClickLabel(const QString& text, QWidget *parent)
+RClickLabel::RClickLabel(const QString& text, QWidget* parent)
            : QLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
@@ -71,7 +71,7 @@ void RClickLabel::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void RClickLabel::keyPressEvent(QKeyEvent *e)
+void RClickLabel::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
     {
@@ -89,13 +89,13 @@ void RClickLabel::keyPressEvent(QKeyEvent *e)
 
 // ------------------------------------------------------------------------
 
-RSqueezedClickLabel::RSqueezedClickLabel(QWidget *parent)
+RSqueezedClickLabel::RSqueezedClickLabel(QWidget* parent)
                    : KSqueezedTextLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
-RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget *parent)
+RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget* parent)
                    : KSqueezedTextLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
@@ -113,7 +113,7 @@ void RSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
-void RSqueezedClickLabel::keyPressEvent(QKeyEvent *e)
+void RSqueezedClickLabel::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
     {
@@ -131,7 +131,7 @@ void RSqueezedClickLabel::keyPressEvent(QKeyEvent *e)
 
 // ------------------------------------------------------------------------
 
-RArrowClickLabel::RArrowClickLabel(QWidget *parent)
+RArrowClickLabel::RArrowClickLabel(QWidget* parent)
                 : QWidget(parent), m_arrowType(Qt::DownArrow)
 {
     setCursor(Qt::PointingHandCursor);
@@ -264,18 +264,18 @@ public:
 
     bool              expandByDefault;
 
-    QLabel           *pixmapLabel;
-    QWidget          *containerWidget;
-    QGridLayout      *grid;
+    QLabel*           pixmapLabel;
+    QWidget*          containerWidget;
+    QGridLayout*      grid;
 
-    KSeparator       *line;
-    QWidget          *hbox;
+    KSeparator*       line;
+    QWidget*          hbox;
 
-    RArrowClickLabel *arrow;
-    RClickLabel      *clickLabel;
+    RArrowClickLabel* arrow;
+    RClickLabel*      clickLabel;
 };
 
-RLabelExpander::RLabelExpander(QWidget *parent)
+RLabelExpander::RLabelExpander(QWidget* parent)
               : QWidget(parent), d(new RLabelExpanderPriv)
 {
     d->grid        = new QGridLayout(this);
@@ -395,7 +395,7 @@ void RLabelExpander::slotToggleContainer()
         setExpanded(!d->containerWidget->isVisible());
 }
 
-bool RLabelExpander::eventFilter(QObject *obj, QEvent *ev)
+bool RLabelExpander::eventFilter(QObject* obj, QEvent* ev)
 {
     if ( obj == d->pixmapLabel)
     {
@@ -429,7 +429,7 @@ public:
         vbox   = 0;
     }
 
-    void createItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+    void createItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
                     const QString& objName, bool expandBydefault)
     {
         RLabelExpander *exp = new RLabelExpander(parent->viewport());
@@ -457,17 +457,17 @@ public:
 
     QList<RLabelExpander*>  wList;
 
-    QVBoxLayout            *vbox;
+    QVBoxLayout*            vbox;
 
-    RExpanderBox           *parent;
+    RExpanderBox*           parent;
 };
 
-RExpanderBox::RExpanderBox(QWidget *parent)
+RExpanderBox::RExpanderBox(QWidget* parent)
             : QScrollArea(parent), d(new RExpanderBoxPriv(this))
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
-    QWidget *main = new QWidget(viewport());
+    QWidget* main = new QWidget(viewport());
     d->vbox       = new QVBoxLayout(main);
     d->vbox->setMargin(0);
     d->vbox->setSpacing(KDialog::spacingHint());
@@ -485,13 +485,13 @@ RExpanderBox::~RExpanderBox()
     delete d;
 }
 
-void RExpanderBox::addItem(QWidget *w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::addItem(QWidget* w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
     d->createItem(-1, w, pix, txt, objName, expandBydefault);
 }
 
-void RExpanderBox::addItem(QWidget *w, const QString& txt,
+void RExpanderBox::addItem(QWidget* w, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
     addItem(w, QPixmap(), txt, objName, expandBydefault);
@@ -502,7 +502,7 @@ void RExpanderBox::addStretch()
     d->vbox->addStretch(10);
 }
 
-void RExpanderBox::insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::insertItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
     d->createItem(index, w, pix, txt, objName, expandBydefault);
@@ -518,7 +518,7 @@ void RExpanderBox::slotItemExpanded(bool b)
     }
 }
 
-void RExpanderBox::insertItem(int index, QWidget *w, const QString& txt,
+void RExpanderBox::insertItem(int index, QWidget* w, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
     insertItem(index, w, QPixmap(), txt, objName, expandBydefault);
@@ -596,7 +596,7 @@ RLabelExpander* RExpanderBox::widget(int index) const
     return d->wList[index];
 }
 
-int RExpanderBox::indexOf(RLabelExpander *widget) const
+int RExpanderBox::indexOf(RLabelExpander* widget) const
 {
     for (int i = 0 ; i < count(); ++i)
     {

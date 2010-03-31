@@ -6,8 +6,8 @@
  * Date        : 2008-03-14
  * Description : A widget to host settings as expander box
  *
- * Copyright (C) 2008-2009 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -50,8 +50,8 @@ class LIBKDCRAW_EXPORT RClickLabel : public QLabel
 
 public:
 
-    RClickLabel(QWidget *parent = 0);
-    RClickLabel(const QString& text, QWidget *parent = 0);
+    RClickLabel(QWidget* parent = 0);
+    RClickLabel(const QString& text, QWidget* parent = 0);
     ~RClickLabel(){};
 
 Q_SIGNALS:
@@ -75,8 +75,8 @@ class LIBKDCRAW_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
 
 public:
 
-    RSqueezedClickLabel(QWidget *parent = 0);
-    RSqueezedClickLabel(const QString& text, QWidget *parent = 0);
+    RSqueezedClickLabel(QWidget* parent = 0);
+    RSqueezedClickLabel(const QString& text, QWidget* parent = 0);
     ~RSqueezedClickLabel(){};
 
 Q_SIGNALS:
@@ -98,7 +98,7 @@ class LIBKDCRAW_EXPORT RArrowClickLabel : public QWidget
 
 public:
 
-    RArrowClickLabel(QWidget *parent = 0);
+    RArrowClickLabel(QWidget* parent = 0);
     ~RArrowClickLabel(){};
 
     void setArrowType(Qt::ArrowType arrowType);
@@ -132,7 +132,7 @@ class LIBKDCRAW_EXPORT RLabelExpander : public QWidget
 
 public:
 
-    RLabelExpander(QWidget *parent = 0);
+    RLabelExpander(QWidget* parent = 0);
     ~RLabelExpander();
 
     void setLineVisible(bool b);
@@ -163,7 +163,7 @@ private Q_SLOTS:
 
 private:
 
-    bool eventFilter(QObject *obj, QEvent *ev);
+    bool eventFilter(QObject* obj, QEvent* ev);
 
 private:
 
@@ -180,7 +180,7 @@ class LIBKDCRAW_EXPORT RExpanderBox : public QScrollArea
 
 public:
 
-    RExpanderBox(QWidget *parent = 0);
+    RExpanderBox(QWidget* parent = 0);
     ~RExpanderBox();
 
     /** Add RLabelExpander item at end of box layout with these settings :
@@ -190,9 +190,9 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void addItem(QWidget *w, const QPixmap& pix, const QString& txt,
+    void addItem(QWidget* w, const QPixmap& pix, const QString& txt,
                  const QString& objName, bool expandBydefault);
-    void addItem(QWidget *w, const QString& txt,
+    void addItem(QWidget* w, const QString& txt,
                  const QString& objName, bool expandBydefault);
 
     /** Insert RLabelExpander item at box layout index with these settings :
@@ -202,9 +202,9 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void insertItem(int index, QWidget *w, const QPixmap& pix, const QString& txt,
+    void insertItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
                     const QString& objName, bool expandBydefault);
-    void insertItem(int index, QWidget *w, const QString& txt,
+    void insertItem(int index, QWidget* w, const QString& txt,
                     const QString& objName, bool expandBydefault);
 
     void removeItem(int index);
