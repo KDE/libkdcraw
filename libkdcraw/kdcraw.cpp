@@ -629,6 +629,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 
     args.append(filePath);
     kDebug(51002) << "LibRaw: dcraw emulation: " << args << endl;
+    kDebug(51002) << "LibRaw highlights adjustements : " << m_rawDecodingSettings.fixColorsHighlights << endl;
 
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
@@ -659,6 +660,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         return false;
     }
     d->setProgress(0.25);
+
 
     if (m_rawDecodingSettings.fixColorsHighlights)
     {
