@@ -24,7 +24,7 @@
 
 #include "dcrawsettingswidget.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QCheckBox>
 #include <QLabel>
@@ -32,7 +32,7 @@
 #include <QWhatsThis>
 #include <QToolTip>
 
-// KDE includes.
+// KDE includes
 
 #include <kapplication.h>
 #include <kdialog.h>
@@ -40,7 +40,7 @@
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 
-// Local includes.
+// Local includes
 
 #include "kdcraw.h"
 #include "rnuminput.h"
@@ -760,7 +760,7 @@ bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
 void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
 {
     d->sixteenBitsImage->setChecked(settings.sixteenBitsImage);
-  
+
     switch(settings.whiteBalance)
     {
         case RawDecodingSettings::CAMERA:
