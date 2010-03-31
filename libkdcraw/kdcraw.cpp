@@ -661,7 +661,10 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     d->setProgress(0.25);
 
     if (m_rawDecodingSettings.fixColorsHighlights)
+    {
+        kDebug(51002) << "Applying LibRaw highlights adjustements" << endl;
         raw.adjust_maximum();
+    }
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
