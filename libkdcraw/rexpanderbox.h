@@ -135,6 +135,12 @@ public:
     RLabelExpander(QWidget* parent = 0);
     ~RLabelExpander();
 
+    void setCheckBoxVisible(bool b);
+    bool checkBoxIsVisible() const;
+
+    void setChecked(bool b);
+    bool isChecked() const;
+
     void setLineVisible(bool b);
     bool lineIsVisible() const;
 
@@ -155,7 +161,8 @@ public:
 
 Q_SIGNALS:
 
-    void signalExpanded(bool b);
+    void signalExpanded(bool);
+    void signalToggled(bool);
 
 private Q_SLOTS:
 
@@ -209,6 +216,12 @@ public:
 
     void removeItem(int index);
 
+    void setCheckBoxVisible(int index, bool b);
+    bool checkBoxIsVisible(int index) const;
+
+    void setChecked(int index, bool b);
+    bool isChecked(int index) const;
+
     void setItemText(int index, const QString& txt);
     QString itemText (int index) const;
 
@@ -238,10 +251,12 @@ public:
 Q_SIGNALS:
 
     void signalItemExpanded(int index, bool b);
+    void signalItemToggled(int index, bool b);
 
 private Q_SLOTS:
 
     void slotItemExpanded(bool b);
+    void slotItemToggled(bool b);
 
 private:
 

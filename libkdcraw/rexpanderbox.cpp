@@ -34,6 +34,7 @@
 #include <QStyleOption>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -259,11 +260,13 @@ public:
         arrow           = 0;
         line            = 0;
         hbox            = 0;
+        checkBox        = 0;
         expandByDefault = true;
     }
 
     bool              expandByDefault;
 
+    QCheckBox*        checkBox;
     QLabel*           pixmapLabel;
     QWidget*          containerWidget;
     QGridLayout*      grid;
@@ -282,11 +285,13 @@ RLabelExpander::RLabelExpander(QWidget* parent)
     d->line        = new KSeparator(Qt::Horizontal, this);
     d->hbox        = new QWidget(this);
     d->arrow       = new RArrowClickLabel(d->hbox);
+    d->checkBox    = new QCheckBox(d->hbox);
     d->pixmapLabel = new QLabel(d->hbox);
     d->clickLabel  = new RClickLabel(d->hbox);
 
-    QHBoxLayout *hlay = new QHBoxLayout(d->hbox);
+    QHBoxLayout* hlay = new QHBoxLayout(d->hbox);
     hlay->addWidget(d->arrow);
+    hlay->addWidget(d->checkBox);
     hlay->addWidget(d->pixmapLabel);
     hlay->addWidget(d->clickLabel, 10);
     hlay->setMargin(0);
@@ -296,6 +301,7 @@ RLabelExpander::RLabelExpander(QWidget* parent)
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
 
     d->hbox->setCursor(Qt::PointingHandCursor);
+    setCheckBoxVisible(false);
 
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
@@ -308,11 +314,34 @@ RLabelExpander::RLabelExpander(QWidget* parent)
 
     connect(d->clickLabel, SIGNAL(activated()),
             this, SLOT(slotToggleContainer()));
+
+    connect(d->checkBox, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalToggled(bool)));
 }
 
 RLabelExpander::~RLabelExpander()
 {
     delete d;
+}
+
+void RLabelExpander::setCheckBoxVisible(bool b)
+{
+    d->checkBox->setVisible(b);
+}
+
+bool RLabelExpander::checkBoxIsVisible() const
+{
+    return d->checkBox->isVisible();
+}
+
+void RLabelExpander::setChecked(bool b)
+{
+    d->checkBox->setChecked(b);
+}
+
+bool RLabelExpander::isChecked() const
+{
+    return d->checkBox->isChecked();
 }
 
 void RLabelExpander::setLineVisible(bool b)
@@ -453,6 +482,9 @@ public:
 
         parent->connect(exp, SIGNAL(signalExpanded(bool)),
                         parent, SLOT(slotItemExpanded(bool)));
+
+        parent->connect(exp, SIGNAL(signalToggled(bool)),
+                        parent, SLOT(slotItemToggled(bool)));
     }
 
     QList<RLabelExpander*> wList;
@@ -485,6 +517,30 @@ RExpanderBox::~RExpanderBox()
     delete d;
 }
 
+void RExpanderBox::setCheckBoxVisible(int index, bool b)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setCheckBoxVisible(b);
+}
+
+bool RExpanderBox::checkBoxIsVisible(int index) const
+{
+    if (index > d->wList.count() || index < 0) return false;
+    return d->wList[index]->checkBoxIsVisible();
+}
+
+void RExpanderBox::setChecked(int index, bool b)
+{
+    if (index > d->wList.count() || index < 0) return;
+    d->wList[index]->setChecked(b);
+}
+
+bool RExpanderBox::isChecked(int index) const
+{
+    if (index > d->wList.count() || index < 0) return false;
+    return d->wList[index]->isChecked();
+}
+
 void RExpanderBox::addItem(QWidget* w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
@@ -515,6 +571,16 @@ void RExpanderBox::slotItemExpanded(bool b)
     {
         int index = indexOf(exp);
         emit signalItemExpanded(index, b);
+    }
+}
+
+void RExpanderBox::slotItemToggled(bool b)
+{
+    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    if (exp)
+    {
+        int index = indexOf(exp);
+        emit signalItemToggled(index, b);
     }
 }
 
