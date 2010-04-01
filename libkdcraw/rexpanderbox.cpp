@@ -432,7 +432,7 @@ public:
     void createItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
                     const QString& objName, bool expandBydefault)
     {
-        RLabelExpander *exp = new RLabelExpander(parent->viewport());
+        RLabelExpander* exp = new RLabelExpander(parent->viewport());
         exp->setText(txt);
         exp->setIcon(pix);
         exp->setWidget(w);
@@ -455,11 +455,11 @@ public:
                         parent, SLOT(slotItemExpanded(bool)));
     }
 
-    QList<RLabelExpander*>  wList;
+    QList<RLabelExpander*> wList;
 
-    QVBoxLayout*            vbox;
+    QVBoxLayout*           vbox;
 
-    RExpanderBox*           parent;
+    RExpanderBox*          parent;
 };
 
 RExpanderBox::RExpanderBox(QWidget* parent)
