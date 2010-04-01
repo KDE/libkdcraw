@@ -332,8 +332,8 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->fixColorsHighlights = new QCheckBox(i18n("Correct false colors in highlights"), d->whiteBalanceSettings);
     d->fixColorsHighlights->setWhatsThis(i18n("<p>If enabled, images with overblown channels are processed much "
-                                              "more accurate, without 'pink clouds' (and blue highlights under "
-                                              "tungsteen lamps)."));
+                                              "more accurately, without 'pink clouds' (and blue highlights under "
+                                              "tungsten lamps)."));
 
     d->autoBrightnessBox = new QCheckBox(i18n("Auto Brightness"), d->whiteBalanceSettings);
     d->autoBrightnessBox->setWhatsThis(i18n("<p>If disable, use a fixed white level "
