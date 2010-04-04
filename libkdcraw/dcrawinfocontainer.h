@@ -88,6 +88,12 @@ public:
     /** Left margin of raw image. */
     unsigned int     leftMargin;
 
+    /** Right margin of raw image. */
+    unsigned int     rightMargin;
+
+    /** Bottom margin of raw image. */
+    unsigned int     bottomMargin;
+
     /** The raw image orientation */
     ImageOrientation orientation;
 

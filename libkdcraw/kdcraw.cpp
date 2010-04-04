@@ -249,7 +249,8 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 // ----------------------------------------------------------------------------------
 
-bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify)
+bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
+                            bool addMaskedBorders)
 {
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
@@ -292,6 +293,18 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         kDebug(51002) << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
         raw.recycle();
         return false;
+    }
+
+    if (addMaskedBorders)
+    {
+
+        ret = raw.add_masked_borders_to_bitmap();
+        if (ret != LIBRAW_SUCCESS)
+        {
+            kDebug(51002) << "LibRaw: failed to add masked borders: " << libraw_strerror(ret) << endl;
+            raw.recycle();
+            return false;
+        }
     }
 
     if (m_cancel)

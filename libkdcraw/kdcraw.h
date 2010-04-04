@@ -127,7 +127,8 @@ public:
             - All info about Raw image into 'identify' container. 
             - 'false' is returned if loadding failed, else 'true'.  
      */
-    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify);
+    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
+                        bool addMaskedBorders = false);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using 
         'rawDecodingSettings' settings. This is a cancelable method which require 
