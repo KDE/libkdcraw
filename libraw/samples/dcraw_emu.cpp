@@ -44,7 +44,7 @@ void usage(const char *prog)
     printf("dcraw_emu: almost complete dcraw emulator\n");
     printf("Usage:  %s [OPTION]... [FILE]...\n", prog);
     printf(
-"-c        Use channel_maximum valus to adjust RAW maximum\n"
+"-c float-num       Set adjust maximum threshold (default 0.75)\n"
 "-v        Verbose: print progress messages (repeated -v will add verbosity)\n"
 "-w        Use camera white balance, if possible\n"
 "-a        Average the whole image for white balance\n"
@@ -113,7 +113,6 @@ int main(int argc, char *argv[])
     int i,arg,c,ret;
     char opm,opt,*cp,*sp;
     int use_mmap=0, msize;
-    int use_channel_max = 0;
     void *iobuffer;
 
 #define OUT RawProcessor.imgdata.params
@@ -122,8 +121,8 @@ int main(int argc, char *argv[])
   for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
       {
           opt = argv[arg++][1];
-          if ((cp = strchr (sp=(char*)"nbrkStqmHACgU", opt)))
-              for (i=0; i < "11411111142"[cp-sp]-'0'; i++)
+          if ((cp = strchr (sp=(char*)"cnbrkStqmHACgU", opt)))
+              for (i=0; i < "111411111142"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0])) 
                       {
                           fprintf (stderr,"Non-numeric argument to \"-%c\"\n", opt);
@@ -132,7 +131,7 @@ int main(int argc, char *argv[])
           switch (opt) 
               {
               case 'v':  verbosity++;  break;
-              case 'c':  use_channel_max++; break;
+              case 'c':  OUT.adjust_maximum_thr   = atof(argv[arg++]);  break;
               case 'U':  OUT.auto_bright_thr   = atof(argv[arg++]);  break;
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
               case 'b':  OUT.bright      = atof(argv[arg++]);  break;
@@ -256,8 +255,6 @@ int main(int argc, char *argv[])
                     fprintf(stderr,"Cannot unpack %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue;
                 }
-            if (use_channel_max)
-                RawProcessor.adjust_maximum();
             if (LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_process()))
                 {
                     fprintf(stderr,"Cannot do postpocessing on %s: %s\n",argv[arg],libraw_strerror(ret));

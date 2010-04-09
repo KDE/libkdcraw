@@ -1,6 +1,6 @@
 /* 
    GENERATED FILE, DO NOT EDIT
-   Generated from dcraw/dcraw.c at Mon Mar 29 15:20:13 2010
+   Generated from dcraw/dcraw.c at Fri Apr  9 19:08:31 2010
    Look into original file (probably http://cybercom.net/~dcoffin/dcraw/dcraw.c)
    for copyright information.
 */
@@ -5627,7 +5627,7 @@ void CLASS parse_ciff (int offset, int length)
       fread (artist, 64, 1, ifp);
     if (type == 0x080a) {
       fread (make, 64, 1, ifp);
-      fseek (ifp, strlen(make) - 63, SEEK_CUR);
+      fseek (ifp, ((INT64)strlen(make)) - 63, SEEK_CUR);
       fread (model, 64, 1, ifp);
     }
     if (type == 0x1810) {

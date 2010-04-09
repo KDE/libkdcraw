@@ -183,7 +183,8 @@ LibRaw:: LibRaw(unsigned int flags)
     imgdata.params.output_color=1;
     imgdata.params.output_bps=8;
     imgdata.params.use_fuji_rotate=1;
-    imgdata.params.auto_bright_thr = 0.01;
+    imgdata.params.auto_bright_thr = LIBRAW_DEFAULT_AUTO_BRIGHTNESS_THRESHOLD;
+    imgdata.params.adjust_maximum_thr= LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD;
     imgdata.parent_class = this;
     imgdata.progress_flags = 0;
     tls = new LibRaw_TLS;
@@ -324,17 +325,23 @@ int LibRaw::adjust_maximum()
 {
     int i;
     ushort real_max;
-    CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
-    CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
+    float  auto_threshold;
+
+    if(O.adjust_maximum_thr < 0.00001)
+        return LIBRAW_SUCCESS;
+    else if (O.adjust_maximum_thr > 0.99999)
+        auto_threshold = LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD;
+    else
+        auto_threshold = O.adjust_maximum_thr;
+        
     
     real_max = C.channel_maximum[0];
     for(i = 1; i< 4; i++)
         if(real_max < C.channel_maximum[i])
             real_max = C.channel_maximum[i];
-//    fprintf(stderr,"Max=%u RMax=%u\n",C.maximum,real_max);
-    if (real_max > 0 && real_max < C.maximum && real_max > C.maximum*0.75)
+
+    if (real_max > 0 && real_max < C.maximum && real_max > C.maximum* auto_threshold)
         {
-//            fprintf(stderr,"Adjusting maximum from %u to %u\n",C.maximum,real_max);
             C.maximum = real_max;
         }
     return LIBRAW_SUCCESS;
@@ -1411,6 +1418,7 @@ int LibRaw::dcraw_process(void)
 
     try {
 
+        adjust_maximum();
         if(IO.fwidth) 
             rotate_fuji_raw();
 

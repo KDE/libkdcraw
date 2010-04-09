@@ -221,8 +221,10 @@ typedef struct
     unsigned    shot_select;    /* -s */
     float       bright;         /* -b */
     float       threshold;      /*  -n */
+#ifdef LIBRAW_LIBRARY_BUILD
 #ifdef _OPENMP
 #pragma omp firstprivate(threshold)
+#endif
 #endif
     int         half_size;      /* -h */
     int         four_color_rgb; /* -f */
@@ -245,6 +247,7 @@ typedef struct
 
     int         med_passes;     /* -m */
     float       auto_bright_thr; 
+    float       adjust_maximum_thr;
     int         no_auto_bright; /* -W */
     int         use_fuji_rotate;/* -j */
     enum LibRaw_filtering    filtering_mode; 

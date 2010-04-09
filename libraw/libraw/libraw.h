@@ -69,7 +69,6 @@ DllDef    int                 libraw_rotate_fuji_raw(libraw_data_t* lr);
 
     /* DCRAW compatibility */
 DllDef    int                 libraw_adjust_sizes_info_only(libraw_data_t*);
-DllDef    int                 libraw_adjust_maximum(libraw_data_t*);
 DllDef    int                 libraw_dcraw_document_mode_processing(libraw_data_t*);
 DllDef    int                 libraw_dcraw_ppm_tiff_writer(libraw_data_t* lr,const char *filename);
 DllDef    int                 libraw_dcraw_thumb_writer(libraw_data_t* lr,const char *fname);

@@ -21,6 +21,9 @@ it under the terms of the one of three licenses as you choose:
 #ifndef _LIBRAW_ERRORS_H
 #define _LIBRAW_ERRORS_H
 
+#define LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD 0.75
+#define LIBRAW_DEFAULT_AUTO_BRIGHTNESS_THRESHOLD 0.01
+
 enum LibRaw_constructor_flags
 {
     LIBRAW_OPTIONS_NONE         =0,
