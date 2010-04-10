@@ -119,6 +119,9 @@ public:
     float            cameraColorMatrix2[3][4];
     float            cameraXYZMatrix[3][4];
 
+    /** The used Color Keys */
+    QString          colorKeys;
+
     /** The camera maker. */
     QString          make;
     /** The camera model. */

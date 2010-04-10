@@ -73,6 +73,7 @@ bool DcrawInfoContainer::isEmpty()
     if (make.isEmpty()                  &&
         model.isEmpty()                 &&
         filterPattern.isEmpty()         &&
+        colorKeys.isEmpty()             &&
         DNGVersion.isEmpty()            &&
         exposureTime     == -1.0        &&
         aperture         == -1.0        &&

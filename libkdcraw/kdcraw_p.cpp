@@ -128,6 +128,8 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
         if (!raw->imgdata.idata.cdesc[3]) raw->imgdata.idata.cdesc[3] = 'G';
         for (int i=0; i < 16; i++)
             identify.filterPattern.append(raw->imgdata.idata.cdesc[raw->fc(i >> 1,i & 1)]);
+
+        identify.colorKeys = raw->imgdata.idata.cdesc;
     }
 
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
