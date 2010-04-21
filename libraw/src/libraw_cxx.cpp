@@ -453,7 +453,6 @@ void LibRaw:: init_masked_ptrs()
     M.br = M.bottom + (S.width * S.bottom_margin);
 
 }
-
 int LibRaw::add_masked_borders_to_bitmap()
 {
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
@@ -486,7 +485,7 @@ int LibRaw::add_masked_borders_to_bitmap()
             {
                 ushort *p = get_masked_pointer(r,c);
                 if(p)
-                    newimage[r*S.raw_width+c][FC(r,c)] = *p;
+                    newimage[r*S.raw_width+c][COLOR(r,c)] = *p;
             }
     // middle rows
     for (r=S.top_margin; r<S.top_margin+S.height;r++)
@@ -496,18 +495,20 @@ int LibRaw::add_masked_borders_to_bitmap()
                 {
                     ushort *p = get_masked_pointer(r,c);
                     if(p)
-                        newimage[r*S.raw_width+c][FC(r,c)] =  *p;
+                        newimage[r*S.raw_width+c][COLOR(r,c)] =  *p;
                 }
             for(c=S.left_margin; c<S.left_margin+S.iwidth;c++)
                 {
                     int col = c - S.left_margin;
-                    newimage[r*S.raw_width+c][FC(r,c)] = imgdata.image[row*S.iwidth+col][FC(row,col)];
+                    newimage[r*S.raw_width+c][COLOR(r,c)] = imgdata.image[row*S.iwidth+col][COLOR(r,c)];
+//                    for(int cc=0;cc<4;cc++)
+//                        newimage[r*S.raw_width+c][cc] = imgdata.image[row*S.iwidth+col][cc];
                 }
             for(c=S.left_margin+S.iwidth;c<S.raw_width;c++)
                 {
                     ushort *p = get_masked_pointer(r,c);
                     if(p)
-                        newimage[r*S.raw_width+c][FC(r,c)] =  *p;
+                        newimage[r*S.raw_width+c][COLOR(r,c)] =  *p;
                 }
         }
     // bottom rows
@@ -516,7 +517,7 @@ int LibRaw::add_masked_borders_to_bitmap()
             {
                 ushort *p = get_masked_pointer(r,c);
                 if(p)
-                    newimage[r*S.raw_width+c][FC(r,c)] = *p;
+                    newimage[r*S.raw_width+c][COLOR(r,c)] = *p;
             }
     free(imgdata.image);
     imgdata.image=newimage;
@@ -1381,7 +1382,6 @@ int LibRaw::rotate_fuji_raw(void)
         {
             for(col=0;col<S.width;col++)
                 {
-
                     if (libraw_internal_data.unpacker_data.fuji_layout) {
                         r = IO.fuji_width - 1 - col + (row >> 1);
                         c = col + ((row+1) >> 1);
@@ -1389,8 +1389,8 @@ int LibRaw::rotate_fuji_raw(void)
                         r = IO.fuji_width - 1 + row - (col >> 1);
                         c = row + ((col+1) >> 1);
                     }
-                    newimage[((r) >> IO.shrink)*fiwidth + ((c) >> IO.shrink)][FC(r,c)] = 
-                        imgdata.image[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][FC(r,c)];
+                    newimage[((r) >> IO.shrink)*fiwidth + ((c) >> IO.shrink)][FCF(row,col)] = 
+                        imgdata.image[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][FCF(row,col)];
                 }
         }
     // restore fuji sizes!

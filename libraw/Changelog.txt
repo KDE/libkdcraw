@@ -1,3 +1,11 @@
+2010-04-21 Alex Tutubalin <lexa@lexa.ru>
+           * Finally fixed inconsistency in Fuji files processing
+           * New COLOR(row,col) call to get bayer color index in image[] array
+           * Old FC() call is deprecated and will be removed in future releases
+           * unprocessed_raw sample switched to COLOR() call
+           * LibRaw 0.9.0-Beta5
+
+
 2010-04-10 Alex Tutubalin <lexa@lexa.ru>
            * Fixed bug in unpacking DNG files made from Fuji RAFs.
            * LibRaw 0.9.0-Beta4

@@ -114,7 +114,7 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
                     continue;
                 }
-	    return 0;
+
             if(verbose)
                 printf("Unpacked....\n");
 
@@ -122,10 +122,13 @@ int main(int ac, char *av[])
                 {
                     fprintf(stderr,"Cannot add mask data to bitmap %s\n",av[i]);
                 }
+
+            // move all pixel data to component 0
+
             for(int r=0;r<S.iheight;r++)
                 for(c=0;c<S.iwidth;c++)
                     RawProcessor.imgdata.image[r*S.iwidth+c][0] 
-                        = RawProcessor.imgdata.image[r*S.iwidth+c][RawProcessor.FC(r,c)];
+		      = RawProcessor.imgdata.image[r*S.iwidth+c][RawProcessor.COLOR(r,c)];
 
             P1.colors=1;
             if(autoscale)
@@ -144,6 +147,7 @@ int main(int ac, char *av[])
                                 RawProcessor.imgdata.image[j][0] *= scale;
                         }
                 }
+
             
             if(OUT.shot_select)
                 snprintf(outfn,sizeof(outfn),"%s-%d.tiff",av[i],OUT.shot_select);
