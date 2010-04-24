@@ -29,7 +29,7 @@ it under the terms of the one of three licenses as you choose:
 #endif
 #include <stdio.h>
 #ifdef _OPENMP
-#ifdef __MSVCRT_VERSION__
+#ifdef _MSC_VER
 #error OpenMP is not supported under MS Visual Studio
 #endif
 #include <omp.h>
