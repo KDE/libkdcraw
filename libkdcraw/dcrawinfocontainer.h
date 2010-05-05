@@ -46,10 +46,11 @@ public:
      */
     enum ImageOrientation
     {
-        ORIENTATION_NONE  = 0,
-        ORIENTATION_180   = 3,
-        ORIENTATION_90CCW = 5,
-        ORIENTATION_90CW  = 6
+        ORIENTATION_NONE        = 0,
+        ORIENTATION_180         = 3,
+        ORIENTATION_Mirror90CCW = 4,
+        ORIENTATION_90CCW       = 5,
+        ORIENTATION_90CW        = 6
     };
 
 public:
