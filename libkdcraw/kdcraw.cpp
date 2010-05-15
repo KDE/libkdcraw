@@ -249,8 +249,15 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 // ----------------------------------------------------------------------------------
 
+bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify)
+{
+    return extractRAWData(filePath, rawData, identify, false, 0);
+}
+
+// ----------------------------------------------------------------------------------
+
 bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
-                            bool addMaskedBorders)
+                            bool addMaskedBorders, unsigned int shotSelect)
 {
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
@@ -286,6 +293,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 
     raw.imgdata.params.output_bps    = 16;
     raw.imgdata.params.document_mode = 2;
+    raw.imgdata.params.shot_select   = shotSelect;
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
