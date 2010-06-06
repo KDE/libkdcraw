@@ -344,7 +344,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->brightnessSpinBox->setDecimals(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01);
     d->brightnessSpinBox->setDefaultValue(1.0);
-    d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brighness</b><p>"
+    d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brightness</b><p>"
                                             "Specify the brightness level of output image."
                                             "The default value is 1.0 (works in 8-bit mode only).<p>"));
 
