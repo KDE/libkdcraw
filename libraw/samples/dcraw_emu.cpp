@@ -76,6 +76,7 @@ void usage(const char *prog)
 "-6        Write 16-bit linear instead of 8-bit with gamma\n"
 "-g pow ts Set gamma curve to gamma pow and toe slope ts (default = 2.222 4.5)\n"
 "-T        Write TIFF instead of PPM\n"
+"-G        Use green_matching() filter\n"
 #ifndef WIN32
 "-B        Use mmap()-ed buffer instead of plain FILE I/O\n"
 #endif
@@ -131,6 +132,7 @@ int main(int argc, char *argv[])
           switch (opt) 
               {
               case 'v':  verbosity++;  break;
+              case 'G':  OUT.green_matching = 1; break;
               case 'c':  OUT.adjust_maximum_thr   = atof(argv[arg++]);  break;
               case 'U':  OUT.auto_bright_thr   = atof(argv[arg++]);  break;
               case 'n':  OUT.threshold   = atof(argv[arg++]);  break;

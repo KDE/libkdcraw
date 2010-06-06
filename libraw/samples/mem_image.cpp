@@ -99,11 +99,12 @@ int main(int ac, char *av[])
     if(ac<2) 
         {
             printf(
-                "mem_image - LibRaw sample, to illustrate work for memory buffers. Emulates dcraw [-4] [-1] [-e]\n"
+                "mem_image - LibRaw sample, to illustrate work for memory buffers. Emulates dcraw [-4] [-1] [-e] [-h]\n"
                 "Usage: %s [-D] [-T] [-v] [-e] raw-files....\n"
                 "\t-6 - output 16-bit PPM\n"
                 "\t-4 - linear 16-bit data\n"
                 "\t-e - extract thumbnails (same as dcraw -e in separate run)\n",
+                "\t-h - use half_size\n",
                 av[0]);
             return 0;
         }
@@ -131,6 +132,8 @@ int main(int ac, char *av[])
                         }
                     if(av[i][1]=='e' && av[i][2]==0)
                         output_thumbs++;
+                    if(av[i][1]=='h' && av[i][2]==0)
+                        OUT.half_size=1;
                     continue;
                 }
             printf("Processing %s\n",av[i]);
