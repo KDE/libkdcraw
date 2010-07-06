@@ -1,6 +1,11 @@
 1.1.0 - Released with KDE 4.5.0
 ------------------------------------------------------------------------
 
+*dcraw 9.03 (1.437) imported:
+
+    + New cameras: Canon SX20, Nikon D3s, Olympus E-P2, Panasoni DMC-GF1, Samsung EX1, Sony A450.
+    + Color data changed for some cameras.
+
 * dcraw 9.01 (1.434) imported:
     + Separate black levels for each color channel.
     + New cameras: Canon 550D, Casio EX-Z1050, Fuji HS10/HS11,
