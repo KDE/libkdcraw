@@ -6,7 +6,7 @@
  * Date        : 2006-12-09
  * Description : a tread-safe libraw C++ program interface
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com> 
+ * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
@@ -82,16 +82,16 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 
     if ( loadEmbeddedPreview(imgData, path) )
     {
-        kDebug(51002) << "Preview data size:" << imgData.size();
+        kDebug() << "Preview data size:" << imgData.size();
 
         if (image.loadFromData( imgData ))
         {
-            kDebug(51002) << "Using embedded RAW preview extraction";
+            kDebug() << "Using embedded RAW preview extraction";
             return true;
         }
     }
 
-    kDebug(51002) << "Failed to load embedded RAW preview";
+    kDebug() << "Failed to load embedded RAW preview";
     return false;
 }
 
@@ -109,7 +109,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -118,7 +118,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     if (ret != LIBRAW_SUCCESS)
     {
         raw.recycle();
-        kDebug(51002) << "LibRaw: failed to run unpack_thumb: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run unpack_thumb: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -126,7 +126,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     libraw_processed_image_t *thumb = raw.dcraw_make_mem_thumb(&ret);
     if(!thumb)
     {
-        kDebug(51002) << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -141,7 +141,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 
     if ( imgData.isEmpty() )
     {
-        kDebug(51002) << "Failed to load JPEG thumb from LibRaw!" << endl;
+        kDebug() << "Failed to load JPEG thumb from LibRaw!";
         return false;
     }
 
@@ -157,7 +157,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
 
-    kDebug(51002) << "Try to use reduced RAW picture extraction" << endl;
+    kDebug() << "Try to use reduced RAW picture extraction";
 
     LibRaw raw;
     raw.imgdata.params.use_auto_wb    = 1;         // Use automatic white balance.
@@ -170,7 +170,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -178,7 +178,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -186,7 +186,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -194,7 +194,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     libraw_processed_image_t* halfImg = raw.dcraw_make_mem_image(&ret);
     if(!halfImg)
     {
-        kDebug(51002) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -206,11 +206,11 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
     if (!image.loadFromData(imgData))
     {
-        kDebug(51002) << "Failed to load PPM data from LibRaw!" << endl;
+        kDebug() << "Failed to load PPM data from LibRaw!";
         return false;
     }
 
-    kDebug(51002) << "Using reduced RAW picture extraction" << endl;
+    kDebug() << "Using reduced RAW picture extraction";
     return true;
 }
 
@@ -229,7 +229,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -237,7 +237,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
     ret = raw.adjust_sizes_info_only();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run adjust_sizes_info_only: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -279,7 +279,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -298,7 +298,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -309,7 +309,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         ret = raw.add_masked_borders_to_bitmap();
         if (ret != LIBRAW_SUCCESS)
         {
-            kDebug(51002) << "LibRaw: failed to add masked borders: " << libraw_strerror(ret) << endl;
+            kDebug() << "LibRaw: failed to add masked borders: " << libraw_strerror(ret);
             raw.recycle();
             return false;
         }
@@ -351,7 +351,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     return true;
 }
 
-bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
+bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings,
                                 QByteArray &imageData, int &width, int &height, int &rgbmax)
 {
     m_rawDecodingSettings                    = rawDecodingSettings;
@@ -359,7 +359,7 @@ bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettin
     return (loadFromLibraw(filePath, imageData, width, height, rgbmax));
 }
 
-bool KDcraw::decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
+bool KDcraw::decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings,
                             QByteArray& imageData, int& width, int& height, int& rgbmax)
 {
     m_rawDecodingSettings = rawDecodingSettings;
@@ -553,7 +553,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
                 RGB[0] = 1.0 / RGB[0];
                 RGB[1] = 1.0 / RGB[1];
                 RGB[2] = 1.0 / RGB[2];
-                kDebug(51002) << "Warning: cannot get daylight multipliers" << endl;
+                kDebug() << "Warning: cannot get daylight multipliers";
             }
 
             // (-r) set Raw Color Balance Multipliers.
@@ -649,13 +649,13 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     d->setProgress(0.1);
 
     args.append(filePath);
-    kDebug(51002) << "LibRaw: dcraw emulation: " << args << endl;
-    kDebug(51002) << "LibRaw highlights adjustements : " << m_rawDecodingSettings.fixColorsHighlights << endl;
+    kDebug() << "LibRaw: dcraw emulation: " << args;
+    kDebug() << "LibRaw highlights adjustements : " << m_rawDecodingSettings.fixColorsHighlights;
 
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run open_file: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run open_file: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -670,7 +670,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run unpack: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -684,21 +684,21 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 
     if (m_rawDecodingSettings.fixColorsHighlights)
     {
-        kDebug(51002) << "Applying LibRaw highlights adjustements" << endl;
+        kDebug() << "Applying LibRaw highlights adjustements";
         // 1.0 is fallback to default value
-        raw.imgdata.params.adjust_maximum_thr = 1.0; 
+        raw.imgdata.params.adjust_maximum_thr = 1.0;
     }
     else
     {
-        kDebug(51002) << "Disabling LibRaw highlights adjustements" << endl;
+        kDebug() << "Disabling LibRaw highlights adjustements";
         // 0.0 disables this feature
-        raw.imgdata.params.adjust_maximum_thr = 0.0; 
+        raw.imgdata.params.adjust_maximum_thr = 0.0;
     }
 
     ret = raw.dcraw_process();
     if (ret != LIBRAW_SUCCESS)
     {
-        kDebug(51002) << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run dcraw_process: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -713,7 +713,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     libraw_processed_image_t* img = raw.dcraw_make_mem_image(&ret);
     if(!img)
     {
-        kDebug(51002) << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret) << endl;
+        kDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
@@ -737,9 +737,9 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         return false;
     d->setProgress(0.4);
 
-    kDebug(51002) << "LibRaw: data info: width=" << width 
-                  << " height=" << height 
-                  << " rgbmax=" << rgbmax << endl;
+    kDebug() << "LibRaw: data info: width=" << width
+                  << " height=" << height
+                  << " rgbmax=" << rgbmax;
 
     return true;
 }

@@ -62,8 +62,8 @@ void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t *
 
 int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
-    kDebug(51002) << "LibRaw progress: " << libraw_strprogress(p) << " pass "
-                  << iteration << " of " << expected;
+    kDebug() << "LibRaw progress: " << libraw_strprogress(p) << " pass "
+             << iteration << " of " << expected;
 
     // post a little change in progress indicator to show raw processor activity.
     setProgress(progressValue()+0.01);
@@ -71,7 +71,7 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
     // Clean processing termination by user...
     if(m_parent->checkToCancelWaitingData())
     {
-        kDebug(51002) << "LibRaw process terminaison invoked..." << endl;
+        kDebug() << "LibRaw process terminaison invoked...";
         m_parent->m_cancel = true;
         m_progress = 0.0;
         return 1;
@@ -123,7 +123,7 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
     memcpy(&identify.cameraColorMatrix2, &raw->imgdata.color.rgb_cam, sizeof(raw->imgdata.color.rgb_cam));
     memcpy(&identify.cameraXYZMatrix,    &raw->imgdata.color.cam_xyz, sizeof(raw->imgdata.color.cam_xyz));
 
-    if (raw->imgdata.idata.filters) 
+    if (raw->imgdata.idata.filters)
     {
         if (!raw->imgdata.idata.cdesc[3]) raw->imgdata.idata.cdesc[3] = 'G';
         for (int i=0; i < 16; i++)
@@ -135,9 +135,9 @@ void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
         identify.daylightMult[c] = raw->imgdata.color.pre_mul[c];
 
-    if (raw->imgdata.color.cam_mul[0] > 0) 
+    if (raw->imgdata.color.cam_mul[0] > 0)
     {
-        for(int c = 0 ; c < 4 ; c++) 
+        for(int c = 0 ; c < 4 ; c++)
             identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
     }
 }

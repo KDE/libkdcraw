@@ -1,3 +1,27 @@
+# ===========================================================
+#
+# This file is a part of digiKam project
+# <a href="http://www.digikam.org">http://www.digikam.org</a>
+#
+# @date   2006-12-09
+# @brief  a tread-safe libraw C++ program interface for KDE
+#
+# @author Copyright (C) 2006-2010 by Gilles Caulier
+#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+#
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation;
+# either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# ============================================================
+
 PROJECT(libkdcraw)
 
 FIND_PACKAGE(KDE4 REQUIRED)
@@ -8,6 +32,9 @@ INCLUDE(FindPackageHandleStandardArgs)
 
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS} ${KDE4_DEFINITIONS})
 INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+
+SET(LIBKDCRAW_AREA_CODE_GENERAL 51002)
+ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 
 # ==================================================================================================
 # Information to update before to release this library.
@@ -90,7 +117,7 @@ ELSE(VERSION_CMAKE)
 ENDIF(VERSION_CMAKE AND NOT MSVC)
 
 IF(OPENMP_FOUND)
-    ADD_DEFINITIONS(${OpenMP_CXX_FLAGS}) 
+    ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
     IF(CMAKE_COMPILER_IS_GNUCXX)
         SET(OPENMP_LDFLAGS "-lgomp")
     ENDIF(CMAKE_COMPILER_IS_GNUCXX)
