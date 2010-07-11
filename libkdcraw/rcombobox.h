@@ -1,13 +1,14 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2008-08-16
- * Description : a combo box widget re-implemented with a
- *               reset button to switch to a default item.
+ * @date   2008-08-16
+ * @brief  a combo box widget re-implemented with a
+ *         reset button to switch to a default item
  *
- * Copyright (C) 2008-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2008-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,7 +18,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -42,11 +43,11 @@ class RComboBoxPriv;
 class LIBKDCRAW_EXPORT RComboBox : public KHBox
 {
 
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    RComboBox(QWidget *parent=0);
+    RComboBox(QWidget* parent=0);
     ~RComboBox();
 
     void setCurrentIndex(int d);

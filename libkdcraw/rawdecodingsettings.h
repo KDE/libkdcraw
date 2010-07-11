@@ -1,23 +1,27 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2006-12-09
- * Description : Raw decoding settings
+ * @date   2006-12-09
+ * @brief  Raw decoding settings
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
+ * @author Copyright (C) 2006-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2007-2008 by Guillaume Castagnino
+ *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -89,7 +93,7 @@ public:
         AERA    = 4
     };
 
-    /** Input color profile used to decoded image 
+    /** Input color profile used to decoded image
         NOINPUTCS:     No input color profile.
         EMBEDDED:      Use the camera profile embedded in RAW file if exist.
         CUSTOMINPUTCS: Use a custom input color space profile.
@@ -101,7 +105,7 @@ public:
         CUSTOMINPUTCS
     };
 
-    /** Output RGB color space used to decoded image 
+    /** Output RGB color space used to decoded image
         RAWCOLOR:       No output color profile (Linear RAW).
         SRGB:           Use standard sRGB color space.
         ADOBERGB:       Use standard Adobe RGB color space.
@@ -123,10 +127,10 @@ public:
     RawDecodingSettings();
 
     /** Equivalent to the copy constructor */
-    RawDecodingSettings& operator=(const RawDecodingSettings& prm);  
+    RawDecodingSettings& operator=(const RawDecodingSettings& prm);
 
     /** Compare for equality */
-    bool operator==(const RawDecodingSettings &o) const;
+    bool operator==(const RawDecodingSettings& o) const;
 
     /** Standard destructor */
     virtual ~RawDecodingSettings();
@@ -140,7 +144,7 @@ public:
 
 public:
 
-    /** If true, images with overblown channels are processed much more accurate, 
+    /** If true, images with overblown channels are processed much more accurate,
         without 'pink clouds' (and blue highlights under tungsteen lamps).
      */
     bool fixColorsHighlights;
@@ -172,8 +176,8 @@ public:
     */
     bool RGBInterpolate4Colors;
 
-    /** For cameras with non-square pixels, do not stretch the image to its 
-        correct aspect ratio. In any case, this option guarantees that each 
+    /** For cameras with non-square pixels, do not stretch the image to its
+        correct aspect ratio. In any case, this option guarantees that each
         output pixel corresponds to one RAW pixel.
     */
     bool DontStretchPixels;
@@ -193,7 +197,7 @@ public:
     */
     DecodingQuality RAWQuality;
 
-    /** After interpolation, clean up color artifacts by repeatedly applying 
+    /** After interpolation, clean up color artifacts by repeatedly applying
         a 3x3 median filter to the R-G and B-G channels.
     */
     int medianFilterPasses;

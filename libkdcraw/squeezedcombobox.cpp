@@ -1,15 +1,18 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2008-08-21
- * Description : a combo box with a width not depending of text
- *               content size
+ * @date   2008-08-21
+ * @brief  a combo box with a width not depending of text
+ *         content size
  *
- * Copyright (C) 2005 by Tom Albers <tomalbers@kde.nl>
- * Copyright (C) 2008-2009 by Andi Clemens <andi dot clemens at gmx dot net>
- * Copyright (C) 2006-2009 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2006-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2008 by Andi Clemens
+ *         <a href="mailto:andi dot clemens at gmx dot net">andi dot clemens at gmx dot net</a>
+ * @author Copyright (C) 2005 by Tom Albers
+ *         <a href="mailto:tomalbers at kde dot nl">tomalbers at kde dot nl</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +22,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -48,12 +51,12 @@ public:
         timer = 0;
     }
 
-    QMap<int, QString>  originalItems;
+    QMap<int, QString> originalItems;
 
-    QTimer             *timer;
+    QTimer*            timer;
 };
 
-SqueezedComboBox::SqueezedComboBox(QWidget *parent, const char *name)
+SqueezedComboBox::SqueezedComboBox(QWidget* parent, const char* name)
                 : QComboBox(parent), d(new SqueezedComboBoxPriv)
 {
     setObjectName(name);
@@ -133,7 +136,7 @@ void SqueezedComboBox::addSqueezedItem(const QString& newItem,
 void SqueezedComboBox::setCurrent(const QString& itemText)
 {
     QString squeezedText = squeezeText(itemText);
-    qint32 itemIndex = findText(squeezedText);
+    qint32 itemIndex     = findText(squeezedText);
     if (itemIndex >= 0)
         setCurrentIndex(itemIndex);
 }
@@ -164,7 +167,7 @@ QString SqueezedComboBox::squeezeText(const QString& original)
 
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
-    widgetSize = widgetSize-fm.width("...");
+    widgetSize     = widgetSize-fm.width("...");
     for (int i = 0 ; i != original.length(); ++i)
     {
         if ( (int)fm.width(original.right(i)) > widgetSize)
