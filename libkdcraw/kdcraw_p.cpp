@@ -1,21 +1,23 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2008-10-09
- * Description : internal private container for KDcraw
+ * @date   2008-10-09
+ * @brief  internal private container for KDcraw
  *
- * Copyright (C) 2008-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * @author Copyright (C) 2008-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -32,18 +34,18 @@
 namespace KDcrawIface
 {
 
-int callbackForLibRaw(void *data, enum LibRaw_progress p, int iteration, int expected)
+int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int expected)
 {
     if (data)
     {
-        KDcrawPriv *d = static_cast<KDcrawPriv*>(data);
+        KDcrawPriv* d = static_cast<KDcrawPriv*>(data);
         if (d) return d->progressCallback(p, iteration, expected);
     }
 
     return 0;
 }
 
-KDcrawPriv::KDcrawPriv(KDcraw *p)
+KDcrawPriv::KDcrawPriv(KDcraw* p)
 {
     m_progress = 0.0;
     m_parent   = p;
@@ -53,7 +55,7 @@ KDcrawPriv::~KDcrawPriv()
 {
 }
 
-void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t *img)
+void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img)
 {
     QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
     imgData.append(header.toAscii());
@@ -92,7 +94,7 @@ double KDcrawPriv::progressValue()
     return m_progress;
 }
 
-void KDcrawPriv::fillIndentifyInfo(LibRaw *raw, DcrawInfoContainer& identify)
+void KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& identify)
 {
     identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
     identify.make             = QString(raw->imgdata.idata.make);

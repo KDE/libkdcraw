@@ -1,23 +1,27 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.kipi-plugins.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2006-12-09
- * Description : a tread-safe libraw C++ program interface
+ * @date   2006-12-09
+ * @brief  a tread-safe libraw C++ program interface
  *
- * Copyright (C) 2006-2010 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
+ * @author Copyright (C) 2006-2010 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2007-2008 by Guillaume Castagnino
+ *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -62,17 +66,17 @@ public:
      */
     static QString version();
 
-    /** This is a non cancelable method witch do not require a class instance to run. 
-        It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview(). 
+    /** This is a non cancelable method witch do not require a class instance to run.
+        It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview().
      */
     static bool loadDcrawPreview(QImage& image, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data. 
+    /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data.
         This is a fast and non cancelable. This method do not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QByteArray& imgData, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW picture has a QImage. This is a fast and non cancelable 
+    /** Get the embedded JPEG preview image from RAW picture has a QImage. This is a fast and non cancelable
         This method do not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QImage& image, const QString& path);
@@ -82,32 +86,32 @@ public:
      */
     static bool loadHalfPreview(QImage& image, const QString& path);
 
-    /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h 
-        for more details. This is a fast and non cancelable method witch do not require 
+    /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h
+        for more details. This is a fast and non cancelable method witch do not require
         a class instance to run.
      */
     static bool rawFileIdentify(DcrawInfoContainer& identify, const QString& path);
 
-    /** Return the string of all RAW file type mime supported. 
+    /** Return the string of all RAW file type mime supported.
      */
     static const char *rawFiles();
 
     /** Return the list of all RAW file type mime supported,
-        as a QStringList, without wildcard and suffix dot.  
+        as a QStringList, without wildcard and suffix dot.
      */
     static QStringList rawFilesList();
 
     /** Returns a version number for the list of supported RAW file types.
         This version is incremented if the list of supported formats has changed
-        between library releases. 
+        between library releases.
      */
     static int rawFilesVersion();
 
     /** Provide a list of supported RAW Camera name.
-     */ 
+     */
     static QStringList supportedCamera();
 
-    /** Return LibRaw version string. 
+    /** Return LibRaw version string.
      */
     static QString librawVersion();
 
@@ -143,60 +147,60 @@ public:
                         bool addMaskedBorders, unsigned int shotSelect);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using
-        'rawDecodingSettings' settings. This is a cancelable method which require 
+        'rawDecodingSettings' settings. This is a cancelable method which require
         a class instance to run because RAW pictures decoding can take a while.
 
         This method return:
 
-            - A byte array container 'imageData' with picture data. Pixels order is RGB. 
-              Color depth can be 8 or 16. In 8 bits you can access to color component 
+            - A byte array container 'imageData' with picture data. Pixels order is RGB.
+              Color depth can be 8 or 16. In 8 bits you can access to color component
               using (uchar*), in 16 bits using (ushort*).
 
             - Size size of image in number of pixels ('width' and 'height').
             - The max average of RGB components from decoded picture.
-            - 'false' is returned if decoding failed, else 'true'.  
+            - 'false' is returned if decoding failed, else 'true'.
      */
-    bool decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
+    bool decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings,
                             QByteArray& imageData, int& width, int& height, int& rgbmax);
 
-    /** Extract a full size of RAW data from 'filePath' picture file using 
-        'rawDecodingSettings' settings. This is a cancelable method which require 
+    /** Extract a full size of RAW data from 'filePath' picture file using
+        'rawDecodingSettings' settings. This is a cancelable method which require
         a class instance to run because RAW pictures decoding can take a while.
 
         This method return:
 
-            - A byte array container 'imageData' with picture data. Pixels order is RGB. 
-              Color depth can be 8 or 16. In 8 bits you can access to color component 
+            - A byte array container 'imageData' with picture data. Pixels order is RGB.
+              Color depth can be 8 or 16. In 8 bits you can access to color component
               using (uchar*), in 16 bits using (ushort*).
 
             - Size size of image in number of pixels ('width' and 'height').
-            - The max average of RGB components from decoded picture. 
-            - 'false' is returned if decoding failed, else 'true'.  
+            - The max average of RGB components from decoded picture.
+            - 'false' is returned if decoding failed, else 'true'.
      */
-    bool decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings, 
+    bool decodeRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings,
                         QByteArray& imageData, int& width, int& height, int& rgbmax);
 
-    /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running 
+    /** To cancel 'decodeHalfRAWImage' and 'decodeRAWImage' methods running
         in a separate thread.
      */
     void cancel();
 
 protected:
 
-    /** Used internally to cancel RAW decoding operation. Normally, you don't need to use it 
-        directly, excepted if you derivated this class. Usual way is to use cancel() method 
+    /** Used internally to cancel RAW decoding operation. Normally, you don't need to use it
+        directly, excepted if you derivated this class. Usual way is to use cancel() method
      */
     bool                m_cancel;
 
-    /** The settings container used to perform RAW pictures decoding. See 'rawdecodingsetting.h' 
+    /** The settings container used to perform RAW pictures decoding. See 'rawdecodingsetting.h'
         for details.
      */
     RawDecodingSettings m_rawDecodingSettings;
 
 protected:
 
-    /** Re-implement this method to control the cancelisation of loop witch wait data 
-        from RAW decoding process with your propers envirronement. 
+    /** Re-implement this method to control the cancelisation of loop witch wait data
+        from RAW decoding process with your propers envirronement.
         By default, this method check if m_cancel is true.
      */
     virtual bool checkToCancelWaitingData();
