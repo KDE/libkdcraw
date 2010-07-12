@@ -27,14 +27,7 @@
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
-
-// KDE includes.
-
-#include "kdeversion.h"
-
-#include "qdebug.h"
-#define PRINT_DEBUG qDebug()
-#define ENDL
+#include <QDebug>
 
 // Local includes.
 
@@ -46,8 +39,8 @@ int main (int argc, char** argv)
 {
     if(argc != 2)
     {
-        PRINT_DEBUG << "raw2png - RAW Camera Image to PNG Converter" ENDL;
-        PRINT_DEBUG << "Usage: <rawfile>" ENDL;
+        qDebug() << "raw2png - RAW Camera Image to PNG Converter";
+        qDebug() << "Usage: <rawfile>";
         return -1;
     }
 
@@ -62,57 +55,57 @@ int main (int argc, char** argv)
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Identify RAW image from " << input.fileName() ENDL;
+    qDebug() << "raw2png: Identify RAW image from " << input.fileName();
 
     KDcraw rawProcessor;
     if (!rawProcessor.rawFileIdentify(identify, filePath))
     {
-        PRINT_DEBUG << "raw2png: Idendify RAW image failed. Aborted..." ENDL;
+        qDebug() << "raw2png: Idendify RAW image failed. Aborted...";
         return -1;
     }
 
     int width  = identify.imageSize.width();
     int height = identify.imageSize.height();
 
-    PRINT_DEBUG << "raw2png: Raw image info:" ENDL;
-    PRINT_DEBUG << "--- Date:      " << identify.dateTime.toString(Qt::ISODate) ENDL;
-    PRINT_DEBUG << "--- Make:      " << identify.make ENDL;
-    PRINT_DEBUG << "--- Model:     " << identify.model ENDL;
-    PRINT_DEBUG << "--- Size:      " << width << "x" << height ENDL;
-    PRINT_DEBUG << "--- Filter:    " << identify.filterPattern ENDL;
-    PRINT_DEBUG << "--- Colors:    " << identify.rawColors ENDL;
+    qDebug() << "raw2png: Raw image info:";
+    qDebug() << "--- Date:      " << identify.dateTime.toString(Qt::ISODate);
+    qDebug() << "--- Make:      " << identify.make;
+    qDebug() << "--- Model:     " << identify.model;
+    qDebug() << "--- Size:      " << width << "x" << height;
+    qDebug() << "--- Filter:    " << identify.filterPattern;
+    qDebug() << "--- Colors:    " << identify.rawColors;
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading RAW image preview" ENDL;
+    qDebug() << "raw2png: Loading RAW image preview";
 
     if (!rawProcessor.loadDcrawPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading RAW image preview failed. Aborted..." ENDL;
+        qDebug() << "raw2png: Loading RAW image preview failed. Aborted...";
         return -1;
     }
 
-    PRINT_DEBUG << "raw2png: Saving preview image to "
-                << previewOutput.fileName() << " size ("
-                << image.width() << "x" << image.height()
-                << ")" ENDL;
+    qDebug() << "raw2png: Saving preview image to "
+             << previewOutput.fileName() << " size ("
+             << image.width() << "x" << image.height()
+             << ")";
     image.save(previewFilePath, "PNG");
 
     // -----------------------------------------------------------
 
-    PRINT_DEBUG << "raw2png: Loading half RAW image" ENDL;
+    qDebug() << "raw2png: Loading half RAW image";
 
     image = QImage();
     if (!rawProcessor.loadHalfPreview(image, filePath))
     {
-        PRINT_DEBUG << "raw2png: Loading half RAW image failed. Aborted..." ENDL;
+        qDebug() << "raw2png: Loading half RAW image failed. Aborted...";
         return -1;
     }
 
-    PRINT_DEBUG << "raw2png: Saving half image to "
-                << halfOutput.fileName() << " size ("
-                << image.width() << "x" << image.height()
-                << ")" ENDL;
+    qDebug() << "raw2png: Saving half image to "
+             << halfOutput.fileName() << " size ("
+             << image.width() << "x" << image.height()
+             << ")";
     image.save(halfFilePath, "PNG");
 
     return 0;
