@@ -38,8 +38,6 @@
 namespace KDcrawIface
 {
 
-class RComboBoxPriv;
-
 class LIBKDCRAW_EXPORT RComboBox : public KHBox
 {
 
@@ -78,6 +76,7 @@ private Q_SLOTS:
 
 private:
 
+    class RComboBoxPriv;
     RComboBoxPriv* const d;
 };
 

@@ -42,7 +42,7 @@
 namespace KDcrawIface
 {
 
-class SqueezedComboBoxPriv
+class SqueezedComboBox::SqueezedComboBoxPriv
 {
 public:
 

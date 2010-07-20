@@ -47,8 +47,6 @@
 namespace KDcrawIface
 {
 
-class DcrawSettingsWidgetPriv;
-
 class LIBKDCRAW_EXPORT DcrawSettingsWidget : public RExpanderBox
 {
     Q_OBJECT
@@ -179,6 +177,7 @@ private Q_SLOTS:
 
 private:
 
+    class DcrawSettingsWidgetPriv;
     DcrawSettingsWidgetPriv* const d;
 };
 

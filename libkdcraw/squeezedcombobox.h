@@ -41,8 +41,6 @@
 namespace KDcrawIface
 {
 
-class SqueezedComboBoxPriv;
-
 /** @class SqueezedComboBox
  *
  * This widget is a QComboBox, but then a little bit
@@ -157,6 +155,7 @@ private:
 
 private:
 
+    class SqueezedComboBoxPriv;
     SqueezedComboBoxPriv* const d;
 };
 

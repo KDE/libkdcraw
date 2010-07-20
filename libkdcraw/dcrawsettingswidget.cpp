@@ -54,7 +54,7 @@
 namespace KDcrawIface
 {
 
-class DcrawSettingsWidgetPriv
+class DcrawSettingsWidget::DcrawSettingsWidgetPriv
 {
 public:
 

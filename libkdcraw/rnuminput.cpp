@@ -39,7 +39,7 @@
 namespace KDcrawIface
 {
 
-class RIntNumInputPriv
+class RIntNumInput::RIntNumInputPriv
 {
 
 public:
@@ -138,7 +138,7 @@ void RIntNumInput::slotValueChanged(int v)
 
 // ----------------------------------------------------
 
-class RDoubleNumInputPriv
+class RDoubleNumInput::RDoubleNumInputPriv
 {
 
 public:

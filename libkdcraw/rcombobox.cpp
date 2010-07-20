@@ -38,7 +38,7 @@
 namespace KDcrawIface
 {
 
-class RComboBoxPriv
+class RComboBox::RComboBoxPriv
 {
 
 public:

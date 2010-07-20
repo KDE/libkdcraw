@@ -39,11 +39,8 @@
 namespace KDcrawIface
 {
 
-class RIntNumInputPriv;
-
 class LIBKDCRAW_EXPORT RIntNumInput : public KHBox
 {
-
     Q_OBJECT
 
 public:
@@ -77,17 +74,15 @@ private Q_SLOTS:
 
 private:
 
+    class RIntNumInputPriv;
     RIntNumInputPriv* const d;
 };
 
 // ---------------------------------------------------------
 
-class RDoubleNumInputPriv;
-
 class LIBKDCRAW_EXPORT RDoubleNumInput : public KHBox
 {
-
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
@@ -120,6 +115,7 @@ private Q_SLOTS:
 
 private:
 
+    class RDoubleNumInputPriv;
     RDoubleNumInputPriv* const d;
 };
 

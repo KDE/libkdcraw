@@ -126,8 +126,6 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class RLabelExpanderPriv;
-
 class LIBKDCRAW_EXPORT RLabelExpander : public QWidget
 {
     Q_OBJECT
@@ -176,12 +174,11 @@ private:
 
 private:
 
+    class RLabelExpanderPriv;
     RLabelExpanderPriv* const d;
 };
 
 // -------------------------------------------------------------------------
-
-class RExpanderBoxPriv;
 
 class LIBKDCRAW_EXPORT RExpanderBox : public QScrollArea
 {
@@ -262,6 +259,7 @@ private Q_SLOTS:
 
 private:
 
+    class RExpanderBoxPriv;
     RExpanderBoxPriv* const d;
 };
 
