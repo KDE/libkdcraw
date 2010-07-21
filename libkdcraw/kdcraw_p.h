@@ -51,7 +51,7 @@ extern "C"
     int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int expected);
 }
 
-class KDcrawPriv
+class KDcraw::KDcrawPriv
 {
 
 public:
@@ -75,6 +75,8 @@ private:
     double  m_progress;
 
     KDcraw* m_parent;
+
+    friend class KDcraw;
 };
 
 }  // namespace KDcrawIface

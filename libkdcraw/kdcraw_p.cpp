@@ -38,31 +38,31 @@ int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int exp
 {
     if (data)
     {
-        KDcrawPriv* d = static_cast<KDcrawPriv*>(data);
+        KDcraw::KDcrawPriv* d = static_cast<KDcraw::KDcrawPriv*>(data);
         if (d) return d->progressCallback(p, iteration, expected);
     }
 
     return 0;
 }
 
-KDcrawPriv::KDcrawPriv(KDcraw* p)
+KDcraw::KDcrawPriv::KDcrawPriv(KDcraw* p)
 {
     m_progress = 0.0;
     m_parent   = p;
 }
 
-KDcrawPriv::~KDcrawPriv()
+KDcraw::KDcrawPriv::~KDcrawPriv()
 {
 }
 
-void KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img)
+void KDcraw::KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img)
 {
     QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
     imgData.append(header.toAscii());
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
 }
 
-int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
+int KDcraw::KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
     kDebug() << "LibRaw progress: " << libraw_strprogress(p) << " pass "
              << iteration << " of " << expected;
@@ -83,18 +83,18 @@ int KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, int expe
     return 0;
 }
 
-void KDcrawPriv::setProgress(double value)
+void KDcraw::KDcrawPriv::setProgress(double value)
 {
     m_progress = value;
     m_parent->setWaitingDataProgress(m_progress);
 }
 
-double KDcrawPriv::progressValue()
+double KDcraw::KDcrawPriv::progressValue()
 {
     return m_progress;
 }
 
-void KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& identify)
+void KDcraw::KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& identify)
 {
     identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
     identify.make             = QString(raw->imgdata.idata.make);

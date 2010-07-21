@@ -44,8 +44,6 @@
 namespace KDcrawIface
 {
 
-class KDcrawPriv;
-
 class LIBKDCRAW_EXPORT KDcraw : public QObject
 {
     Q_OBJECT
@@ -216,11 +214,14 @@ private:
     bool loadFromLibraw(const QString& filePath, QByteArray& imageData,
                         int& width, int& height, int& rgbmax);
 
+public:
+
+    // Declared public to be called externally by callbackForLibRaw() static method.
+    class KDcrawPriv;
+
 private:
 
     KDcrawPriv* const d;
-
-    friend class KDcrawPriv;
 };
 
 }  // namespace KDcrawIface
