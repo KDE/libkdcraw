@@ -678,11 +678,6 @@ KUrlRequester* DcrawSettingsWidget::outputProfileUrlEdit() const
     return d->outIccUrlEdit;
 }
 
-void DcrawSettingsWidget::setDefaultSettings()
-{
-    resetToDefault();
-}
-
 void DcrawSettingsWidget::resetToDefault()
 {
     setSettings(RawDecodingSettings());
