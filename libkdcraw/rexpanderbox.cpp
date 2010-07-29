@@ -10,6 +10,8 @@
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008-2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2010 by Manuel Viet
+ *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -726,6 +728,49 @@ void RExpanderBox::writeSettings()
         }
     }
     config->sync();
+}
+
+// ------------------------------------------------------------------------
+
+RExpanderBoxExclusive::RExpanderBoxExclusive(QWidget* parent)
+                     : RExpanderBox(parent)
+{
+    setIsToolBox(true);
+}
+
+RExpanderBoxExclusive::~RExpanderBoxExclusive()
+{
+}
+
+void RExpanderBoxExclusive::slotItemExpanded(bool b)
+{
+    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    if (!exp) return;
+
+    if (isToolBox() && b)
+    {
+        int item = 0;
+
+        while (item < count())
+        {
+            if (isItemExpanded(item) && item != indexOf(exp))
+            {
+                setItemExpanded(item, false);
+            }
+            item++;
+        }
+    }
+    emit signalItemExpanded(indexOf(exp), b);
+}
+
+void RExpanderBoxExclusive::setIsToolBox(bool b)
+{
+    m_toolbox = b;
+}
+
+bool RExpanderBoxExclusive::isToolBox() const
+{
+    return (m_toolbox);
 }
 
 } // namespace KDcrawIface

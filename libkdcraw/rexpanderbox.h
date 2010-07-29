@@ -10,6 +10,8 @@
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008-2010 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * @author Copyright (C) 2010 by Manuel Viet
+ *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -261,6 +263,30 @@ private:
 
     class RExpanderBoxPriv;
     RExpanderBoxPriv* const d;
+};
+
+// -------------------------------------------------------------------------
+
+class LIBKDCRAW_EXPORT RExpanderBoxExclusive : public RExpanderBox
+{
+    Q_OBJECT
+
+public:
+
+    RExpanderBoxExclusive(QWidget* parent = 0);
+    ~RExpanderBoxExclusive();
+
+    /** Show one expander open at most */
+    void setIsToolBox(bool b);
+    bool isToolBox() const;
+
+private Q_SLOTS:
+
+    void slotItemExpanded(bool b);
+
+private:
+
+    bool m_toolbox;
 };
 
 } // namespace KDcrawIface
