@@ -95,6 +95,11 @@ FIND_PACKAGE(LCMS REQUIRED)
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
 
+# To prevent warnings from M$ compiler
+IF(WIN32 AND MSVC)
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+ENDIF(WIN32 AND MSVC)
+
 # OpenMP detection requires CMake >= 2.6.3
 
 EXEC_PROGRAM(${CMAKE_COMMAND} ARGS --version OUTPUT_VARIABLE VERSION_CMAKE_INFO)
