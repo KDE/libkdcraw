@@ -1,3 +1,7 @@
+2010-09-05 Alex Tutubalin <lexa@lexa.ru>
+           * fixed typo in documentation
+           * LibRaw 0.10.0 Release
+
 2010-07-31 Alex Tutubalin <lexa@lexa.ru>
            * dcraw 9.04 (1.438) imported: changes in tiff metadata parser,
             fixed a typo in Canon A720 model name
