@@ -140,7 +140,8 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
     else
         imgData = QByteArray((const char*)thumb->data, (int)thumb->data_size);
 
-    free(thumb);
+    // Clear memory allocation. Introduced with LibRaw 0.11.0
+    raw.dcraw_clear_mem(thumb);
     raw.recycle();
 
     if ( imgData.isEmpty() )
