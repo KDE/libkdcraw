@@ -52,7 +52,7 @@ int main(int ac, char *av[])
                 "\t-s N - select Nth image in file (default=0)\n"
                 "\t-g - use gamma correction with gamma 2.2 (not precise,use for visual inspection only)\n"
                 "\t-A - autoscaling (by integer factor)\n"
-                "\t-N - no raw curve\n"
+                "\t-N - no raw curve/zeroes filtering\n"
                 ,LibRaw::version(),
                 LibRaw::cameraCount(),
                 av[0]);
@@ -71,7 +71,7 @@ int main(int ac, char *av[])
     OUT.output_tiff=1;
     OUT.user_flip=0;
     OUT.no_auto_bright = 1;
-    OUT.filtering_mode=(LibRaw_filtering)( LIBRAW_FILTERING_NOBLACKS|LIBRAW_FILTERING_NOZEROES);
+    OUT.filtering_mode=(LibRaw_filtering)(LIBRAW_FILTERING_NOZEROES);
     for (i=1;i<ac;i++)
         {
             if(av[i][0]=='-')

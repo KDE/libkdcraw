@@ -78,7 +78,7 @@ void usage(const char *prog)
 "-T        Write TIFF instead of PPM\n"
 "-G        Use green_matching() filter\n"
 #ifndef WIN32
-"-B        Use mmap()-ed buffer instead of plain FILE I/O\n"
+"-E        Use mmap()-ed buffer instead of plain FILE I/O\n"
 #endif
         );
     exit(1);
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
   for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
       {
           opt = argv[arg++][1];
-          if ((cp = strchr (sp=(char*)"cnbrkStqmHACgU", opt)))
+          if ((cp = strchr (sp=(char*)"cnbrkStqmHABCgU", opt)))
               for (i=0; i < "111411111142"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0])) 
                       {
@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
                   OUT.four_color_rgb    = 1;  
                   break;
               case 'A':  for(c=0; c<4;c++) OUT.greybox[c]  = atoi(argv[arg++]);
+              case 'B':  for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]);
               case 'a':  OUT.use_auto_wb       = 1;  break;
               case 'w':  OUT.use_camera_wb     = 1;  break;
               case 'M':  OUT.use_camera_matrix = (opm == '+');  break;
@@ -183,7 +184,7 @@ int main(int argc, char *argv[])
               case '4':  OUT.gamm[0] = OUT.gamm[1] =  OUT.no_auto_bright    = 1; /* no break here! */
               case '6':  OUT.output_bps = 16;  break;
 #ifndef WIN32
-              case 'B':  use_mmap              = 1;  break;
+              case 'E':  use_mmap              = 1;  break;
 #endif
               default:
                   fprintf (stderr,"Unknown option \"-%c\".\n", opt);
