@@ -127,7 +127,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
     }
 
-    libraw_processed_image_t *thumb = raw.dcraw_make_mem_thumb(&ret);
+    libraw_processed_image_t* thumb = raw.dcraw_make_mem_thumb(&ret);
     if(!thumb)
     {
         kDebug() << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret);
@@ -205,21 +205,18 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 
     QByteArray imgData;
     KDcrawPriv::createPPMHeader(imgData, halfImg);
-    free(halfImg);
+    // Clear memory allocation. Introduced with LibRaw 0.11.0
+    raw.dcraw_clear_mem(halfImg);
     raw.recycle();
 
     if (!image.loadFromData(imgData))
     {
         kDebug() << "Failed to load PPM data from LibRaw!";
-        // Clear memory allocation. Introduced with LibRaw 0.11.0
-        raw.dcraw_clear_mem(halfImg);
         return false;
     }
 
     kDebug() << "Using reduced RAW picture extraction";
 
-    // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(halfImg);
     return true;
 }
 
@@ -740,13 +737,12 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     height    = img->height;
     rgbmax    = (1 << img->bits)-1;
     imageData = QByteArray((const char*)img->data, (int)img->data_size);
-    free(img);
+    // Clear memory allocation. Introduced with LibRaw 0.11.0
+    raw.dcraw_clear_mem(img);
     raw.recycle();
 
     if (m_cancel)
     {
-        // Clear memory allocation. Introduced with LibRaw 0.11.0
-        raw.dcraw_clear_mem(img);
         return false;
     }
     d->setProgress(0.4);
@@ -754,9 +750,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     kDebug() << "LibRaw: data info: width=" << width
              << " height=" << height
              << " rgbmax=" << rgbmax;
-
-    // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(img);
 
     return true;
 }
