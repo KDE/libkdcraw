@@ -164,9 +164,9 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     kDebug() << "Try to use reduced RAW picture extraction";
 
     LibRaw raw;
-    raw.imgdata.params.use_auto_wb    = 1;         // Use automatic white balance.
-    raw.imgdata.params.use_camera_wb  = 1;         // Use camera white balance, if possible.
-    raw.imgdata.params.half_size      = 1;         // Half-size color image (3x faster than -q).
+    raw.imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
+    raw.imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
+    raw.imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
 
     // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
     raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
@@ -211,10 +211,15 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     if (!image.loadFromData(imgData))
     {
         kDebug() << "Failed to load PPM data from LibRaw!";
+        // Clear memory allocation. Introduced with LibRaw 0.11.0
+        raw.dcraw_clear_mem(halfImg);
         return false;
     }
 
     kDebug() << "Using reduced RAW picture extraction";
+
+    // Clear memory allocation. Introduced with LibRaw 0.11.0
+    raw.dcraw_clear_mem(halfImg);
     return true;
 }
 
@@ -338,7 +343,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     rawData = QByteArray();
     rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
 
-    unsigned short *output = (unsigned short *)rawData.data();
+    unsigned short* output = (unsigned short*)rawData.data();
 
     for (uint row=0 ; row < raw.imgdata.sizes.iheight ; row++)
     {
@@ -356,7 +361,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 }
 
 bool KDcraw::decodeHalfRAWImage(const QString& filePath, const RawDecodingSettings& rawDecodingSettings,
-                                QByteArray &imageData, int &width, int &height, int &rgbmax)
+                                QByteArray& imageData, int& width, int& height, int& rgbmax)
 {
     m_rawDecodingSettings                    = rawDecodingSettings;
     m_rawDecodingSettings.halfSizeColorImage = true;
@@ -724,7 +729,8 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 
     if (m_cancel)
     {
-        free(img);
+        // Clear memory allocation. Introduced with LibRaw 0.11.0
+        raw.dcraw_clear_mem(img);
         raw.recycle();
         return false;
     }
@@ -738,12 +744,19 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     raw.recycle();
 
     if (m_cancel)
+    {
+        // Clear memory allocation. Introduced with LibRaw 0.11.0
+        raw.dcraw_clear_mem(img);
         return false;
+    }
     d->setProgress(0.4);
 
     kDebug() << "LibRaw: data info: width=" << width
-                  << " height=" << height
-                  << " rgbmax=" << rgbmax;
+             << " height=" << height
+             << " rgbmax=" << rgbmax;
+
+    // Clear memory allocation. Introduced with LibRaw 0.11.0
+    raw.dcraw_clear_mem(img);
 
     return true;
 }
