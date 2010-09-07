@@ -1,3 +1,13 @@
+2010-09-07 Alex Tutubalin <lexa@lexa.ru>
+           * Phase One files: LibRaw::unpack() sets colordata.black to
+             approximately correct value. 
+           * Fixed minor error in setting colordata.maximum value
+             for Phase One files.
+           * LibRaw::subtract_black() sets colordata.black and
+             colordata.cblack[] to zero to preserve data integrity.
+           * LibRaw 0.11-Beta2
+             
+
 2010-09-04 Alex Tutubalin <lexa@lexa.ru>
 
            * It is now possible to crop output image on postprocessing

@@ -1480,6 +1480,7 @@ void LibRaw::subtract_black()
                         if(val<0) val = 0;
                         BAYERC(row,col,cc) = val;
                     }
+            C.maximum -= C.black;
             if(!( O.filtering_mode & LIBRAW_FILTERING_NORAWCURVE) )
                 {
                     phase_one_correct();
@@ -1493,6 +1494,15 @@ void LibRaw::subtract_black()
                         val = BAYERC(row,col,cc);
                         if(C.channel_maximum[cc] > val) C.channel_maximum[cc] = val;
                     }
+            // clear P1 black level data
+            imgdata.color.phase_one_data.t_black = 0;
+            if(imgdata.masked_pixels.ph1_black)
+                {
+                    free(imgdata.masked_pixels.ph1_black);
+                    imgdata.masked_pixels.ph1_black = 0;
+                }
+            ZERO(C.cblack);
+            C.black = 0;
         }
     else if((C.black || C.cblack[0] || C.cblack[1] || C.cblack[2] || C.cblack[3]))
         {
@@ -1514,6 +1524,8 @@ void LibRaw::subtract_black()
                         BAYERC(row,col,cc) = val;
                     }
             C.maximum -= C.black;
+            ZERO(C.cblack);
+            C.black = 0;
         }
 }
 
@@ -1564,8 +1576,6 @@ int LibRaw::dcraw_process(void)
 
         if (O.user_qual >= 0) quality = O.user_qual;
 
-
-
         adjust_maximum();
 
         if (O.user_sat > 0) C.maximum = O.user_sat;
@@ -1577,15 +1587,7 @@ int LibRaw::dcraw_process(void)
 
         if ( O.document_mode < 2)
             {
-                int s_black=C.black, s_cblack[8],i;
-                for(i=0;i<8;i++)
-                    s_cblack[i] = C.cblack[i];
-                ZERO(C.cblack);
-                C.black = 0;
                 scale_colors();
-                for(i=0;i<8;i++)
-                    C.cblack[i] = s_cblack[i];
-                C.black = s_black;
                 SET_PROC_FLAG(LIBRAW_PROGRESS_SCALE_COLORS);
             }
 
