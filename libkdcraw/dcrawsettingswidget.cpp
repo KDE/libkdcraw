@@ -164,7 +164,7 @@ DcrawSettingsWidget::DcrawSettingsWidget(QWidget* parent, int advSettings)
 
 void DcrawSettingsWidget::setup(int advSettings)
 {
-    setObjectName("DCRawSettings Expander");
+    setObjectName( QLatin1String("DCRawSettings Expander" ));
 
     // ---------------------------------------------------------------
     // DEMOSAICING Settings panel
