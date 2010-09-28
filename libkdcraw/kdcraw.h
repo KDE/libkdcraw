@@ -1,4 +1,5 @@
 /** ===========================================================
+ * @file
  *
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
@@ -41,6 +42,8 @@
 #include "rawdecodingsettings.h"
 #include "dcrawinfocontainer.h"
 
+/** @brief Main namespace of libKDcraw
+ */
 namespace KDcrawIface
 {
 
