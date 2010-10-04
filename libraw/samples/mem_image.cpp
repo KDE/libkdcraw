@@ -167,7 +167,7 @@ int main(int ac, char *av[])
             if(image)
                 {
                     write_ppm(image,av[i]);
-                    free(image);
+                    LibRaw::dcraw_clear_mem(image);
                 }
             else
                 fprintf(stderr,"Cannot unpack %s to memory buffer: %s\n" , av[i],libraw_strerror(ret));
@@ -187,7 +187,7 @@ int main(int ac, char *av[])
                             if(thumb)
                                 {
                                     write_thumb(thumb,av[i]);
-                                    free(thumb);
+                                    LibRaw::dcraw_clear_mem(thumb);
                                 }
                             else
                                 fprintf(stderr,"Cannot unpack thumbnail of %s to memory buffer: %s\n" , av[i],libraw_strerror(ret));
