@@ -59,7 +59,7 @@ DcrawInfoContainer::DcrawInfoContainer()
         {
             cameraColorMatrix1[x][y] = 0.0;
             cameraColorMatrix2[x][y] = 0.0;
-            cameraXYZMatrix[x][y]    = 0.0;
+            cameraXYZMatrix[y][x]    = 0.0;       // NOTE: see B.K.O # 253911 : [y][x] not [x][y]
         }
     }
 }
