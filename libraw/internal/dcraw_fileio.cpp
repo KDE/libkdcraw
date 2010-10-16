@@ -40,7 +40,10 @@ void CLASS bad_pixels (const char *cfname)
   int len, time, row, col, r, c, rad, tot, n, fixed=0;
 #else
   char *cp, line[128];
-  int time, row, col, r, c, rad, tot, n, fixed=0;
+  int time, row, col, r, c, rad, tot, n;
+#ifdef DCRAW_VERBOSE
+  int fixed = 0;
+#endif
 #endif
 
   if (!filters) return;
