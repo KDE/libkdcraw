@@ -21,6 +21,11 @@ it under the terms of the one of three licenses as you choose:
 
 
  */
+#ifdef WIN32
+// suppress sprintf-related warning. sprintf() is permitted in sample code
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,11 +36,13 @@ it under the terms of the one of three licenses as you choose:
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <sys/time.h>
 #endif
 
 #include "libraw/libraw.h"
 #ifdef WIN32
 #define snprintf _snprintf
+#include <windows.h>
 #endif
 
 
@@ -77,6 +84,9 @@ void usage(const char *prog)
 "-g pow ts Set gamma curve to gamma pow and toe slope ts (default = 2.222 4.5)\n"
 "-T        Write TIFF instead of PPM\n"
 "-G        Use green_matching() filter\n"
+"-B <x y w h> use cropbox\n"
+"-F        Use FILE I/O instead of streambuf API\n"
+"-d        Detailed timing report\n"
 #ifndef WIN32
 "-E        Use mmap()-ed buffer instead of plain FILE I/O\n"
 #endif
@@ -105,6 +115,36 @@ int my_progress_callback(void *d,enum LibRaw_progress p,int iteration, int expec
     return 0; // always return 0 to continue processing
 }
 
+// timer
+#ifndef WIN32
+static struct timeval start,end;
+void timerstart(void)
+{
+    gettimeofday(&start,NULL);
+}
+void timerprint(const char *msg,const char *filename)
+{
+    gettimeofday(&end,NULL);
+    float msec = (end.tv_sec - start.tv_sec)*1000.0f + (end.tv_usec - start.tv_usec)/1000.0f;
+    printf("Timing: %s/%s: %6.3f msec\n",filename,msg,msec);
+}
+#else
+LARGE_INTEGER start;
+void timerstart(void)
+{
+	QueryPerformanceCounter(&start);
+}
+void timerprint(const char *msg, const char *filename)
+{
+	LARGE_INTEGER unit,end;
+	QueryPerformanceCounter(&end);
+	QueryPerformanceFrequency(&unit);
+	float msec = (float)(end.QuadPart - start.QuadPart);
+	msec /= (float)unit.QuadPart/1000.0f;
+	printf("Timing: %s/%s: %6.3f msec\n",filename,msg,msec);
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -113,8 +153,15 @@ int main(int argc, char *argv[])
     LibRaw RawProcessor;
     int i,arg,c,ret;
     char opm,opt,*cp,*sp;
-    int use_mmap=0, msize;
-    void *iobuffer;
+    int use_bigfile=0, use_timing=0;
+#ifndef WIN32
+    int msize = 0,use_mmap=0;
+    void *iobuffer=0;
+#endif
+
+#ifdef OUT
+#undef OUT
+#endif
 
 #define OUT RawProcessor.imgdata.params
     
@@ -133,15 +180,15 @@ int main(int argc, char *argv[])
               {
               case 'v':  verbosity++;  break;
               case 'G':  OUT.green_matching = 1; break;
-              case 'c':  OUT.adjust_maximum_thr   = atof(argv[arg++]);  break;
-              case 'U':  OUT.auto_bright_thr   = atof(argv[arg++]);  break;
-              case 'n':  OUT.threshold   = atof(argv[arg++]);  break;
-              case 'b':  OUT.bright      = atof(argv[arg++]);  break;
+              case 'c':  OUT.adjust_maximum_thr   = (float)atof(argv[arg++]);  break;
+              case 'U':  OUT.auto_bright_thr   = (float)atof(argv[arg++]);  break;
+              case 'n':  OUT.threshold   = (float)atof(argv[arg++]);  break;
+              case 'b':  OUT.bright      = (float)atof(argv[arg++]);  break;
               case 'P':  OUT.bad_pixels  = argv[arg++];        break;
               case 'K':  OUT.dark_frame  = argv[arg++];        break;
               case 'r':
                   for(c=0;c<4;c++) 
-                      OUT.user_mul[c] = atof(argv[arg++]);  
+                      OUT.user_mul[c] = (float)atof(argv[arg++]);  
                   break;
               case 'C':  
                   OUT.aber[0] = 1 / atof(argv[arg++]);
@@ -183,6 +230,8 @@ int main(int argc, char *argv[])
               case 'T':  OUT.output_tiff       = 1;  break;
               case '4':  OUT.gamm[0] = OUT.gamm[1] =  OUT.no_auto_bright    = 1; /* no break here! */
               case '6':  OUT.output_bps = 16;  break;
+              case 'F':  use_bigfile=1; break;
+              case 'd':  use_timing=1; break;
 #ifndef WIN32
               case 'E':  use_mmap              = 1;  break;
 #endif
@@ -191,7 +240,11 @@ int main(int argc, char *argv[])
                   return 1;
               }
       }
+#ifndef WIN32
   putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
+#else
+  _putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
+#endif
   OUT.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 #define P1 RawProcessor.imgdata.idata
 #define S RawProcessor.imgdata.sizes
@@ -211,6 +264,9 @@ int main(int argc, char *argv[])
             char outfn[1024];
 
             if(verbosity) printf("Processing file %s\n",argv[arg]);
+            
+            timerstart();
+            
 #ifndef WIN32
             if(use_mmap)
                 {
@@ -247,23 +303,43 @@ int main(int argc, char *argv[])
             else
 #endif
                 {
-                    if( (ret = RawProcessor.open_file(argv[arg])) != LIBRAW_SUCCESS)
+                    if(use_bigfile)
+                        // force open_file switch to bigfile processing
+                        ret = RawProcessor.open_file(argv[arg],1);
+                    else
+                        ret = RawProcessor.open_file(argv[arg]);
+                        
+                    if( ret  != LIBRAW_SUCCESS)
                         {
                             fprintf(stderr,"Cannot open %s: %s\n",argv[arg],libraw_strerror(ret));
                             continue; // no recycle b/c open_file will recycle itself
                         }
                 }
+
+            if(use_timing)
+                timerprint("LibRaw::open_file()",argv[arg]);
+
+
+            timerstart();
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue;
                 }
+
+            if(use_timing)
+                timerprint("LibRaw::unpack()",argv[arg]);
+
+            timerstart();
             if (LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_process()))
                 {
                     fprintf(stderr,"Cannot do postpocessing on %s: %s\n",argv[arg],libraw_strerror(ret));
                     if(LIBRAW_FATAL_ERROR(ret))
                         continue; 
                 }
+            if(use_timing)
+                timerprint("LibRaw::dcraw_process()",argv[arg]);
+
             snprintf(outfn,sizeof(outfn),
                      "%s.%s",
                      argv[arg], OUT.output_tiff ? "tiff" : (P1.colors>1?"ppm":"pgm"));
