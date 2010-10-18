@@ -103,7 +103,7 @@ class LibRaw_file_datastream: public LibRaw_abstract_datastream
 #define LR_STREAM_CHK() do {if(!f.get()) throw LIBRAW_EXCEPTION_IO_EOF;}while(0)
 
 #ifndef WIN32SECURECALLS
-    virtual int read(void * ptr,size_t size, size_t nmemb){LR_STREAM_CHK(); return int(f->sgetn(static_cast<char*>(ptr), nmemb * size) / size); }
+	virtual int read(void * ptr,size_t size, size_t nmemb){LR_STREAM_CHK(); return int(f->sgetn(static_cast<char*>(ptr), std::streamsize(nmemb * size)) / size); }
 #else
     virtual int read(void * ptr,size_t size, size_t nmemb){LR_STREAM_CHK(); return int(f->_Sgetn_s(static_cast<char*>(ptr), nmemb * size,nmemb * size) / size); }
 #endif
@@ -189,7 +189,7 @@ class LibRaw_file_datastream: public LibRaw_abstract_datastream
             f = saved_f;
             return ENOMEM;
         }
-        f->pubsetbuf(static_cast<char*>(buf), size);
+		f->pubsetbuf(static_cast<char*>(buf), static_cast<std::streamsize>(size));
         return 0;
     }
     
@@ -351,6 +351,9 @@ inline int LibRaw_abstract_datastream::tempbuffer_open(void  *buf, size_t size)
     return substream?0:EINVAL;
 }
 
+#define LR_BF_CHK() do {if(!f) throw LIBRAW_EXCEPTION_IO_EOF;}while(0)
+
+
 class LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
 {
   public:
@@ -374,8 +377,6 @@ class LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual             ~LibRaw_bigfile_datastream() {if(f)fclose(f); if(sav)fclose(sav);}
     virtual int         valid() { return f?1:0;}
 
-#define LR_BF_CHK() do {if(!f) throw LIBRAW_EXCEPTION_IO_EOF;}while(0)
-
     virtual int         read(void * ptr,size_t size, size_t nmemb) 
     { 
         LR_BF_CHK(); 
@@ -393,7 +394,7 @@ class LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
 #ifdef WIN32SECURECALLS
         return substream?substream->seek(o,whence):_fseeki64(f,o,whence);
 #else
-        return substream?substream->seek(o,whence):fseek(f,(size_t)o,whence);
+        return substream?substream->seek(o,whence):fseek(f,(long)o,whence);
 #endif
 #else
         return substream?substream->seek(o,whence):fseeko(f,o,whence);
