@@ -8893,3 +8893,4 @@ void CLASS write_ppm_tiff()
   }
   free (ppm);
 }
+
