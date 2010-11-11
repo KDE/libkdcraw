@@ -43,7 +43,6 @@
 
 #include "version.h"
 #include "rawfiles.h"
-#include "libraw_config.h"
 #include "kdcraw_p.h"
 
 namespace KDcrawIface
@@ -789,7 +788,7 @@ QString KDcraw::librawVersion()
 
 bool KDcraw::librawUseGomp()
 {
-#ifdef USE_OPENMP
+#ifdef LIBRAW_USE_OPENMP
     return true;
 #else
     return false;

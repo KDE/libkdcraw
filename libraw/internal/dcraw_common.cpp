@@ -3201,7 +3201,7 @@ void CLASS hat_transform (float *temp, float *base, int st, int size, int sc)
     temp[i] = 2*base[st*i] + base[st*(i-sc)] + base[st*(2*size-2-(i+sc))];
 }
 
-#if !defined(_OPENMP) || defined(__APPLE__) || defined(__MACOSX__)
+#if !defined(LIBRAW_USE_OPENMP)
 void CLASS wavelet_denoise()
 {
   float *fimg=0, *temp, thold, mul[2], avg, diff;
@@ -3281,7 +3281,7 @@ void CLASS wavelet_denoise()
   }
   free (fimg);
 }
-#else
+#else /* LIBRAW_USE_OPENMP */
 void CLASS wavelet_denoise()
 {
   float *fimg=0, *temp, thold, mul[2], avg, diff;
@@ -3847,7 +3847,7 @@ void CLASS ppg_interpolate()
 /*  Fill in the green layer with gradients and pattern recognition: */
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,0,3);
-#ifdef _OPENMP
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel for default(shared) private(guess, diff, row, col, d, c, i, pix) schedule(static)
 #endif
 #endif
@@ -3869,7 +3869,7 @@ void CLASS ppg_interpolate()
 /*  Calculate red and blue for each green pixel:		*/
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,1,3);
-#ifdef _OPENMP
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel for default(shared) private(guess, diff, row, col, d, c, i, pix) schedule(static)
 #endif
 #endif
@@ -3883,7 +3883,7 @@ void CLASS ppg_interpolate()
 /*  Calculate blue for red pixels and vice versa:		*/
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,2,3);
-#ifdef _OPENMP
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel for default(shared) private(guess, diff, row, col, d, c, i, pix) schedule(static)
 #endif
 #endif
@@ -4155,7 +4155,7 @@ void CLASS ahd_interpolate()
   border_interpolate(5);
 
 #ifdef LIBRAW_LIBRARY_BUILD
-#ifdef _OPENMP
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel private(buffer,rgb,lab,homo,top,left,i,j,k) shared(xyz_cam,terminate_flag)
 #endif
 #endif
@@ -4166,12 +4166,14 @@ void CLASS ahd_interpolate()
     lab  = (short (*)[TS][TS][3])(buffer + 12*TS*TS);
     homo = (char  (*)[TS][2])    (buffer + 24*TS*TS);
 
-#ifdef _OPENMP
+#ifdef LIBRAW_LIBRARY_BUILD
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp for schedule(dynamic)
+#endif
 #endif
     for (top=2; top < height-5; top += TS-6){
 #ifdef LIBRAW_LIBRARY_BUILD
-#ifdef _OPENMP
+#ifdef LIBRAW_USE_OPENMP
         if(0== omp_get_thread_num())
 #endif
            if(callbacks.progress_cb) {                                     
