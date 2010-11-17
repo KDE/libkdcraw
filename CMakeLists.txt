@@ -54,10 +54,11 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 1.0.0 => 8.0.0  (Released with KDE 4.4.0)
 # 1.1.0 => 8.1.0  (Released with KDE 4.4.2)
 # 1.2.0 => 9.0.0  (Released with KDE 4.6.0)
+# 1.3.0 => 10.0.0 (Released with KDE 4.7.0)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "1")
-SET(DCRAW_LIB_MINOR_VERSION "2")
+SET(DCRAW_LIB_MINOR_VERSION "3")
 SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -71,7 +72,7 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "9")
+SET(DCRAW_LIB_SO_CUR_VERSION "10")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
@@ -114,6 +115,12 @@ ENDIF(OPENMP_FOUND)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
+# Flag to include demosaic pack GPL2
+ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
+
+# Flag to include demosaic pack GPL2
+ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
+
 # LibRaw use C++ exception.
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
@@ -128,6 +135,8 @@ INCLUDE_DIRECTORIES(
                     ${JPEG_INCLUDE_DIR}
                     ${LCMS_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL2
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL3
                    )
 
 # Do not compile LibRaw with KDE FINAL mode.
@@ -135,6 +144,8 @@ KDE4_NO_ENABLE_FINAL(libraw)
 
 SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_fileio.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/demosaic_packs.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcb_demosaicing.c
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
    )
