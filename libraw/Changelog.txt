@@ -1,3 +1,21 @@
+2010-11-20 Alex Tutubalin <lexa@lexa.ru>
+        * Update for new demosaic-pack-GPL3
+	* LibRaw 0.12.0-Beta1
+
+2010-11-19 Alex Tutubalin <lexa@lexa.ru>
+        * Demosaic pack(s) supported via ./configure   
+
+2010-11-17 Alex Tutubalin <lexa@lexa.ru>
+	* LCMS2 support
+	* afd_interpolate(2,1) instead of (5,0)
+        * dcraw_emu sample command line keys added and reordered
+          to reflect changes in LibRaw 0.12. 
+	* Nikon P7000: color matrix data and black level patch for ISO >=400
+	  Thanks to Gunnar Thorburn 
+        * Support for several industrial cameras based on Sony ICX 625/655 
+	  sensor: JAI BB500CL/GE, SVS625CL, ptGrey GRAS-50S5C
+	  Thanks to kaare
+
 2010-11-15 Alex Tutubalin <lexa@lexa.ru>
 
         * Several demosaic algorithms, found in other open-source RAW processing

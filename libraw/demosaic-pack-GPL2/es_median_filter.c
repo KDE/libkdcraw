@@ -54,14 +54,18 @@ void CLASS es_median_filter()
   /* Allocate buffer for 3x3 median filter */
   mf = (int (*)[3])calloc(width*height, sizeof *mf);
   for (pass=1; pass <= es_med_passes; pass++) {
+#ifdef DCRAW_VERBOSE
     if (verbose)
       fprintf (stderr,_("Edge-sensitive median filter pass %d...\n"), pass);
+#endif
   for (c=0; c < 3; c+=2) {
+#ifdef DCRAW_VERBOSE
     if (verbose) {
       if (c == 0) 
 	fprintf (stderr,_("\tR-G: 5x5 median filter + 3x3 Laplacian...")); 
       else
 	fprintf (stderr,_("\tB-G: 5x5 median filter + 3x3 Laplacian...")); }
+#endif
     /* Compute differential color plane */
     for (indx=0; indx < height*width; indx++)
       mf[indx][c] = image[indx][c] - image[indx][1];
@@ -84,7 +88,9 @@ void CLASS es_median_filter()
 /* 	pc[0][1] = p[4]; */
 /*       } */
     /* Apply 5x5 median fileter */
+#ifdef LIBRAW_USE_OPENMP
 #pragma omp parallel for private(row,col,pc)
+#endif
     for (row=2; row < height-2; row++)
       for (col=2; col < width-2; col++) {
 	pc = mf + row*width+col;
@@ -148,9 +154,11 @@ void CLASS es_median_filter()
 	  pc[0][c] = pc[0][1];
 	  smooth_cnt++; }
       }
+#ifdef DCRAW_VERBOSE
     if (verbose) 
       fprintf (stderr,_(" edge = %5.2f (%%)\n"),
 	       100.*(double)(edge_cnt)/(double)(edge_cnt+smooth_cnt));
+#endif
   }
   /* Make sure we don't mess up with edges */
   for (row=1; row < height-1; row++)
@@ -195,7 +203,9 @@ void CLASS es_median_filter()
       image[indx][1] = CLIP(v0);
     }
   /* Update interpolated pixels after differential median filter */
+#ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("\tUpdate R,G,B...")); 
+#endif
   /* Update red & blue at GREEN by averaging color differential values */
   for (row=1; row < height-1; row++)
     for (col=1+(FC(row,2) & 1), c=FC(row,col+1); col < width-1; col+=2) {
@@ -279,7 +289,9 @@ void CLASS es_median_filter()
 	pix[0][1] = CLIP(v0);
       }
     }
+#ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("\n"));
+#endif
   }
   /* Free buffer */
   free(mf);

@@ -21,9 +21,7 @@ it under the terms of the one of three licenses as you choose:
    for more information
 */
 
-#line 27 "dcraw/dcraw.c"
 #define NO_JPEG
-#line 32 "dcraw/dcraw.c"
 #define VERSION "9.05"
 
 #ifndef _GNU_SOURCE
@@ -50,16 +48,12 @@ it under the terms of the one of three licenses as you choose:
 #ifndef NO_JPEG
 #include <jpeglib.h>
 #endif
-#ifndef NO_LCMS
-#include <lcms.h>
-#endif
 #ifdef LOCALEDIR
 #include <libintl.h>
 #define _(String) gettext(String)
 #else
 #define _(String) (String)
 #endif
-#line 75 "dcraw/dcraw.c"
 #ifdef __CYGWIN__
 #include <io.h>
 #endif
@@ -70,12 +64,10 @@ it under the terms of the one of three licenses as you choose:
 #define snprintf _snprintf
 #define strcasecmp _stricmp
 #define strncasecmp strnicmp
-#line 89 "dcraw/dcraw.c"
 #else
 #include <unistd.h>
 #include <utime.h>
 #include <netinet/in.h>
-#line 97 "dcraw/dcraw.c"
 #endif
 
 #ifdef LJPEG_DECODE
@@ -86,7 +78,6 @@ it under the terms of the one of three licenses as you choose:
 #ifndef LONG_BIT
 #define LONG_BIT (8 * sizeof (long))
 #endif
-#line 174 "dcraw/dcraw.c"
 #define FORC(cnt) for (c=0; c < cnt; c++)
 #define FORC3 FORC(3)
 #define FORC4 FORC(4)
@@ -140,7 +131,6 @@ it under the terms of the one of three licenses as you choose:
 	3 G R G R G R	3 B G B G B G	3 R G R G R G	3 G B G B G B
  */
 
-#line 232 "dcraw/dcraw.c"
 #define BAYER(row,col) \
 	image[((row) >> shrink)*iwidth + ((col) >> shrink)][FC(row,col)]
 #define BAYER2(row,col) \
