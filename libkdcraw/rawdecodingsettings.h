@@ -53,38 +53,54 @@ class LIBKDCRAW_EXPORT RawDecodingSettings
 public:
 
     /** RAW decoding Interpolation methods
-
-        Bilinear: use high-speed but low-quality bilinear
-                  interpolation (default - for slow computer). In this method,
-                  the red value of a non-red pixel is computed as the average of
-                  the adjacent red pixels, and similar for blue and green.
-        VNG:      use Variable Number of Gradients interpolation.
-                  This method computes gradients near the pixel of interest and uses
-                  the lower gradients (representing smoother and more similar parts
-                  of the image) to make an estimate.
-        PPG:      use Patterned Pixel Grouping interpolation.
-                  Pixel Grouping uses assumptions about natural scenery in making estimates.
-                  It has fewer color artifacts on natural images than the Variable Number of
-                  Gradients method.
-        AHD:      use Adaptive Homogeneity-Directed interpolation.
-                  This method selects the direction of interpolation so as to
-                  maximize a homogeneity metric, thus typically minimizing color artifacts.
-    */
+     *
+     *  Bilinear: use high-speed but low-quality bilinear
+     *            interpolation (default - for slow computer). In this method,
+     *            the red value of a non-red pixel is computed as the average of
+     *            the adjacent red pixels, and similar for blue and green.
+     *  VNG:      use Variable Number of Gradients interpolation.
+     *            This method computes gradients near the pixel of interest and uses
+     *            the lower gradients (representing smoother and more similar parts
+     *            of the image) to make an estimate.
+     *  PPG:      use Patterned Pixel Grouping interpolation.
+     *            Pixel Grouping uses assumptions about natural scenery in making estimates.
+     *            It has fewer color artifacts on natural images than the Variable Number of
+     *            Gradients method.
+     *  AHD:      use Adaptive Homogeneity-Directed interpolation.
+     *            This method selects the direction of interpolation so as to
+     *            maximize a homogeneity metric, thus typically minimizing color artifacts.
+     *  DCB:      DCB interpolation (http://www.linuxphoto.org/html/dcb.html)
+     *  PL_AHD:   Paul Lee modified AHD interpolation (http://sites.google.com/site/demosaicalgorithms/modified-dcraw)
+     *  AFD:      Demosaicing through 5 pass median filter from PerfectRaw.
+     *  VCD:      VCD interpolation.
+     *  VCD_AHD:  Paul Lee mixed demosaicing between VCD and AHD.
+     *  LMMSE:    LMMSE interpolation from PerfectRaw.
+     *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee.
+     */
     enum DecodingQuality
     {
+        // Original dcraw demosaicing methods
         BILINEAR = 0,
         VNG      = 1,
         PPG      = 2,
-        AHD      = 3
+        AHD      = 3,
+        // Extended demosaicing method
+        DCB      = 4,
+        PL_AHD   = 5,
+        AFD      = 6,
+        VCD      = 7,
+        VCD_AHD  = 8,
+        LMMSE    = 9,
+        AMAZE    = 10
     };
 
     /** White balances alternatives
-        NONE:     no white balance used : reverts to standard daylight D65 WB.
-        CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
-        AUTO:     Averages an auto WB on the entire image.
-        CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
-        AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
-    */
+     *  NONE:     no white balance used : reverts to standard daylight D65 WB.
+     *  CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
+     *  AUTO:     Averages an auto WB on the entire image.
+     *  CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
+     *  AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
+     */
     enum WhiteBalance
     {
         NONE    = 0,
@@ -95,10 +111,10 @@ public:
     };
 
     /** Input color profile used to decoded image
-        NOINPUTCS:     No input color profile.
-        EMBEDDED:      Use the camera profile embedded in RAW file if exist.
-        CUSTOMINPUTCS: Use a custom input color space profile.
-    */
+     *  NOINPUTCS:     No input color profile.
+     *  EMBEDDED:      Use the camera profile embedded in RAW file if exist.
+     *  CUSTOMINPUTCS: Use a custom input color space profile.
+     */
     enum InputColorSpace
     {
         NOINPUTCS = 0,
@@ -107,13 +123,13 @@ public:
     };
 
     /** Output RGB color space used to decoded image
-        RAWCOLOR:       No output color profile (Linear RAW).
-        SRGB:           Use standard sRGB color space.
-        ADOBERGB:       Use standard Adobe RGB color space.
-        WIDEGAMMUT:     Use standard RGB Wide Gamut color space.
-        PROPHOTO:       Use standard RGB Pro Photo color space.
-        CUSTOMOUTPUTCS: Use a custom workspace color profile.
-    */
+     *  RAWCOLOR:       No output color profile (Linear RAW).
+     *  SRGB:           Use standard sRGB color space.
+     *  ADOBERGB:       Use standard Adobe RGB color space.
+     *  WIDEGAMMUT:     Use standard RGB Wide Gamut color space.
+     *  PROPHOTO:       Use standard RGB Pro Photo color space.
+     *  CUSTOMOUTPUTCS: Use a custom workspace color profile.
+     */
     enum OutputColorSpace
     {
         RAWCOLOR = 0,
@@ -124,149 +140,190 @@ public:
         CUSTOMOUTPUTCS
     };
 
-    /** Standard constructor with default settings */
+    /** Standard constructor with default settings
+     */
     RawDecodingSettings();
 
-    /** Equivalent to the copy constructor */
+    /** Equivalent to the copy constructor
+     */
     RawDecodingSettings& operator=(const RawDecodingSettings& prm);
 
-    /** Compare for equality */
+    /** Compare for equality
+     */
     bool operator==(const RawDecodingSettings& o) const;
 
-    /** Standard destructor */
+    /** Standard destructor
+     */
     virtual ~RawDecodingSettings();
 
-    /** Method to use a settings to optimize time loading, for exemple to compute image histogram */
+    /** Method to use a settings to optimize time loading, for exemple to compute image histogram
+     */
     void optimizeTimeLoading();
 
-    /** Methods to read/write settings from/to a config file */
+    /** Methods to read/write settings from/to a config file
+     */
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
 public:
 
     /** If true, images with overblown channels are processed much more accurate,
-        without 'pink clouds' (and blue highlights under tungsteen lamps).
+     *  without 'pink clouds' (and blue highlights under tungsteen lamps).
      */
     bool fixColorsHighlights;
 
     /** If false, use a fixed white level, ignoring the image histogram.
-    */
+     */
     bool autoBrightness;
 
     /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
-    */
+     */
     bool sixteenBitsImage;
 
     /** Half-size color image decoding (twice as fast as "enableRAWQuality").
-        Use this option to reduce time loading to render histogram for example,
-        no to render an image to screen.
-    */
+     *  Use this option to reduce time loading to render histogram for example,
+     *  no to render an image to screen.
+     */
     bool halfSizeColorImage;
 
     /** White balance type to use. See WhiteBalance values for detail
-    */
+     */
     WhiteBalance whiteBalance;
 
     /** The temperature and the green multiplier of the custom white balance
-    */
+     */
     int customWhiteBalance;
     double customWhiteBalanceGreen;
 
     /** RAW file decoding using RGB interpolation as four colors.
-    */
+     */
     bool RGBInterpolate4Colors;
 
     /** For cameras with non-square pixels, do not stretch the image to its
-        correct aspect ratio. In any case, this option guarantees that each
-        output pixel corresponds to one RAW pixel.
-    */
+     *  correct aspect ratio. In any case, this option guarantees that each
+     *  output pixel corresponds to one RAW pixel.
+     */
     bool DontStretchPixels;
 
     /** Unclip Highlight color level:
-        0   = Clip all highlights to solid white.
-        1   = Leave highlights unclipped in various shades of pink.
-        2   = Blend clipped and unclipped values together for a gradual
-              fade to white.
-        3-9 = Reconstruct highlights. Low numbers favor whites; high numbers
-              favor colors.
-    */
+     *  0   = Clip all highlights to solid white.
+     *  1   = Leave highlights unclipped in various shades of pink.
+     *  2   = Blend clipped and unclipped values together for a gradual
+     *        fade to white.
+     *  3-9 = Reconstruct highlights. Low numbers favor whites; high numbers
+     *        favor colors.
+     */
     int unclipColors;
 
     /** RAW quality decoding factor value. See DecodingQuality values
-        for details.
-    */
+     *  for details.
+     */
     DecodingQuality RAWQuality;
 
     /** After interpolation, clean up color artifacts by repeatedly applying
-        a 3x3 median filter to the R-G and B-G channels.
-    */
+     *  a 3x3 median filter to the R-G and B-G channels.
+     */
     int medianFilterPasses;
 
     /** Use wavelets to erase noise while preserving real detail.
-    */
+     */
     bool enableNoiseReduction;
 
     /** Noise reduction threshold value.
-        The best threshold should be somewhere between 100 and 1000.
-    */
+     *  The best threshold should be somewhere between 100 and 1000.
+     */
     int NRThreshold;
 
     /** Use red and blue layer magnification to reduce chromatic aberrations
-    */
+     */
     bool enableCACorrection;
 
     /** Magnification factor for Red and Blue layers
-        - caMultiplier[0] = red multiplier
-        - caMultiplier[1] = blue multiplier
-    */
+     *  - caMultiplier[0] = red multiplier
+     *  - caMultiplier[1] = blue multiplier
+     */
     double caMultiplier[2];
 
     /** Brightness of output image.
-    */
+     */
     double brightness;
 
     /** Set on the black point setting to decode RAW image.
-    */
+     */
     bool enableBlackPoint;
 
     /** Black Point value of output image.
-    */
+     */
     int blackPoint;
 
     /** Set on the white point setting to decode RAW image.
-    */
+     */
     bool enableWhitePoint;
 
     /** White Point value of output image.
-    */
+     */
     int whitePoint;
 
     /** The input color profile used to decoded RAW data. See OutputColorProfile
-        values for details.
-    */
+     *  values for details.
+     */
     InputColorSpace inputColorSpace;
 
     /** Path to custom input ICC profile to define the camera's raw colorspace.
-    */
+     */
     QString inputProfile;
 
     /** The output color profile used to decoded RAW data. See OutputColorProfile
-        values for details.
-    */
+     *  values for details.
+     */
     OutputColorSpace outputColorSpace;
 
     /** Path to custom output ICC profile to define the color workspace.
-    */
+     */
     QString outputProfile;
 
     /** Path to text file including dead pixel list.
-    */
+     */
     QString deadPixelMap;
 
     /** Rectangle used to calculate the white balance by averaging the region of image.
-    */
+     */
     QRect whiteBalanceArea;
+
+    //-- Extended demosaicing method settings ----------------------------------------------------------
+
+    /// For DCB intepolation.
+
+    /** Number of DCB correction passes.
+     */
+    int dcbIterations;
+
+    /** DCB interpolation with enhance interpolated colors.
+     */
+    int dcbEnhanceFl;
+
+    /** FBDD noise reduction before demosaicing.
+     *  0   : do not use FBDD noise reduction
+     *  1   : light FBDD reduction
+     *  2-9 : full FBDD reduction
+     */
+    int fbddNR;
+
+    /// For VCD interpolation.
+
+    /** Use EECI refine for VCD interpolation.
+     */
+    int eeciRefine;
+
+    /** Use edge-sensitive median filtering for artifact supression after VCD demosaic.
+     */
+    int esMedPasses;
+
+    /// For AMaZE interpolation.
+
+    /** Suppress chromatic abberation for AMaZE demosaic.
+     */
+    int amazeCARefine;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
