@@ -312,7 +312,6 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 
     if (addMaskedBorders)
     {
-
         ret = raw.add_masked_borders_to_bitmap();
         if (ret != LIBRAW_SUCCESS)
         {
@@ -387,8 +386,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 {
     m_cancel = false;
 
-    QStringList args;     // List of dcraw options to show as debug message on the console.
-
     LibRaw raw;
     // Set progress call back function.
     raw.set_progress_handler(callbackForLibRaw, d);
@@ -403,68 +400,57 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     if (!m_rawDecodingSettings.autoBrightness)
     {
         // Use a fixed white level, ignoring the image histogram.
-        args.append("-W");
         raw.imgdata.params.no_auto_bright = 1;
     }
 
     if (m_rawDecodingSettings.sixteenBitsImage)
     {
         // (-4) 16bit ppm output
-        args.append("-4");
         raw.imgdata.params.output_bps = 16;
     }
 
     if (m_rawDecodingSettings.halfSizeColorImage)
     {
         // (-h) Half-size color image (3x faster than -q).
-        args.append("-h");
         raw.imgdata.params.half_size = 1;
     }
 
     if (m_rawDecodingSettings.RGBInterpolate4Colors)
     {
         // (-f) Interpolate RGB as four colors.
-        args.append("-f");
         raw.imgdata.params.four_color_rgb = 1;
     }
 
     if (m_rawDecodingSettings.DontStretchPixels)
     {
         // (-j) Do not stretch the image to its correct aspect ratio.
-        args.append("-j");
         raw.imgdata.params.use_fuji_rotate = 1;
     }
 
     // (-H) Unclip highlight color.
-    args.append(QString("-H %1").arg(m_rawDecodingSettings.unclipColors));
     raw.imgdata.params.highlight = m_rawDecodingSettings.unclipColors;
-
 
     if (m_rawDecodingSettings.brightness != 1.0)
     {
         // (-b) Set Brightness value.
-        args.append(QString("-b %1").arg(m_rawDecodingSettings.brightness));
         raw.imgdata.params.bright = m_rawDecodingSettings.brightness;
     }
 
     if (m_rawDecodingSettings.enableBlackPoint)
     {
         // (-k) Set Black Point value.
-        args.append(QString("-k %1").arg(m_rawDecodingSettings.blackPoint));
         raw.imgdata.params.user_black = m_rawDecodingSettings.blackPoint;
     }
 
     if (m_rawDecodingSettings.enableWhitePoint)
     {
         // (-S) Set White Point value (saturation).
-        args.append(QString("-S %1").arg(m_rawDecodingSettings.whitePoint));
         raw.imgdata.params.user_sat = m_rawDecodingSettings.whitePoint;
     }
 
     if (m_rawDecodingSettings.medianFilterPasses > 0)
     {
         // (-m) After interpolation, clean up color artifacts by repeatedly applying a 3x3 median filter to the R-G and B-G channels.
-        args.append(QString("-m %1").arg(m_rawDecodingSettings.medianFilterPasses));
         raw.imgdata.params.med_passes = m_rawDecodingSettings.medianFilterPasses;
     }
 
@@ -472,7 +458,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     {
         // (-P) Read the dead pixel list from this file.
         raw.imgdata.params.bad_pixels = deadpixelPath.data();
-        args.append(QString("-P %1").arg(raw.imgdata.params.bad_pixels));
     }
 
     switch (m_rawDecodingSettings.whiteBalance)
@@ -484,14 +469,12 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         case RawDecodingSettings::CAMERA:
         {
             // (-w) Use camera white balance, if possible.
-            args.append("-w");
             raw.imgdata.params.use_camera_wb = 1;
             break;
         }
         case RawDecodingSettings::AUTO:
         {
             // (-a) Use automatic white balance.
-            args.append("-a");
             raw.imgdata.params.use_auto_wb = 1;
             break;
         }
@@ -568,10 +551,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             raw.imgdata.params.user_mul[1] = RGB[1];
             raw.imgdata.params.user_mul[2] = RGB[2];
             raw.imgdata.params.user_mul[3] = RGB[1];
-            args.append(QString("-r %1 %2 %3 %4").arg(raw.imgdata.params.user_mul[0])
-                                                 .arg(raw.imgdata.params.user_mul[1])
-                                                 .arg(raw.imgdata.params.user_mul[2])
-                                                 .arg(raw.imgdata.params.user_mul[3]));
             break;
         }
         case RawDecodingSettings::AERA:
@@ -581,23 +560,17 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             raw.imgdata.params.greybox[1] = m_rawDecodingSettings.whiteBalanceArea.top();
             raw.imgdata.params.greybox[2] = m_rawDecodingSettings.whiteBalanceArea.width();
             raw.imgdata.params.greybox[3] = m_rawDecodingSettings.whiteBalanceArea.height();
-            args.append(QString("-A %1 %2 %3 %4").arg(raw.imgdata.params.greybox[0])
-                                                 .arg(raw.imgdata.params.greybox[1])
-                                                 .arg(raw.imgdata.params.greybox[2])
-                                                 .arg(raw.imgdata.params.greybox[3]));
             break;
         }
     }
 
     // (-q) Use an interpolation method.
     raw.imgdata.params.user_qual = m_rawDecodingSettings.RAWQuality;
-    args.append(QString("-q %1").arg(m_rawDecodingSettings.RAWQuality));
 
     if (m_rawDecodingSettings.enableNoiseReduction)
     {
         // (-n) Use wavelets to erase noise while preserving real detail.
         raw.imgdata.params.threshold = m_rawDecodingSettings.NRThreshold;
-        args.append(QString("-n %1").arg(raw.imgdata.params.threshold));
     }
 
     if (m_rawDecodingSettings.enableCACorrection)
@@ -605,8 +578,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         // (-C) Set Correct chromatic aberration correction.
         raw.imgdata.params.aber[0] = m_rawDecodingSettings.caMultiplier[0];
         raw.imgdata.params.aber[2] = m_rawDecodingSettings.caMultiplier[1];
-        args.append(QString("-C %1 %2").arg(raw.imgdata.params.aber[0])
-                                       .arg(raw.imgdata.params.aber[2]));
     }
 
     switch (m_rawDecodingSettings.inputColorSpace)
@@ -615,7 +586,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         {
             // (-p embed) Use input profile from RAW file to define the camera's raw colorspace.
             raw.imgdata.params.camera_profile = (char*)"embed";
-            args.append(QString("-p embed"));
             break;
         }
         case RawDecodingSettings::CUSTOMINPUTCS:
@@ -624,7 +594,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             {
                 // (-p) Use input profile file to define the camera's raw colorspace.
                 raw.imgdata.params.camera_profile = cameraProfile.data();
-                args.append(QString("-p %1").arg(raw.imgdata.params.camera_profile));
             }
             break;
         }
@@ -640,7 +609,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             {
                 // (-o) Use ICC profile file to define the output colorspace.
                 raw.imgdata.params.output_profile = outputProfile.data();
-                args.append(QString("-o %1").arg(raw.imgdata.params.output_profile));
             }
             break;
         }
@@ -648,16 +616,16 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         {
             // (-o) Define the output colorspace.
             raw.imgdata.params.output_color = m_rawDecodingSettings.outputColorSpace;
-            args.append(QString("-o %1").arg(raw.imgdata.params.output_color));
             break;
         }
     }
 
+    //-- Extended demosaicing settings ----------------------------------------------------------
+
     d->setProgress(0.1);
 
-    args.append(filePath);
-    kDebug() << "LibRaw: dcraw emulation: " << args;
-    kDebug() << "LibRaw highlights adjustements : " << m_rawDecodingSettings.fixColorsHighlights;
+    kDebug() << filePath;
+    kDebug() << m_rawDecodingSettings;
 
     int ret = raw.open_file(QFile::encodeName(filePath));
     if (ret != LIBRAW_SUCCESS)
