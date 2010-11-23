@@ -69,13 +69,14 @@ public:
      *  AHD:      use Adaptive Homogeneity-Directed interpolation.
      *            This method selects the direction of interpolation so as to
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
-     *  DCB:      DCB interpolation (http://www.linuxphoto.org/html/dcb.html)
-     *  PL_AHD:   Paul Lee modified AHD interpolation (http://sites.google.com/site/demosaicalgorithms/modified-dcraw)
-     *  AFD:      Demosaicing through 5 pass median filter from PerfectRaw.
+     *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
+     *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
+     *            for details)
+     *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
      *  VCD:      VCD interpolation.
-     *  VCD_AHD:  Paul Lee mixed demosaicing between VCD and AHD.
+     *  VCD_AHD:  mixed demosaicing between VCD and AHD.
      *  LMMSE:    LMMSE interpolation from PerfectRaw.
-     *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee.
+     *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
      */
     enum DecodingQuality
     {

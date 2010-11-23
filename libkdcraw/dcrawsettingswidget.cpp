@@ -227,10 +227,22 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
     d->RAWQualityComboBox = new RComboBox(d->demosaicingSettings);
+
+    // Original dcraw demosaicing methods
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::BILINEAR, i18n("Bilinear"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::VNG,      i18n("VNG"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::PPG,      i18n("PPG"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AHD,      i18n("AHD"));
+
+    // Extended demosaicing method
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::DCB,      i18n("DCB"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18n("AHD v2"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18n("AFD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18n("VCD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18n("VCD && AHD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18n("LMMSE"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18n("AMaZE"));
+
     d->RAWQualityComboBox->setDefaultIndex(RawDecodingSettings::BILINEAR);
     d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality (interpolation)</b><p>"
                 "Select here the demosaicing RAW images decoding "
@@ -239,21 +251,45 @@ void DcrawSettingsWidget::setup(int advSettings)
                 "image sensor internal to many digital cameras in form of a matrix of colored pixels. "
                 "Also known as CFA interpolation or color reconstruction, another common spelling "
                 "is demosaicing. There are 4 methods to demosaicing RAW images:<p>"
+
+                // Original dcraw demosaicing methods
+
                 "<b>Bilinear</b>: use high-speed but low-quality bilinear "
                 "interpolation (default - for slow computer). In this method, "
                 "the red value of a non-red pixel is computed as the average of "
                 "the adjacent red pixels, and similar for blue and green.<p>"
+
                 "<b>VNG</b>: use Variable Number of Gradients interpolation. "
                 "This method computes gradients near the pixel of interest and uses "
                 "the lower gradients (representing smoother and more similar parts "
                 "of the image) to make an estimate.<p>"
+
                 "<b>PPG</b>: use Patterned Pixel Grouping interpolation. "
                 "Pixel Grouping uses assumptions about natural scenery in making estimates. "
                 "It has fewer color artifacts on natural images than the Variable Number of "
                 "Gradients method.<p>"
+
                 "<b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
                 "This method selects the direction of interpolation so as to "
-                "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"));
+                "maximize a homogeneity metric, thus typically minimizing color artifacts.<p>"
+
+                // Extended demosaicing method
+
+                "<b>DCB</b>: DCB interpolation (see <a href=\"http://www.linuxphoto.org/html/dcb.html\">this url</a> for details).<p>"
+
+                "<b>AHD v2</b>: modified AHD interpolation (see <a href=\"http://sites.google.com/site/demosaicalgorithms/modified-dcraw\">this url</a> for details).<p>"
+
+                "<b>AFD</b>: demosaicing through 5 pass median filter from PerfectRaw project.<p>"
+
+                "<b>VCD</b>: VCD interpolation.<p>"
+
+                "<b>VCD && AHD</b>: Mixed demosaicing between VCD and AHD.<p>"
+
+                "<b>LMMSE</b>: LMMSE interpolation from PerfectRaw.<p>"
+
+                "<b>AMaZE</b>: AMaZE interpolation and color aberration removal from RawTherapee project.<p>"
+                ));
+
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
     line++;
