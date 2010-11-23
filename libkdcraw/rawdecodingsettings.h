@@ -176,12 +176,12 @@ public:
      */
     bool autoBrightness;
 
-    /** If true, decode RAW file in 16 bits per color per pixel else 8 bits.
+    /** Turn on RAW file decoding in 16 bits per color per pixel instead 8 bits.
      */
     bool sixteenBitsImage;
 
     /** Half-size color image decoding (twice as fast as "enableRAWQuality").
-     *  Use this option to reduce time loading to render histogram for example,
+     *  Turn on this option to reduce time loading to render histogram for example,
      *  no to render an image to screen.
      */
     bool halfSizeColorImage;
@@ -195,7 +195,7 @@ public:
     int customWhiteBalance;
     double customWhiteBalanceGreen;
 
-    /** RAW file decoding using RGB interpolation as four colors.
+    /** Turn on RAW file decoding using RGB interpolation as four colors.
      */
     bool RGBInterpolate4Colors;
 
@@ -225,7 +225,7 @@ public:
      */
     int medianFilterPasses;
 
-    /** Use wavelets to erase noise while preserving real detail.
+    /** Turn on wavelets correction to erase noise while preserving real detail.
      */
     bool enableNoiseReduction;
 
@@ -234,7 +234,7 @@ public:
      */
     int NRThreshold;
 
-    /** Use red and blue layer magnification to reduce chromatic aberrations
+    /** Turn on red and blue layer magnification to reduce chromatic aberrations
      */
     bool enableCACorrection;
 
@@ -248,7 +248,7 @@ public:
      */
     double brightness;
 
-    /** Set on the black point setting to decode RAW image.
+    /** Turn on the black point setting to decode RAW image.
      */
     bool enableBlackPoint;
 
@@ -256,7 +256,7 @@ public:
      */
     int blackPoint;
 
-    /** Set on the white point setting to decode RAW image.
+    /** Turn on the white point setting to decode RAW image.
      */
     bool enableWhitePoint;
 
@@ -290,40 +290,44 @@ public:
      */
     QRect whiteBalanceArea;
 
-    //-- Extended demosaicing method settings ----------------------------------------------------------
+    //-- Extended demosaicing settings ----------------------------------------------------------
 
     /// For DCB intepolation.
 
     /** Number of DCB correction passes.
+     * -1   : disable (default)
+     * 1-10 : DCB correction passes
      */
     int dcbIterations;
 
-    /** DCB interpolation with enhance interpolated colors.
+    /** Turn on the DCB interpolation with enhance interpolated colors.
      */
-    int dcbEnhanceFl;
+    bool dcbEnhanceFl;
 
     /** FBDD noise reduction before demosaicing.
-     *  0   : do not use FBDD noise reduction
+     *  0   : disable
      *  1   : light FBDD reduction
-     *  2-9 : full FBDD reduction
+     *  2-5 : full FBDD reduction
      */
     int fbddNR;
 
     /// For VCD interpolation.
 
-    /** Use EECI refine for VCD interpolation.
+    /** Turn on the EECI refine for VCD interpolation.
      */
-    int eeciRefine;
+    bool eeciRefine;
 
     /** Use edge-sensitive median filtering for artifact supression after VCD demosaic.
+     * 0   : disable (default)
+     * 1-5 : median filter passes.
      */
     int esMedPasses;
 
     /// For AMaZE interpolation.
 
-    /** Suppress chromatic abberation for AMaZE demosaic.
+    /** Turn on option to suppress chromatic abberation for AMaZE demosaic.
      */
-    int amazeCARefine;
+    bool amazeCARefine;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
