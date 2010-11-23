@@ -292,7 +292,7 @@ public:
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    /// For DCB intepolation.
+    /// For DCB interpolation.
 
     /** Number of DCB correction passes.
      * -1   : disable (default)
