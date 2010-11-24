@@ -351,7 +351,8 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- enableNoiseReduction:    " << s.enableNoiseReduction    << endl;
     dbg.nospace() << "-- NRThreshold:             " << s.NRThreshold             << endl;
     dbg.nospace() << "-- enableCACorrection:      " << s.enableCACorrection      << endl;
-    dbg.nospace() << "-- caMultiplier:            " << s.caMultiplier            << endl;
+    dbg.nospace() << "-- caMultiplier:            " << s.caMultiplier[0]
+                  << ", "                           << s.caMultiplier[1]         << endl;
     dbg.nospace() << "-- medianFilterPasses:      " << s.medianFilterPasses      << endl;
     dbg.nospace() << "-- inputProfile:            " << s.inputProfile            << endl;
     dbg.nospace() << "-- outputProfile:           " << s.outputProfile           << endl;
