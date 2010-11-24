@@ -250,7 +250,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                 "interpolate a complete image from the partial raw data received from the color-filtered "
                 "image sensor internal to many digital cameras in form of a matrix of colored pixels. "
                 "Also known as CFA interpolation or color reconstruction, another common spelling "
-                "is demosaicing. There are 4 methods to demosaicing RAW images:<p>"
+                "is demosaicing. See below all methods to demosaicing RAW images:<p>"
 
                 // Original dcraw demosaicing methods
 
