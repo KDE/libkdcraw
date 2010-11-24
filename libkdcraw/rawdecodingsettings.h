@@ -305,20 +305,20 @@ public:
      */
     bool dcbEnhanceFl;
 
-    /** FBDD noise reduction before demosaicing.
+    /** Fake Before Demosaicing Denoising noise reduction.
      *  0   : disable
      *  1   : light FBDD reduction
      *  2-5 : full FBDD reduction
      */
     int fbddNR;
 
-    /// For VCD interpolation.
+    /// For VCD_AHD interpolation.
 
-    /** Turn on the EECI refine for VCD interpolation.
+    /** Turn on the EECI refine for VCD Demosaicing.
      */
     bool eeciRefine;
 
-    /** Use edge-sensitive median filtering for artifact supression after VCD demosaic.
+    /** Use edge-sensitive median filtering for artifact supression after VCD Demosaicing.
      * 0   : disable (default)
      * 1-5 : median filter passes.
      */

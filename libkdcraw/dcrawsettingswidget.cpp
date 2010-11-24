@@ -926,36 +926,23 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }
 
-    prm.DontStretchPixels = d->dontStretchPixelsCheckBox->isChecked();
-    prm.brightness        = d->brightnessSpinBox->value();
-    prm.enableBlackPoint  = d->blackPointCheckBox->isChecked();
-    prm.blackPoint        = d->blackPointSpinBox->value();
-    prm.enableWhitePoint  = d->whitePointCheckBox->isChecked();
-    prm.whitePoint        = d->whitePointSpinBox->value();
+    prm.DontStretchPixels    = d->dontStretchPixelsCheckBox->isChecked();
+    prm.brightness           = d->brightnessSpinBox->value();
+    prm.enableBlackPoint     = d->blackPointCheckBox->isChecked();
+    prm.blackPoint           = d->blackPointSpinBox->value();
+    prm.enableWhitePoint     = d->whitePointCheckBox->isChecked();
+    prm.whitePoint           = d->whitePointSpinBox->value();
+    prm.RAWQuality           = (RawDecodingSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
 
-    switch(d->RAWQualityComboBox->currentIndex())
-    {
-        case 1:
-            prm.RAWQuality = RawDecodingSettings::VNG;
-            break;
-        case 2:
-            prm.RAWQuality = RawDecodingSettings::PPG;
-            break;
-        case 3:
-            prm.RAWQuality = RawDecodingSettings::AHD;
-            break;
-        default:
-            prm.RAWQuality = RawDecodingSettings::BILINEAR;
-            break;
-    }
-
-    prm.inputColorSpace      = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
-    prm.outputColorSpace     = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
     prm.enableNoiseReduction = d->enableNoiseReduction->isChecked();
     prm.NRThreshold          = d->NRThresholdSpinBox->value();
+
     prm.enableCACorrection   = d->enableCACorrection->isChecked();
     prm.caMultiplier[0]      = d->caRedMultSpinBox->value();
     prm.caMultiplier[1]      = d->caBlueMultSpinBox->value();
+
+    prm.inputColorSpace      = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
+    prm.outputColorSpace     = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
     prm.inputProfile         = d->inIccUrlEdit->url().toLocalFile();
     prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
 
