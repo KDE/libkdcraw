@@ -275,12 +275,9 @@ void DcrawSettingsWidget::setup(int advSettings)
 
                 // Extended demosaicing method
 
-                "<b>DCB</b>: DCB interpolation (see "
-                "<a href=\"http://www.linuxphoto.org/html/dcb.html\">this url</a> for details).<p>"
+                "<b>DCB</b>: DCB interpolation from linuxphoto.org project.<p>"
 
-                "<b>AHD v2</b>: modified AHD interpolation using Variance of Color Differences method (see "
-                "<a href=\"http://sites.google.com/site/demosaicalgorithms/modified-dcraw\">this url</a> "
-                "for details).<p>"
+                "<b>AHD v2</b>: modified AHD interpolation using Variance of Color Differences method.<p>"
 
                 "<b>AFD</b>: Adaptive Filtered Demosaicing interpolation through 5 pass median filter "
                 "from PerfectRaw project.<p>"
