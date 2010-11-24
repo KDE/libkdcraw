@@ -301,8 +301,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesSpinBox->setRange(0, 10, 1);
     d->medianFilterPassesSpinBox->setDefaultValue(0);
     d->medianFilterPassesSpinBox->setSliderEnabled(true);
-    d->medianFilterPassesLabel   = new QLabel(i18n("Median:"), d->whiteBalanceSettings);
-    d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Median Filter</b><p>"
+    d->medianFilterPassesLabel   = new QLabel(i18n("Pass:"), d->whiteBalanceSettings);
+    d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Pass</b><p>"
                                                      "Set here the passes used by median filter applied after "
                                                      "interpolation to Red-Green and Blue-Green channels."));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
@@ -817,7 +817,6 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     }
     slotWhiteBalanceToggled(d->whiteBalanceComboBox->currentIndex());
 
-    d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
     d->customWhiteBalanceSpinBox->setValue(settings.customWhiteBalance);
     d->customWhiteBalanceGreenSpinBox->setValue(settings.customWhiteBalanceGreen);
     d->fourColorCheckBox->setChecked(settings.RGBInterpolate4Colors);
@@ -851,19 +850,17 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->whitePointSpinBox->setEnabled(settings.enableWhitePoint);
     d->whitePointSpinBox->setValue(settings.whitePoint);
 
+    d->RAWQualityComboBox->setCurrentIndex(settings.RAWQuality);
     switch(settings.RAWQuality)
     {
-        case RawDecodingSettings::VNG:
-            d->RAWQualityComboBox->setCurrentIndex(1);
+        case RawDecodingSettings::DCB:
+            d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
             break;
-        case RawDecodingSettings::PPG:
-            d->RAWQualityComboBox->setCurrentIndex(2);
-            break;
-        case RawDecodingSettings::AHD:
-            d->RAWQualityComboBox->setCurrentIndex(3);
+        case RawDecodingSettings::VCD_AHD:
+            d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
             break;
         default:
-            d->RAWQualityComboBox->setCurrentIndex(0);
+            d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
             break;
     }
 
@@ -903,7 +900,6 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }
 
-    prm.medianFilterPasses      = d->medianFilterPassesSpinBox->value();
     prm.customWhiteBalance      = d->customWhiteBalanceSpinBox->value();
     prm.customWhiteBalanceGreen = d->customWhiteBalanceGreenSpinBox->value();
     prm.RGBInterpolate4Colors   = d->fourColorCheckBox->isChecked();
@@ -932,7 +928,20 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.blackPoint           = d->blackPointSpinBox->value();
     prm.enableWhitePoint     = d->whitePointCheckBox->isChecked();
     prm.whitePoint           = d->whitePointSpinBox->value();
+
     prm.RAWQuality           = (RawDecodingSettings::DecodingQuality)d->RAWQualityComboBox->currentIndex();
+    switch(prm.RAWQuality)
+    {
+        case RawDecodingSettings::DCB:
+            prm.dcbIterations      = prm.medianFilterPasses;
+            break;
+        case RawDecodingSettings::VCD_AHD:
+            prm.eeciRefine         = prm.medianFilterPasses;
+            break;
+        default:
+            prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();
+            break;
+    }
 
     prm.enableNoiseReduction = d->enableNoiseReduction->isChecked();
     prm.NRThreshold          = d->NRThresholdSpinBox->value();

@@ -295,7 +295,7 @@ public:
 
     /// For DCB interpolation.
 
-    /** Number of DCB correction passes.
+    /** Number of DCB median filtering correction passes.
      * -1   : disable (default)
      * 1-10 : DCB correction passes
      */
@@ -320,7 +320,7 @@ public:
 
     /** Use edge-sensitive median filtering for artifact supression after VCD Demosaicing.
      * 0   : disable (default)
-     * 1-5 : median filter passes.
+     * 1-10 : median filter passes.
      */
     int esMedPasses;
 
