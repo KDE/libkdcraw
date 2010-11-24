@@ -275,19 +275,25 @@ void DcrawSettingsWidget::setup(int advSettings)
 
                 // Extended demosaicing method
 
-                "<b>DCB</b>: DCB interpolation (see <a href=\"http://www.linuxphoto.org/html/dcb.html\">this url</a> for details).<p>"
+                "<b>DCB</b>: DCB interpolation (see "
+                "<a href=\"http://www.linuxphoto.org/html/dcb.html\">this url</a> for details).<p>"
 
-                "<b>AHD v2</b>: modified AHD interpolation (see <a href=\"http://sites.google.com/site/demosaicalgorithms/modified-dcraw\">this url</a> for details).<p>"
+                "<b>AHD v2</b>: modified AHD interpolation using Variance of Color Differences method (see "
+                "<a href=\"http://sites.google.com/site/demosaicalgorithms/modified-dcraw\">this url</a> "
+                "for details).<p>"
 
-                "<b>AFD</b>: demosaicing through 5 pass median filter from PerfectRaw project.<p>"
+                "<b>AFD</b>: Adaptive Filtered Demosaicing interpolation through 5 pass median filter "
+                "from PerfectRaw project.<p>"
 
-                "<b>VCD</b>: VCD interpolation.<p>"
+                "<b>VCD</b>: Variance of Color Differences interpolation.<p>"
 
                 "<b>VCD && AHD</b>: Mixed demosaicing between VCD and AHD.<p>"
 
-                "<b>LMMSE</b>: LMMSE interpolation from PerfectRaw.<p>"
+                "<b>LMMSE</b>: color demosaicing via directional linear minimum mean square-error "
+                "estimation interpolation from PerfectRaw.<p>"
 
-                "<b>AMaZE</b>: AMaZE interpolation and color aberration removal from RawTherapee project.<p>"
+                "<b>AMaZE</b>: Aliasing Minimization interpolation and Zipper Elimination to apply color "
+                "aberration removal from RawTherapee project.<p>"
                 ));
 
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
