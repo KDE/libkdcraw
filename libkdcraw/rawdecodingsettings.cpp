@@ -329,6 +329,7 @@ void RawDecodingSettings::writeSettings(KConfigGroup& group)
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
 {
+    dbg.nospace() << endl;
     dbg.nospace() << "--RAW DECODING SETTINGS---------------------------------" << endl;
     dbg.nospace() << "--autoBrightness:          " << s.autoBrightness          << endl;
     dbg.nospace() << "--sixteenBitsImage:        " << s.sixteenBitsImage        << endl;
