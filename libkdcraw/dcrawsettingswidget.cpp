@@ -239,7 +239,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18n("AHD v2"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18n("AFD"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18n("VCD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18n("VCD && AHD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18n("VCD & AHD"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18n("LMMSE"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18n("AMaZE"));
 
@@ -284,7 +284,7 @@ void DcrawSettingsWidget::setup(int advSettings)
 
                 "<b>VCD</b>: Variance of Color Differences interpolation.<p>"
 
-                "<b>VCD && AHD</b>: Mixed demosaicing between VCD and AHD.<p>"
+                "<b>VCD & AHD</b>: Mixed demosaicing between VCD and AHD.<p>"
 
                 "<b>LMMSE</b>: color demosaicing via directional linear minimum mean square-error "
                 "estimation interpolation from PerfectRaw.<p>"
