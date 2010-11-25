@@ -973,21 +973,17 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     switch(prm.RAWQuality)
     {
         case RawDecodingSettings::DCB:
-            kDebug() << prm.RAWQuality << " (1)";
             prm.dcbIterations      = prm.medianFilterPasses;
             prm.dcbEnhanceFl       = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::VCD_AHD:
-            kDebug() << prm.RAWQuality << " (2)";
             prm.esMedPasses        = prm.medianFilterPasses;
             prm.eeciRefine         = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::AMAZE:
-            kDebug() << prm.RAWQuality << " (3)";
             prm.amazeCARefine      = d->refineInterpolation->isChecked();
             break;
         default:
-            kDebug() << prm.RAWQuality << " (default)";
             prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();
             break;
     }
