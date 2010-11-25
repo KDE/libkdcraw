@@ -807,11 +807,42 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
     switch(quality)
     {
         case RawDecodingSettings::DCB:
-        case RawDecodingSettings::VCD_AHD:
-        case RawDecodingSettings::AMAZE:
+            d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolation->setEnabled(true);
             break;
-        default:
+
+        case RawDecodingSettings::PL_AHD:
+            d->medianFilterPassesSpinBox->setEnabled(false);
+            d->refineInterpolation->setEnabled(false);
+            break;
+
+        case RawDecodingSettings::AFD:
+            d->medianFilterPassesSpinBox->setEnabled(false);
+            d->refineInterpolation->setEnabled(false);
+            break;
+
+        case RawDecodingSettings::VCD:
+            d->medianFilterPassesSpinBox->setEnabled(false);
+            d->refineInterpolation->setEnabled(false);
+            break;
+
+        case RawDecodingSettings::VCD_AHD:
+            d->medianFilterPassesSpinBox->setEnabled(true);
+            d->refineInterpolation->setEnabled(true);
+            break;
+
+        case RawDecodingSettings::LMMSE:
+            d->medianFilterPassesSpinBox->setEnabled(false);
+            d->refineInterpolation->setEnabled(false);
+            break;
+
+        case RawDecodingSettings::AMAZE:
+            d->medianFilterPassesSpinBox->setEnabled(false);
+            d->refineInterpolation->setEnabled(true);
+            break;
+
+        default: // BILINEAR, VNG, PPG, AHD
+            d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolation->setEnabled(false);
             break;
     }
