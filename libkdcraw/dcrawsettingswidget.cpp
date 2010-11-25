@@ -807,41 +807,49 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
     switch(quality)
     {
         case RawDecodingSettings::DCB:
+            d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolation->setEnabled(true);
             break;
 
         case RawDecodingSettings::PL_AHD:
+            d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolation->setEnabled(false);
             break;
 
         case RawDecodingSettings::AFD:
+            d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolation->setEnabled(false);
             break;
 
         case RawDecodingSettings::VCD:
+            d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolation->setEnabled(false);
             break;
 
         case RawDecodingSettings::VCD_AHD:
+            d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolation->setEnabled(true);
             break;
 
         case RawDecodingSettings::LMMSE:
+            d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolation->setEnabled(false);
             break;
 
         case RawDecodingSettings::AMAZE:
+            d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
             d->refineInterpolation->setEnabled(true);
             break;
 
         default: // BILINEAR, VNG, PPG, AHD
+            d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
             d->refineInterpolation->setEnabled(false);
             break;
