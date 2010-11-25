@@ -153,12 +153,12 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    dcbIterations              = o.dcbIterations;
-    dcbEnhanceFl               = o.dcbEnhanceFl;
-    fbddNR                     = o.fbddNR;
-    eeciRefine                 = o.eeciRefine;
-    esMedPasses                = o.esMedPasses;
-    amazeCARefine              = o.amazeCARefine;
+    dcbIterations           = o.dcbIterations;
+    dcbEnhanceFl            = o.dcbEnhanceFl;
+    fbddNR                  = o.fbddNR;
+    eeciRefine              = o.eeciRefine;
+    esMedPasses             = o.esMedPasses;
+    amazeCARefine           = o.amazeCARefine;
     return *this;
 }
 
