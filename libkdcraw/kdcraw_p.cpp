@@ -119,8 +119,11 @@ void KDcraw::KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& iden
     identify.pixelAspectRatio = raw->imgdata.sizes.pixel_aspect;
     identify.rawColors        = raw->imgdata.idata.colors;
     identify.rawImages        = raw->imgdata.idata.raw_count;
-    //TODO: provide per channel black point with next interface change
     identify.blackPoint       = raw->imgdata.color.black;
+    for (int ch = 0; ch < 8; ch++)
+    {
+        identify.blackPointCh[ch] = raw->imgdata.color.cblack[ch];
+    }
     identify.whitePoint       = raw->imgdata.color.maximum;
     identify.orientation      = (DcrawInfoContainer::ImageOrientation)raw->imgdata.sizes.flip;
     memcpy(&identify.cameraColorMatrix1, &raw->imgdata.color.cmatrix, sizeof(raw->imgdata.color.cmatrix));

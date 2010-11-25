@@ -82,6 +82,9 @@ public:
 
     /** Black level from Raw histogram. */
     unsigned int     blackPoint;
+    
+    /** Channel black levels from Raw histogram. */
+    unsigned int     blackPointCh[8];
 
     /** White level from Raw histogram. */
     unsigned int     whitePoint;

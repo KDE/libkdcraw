@@ -49,6 +49,10 @@ DcrawInfoContainer::DcrawInfoContainer()
     cameraMult[2]     = 0.0;
     cameraMult[3]     = 0.0;
     blackPoint        = 0;
+    for (int ch=0; ch<8; ch++)
+    {
+        blackPointCh[ch] = 0;
+    }
     whitePoint        = 0;
     topMargin         = 0;
     leftMargin        = 0;
@@ -86,6 +90,14 @@ bool DcrawInfoContainer::isEmpty()
         rawColors        == -1          &&
         rawImages        == -1          &&
         blackPoint       == 0           &&
+        blackPointCh[0]  == 0           &&
+        blackPointCh[1]  == 0           &&
+        blackPointCh[2]  == 0           &&
+        blackPointCh[3]  == 0           &&
+        blackPointCh[4]  == 0           &&
+        blackPointCh[5]  == 0           &&
+        blackPointCh[6]  == 0           &&
+        blackPointCh[7]  == 0           &&
         whitePoint       == 0           &&
         topMargin        == 0           &&
         leftMargin       == 0           &&
@@ -158,7 +170,6 @@ QDebug operator<<(QDebug dbg, const DcrawInfoContainer& c)
     dbg.nospace() << "DcrawInfoContainer::cameraMult: "       << c.cameraMult << ", ";
     dbg.nospace() << "DcrawInfoContainer::blackPoint: "       << c.blackPoint << ", ";
     dbg.nospace() << "DcrawInfoContainer::whitePoint: "       << c.whitePoint << ", ";
-    dbg.nospace() << "DcrawInfoContainer::blackPoint: "       << c.blackPoint << ", ";
     dbg.nospace() << "DcrawInfoContainer::topMargin: "        << c.topMargin << ", ";
     dbg.nospace() << "DcrawInfoContainer::leftMargin: "       << c.leftMargin << ", ";
     dbg.nospace() << "DcrawInfoContainer::rightMargin: "      << c.rightMargin << ", ";
