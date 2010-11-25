@@ -111,6 +111,7 @@ private Q_SLOTS:
     void processDcrawUrl(const QString&);
     void slotInputColorSpaceChanged(int);
     void slotOutputColorSpaceChanged(int);
+    void slotRAWQualityChanged(int);
 
 private:
 

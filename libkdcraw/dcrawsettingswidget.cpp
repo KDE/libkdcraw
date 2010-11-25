@@ -104,6 +104,7 @@ public:
         inputColorSpaceLabel           = 0;
         inputColorSpaceComboBox        = 0;
         fixColorsHighlights            = 0;
+        refineInterpolation            = 0;
     }
 
     QWidget*         demosaicingSettings;
@@ -134,6 +135,7 @@ public:
     QCheckBox*       enableNoiseReduction;
     QCheckBox*       enableCACorrection;
     QCheckBox*       fixColorsHighlights;
+    QCheckBox*       refineInterpolation;
 
     KUrlRequester*   inIccUrlEdit;
     KUrlRequester*   outIccUrlEdit;
@@ -307,6 +309,17 @@ void DcrawSettingsWidget::setup(int advSettings)
                                                      "interpolation to Red-Green and Blue-Green channels."));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
+
+    d->refineInterpolation       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
+    d->refineInterpolation->setWhatsThis(i18n("<p><b>Refine interpolation</b><p>"
+                                              "This setting is available only for few Quality options:"
+                                              "<b>DCB</b>: turn on the enhance interpolated colors filter.<p>"
+                                              "<b>VCD & AHD</b>: turn on the enhanced effective "
+                                              "color interpolation (EECI) refine to improve sharpness.<p>"
+                                              "<b>AMaZE</b>: turn on chromatic abberation correction.<p>"
+                                        ));
+    demosaicingLayout->addWidget(d->refineInterpolation, line, 0, 1, 2);
+    line++;
 
     addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18n("Demosaicing"), QString("demosaicing"), true);
 
@@ -619,7 +632,7 @@ void DcrawSettingsWidget::setup(int advSettings)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->RAWQualityComboBox, SIGNAL(activated(int)),
-            this, SIGNAL(signalSettingsChanged()));
+            this, SLOT(slotRAWQualityChanged(int)));
 
     connect(d->unclipColorComboBox, SIGNAL(activated(int)),
             this, SIGNAL(signalSettingsChanged()));
@@ -785,6 +798,22 @@ void DcrawSettingsWidget::slotOutputColorSpaceChanged(int item)
     d->outIccUrlEdit->setEnabled(item == RawDecodingSettings::CUSTOMOUTPUTCS);
 }
 
+void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
+{
+    switch(quality)
+    {
+        case RawDecodingSettings::DCB:
+        case RawDecodingSettings::VCD_AHD:
+        case RawDecodingSettings::AMAZE:
+            d->refineInterpolation->setEnabled(true);
+            break;
+        default:
+            d->refineInterpolation->setEnabled(false);
+            break;
+    }
+    emit signalSettingsChanged();
+}
+
 void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
 {
     d->brightnessLabel->setEnabled(b);
@@ -855,12 +884,18 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     {
         case RawDecodingSettings::DCB:
             d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
+            d->refineInterpolation->setChecked(settings.dcbEnhanceFl);
             break;
         case RawDecodingSettings::VCD_AHD:
             d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
+            d->refineInterpolation->setChecked(settings.eeciRefine);
+            break;
+        case RawDecodingSettings::AMAZE:
+            d->refineInterpolation->setChecked(settings.amazeCARefine);
             break;
         default:
             d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
+            d->refineInterpolation->setChecked(false); // option not used.
             break;
     }
 
@@ -934,9 +969,14 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     {
         case RawDecodingSettings::DCB:
             prm.dcbIterations      = prm.medianFilterPasses;
+            prm.dcbEnhanceFl       = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::VCD_AHD:
             prm.eeciRefine         = prm.medianFilterPasses;
+            prm.eeciRefine         = d->refineInterpolation->isChecked();
+            break;
+        case RawDecodingSettings::AMAZE:
+            prm.amazeCARefine      = d->refineInterpolation->isChecked();
             break;
         default:
             prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();

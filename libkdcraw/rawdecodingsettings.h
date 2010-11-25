@@ -318,15 +318,15 @@ public:
      */
     bool eeciRefine;
 
-    /** Use edge-sensitive median filtering for artifact supression after VCD Demosaicing.
+    /** Use edge-sensitive median filtering for artifact supression after VCD demosaicing.
      * 0   : disable (default)
      * 1-10 : median filter passes.
      */
     int esMedPasses;
 
-    /// For AMaZE interpolation.
+    /// For AMAZE interpolation.
 
-    /** Turn on option to suppress chromatic abberation for AMaZE demosaic.
+    /** Turn on chromatic abberation correction for AMaZE demosaicing.
      */
     bool amazeCARefine;
 };
