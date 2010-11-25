@@ -309,17 +309,17 @@ void DcrawSettingsWidget::setup(int advSettings)
                                                      "interpolation to Red-Green and Blue-Green channels."));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
+    line++;
 
     d->refineInterpolation       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
     d->refineInterpolation->setWhatsThis(i18n("<p><b>Refine interpolation</b><p>"
-                                              "This setting is available only for few Quality options:"
+                                              "This setting is available only for few Quality options:<p>"
                                               "<b>DCB</b>: turn on the enhance interpolated colors filter.<p>"
                                               "<b>VCD & AHD</b>: turn on the enhanced effective "
                                               "color interpolation (EECI) refine to improve sharpness.<p>"
                                               "<b>AMaZE</b>: turn on chromatic abberation correction.<p>"
                                         ));
     demosaicingLayout->addWidget(d->refineInterpolation, line, 0, 1, 2);
-    line++;
 
     addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18n("Demosaicing"), QString("demosaicing"), true);
 
