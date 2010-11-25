@@ -664,6 +664,9 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->dontStretchPixelsCheckBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
+    connect(d->refineInterpolation, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSettingsChanged()));
+
     connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
@@ -898,6 +901,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
             d->refineInterpolation->setChecked(false); // option not used.
             break;
     }
+    slotRAWQualityChanged(settings.RAWQuality);
 
     d->inputColorSpaceComboBox->setCurrentIndex((int)settings.inputColorSpace);
     slotInputColorSpaceChanged((int)settings.inputColorSpace);
@@ -972,7 +976,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             prm.dcbEnhanceFl       = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::VCD_AHD:
-            prm.eeciRefine         = prm.medianFilterPasses;
+            prm.esMedPasses        = prm.medianFilterPasses;
             prm.eeciRefine         = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::AMAZE:
