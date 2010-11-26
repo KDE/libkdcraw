@@ -1,0 +1,22 @@
+Index: rawdecodingsettings.h
+===================================================================
+--- rawdecodingsettings.h	(revision 1201001)
++++ rawdecodingsettings.h	(working copy)
+@@ -238,12 +238,13 @@
+      */
+     int medianFilterPasses;
+ 
+-    /** Turn on wavelets correction to erase noise while preserving real detail.
++    /** Noise reduction method to apply before demosaicing.
+      */
+-    bool enableNoiseReduction;
++    NoiseReduction NRType;
+ 
+-    /** Noise reduction threshold value.
+-     *  The best threshold should be somewhere between 100 and 1000.
++    /** Noise reduction threshold value. Null value disable NR.
++     *  For Wavelets NR, range is between 100 and 1000.
++     *  For FBDD NR : 1 apply a light correction and 2-5 a full noise reduction.
+      */
+     int NRThreshold;
+ 
