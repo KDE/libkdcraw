@@ -307,7 +307,10 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesLabel   = new QLabel(i18n("Pass:"), d->whiteBalanceSettings);
     d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Pass</b><p>"
                                                      "Set here the passes used by median filter applied after "
-                                                     "interpolation to Red-Green and Blue-Green channels."));
+                                                     "interpolation to Red-Green and Blue-Green channels.<p>"
+                                                     "This setting is available only for few Quality options: "
+                                                     "<b>Bilinear</b>, <b>VNG</b>, <b>PPG</b>, <b>AHD</b>, "
+                                                     "<b>DCB</b>, and <b>VCD & AHD</b>.<p>"));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
     line++;
@@ -1012,11 +1015,11 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     switch(prm.RAWQuality)
     {
         case RawDecodingSettings::DCB:
-            prm.dcbIterations      = prm.medianFilterPasses;
+            prm.dcbIterations      = d->medianFilterPassesSpinBox->value();
             prm.dcbEnhanceFl       = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::VCD_AHD:
-            prm.esMedPasses        = prm.medianFilterPasses;
+            prm.esMedPasses        = d->medianFilterPassesSpinBox->value();
             prm.eeciRefine         = d->refineInterpolation->isChecked();
             break;
         case RawDecodingSettings::AMAZE:
@@ -1039,6 +1042,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.inputProfile         = d->inIccUrlEdit->url().toLocalFile();
     prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
 
+    kDebug() << prm;
     return prm;
 }
 
