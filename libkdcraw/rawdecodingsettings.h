@@ -111,6 +111,18 @@ public:
         AERA    = 4
     };
 
+    /** Noise Reduction method to apply before demosaicing
+     *  NONR:       No noise reduction.
+     *  WAVELETSNR: wavelets correction to erase noise while preserving real detail.
+     *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction.
+     */
+    enum NoiseReduction
+    {
+        NONR = 0,
+        WAVELETSNR,
+        FBDDNR
+    };
+
     /** Input color profile used to decoded image
      *  NOINPUTCS:     No input color profile.
      *  EMBEDDED:      Use the camera profile embedded in RAW file if exist.
