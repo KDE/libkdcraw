@@ -156,7 +156,7 @@ void CLASS amaze_demosaic_RT() {
 
 
 	// assign working space
-	buffer = (char *) malloc((34*sizeof(float)+sizeof(int))*TS*TS);
+	buffer = (char *) calloc((34*sizeof(float)+sizeof(int))*TS*TS,1);
 	//merror(buffer,"amaze_interpolate()");
 	//memset(buffer,0,(34*sizeof(float)+sizeof(int))*TS*TS);
 	// rgb array
@@ -382,7 +382,8 @@ void CLASS amaze_demosaic_RT() {
 					for (cc=0; cc<16; cc++) {
 						c=FC(rr,cc);
 						//rgb[(rr)*TS+cc][c] = (rawData[winy+32-rr][winx+32-cc])/65535.0f;
-						rgb[(rr)*TS+cc][c] = (rgb[(32-rr)*TS+(32-cc)][c]);//for dcraw implementation
+						rgb[(rr)*TS+cc][c] = (image[(winy+32-rr)*width+(winx+32-cc)][c]);//for dcraw implementation
+						//rgb[(rr)*TS+cc][c] = (rgb[(32-rr)*TS+(32-cc)][c]);//for dcraw implementation
 						cfa[(rr)*TS+cc] = rgb[(rr)*TS+cc][c];
 					}
 			}
