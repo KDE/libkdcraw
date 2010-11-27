@@ -567,10 +567,21 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     // (-q) Use an interpolation method.
     raw.imgdata.params.user_qual = m_rawDecodingSettings.RAWQuality;
 
-    if (m_rawDecodingSettings.enableNoiseReduction)
+    switch (m_rawDecodingSettings.NRType)
     {
-        // (-n) Use wavelets to erase noise while preserving real detail.
-        raw.imgdata.params.threshold = m_rawDecodingSettings.NRThreshold;
+        case RawDecodingSettings::WAVELETSNR:
+        {
+            // (-n) Use wavelets to erase noise while preserving real detail.
+            raw.imgdata.params.threshold    = m_rawDecodingSettings.NRThreshold;
+            break;
+        }
+        case RawDecodingSettings::FBDDNR:
+        {
+            raw.imgdata.params.fbdd_noiserd = m_rawDecodingSettings.NRThreshold;
+            break;
+        }
+        default:   // No Noise Reduction
+            break;
     }
 
     if (m_rawDecodingSettings.enableCACorrection)
@@ -624,7 +635,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 
     raw.imgdata.params.dcb_iterations  = m_rawDecodingSettings.dcbIterations;
     raw.imgdata.params.dcb_enhance_fl  = m_rawDecodingSettings.dcbEnhanceFl;
-    raw.imgdata.params.fbdd_noiserd    = m_rawDecodingSettings.fbddNR;
     raw.imgdata.params.eeci_refine     = m_rawDecodingSettings.eeciRefine;
     raw.imgdata.params.es_med_passes   = m_rawDecodingSettings.esMedPasses;
     raw.imgdata.params.amaze_ca_refine = m_rawDecodingSettings.amazeCARefine;

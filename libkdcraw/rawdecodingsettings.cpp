@@ -35,9 +35,9 @@
 #define OPTIONFOURCOLORRGBENTRY             "Four Color RGB"
 #define OPTIONUNCLIPCOLORSENTRY             "Unclip Color"
 #define OPTIONDONTSTRETCHPIXELSENTRY        "Dont Stretch Pixels"
-#define OPTIONNOISEREDUCTIONENTRY           "Use Noise Reduction"
 #define OPTIONMEDIANFILTERPASSESENTRY       "Median Filter Passes"
-#define OPTIONNRTHRESHOLDENTRY              "NR Threshold"
+#define OPTIONNOISEREDUCTIONTYPEENTRY       "Noise Reduction Type"
+#define OPTIONNOISEREDUCTIONTHRESHOLDENTRY  "Noise Reduction Threshold"
 #define OPTIONUSECACORRECTIONENTRY          "EnableCACorrection"
 #define OPTIONCAREDMULTIPLIERENTRY          "caRedMultiplier"
 #define OPTIONCABLUEMULTIPLIERENTRY         "caBlueMultiplier"
@@ -57,7 +57,6 @@
 
 #define OPTIONDCBITERATIONSENTRY            "Dcb Iterations"
 #define OPTIONDCBENHANCEFLENTRY             "Dcb Enhance Filter"
-#define OPTIONFBDDNRENTRY                   "Fbdd Noise Reduction"
 #define OPTIONEECIREFINEENTRY               "Eeci Refine"
 #define OPTIONESMEDPASSESENTRY              "Es Median Filter Passes"
 #define OPTIONAMAZECAREFINEENTRY            "Amaze CA Refine"
@@ -92,8 +91,8 @@ RawDecodingSettings::RawDecodingSettings()
     enableWhitePoint           = false;
     whitePoint                 = 0;
 
-    enableNoiseReduction       = false;
-    NRThreshold                = 100;
+    NRType                     = NONR;
+    NRThreshold                = 0;
 
     enableCACorrection         = false;
     caMultiplier[0]            = 1.0;
@@ -110,7 +109,6 @@ RawDecodingSettings::RawDecodingSettings()
 
     dcbIterations              = -1;
     dcbEnhanceFl               = false;
-    fbddNR                     = 0;
     eeciRefine                 = false;
     esMedPasses                = 0;
     amazeCARefine              = false;
@@ -140,7 +138,7 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
     blackPoint              = o.blackPoint;
     enableWhitePoint        = o.enableWhitePoint;
     whitePoint              = o.whitePoint;
-    enableNoiseReduction    = o.enableNoiseReduction;
+    NRType                  = o.NRType;
     NRThreshold             = o.NRThreshold;
     enableCACorrection      = o.enableCACorrection;
     caMultiplier[0]         = o.caMultiplier[0];
@@ -155,7 +153,6 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
 
     dcbIterations           = o.dcbIterations;
     dcbEnhanceFl            = o.dcbEnhanceFl;
-    fbddNR                  = o.fbddNR;
     eeciRefine              = o.eeciRefine;
     esMedPasses             = o.esMedPasses;
     amazeCARefine           = o.amazeCARefine;
@@ -182,7 +179,7 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
         && blackPoint              == o.blackPoint
         && enableWhitePoint        == o.enableWhitePoint
         && whitePoint              == o.whitePoint
-        && enableNoiseReduction    == o.enableNoiseReduction
+        && NRType                  == o.NRType
         && NRThreshold             == o.NRThreshold
         && enableCACorrection      == o.enableCACorrection
         && caMultiplier[0]         == o.caMultiplier[0]
@@ -197,7 +194,6 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
 
         && dcbIterations           == o.dcbIterations
         && dcbEnhanceFl            == o.dcbEnhanceFl
-        && fbddNR                  == o.fbddNR
         && eeciRefine              == o.eeciRefine
         && esMedPasses             == o.esMedPasses
         && amazeCARefine           == o.amazeCARefine
@@ -228,8 +224,8 @@ void RawDecodingSettings::optimizeTimeLoading()
     enableWhitePoint        = false;
     whitePoint              = 0;
 
-    enableNoiseReduction    = false;
-    NRThreshold             = 100;
+    NRType                  = NONR;
+    NRThreshold             = 0;
 
     enableCACorrection      = false;
     caMultiplier[0]         = 1.0;
@@ -246,7 +242,6 @@ void RawDecodingSettings::optimizeTimeLoading()
 
     dcbIterations           = -1;
     dcbEnhanceFl            = false;
-    fbddNR                  = 0;
     eeciRefine              = false;
     esMedPasses             = 0;
     amazeCARefine           = false;
@@ -256,75 +251,73 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
 {
     RawDecodingSettings defaultPrm;
 
-    fixColorsHighlights     = group.readEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,   defaultPrm.fixColorsHighlights);
-    sixteenBitsImage        = group.readEntry(OPTIONDECODESIXTEENBITENTRY,      defaultPrm.sixteenBitsImage);
+    fixColorsHighlights     = group.readEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,     defaultPrm.fixColorsHighlights);
+    sixteenBitsImage        = group.readEntry(OPTIONDECODESIXTEENBITENTRY,        defaultPrm.sixteenBitsImage);
     whiteBalance            = (WhiteBalance)
-                              group.readEntry(OPTIONWHITEBALANCEENTRY,          (int)defaultPrm.whiteBalance);
-    customWhiteBalance      = group.readEntry(OPTIONCUSTOMWHITEBALANCEENTRY,    defaultPrm.customWhiteBalance);
-    customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY,         defaultPrm.customWhiteBalanceGreen);
-    RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,          defaultPrm.RGBInterpolate4Colors);
-    unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,          defaultPrm.unclipColors);
-    DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,     defaultPrm.DontStretchPixels);
-    enableNoiseReduction    = group.readEntry(OPTIONNOISEREDUCTIONENTRY,        defaultPrm.enableNoiseReduction);
-    brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,  defaultPrm.brightness);
-    enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,         defaultPrm.enableBlackPoint);
-    blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,            defaultPrm.blackPoint);
-    enableWhitePoint        = group.readEntry(OPTIONUSEWHITEPOINTENTRY,         defaultPrm.enableWhitePoint);
-    whitePoint              = group.readEntry(OPTIONWHITEPOINTENTRY,            defaultPrm.whitePoint);
-    medianFilterPasses      = group.readEntry(OPTIONMEDIANFILTERPASSESENTRY,    defaultPrm.medianFilterPasses);
-    NRThreshold             = group.readEntry(OPTIONNRTHRESHOLDENTRY,           defaultPrm.NRThreshold);
-    enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY,       defaultPrm.enableCACorrection);
-    caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY,       defaultPrm.caMultiplier[0]);
-    caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY,      defaultPrm.caMultiplier[1]);
+                              group.readEntry(OPTIONWHITEBALANCEENTRY,            (int)defaultPrm.whiteBalance);
+    customWhiteBalance      = group.readEntry(OPTIONCUSTOMWHITEBALANCEENTRY,      defaultPrm.customWhiteBalance);
+    customWhiteBalanceGreen = group.readEntry(OPTIONCUSTOMWBGREENENTRY,           defaultPrm.customWhiteBalanceGreen);
+    RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,            defaultPrm.RGBInterpolate4Colors);
+    unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,            defaultPrm.unclipColors);
+    DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,       defaultPrm.DontStretchPixels);
+    NRType                  = (NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)defaultPrm.NRType);
+    brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    defaultPrm.brightness);
+    enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,           defaultPrm.enableBlackPoint);
+    blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,              defaultPrm.blackPoint);
+    enableWhitePoint        = group.readEntry(OPTIONUSEWHITEPOINTENTRY,           defaultPrm.enableWhitePoint);
+    whitePoint              = group.readEntry(OPTIONWHITEPOINTENTRY,              defaultPrm.whitePoint);
+    medianFilterPasses      = group.readEntry(OPTIONMEDIANFILTERPASSESENTRY,      defaultPrm.medianFilterPasses);
+    NRThreshold             = group.readEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY, defaultPrm.NRThreshold);
+    enableCACorrection      = group.readEntry(OPTIONUSECACORRECTIONENTRY,         defaultPrm.enableCACorrection);
+    caMultiplier[0]         = group.readEntry(OPTIONCAREDMULTIPLIERENTRY,         defaultPrm.caMultiplier[0]);
+    caMultiplier[1]         = group.readEntry(OPTIONCABLUEMULTIPLIERENTRY,        defaultPrm.caMultiplier[1]);
     RAWQuality              = (DecodingQuality)
-                              group.readEntry(OPTIONDECODINGQUALITYENTRY,       (int)defaultPrm.RAWQuality);
+                              group.readEntry(OPTIONDECODINGQUALITYENTRY,         (int)defaultPrm.RAWQuality);
     outputColorSpace        = (OutputColorSpace)
-                              group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY,      (int)defaultPrm.outputColorSpace);
-    autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY,        defaultPrm.autoBrightness);
+                              group.readEntry(OPTIONOUTPUTCOLORSPACEENTRY,        (int)defaultPrm.outputColorSpace);
+    autoBrightness          = group.readEntry(OPTIONAUTOBRIGHTNESSENTRY,          defaultPrm.autoBrightness);
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    dcbIterations           = group.readEntry(OPTIONDCBITERATIONSENTRY,         defaultPrm.dcbIterations);
-    dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,          defaultPrm.dcbEnhanceFl);
-    fbddNR                  = group.readEntry(OPTIONFBDDNRENTRY,                defaultPrm.fbddNR);
-    eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,            defaultPrm.eeciRefine);
-    esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,           defaultPrm.esMedPasses);
-    amazeCARefine           = group.readEntry(OPTIONAMAZECAREFINEENTRY,         defaultPrm.amazeCARefine);
+    dcbIterations           = group.readEntry(OPTIONDCBITERATIONSENTRY,           defaultPrm.dcbIterations);
+    dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,            defaultPrm.dcbEnhanceFl);
+    eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,              defaultPrm.eeciRefine);
+    esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,             defaultPrm.esMedPasses);
+    amazeCARefine           = group.readEntry(OPTIONAMAZECAREFINEENTRY,           defaultPrm.amazeCARefine);
 }
 
 void RawDecodingSettings::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,  fixColorsHighlights);
-    group.writeEntry(OPTIONDECODESIXTEENBITENTRY,     sixteenBitsImage);
-    group.writeEntry(OPTIONWHITEBALANCEENTRY,         (int)whiteBalance);
-    group.writeEntry(OPTIONCUSTOMWHITEBALANCEENTRY,   customWhiteBalance);
-    group.writeEntry(OPTIONCUSTOMWBGREENENTRY,        customWhiteBalanceGreen);
-    group.writeEntry(OPTIONFOURCOLORRGBENTRY,         RGBInterpolate4Colors);
-    group.writeEntry(OPTIONUNCLIPCOLORSENTRY,         unclipColors);
-    group.writeEntry(OPTIONDONTSTRETCHPIXELSENTRY,    DontStretchPixels);
-    group.writeEntry(OPTIONNOISEREDUCTIONENTRY,       enableNoiseReduction);
-    group.writeEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY, brightness);
-    group.writeEntry(OPTIONUSEBLACKPOINTENTRY,        enableBlackPoint);
-    group.writeEntry(OPTIONBLACKPOINTENTRY,           blackPoint);
-    group.writeEntry(OPTIONUSEWHITEPOINTENTRY,        enableWhitePoint);
-    group.writeEntry(OPTIONWHITEPOINTENTRY,           whitePoint);
-    group.writeEntry(OPTIONMEDIANFILTERPASSESENTRY,   medianFilterPasses);
-    group.writeEntry(OPTIONNRTHRESHOLDENTRY,          NRThreshold);
-    group.writeEntry(OPTIONUSECACORRECTIONENTRY,      enableCACorrection);
-    group.writeEntry(OPTIONCAREDMULTIPLIERENTRY,      caMultiplier[0]);
-    group.writeEntry(OPTIONCABLUEMULTIPLIERENTRY,     caMultiplier[1]);
-    group.writeEntry(OPTIONDECODINGQUALITYENTRY,      (int)RAWQuality);
-    group.writeEntry(OPTIONOUTPUTCOLORSPACEENTRY,     (int)outputColorSpace);
-    group.writeEntry(OPTIONAUTOBRIGHTNESSENTRY,       autoBrightness);
+    group.writeEntry(OPTIONFIXCOLORSHIGHLIGHTSENTRY,     fixColorsHighlights);
+    group.writeEntry(OPTIONDECODESIXTEENBITENTRY,        sixteenBitsImage);
+    group.writeEntry(OPTIONWHITEBALANCEENTRY,            (int)whiteBalance);
+    group.writeEntry(OPTIONCUSTOMWHITEBALANCEENTRY,      customWhiteBalance);
+    group.writeEntry(OPTIONCUSTOMWBGREENENTRY,           customWhiteBalanceGreen);
+    group.writeEntry(OPTIONFOURCOLORRGBENTRY,            RGBInterpolate4Colors);
+    group.writeEntry(OPTIONUNCLIPCOLORSENTRY,            unclipColors);
+    group.writeEntry(OPTIONDONTSTRETCHPIXELSENTRY,       DontStretchPixels);
+    group.writeEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)NRType);
+    group.writeEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    brightness);
+    group.writeEntry(OPTIONUSEBLACKPOINTENTRY,           enableBlackPoint);
+    group.writeEntry(OPTIONBLACKPOINTENTRY,              blackPoint);
+    group.writeEntry(OPTIONUSEWHITEPOINTENTRY,           enableWhitePoint);
+    group.writeEntry(OPTIONWHITEPOINTENTRY,              whitePoint);
+    group.writeEntry(OPTIONMEDIANFILTERPASSESENTRY,      medianFilterPasses);
+    group.writeEntry(OPTIONNOISEREDUCTIONTHRESHOLDENTRY, NRThreshold);
+    group.writeEntry(OPTIONUSECACORRECTIONENTRY,         enableCACorrection);
+    group.writeEntry(OPTIONCAREDMULTIPLIERENTRY,         caMultiplier[0]);
+    group.writeEntry(OPTIONCABLUEMULTIPLIERENTRY,        caMultiplier[1]);
+    group.writeEntry(OPTIONDECODINGQUALITYENTRY,         (int)RAWQuality);
+    group.writeEntry(OPTIONOUTPUTCOLORSPACEENTRY,        (int)outputColorSpace);
+    group.writeEntry(OPTIONAUTOBRIGHTNESSENTRY,          autoBrightness);
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    group.writeEntry(OPTIONDCBITERATIONSENTRY,        dcbIterations);
-    group.writeEntry(OPTIONDCBENHANCEFLENTRY,         dcbEnhanceFl);
-    group.writeEntry(OPTIONFBDDNRENTRY,               fbddNR);
-    group.writeEntry(OPTIONEECIREFINEENTRY,           eeciRefine);
-    group.writeEntry(OPTIONESMEDPASSESENTRY,          esMedPasses);
-    group.writeEntry(OPTIONAMAZECAREFINEENTRY,        amazeCARefine);
+    group.writeEntry(OPTIONDCBITERATIONSENTRY,           dcbIterations);
+    group.writeEntry(OPTIONDCBENHANCEFLENTRY,            dcbEnhanceFl);
+    group.writeEntry(OPTIONEECIREFINEENTRY,              eeciRefine);
+    group.writeEntry(OPTIONESMEDPASSESENTRY,             esMedPasses);
+    group.writeEntry(OPTIONAMAZECAREFINEENTRY,           amazeCARefine);
 }
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
@@ -348,8 +341,8 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- blackPoint:              " << s.blackPoint              << endl;
     dbg.nospace() << "-- enableWhitePoint:        " << s.enableWhitePoint        << endl;
     dbg.nospace() << "-- whitePoint:              " << s.whitePoint              << endl;
-    dbg.nospace() << "-- enableNoiseReduction:    " << s.enableNoiseReduction    << endl;
-    dbg.nospace() << "-- NRThreshold:             " << s.NRThreshold             << endl;
+    dbg.nospace() << "-- NoiseReductionType:      " << s.NRType                  << endl;
+    dbg.nospace() << "-- NoiseReductionThreshold: " << s.NRThreshold             << endl;
     dbg.nospace() << "-- enableCACorrection:      " << s.enableCACorrection      << endl;
     dbg.nospace() << "-- caMultiplier:            " << s.caMultiplier[0]
                   << ", "                           << s.caMultiplier[1]         << endl;
@@ -363,7 +356,6 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
 
     dbg.nospace() << "-- dcbIterations:           " << s.dcbIterations           << endl;
     dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
-    dbg.nospace() << "-- fbddNR:                  " << s.fbddNR                  << endl;
     dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
     dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
     dbg.nospace() << "-- amazeCARefine:           " << s.amazeCARefine           << endl;

@@ -29,6 +29,10 @@
 
 #include "dcrawsettingswidget.moc"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QCheckBox>
@@ -81,7 +85,7 @@ public:
         dontStretchPixelsCheckBox      = 0;
         RAWQualityComboBox             = 0;
         RAWQualityLabel                = 0;
-        enableNoiseReduction           = 0;
+        noiseReductionComboBox         = 0;
         NRThresholdSpinBox             = 0;
         NRThresholdLabel               = 0;
         enableCACorrection             = 0;
@@ -106,6 +110,7 @@ public:
         inputColorSpaceComboBox        = 0;
         fixColorsHighlights            = 0;
         refineInterpolation            = 0;
+        noiseReductionLabel            = 0;
     }
 
     QWidget*         demosaicingSettings;
@@ -126,6 +131,7 @@ public:
     QLabel*          inputColorSpaceLabel;
     QLabel*          outputColorSpaceLabel;
     QLabel*          medianFilterPassesLabel;
+    QLabel*          noiseReductionLabel;
 
     QCheckBox*       blackPointCheckBox;
     QCheckBox*       whitePointCheckBox;
@@ -133,7 +139,6 @@ public:
     QCheckBox*       autoBrightnessBox;
     QCheckBox*       fourColorCheckBox;
     QCheckBox*       dontStretchPixelsCheckBox;
-    QCheckBox*       enableNoiseReduction;
     QCheckBox*       enableCACorrection;
     QCheckBox*       fixColorsHighlights;
     QCheckBox*       refineInterpolation;
@@ -141,6 +146,7 @@ public:
     KUrlRequester*   inIccUrlEdit;
     KUrlRequester*   outIccUrlEdit;
 
+    RComboBox*       noiseReductionComboBox;
     RComboBox*       whiteBalanceComboBox;
     RComboBox*       RAWQualityComboBox;
     RComboBox*       unclipColorComboBox;
@@ -476,9 +482,17 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->correctionsSettings         = new QWidget(this);
     QGridLayout* correctionsLayout = new QGridLayout(d->correctionsSettings);
 
-    d->enableNoiseReduction        = new QCheckBox(i18n("Enable noise reduction"), d->correctionsSettings);
-    d->enableNoiseReduction->setWhatsThis(i18n("<p><b>Enable Noise Reduction</b><p>"
-                     "Use wavelets to erase noise while preserving real detail.<p>"));
+    d->noiseReductionLabel    = new QLabel(i18n("Noise reduction:"), d->correctionsSettings);
+    d->noiseReductionComboBox = new RComboBox(d->colormanSettings);
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("Noise Reduction", "None"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("Noise Reduction", "Wavelets"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("Noise Reduction", "FBDD"));
+    d->noiseReductionComboBox->setDefaultIndex(RawDecodingSettings::NONR);
+    d->noiseReductionComboBox->setWhatsThis(i18n("<p><b>Noise Reduction</b><p>"
+                "Select here the noise reduction method to apply during RAW decoding.<p>"
+                "<b>None</b>: no noise reduction.<p>"
+                "<b>Wavelets</b>: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.<p>"
+                "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation."));
 
     d->NRThresholdSpinBox = new RIntNumInput(d->correctionsSettings);
     d->NRThresholdSpinBox->setRange(10, 1000, 1);
@@ -509,14 +523,15 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
                           "Set here the magnification factor of the blue layer"));
 
-    correctionsLayout->addWidget(d->enableNoiseReduction, 0, 0, 1, 3);
-    correctionsLayout->addWidget(d->NRThresholdLabel,     1, 0, 1, 1);
-    correctionsLayout->addWidget(d->NRThresholdSpinBox,   1, 1, 1, 2);
-    correctionsLayout->addWidget(d->enableCACorrection,   2, 0, 1, 3);
-    correctionsLayout->addWidget(d->caRedMultLabel,       3, 0, 1, 1);
-    correctionsLayout->addWidget(d->caRedMultSpinBox,     3, 1, 1, 2);
-    correctionsLayout->addWidget(d->caBlueMultLabel,      4, 0, 1, 1);
-    correctionsLayout->addWidget(d->caBlueMultSpinBox,    4, 1, 1, 2);
+    correctionsLayout->addWidget(d->noiseReductionLabel,    0, 0, 1, 1);
+    correctionsLayout->addWidget(d->noiseReductionComboBox, 0, 1, 1, 2);
+    correctionsLayout->addWidget(d->NRThresholdLabel,       1, 0, 1, 1);
+    correctionsLayout->addWidget(d->NRThresholdSpinBox,     1, 1, 1, 2);
+    correctionsLayout->addWidget(d->enableCACorrection,     2, 0, 1, 3);
+    correctionsLayout->addWidget(d->caRedMultLabel,         3, 0, 1, 1);
+    correctionsLayout->addWidget(d->caRedMultSpinBox,       3, 1, 1, 2);
+    correctionsLayout->addWidget(d->caBlueMultLabel,        4, 0, 1, 1);
+    correctionsLayout->addWidget(d->caBlueMultSpinBox,      4, 1, 1, 2);
     correctionsLayout->setRowStretch(5, 10);
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
@@ -600,8 +615,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
             this, SLOT(slotWhiteBalanceToggled(int)));
 
-    connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
-            this, SLOT(slotNoiseReductionToggled(bool)));
+    connect(d->noiseReductionComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotNoiseReductionChanged(int)));
 
     connect(d->enableCACorrection, SIGNAL(toggled(bool)),
             this, SLOT(slotCACorrectionToggled(bool)));
@@ -669,9 +684,6 @@ void DcrawSettingsWidget::setup(int advSettings)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->refineInterpolation, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->enableNoiseReduction, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->enableCACorrection, SIGNAL(toggled(bool)),
@@ -781,10 +793,11 @@ void DcrawSettingsWidget::slotUnclipColorActivated(int v)
     }
 }
 
-void DcrawSettingsWidget::slotNoiseReductionToggled(bool b)
+void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
 {
-    d->NRThresholdSpinBox->setEnabled(b);
-    d->NRThresholdLabel->setEnabled(b);
+    d->NRThresholdSpinBox->setEnabled(!item == RawDecodingSettings::NONR);
+    d->NRThresholdLabel->setEnabled(!item == RawDecodingSettings::NONR);
+    emit signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
@@ -950,8 +963,8 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     slotInputColorSpaceChanged((int)settings.inputColorSpace);
     d->outputColorSpaceComboBox->setCurrentIndex((int)settings.outputColorSpace);
     slotOutputColorSpaceChanged((int)settings.outputColorSpace);
-    d->enableNoiseReduction->setChecked(settings.enableNoiseReduction);
-    slotNoiseReductionToggled(settings.enableNoiseReduction);
+    d->noiseReductionComboBox->setCurrentIndex(settings.NRType);
+    slotNoiseReductionChanged(settings.NRType);
     d->NRThresholdSpinBox->setValue(settings.NRThreshold);
     d->enableCACorrection->setChecked(settings.enableCACorrection);
     slotCACorrectionToggled(settings.enableCACorrection);
@@ -1030,17 +1043,35 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
     }
 
-    prm.enableNoiseReduction = d->enableNoiseReduction->isChecked();
-    prm.NRThreshold          = d->NRThresholdSpinBox->value();
+    prm.NRType = (RawDecodingSettings::NoiseReduction)d->noiseReductionComboBox->currentIndex();
+    switch (prm.NRType)
+    {
+        case RawDecodingSettings::WAVELETSNR:
+        {
+            prm.NRThreshold = d->NRThresholdSpinBox->value();
+            break;
+        }
+        case RawDecodingSettings::FBDDNR:
+        {
+            prm.NRThreshold = lround(d->NRThresholdSpinBox->value()/100.0);
+            break;
+        }
+        default:   // No Noise Reduction
+        {
+            prm.NRThreshold = 0;
+            break;
+        }
+    }
+    prm.NRThreshold        = d->NRThresholdSpinBox->value();
 
-    prm.enableCACorrection   = d->enableCACorrection->isChecked();
-    prm.caMultiplier[0]      = d->caRedMultSpinBox->value();
-    prm.caMultiplier[1]      = d->caBlueMultSpinBox->value();
+    prm.enableCACorrection = d->enableCACorrection->isChecked();
+    prm.caMultiplier[0]    = d->caRedMultSpinBox->value();
+    prm.caMultiplier[1]    = d->caBlueMultSpinBox->value();
 
-    prm.inputColorSpace      = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
-    prm.outputColorSpace     = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
-    prm.inputProfile         = d->inIccUrlEdit->url().toLocalFile();
-    prm.outputProfile        = d->outIccUrlEdit->url().toLocalFile();
+    prm.inputColorSpace    = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
+    prm.outputColorSpace   = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
+    prm.inputProfile       = d->inIccUrlEdit->url().toLocalFile();
+    prm.outputProfile      = d->outIccUrlEdit->url().toLocalFile();
 
     kDebug() << prm;
     return prm;

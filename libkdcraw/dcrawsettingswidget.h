@@ -106,7 +106,7 @@ private Q_SLOTS:
     void slotWhiteBalanceToggled(int);
     void slotsixteenBitsImageToggled(bool);
     void slotUnclipColorActivated(int);
-    void slotNoiseReductionToggled(bool);
+    void slotNoiseReductionChanged(int);
     void slotCACorrectionToggled(bool);
     void processDcrawUrl(const QString&);
     void slotInputColorSpaceChanged(int);

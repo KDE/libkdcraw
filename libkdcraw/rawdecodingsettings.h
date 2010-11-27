@@ -113,8 +113,8 @@ public:
 
     /** Noise Reduction method to apply before demosaicing
      *  NONR:       No noise reduction.
-     *  WAVELETSNR: wavelets correction to erase noise while preserving real detail.
-     *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction.
+     *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
+     *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
      */
     enum NoiseReduction
     {
@@ -205,7 +205,7 @@ public:
 
     /** The temperature and the green multiplier of the custom white balance
      */
-    int customWhiteBalance;
+    int    customWhiteBalance;
     double customWhiteBalanceGreen;
 
     /** Turn on RAW file decoding using RGB interpolation as four colors.
@@ -238,12 +238,13 @@ public:
      */
     int medianFilterPasses;
 
-    /** Turn on wavelets correction to erase noise while preserving real detail.
+    /** Noise reduction method to apply before demosaicing.
      */
-    bool enableNoiseReduction;
+    NoiseReduction NRType;
 
-    /** Noise reduction threshold value.
-     *  The best threshold should be somewhere between 100 and 1000.
+    /** Noise reduction threshold value. Null value disable NR.
+     *  For Wavelets NR, range is between 100 and 1000.
+     *  For FBDD NR : 1 apply a light correction and 2-5 a full noise reduction.
      */
     int NRThreshold;
 
@@ -316,13 +317,6 @@ public:
     /** Turn on the DCB interpolation with enhance interpolated colors.
      */
     bool dcbEnhanceFl;
-
-    /** Fake Before Demosaicing Denoising noise reduction.
-     *  0   : disable
-     *  1   : light FBDD reduction
-     *  2-5 : full FBDD reduction
-     */
-    int fbddNR;
 
     /// For VCD_AHD interpolation.
 
