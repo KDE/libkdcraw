@@ -1072,7 +1072,6 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.inputProfile       = d->inIccUrlEdit->url().toLocalFile();
     prm.outputProfile      = d->outIccUrlEdit->url().toLocalFile();
 
-    kDebug() << prm;
     return prm;
 }
 
