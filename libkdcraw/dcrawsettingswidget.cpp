@@ -495,7 +495,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                 "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation."));
 
     d->NRThresholdSpinBox = new RIntNumInput(d->correctionsSettings);
-    d->NRThresholdSpinBox->setRange(10, 1000, 1);
+    d->NRThresholdSpinBox->setRange(100, 1000, 1);
     d->NRThresholdSpinBox->setDefaultValue(100);
     d->NRThresholdSpinBox->setSliderEnabled(true);
     d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->correctionsSettings);
@@ -1053,7 +1053,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
         }
         case RawDecodingSettings::FBDDNR:
         {
-            prm.NRThreshold = lround(d->NRThresholdSpinBox->value()/100.0);
+            prm.NRThreshold = lround(d->NRThresholdSpinBox->value() / 100.0);
             break;
         }
         default:   // No Noise Reduction
@@ -1062,7 +1062,6 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
             break;
         }
     }
-    prm.NRThreshold        = d->NRThresholdSpinBox->value();
 
     prm.enableCACorrection = d->enableCACorrection->isChecked();
     prm.caMultiplier[0]    = d->caRedMultSpinBox->value();
