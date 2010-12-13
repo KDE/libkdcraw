@@ -39,6 +39,8 @@ INCLUDE_DIRECTORIES (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DI
 SET(LIBKDCRAW_AREA_CODE_GENERAL 51002)
 ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+
 # ==================================================================================================
 # Information to update before to release this library.
 
@@ -178,3 +180,8 @@ SUBDIRS(icons)
 SUBDIRS(libkdcraw)
 SUBDIRS(test)
 SUBDIRS(profiles)
+
+# Install find cmake script to the system for client applications.
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKdcraw.cmake
+        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
