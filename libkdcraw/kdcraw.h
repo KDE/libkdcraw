@@ -30,13 +30,17 @@
 #ifndef KDCRAW_H
 #define KDCRAW_H
 
-// Qt includes.
+// C++ includes
+
+#include <cmath>
+
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtCore/QObject>
 #include <QtGui/QImage>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"

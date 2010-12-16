@@ -21,6 +21,8 @@ it under the terms of the one of three licenses as you choose:
    for more information
 */
 
+#include <math.h>
+
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_LIBRARY_BUILD
@@ -28,6 +30,7 @@ it under the terms of the one of three licenses as you choose:
 #include "libraw/libraw.h"
 #include "internal/defines.h"
 #include "internal/var_defines.h"
+
 
 #ifndef __GLIBC__
 char *my_memmem (char *haystack, size_t haystacklen,

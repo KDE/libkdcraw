@@ -21,6 +21,7 @@ it under the terms of the one of three licenses as you choose:
 
 
  */
+#include <math.h>
 #include <errno.h>
 #include "libraw/libraw.h"
 
