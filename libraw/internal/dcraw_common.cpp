@@ -21,8 +21,6 @@ it under the terms of the one of three licenses as you choose:
    for more information
 */
 
-#include <math.h>
-
 #define CLASS LibRaw::
 #include "libraw/libraw_types.h"
 #define LIBRAW_LIBRARY_BUILD
@@ -30,7 +28,6 @@ it under the terms of the one of three licenses as you choose:
 #include "libraw/libraw.h"
 #include "internal/defines.h"
 #include "internal/var_defines.h"
-
 
 #ifndef __GLIBC__
 char *my_memmem (char *haystack, size_t haystacklen,
@@ -7104,7 +7101,14 @@ void CLASS identify()
   else if (!memcmp (head,"\0MRM",4))
     parse_minolta(0);
   else if (!memcmp (head,"FOVb",4))
-    parse_foveon();
+      {
+          parse_foveon();
+          if(!strcasecmp(make,"SIGMA") && !strncasecmp(model,"SIGMA DP",8))
+              {
+                  make[0] = model[0] = 0;
+                  is_foveon = 0;
+              }
+      }
   else if (!memcmp (head,"CI",2))
     parse_cine();
   else
