@@ -63,8 +63,8 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 # 2.0.0 => 11.0.0 (Included into digiKam 2.0.0 collection)
 
 # Library API version
-SET(DCRAW_LIB_MAJOR_VERSION "2")
-SET(DCRAW_LIB_MINOR_VERSION "0")
+SET(DCRAW_LIB_MAJOR_VERSION "1")
+SET(DCRAW_LIB_MINOR_VERSION "3")
 SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -78,7 +78,7 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "11")
+SET(DCRAW_LIB_SO_CUR_VERSION "10")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
