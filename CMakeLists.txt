@@ -60,7 +60,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 # 1.1.0 => 8.1.0  (Released with KDE 4.4.2)
 # 1.2.0 => 9.0.0  (Released with KDE 4.6.0)
 # 1.3.0 => 10.0.0 (Released with KDE 4.7.0)
-# 2.0.0 => 11.0.0 (Included into digiKam 2.0.0 collection)
+# 2.0.0 => 20.0.0 (Included into digiKam 2.0.0 collection)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "1")
