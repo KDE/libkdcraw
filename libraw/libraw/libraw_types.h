@@ -30,7 +30,7 @@ it under the terms of the one of three licenses as you choose:
 #include <stdio.h>
 
 #if defined (_OPENMP) 
-# if (_MSC_VER < 1600) // OpenMP works on VS2010
+# if (defined WIN32) && (defined _MSC_VER) && (_MSC_VER < 1600) // OpenMP works on VS2010
 #  undef LIBRAW_USE_OPENMP
 # elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
 #   undef LIBRAW_USE_OPENMP
