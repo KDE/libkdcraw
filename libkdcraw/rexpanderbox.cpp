@@ -65,6 +65,20 @@ RClickLabel::RClickLabel(const QString& text, QWidget* parent)
     setCursor(Qt::PointingHandCursor);
 }
 
+void RClickLabel::mousePressEvent(QMouseEvent* event)
+{
+    QLabel::mousePressEvent(event);
+
+    /*
+     * In some contexts, like QGraphicsView, there will be no
+     * release event if the press event was not accepted.
+     */
+    if (event->button() == Qt::LeftButton)
+    {
+        event->accept();
+    }
+}
+
 void RClickLabel::mouseReleaseEvent(QMouseEvent* event)
 {
     QLabel::mouseReleaseEvent(event);
@@ -119,6 +133,20 @@ void RSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
+void RSqueezedClickLabel::mousePressEvent(QMouseEvent* event)
+{
+    QLabel::mousePressEvent(event);
+
+    /*
+     * In some contexts, like QGraphicsView, there will be no
+     * release event if the press event was not accepted.
+     */
+    if (event->button() == Qt::LeftButton)
+    {
+        event->accept();
+    }
+}
+
 void RSqueezedClickLabel::keyPressEvent(QKeyEvent* e)
 {
     switch (e->key())
@@ -155,6 +183,18 @@ void RArrowClickLabel::setArrowType(Qt::ArrowType type)
 Qt::ArrowType RArrowClickLabel::arrowType() const
 {
     return m_arrowType;
+}
+
+void RArrowClickLabel::mousePressEvent(QMouseEvent* event)
+{
+    /*
+     * In some contexts, like QGraphicsView, there will be no
+     * release event if the press event was not accepted.
+     */
+    if (event->button() == Qt::LeftButton)
+    {
+        event->accept();
+    }
 }
 
 void RArrowClickLabel::mouseReleaseEvent(QMouseEvent* event)
