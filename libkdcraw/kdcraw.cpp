@@ -637,7 +637,7 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     raw.imgdata.params.dcb_enhance_fl  = m_rawDecodingSettings.dcbEnhanceFl;
     raw.imgdata.params.eeci_refine     = m_rawDecodingSettings.eeciRefine;
     raw.imgdata.params.es_med_passes   = m_rawDecodingSettings.esMedPasses;
-    raw.imgdata.params.amaze_ca_refine = m_rawDecodingSettings.amazeCARefine;
+//    raw.imgdata.params.amaze_ca_refine = m_rawDecodingSettings.amazeCARefine;
 
     //-------------------------------------------------------------------------------------------
 
