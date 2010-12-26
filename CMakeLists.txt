@@ -180,7 +180,3 @@ SUBDIRS(libkdcraw)
 SUBDIRS(test)
 SUBDIRS(profiles)
 
-# Install find cmake script to the system for client applications.
-
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/FindKdcraw.cmake
-        DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
