@@ -130,7 +130,6 @@ typedef struct
     unsigned    kodak_cbpp;
     INT64       strip_offset, data_offset;
     INT64       meta_offset;
-    unsigned    data_size;
     unsigned     meta_length;
     unsigned    thumb_misc;
     unsigned    fuji_layout;
@@ -162,7 +161,7 @@ struct decode
 
 struct tiff_ifd_t 
 {
-    int t_width, t_height, bps, comp, phint, offset, t_flip, samples, bytes,tile_maxbytes;
+    int t_width, t_height, bps, comp, phint, offset, t_flip, samples, bytes;
 };
 
 

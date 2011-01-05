@@ -30,11 +30,11 @@ it under the terms of the one of three licenses as you choose:
 #include <stdio.h>
 
 #if defined (_OPENMP) 
-# if (defined WIN32) && (defined _MSC_VER) && (_MSC_VER < 1600) // OpenMP works on VS2010
+# if defined(_MSC_VER)
 #  undef LIBRAW_USE_OPENMP
 # elif (defined(__APPLE__) || defined(__MACOSX__)) && defined(_REENTRANT)
 #   undef LIBRAW_USE_OPENMP
-# else 
+# else /* OpenMP defined but not Mac/pthreads and not Windows */
 #   define LIBRAW_USE_OPENMP
 # endif
 #endif
@@ -268,16 +268,8 @@ typedef struct
     int         eeci_refine;
     int         es_med_passes;
     /* AMaZE*/
-    int         ca_correc;
-    float       cared;
-    float	cablue;
-    int cfaline;
-    float linenoise;
-    int cfa_clean;
-    float lclean;
-    float cclean;
-    int cfa_green;
-    float green_thresh;
+    int         amaze_ca_refine;
+
 
 }libraw_output_params_t;
 

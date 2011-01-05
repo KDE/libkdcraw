@@ -648,6 +648,13 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
             O.use_camera_matrix = O.use_camera_wb;
 
         identify();
+        if(!strcmp(P1.make,"FUJIFILM") && !strcmp(P1.model,"FinePix S5500"))
+            {
+                S.top_margin +=8;
+                S.height -=16;
+                S.left_margin +=8;
+                S.width -= 16;
+            }
 
         if(IO.fuji_width)
             {
@@ -1573,10 +1580,6 @@ int LibRaw::dcraw_process(void)
 
     int iterations=-1, dcb_enhance=1, noiserd=0;
     int eeci_refine_fl=0, es_med_passes_fl=0;
-    float cared=0,cablue=0;
-    float linenoise=0; 
-    float lclean=0,cclean=0;
-    float thresh=0;
 
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
@@ -1654,12 +1657,7 @@ int LibRaw::dcraw_process(void)
         if (O.es_med_passes >0 ) es_med_passes_fl = O.es_med_passes;
 
 // LIBRAW_DEMOSAIC_PACK_GPL3
-        //if (quality == 10 && O.amaze_ca_refine >0 ) {CA_correct_RT();}
-
-        if (O.cfa_green >0) {thresh=O.green_thresh ;green_equilibrate(thresh);} 
-        if (O.ca_correc >0 ) {cablue=O.cablue; cared=O.cared; CA_correct_RT(cablue, cared);}
-        if (O.cfaline >0 ) {linenoise=O.linenoise; cfa_linedn(linenoise);}
-        if (O.cfa_clean >0 ) {lclean=O.lclean; cclean=O.cclean; cfa_impulse_gauss(lclean,cclean);}
+        if (quality == 10 && O.amaze_ca_refine >0 ) {CA_correct_RT();}
 
         if (P1.filters && !O.document_mode) 
             {
