@@ -111,7 +111,6 @@ RawDecodingSettings::RawDecodingSettings()
     dcbEnhanceFl               = false;
     eeciRefine                 = false;
     esMedPasses                = 0;
-    amazeCARefine              = false;
 }
 
 RawDecodingSettings::~RawDecodingSettings()
@@ -155,7 +154,6 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
     dcbEnhanceFl            = o.dcbEnhanceFl;
     eeciRefine              = o.eeciRefine;
     esMedPasses             = o.esMedPasses;
-    amazeCARefine           = o.amazeCARefine;
     return *this;
 }
 
@@ -196,7 +194,6 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
         && dcbEnhanceFl            == o.dcbEnhanceFl
         && eeciRefine              == o.eeciRefine
         && esMedPasses             == o.esMedPasses
-        && amazeCARefine           == o.amazeCARefine
         ;
 }
 
@@ -244,7 +241,6 @@ void RawDecodingSettings::optimizeTimeLoading()
     dcbEnhanceFl            = false;
     eeciRefine              = false;
     esMedPasses             = 0;
-    amazeCARefine           = false;
 }
 
 void RawDecodingSettings::readSettings(KConfigGroup& group)
@@ -283,7 +279,6 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
     dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,            defaultPrm.dcbEnhanceFl);
     eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,              defaultPrm.eeciRefine);
     esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,             defaultPrm.esMedPasses);
-    amazeCARefine           = group.readEntry(OPTIONAMAZECAREFINEENTRY,           defaultPrm.amazeCARefine);
 }
 
 void RawDecodingSettings::writeSettings(KConfigGroup& group)
@@ -317,7 +312,6 @@ void RawDecodingSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(OPTIONDCBENHANCEFLENTRY,            dcbEnhanceFl);
     group.writeEntry(OPTIONEECIREFINEENTRY,              eeciRefine);
     group.writeEntry(OPTIONESMEDPASSESENTRY,             esMedPasses);
-    group.writeEntry(OPTIONAMAZECAREFINEENTRY,           amazeCARefine);
 }
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
@@ -358,7 +352,6 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
     dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
     dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
-    dbg.nospace() << "-- amazeCARefine:           " << s.amazeCARefine           << endl;
     dbg.nospace() << "---------------------------------------------------------" << endl;
 
     return dbg.space();

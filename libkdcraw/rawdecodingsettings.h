@@ -330,12 +330,6 @@ public:
      * 1-10 : median filter passes.
      */
     int esMedPasses;
-
-    /// For AMAZE interpolation.
-
-    /** Turn on chromatic abberation correction for AMaZE demosaicing.
-     */
-    bool amazeCARefine;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

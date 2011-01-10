@@ -970,9 +970,6 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
             d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
             d->refineInterpolation->setChecked(settings.eeciRefine);
             break;
-        case RawDecodingSettings::AMAZE:
-            d->refineInterpolation->setChecked(settings.amazeCARefine);
-            break;
         default:
             d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
             d->refineInterpolation->setChecked(false); // option not used.
@@ -1058,9 +1055,6 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
         case RawDecodingSettings::VCD_AHD:
             prm.esMedPasses        = d->medianFilterPassesSpinBox->value();
             prm.eeciRefine         = d->refineInterpolation->isChecked();
-            break;
-        case RawDecodingSettings::AMAZE:
-            prm.amazeCARefine      = d->refineInterpolation->isChecked();
             break;
         default:
             prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();
