@@ -509,7 +509,9 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->autoCACorrection = new QCheckBox(i18n("Automatic color axis adjustements"), d->correctionsSettings);
     d->autoCACorrection->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b><p>"
-                     "Apply Chromatic Aberration correction automatically. Disable this option if you want tu tune manually color factors.<p>"));
+                     "If this option is turned on, It will try to shift image channels sligtly "
+                     "and evaluate Chromatic Aberration change. Note that if you shot blue-red pattern, the method may fail. "
+                     "In this case, disable this option and tune manually color factors.<p>"));
 
     d->caRedMultLabel   = new QLabel(i18n("Red-Green:"), d->correctionsSettings);
     d->caRedMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
