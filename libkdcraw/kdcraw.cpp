@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  a tread-safe libraw C++ program interface
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -584,12 +584,10 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             break;
     }
 
-    if (m_rawDecodingSettings.enableCACorrection)
-    {
-        // (-C) Set Correct chromatic aberration correction.
-        raw.imgdata.params.aber[0] = m_rawDecodingSettings.caMultiplier[0];
-        raw.imgdata.params.aber[2] = m_rawDecodingSettings.caMultiplier[1];
-    }
+    // Chromatic aberration correction.
+    raw.imgdata.params.ca_correc = m_rawDecodingSettings.enableCACorrection;
+    raw.imgdata.params.cared     = m_rawDecodingSettings.caMultiplier[0];
+    raw.imgdata.params.cablue    = m_rawDecodingSettings.caMultiplier[1];
 
     switch (m_rawDecodingSettings.inputColorSpace)
     {

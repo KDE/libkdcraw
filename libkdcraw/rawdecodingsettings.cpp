@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  Raw decoding settings
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -95,8 +95,8 @@ RawDecodingSettings::RawDecodingSettings()
     NRThreshold                = 0;
 
     enableCACorrection         = false;
-    caMultiplier[0]            = 1.0;
-    caMultiplier[1]            = 1.0;
+    caMultiplier[0]            = 0.0;
+    caMultiplier[1]            = 0.0;
 
     inputProfile               = QString();
     outputProfile              = QString();
@@ -228,8 +228,8 @@ void RawDecodingSettings::optimizeTimeLoading()
     NRThreshold             = 0;
 
     enableCACorrection      = false;
-    caMultiplier[0]         = 1.0;
-    caMultiplier[1]         = 1.0;
+    caMultiplier[0]         = 0.0;
+    caMultiplier[1]         = 0.0;
 
     inputProfile            = QString();
     outputProfile           = QString();

@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  Raw decoding settings
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -248,13 +248,14 @@ public:
      */
     int NRThreshold;
 
-    /** Turn on red and blue layer magnification to reduce chromatic aberrations
+    /** Turn on chromatic aberrations correction
      */
     bool enableCACorrection;
 
     /** Magnification factor for Red and Blue layers
-     *  - caMultiplier[0] = red multiplier
-     *  - caMultiplier[1] = blue multiplier
+     *  - caMultiplier[0] = amount of correction on red-green axis.
+     *  - caMultiplier[1] = amount of correction on blue-yellow axis.
+     *  - Both values set to 0.0 = automatic CA correction.
      */
     double caMultiplier[2];
 

@@ -6,7 +6,7 @@
  * @date   2007-02-12
  * @brief  libraw program interface for KDE
  *
- * @author Copyright (C) 2007-2010 by Gilles Caulier
+ * @author Copyright (C) 2007-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it

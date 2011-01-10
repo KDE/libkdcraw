@@ -7,9 +7,9 @@
  * @date   2006-09-13
  * @brief  LibRaw settings widgets
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -89,6 +89,7 @@ public:
         NRThresholdSpinBox             = 0;
         NRThresholdLabel               = 0;
         enableCACorrection             = 0;
+        autoCACorrection               = 0;
         caRedMultSpinBox               = 0;
         caBlueMultSpinBox              = 0;
         caRedMultLabel                 = 0;
@@ -140,6 +141,7 @@ public:
     QCheckBox*       fourColorCheckBox;
     QCheckBox*       dontStretchPixelsCheckBox;
     QCheckBox*       enableCACorrection;
+    QCheckBox*       autoCACorrection;
     QCheckBox*       fixColorsHighlights;
     QCheckBox*       refineInterpolation;
 
@@ -327,7 +329,6 @@ void DcrawSettingsWidget::setup(int advSettings)
                                               "<b>DCB</b>: turn on the enhance interpolated colors filter.<p>"
                                               "<b>VCD & AHD</b>: turn on the enhanced effective "
                                               "color interpolation (EECI) refine to improve sharpness.<p>"
-                                              "<b>AMaZE</b>: turn on chromatic abberation correction.<p>"
                                         ));
     demosaicingLayout->addWidget(d->refineInterpolation, line, 0, 1, 2);
 
@@ -504,35 +505,39 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
     d->enableCACorrection->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
-                     "Enlarge the raw red and blue layers by the given factors, "
-                     "typically 0.999 to 1.001, to correct chromatic aberration.<p>"));
+                     "Enlarge the raw red-green and blue-yellow axis by the given factors (automatic by default).<p>"));
 
-    d->caRedMultLabel   = new QLabel(i18n("Red:"), d->correctionsSettings);
+    d->autoCACorrection = new QCheckBox(i18n("Automatic color axis adjustements"), d->correctionsSettings);
+    d->autoCACorrection->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b><p>"
+                     "Apply Chromatic Aberration correction automatically. Disable this option if you want tu tune manually color factors.<p>"));
+
+    d->caRedMultLabel   = new QLabel(i18n("Red-Green:"), d->correctionsSettings);
     d->caRedMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
-    d->caRedMultSpinBox->setDecimals(5);
-    d->caRedMultSpinBox->setRange(0.00001, 2.0, 0.001);
-    d->caRedMultSpinBox->setDefaultValue(1.0);
-    d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red multiplier</b><p>"
-                         "Set here the magnification factor of the red layer"));
+    d->caRedMultSpinBox->setDecimals(1);
+    d->caRedMultSpinBox->setRange(-4.0, 4.0, 0.1);
+    d->caRedMultSpinBox->setDefaultValue(0.0);
+    d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red-Green multiplier</b><p>"
+                         "Set here the amount of correction on red-green axis"));
 
-    d->caBlueMultLabel   = new QLabel(i18n("Blue:"), d->correctionsSettings);
+    d->caBlueMultLabel   = new QLabel(i18n("Blue-Yellow:"), d->correctionsSettings);
     d->caBlueMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
-    d->caBlueMultSpinBox->setDecimals(5);
-    d->caBlueMultSpinBox->setRange(0.00001, 2.0, 0.001);
-    d->caBlueMultSpinBox->setDefaultValue(1.0);
-    d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue multiplier</b><p>"
-                          "Set here the magnification factor of the blue layer"));
+    d->caBlueMultSpinBox->setDecimals(1);
+    d->caBlueMultSpinBox->setRange(-4.0, 4.0, 0.1);
+    d->caBlueMultSpinBox->setDefaultValue(0.0);
+    d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue-Yellow multiplier</b><p>"
+                          "Set here the amount of correction on blue-yellow axis"));
 
     correctionsLayout->addWidget(d->noiseReductionLabel,    0, 0, 1, 1);
     correctionsLayout->addWidget(d->noiseReductionComboBox, 0, 1, 1, 2);
     correctionsLayout->addWidget(d->NRThresholdLabel,       1, 0, 1, 1);
     correctionsLayout->addWidget(d->NRThresholdSpinBox,     1, 1, 1, 2);
     correctionsLayout->addWidget(d->enableCACorrection,     2, 0, 1, 3);
-    correctionsLayout->addWidget(d->caRedMultLabel,         3, 0, 1, 1);
-    correctionsLayout->addWidget(d->caRedMultSpinBox,       3, 1, 1, 2);
-    correctionsLayout->addWidget(d->caBlueMultLabel,        4, 0, 1, 1);
-    correctionsLayout->addWidget(d->caBlueMultSpinBox,      4, 1, 1, 2);
-    correctionsLayout->setRowStretch(5, 10);
+    correctionsLayout->addWidget(d->autoCACorrection,       3, 0, 1, 3);
+    correctionsLayout->addWidget(d->caRedMultLabel,         4, 0, 1, 1);
+    correctionsLayout->addWidget(d->caRedMultSpinBox,       4, 1, 1, 2);
+    correctionsLayout->addWidget(d->caBlueMultLabel,        5, 0, 1, 1);
+    correctionsLayout->addWidget(d->caBlueMultSpinBox,      5, 1, 1, 2);
+    correctionsLayout->setRowStretch(6, 10);
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
@@ -620,6 +625,9 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     connect(d->enableCACorrection, SIGNAL(toggled(bool)),
             this, SLOT(slotCACorrectionToggled(bool)));
+
+    connect(d->autoCACorrection, SIGNAL(toggled(bool)),
+            this, SLOT(slotAutoCAToggled(bool)));
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
@@ -802,10 +810,23 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
 
 void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
 {
-    d->caRedMultSpinBox->setEnabled(b);
-    d->caBlueMultSpinBox->setEnabled(b);
-    d->caRedMultLabel->setEnabled(b);
-    d->caBlueMultLabel->setEnabled(b);
+    d->autoCACorrection->setEnabled(b);
+    slotAutoCAToggled(d->autoCACorrection->isChecked());
+}
+
+void DcrawSettingsWidget::slotAutoCAToggled(bool b)
+{
+    if (b)
+    {
+        d->caRedMultSpinBox->setValue(0.0);
+        d->caBlueMultSpinBox->setValue(0.0);
+    }
+
+    bool mult = !b & d->autoCACorrection->isEnabled();
+    d->caRedMultSpinBox->setEnabled(mult);
+    d->caBlueMultSpinBox->setEnabled(mult);
+    d->caRedMultLabel->setEnabled(mult);
+    d->caBlueMultLabel->setEnabled(mult);
 }
 
 void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
@@ -966,10 +987,13 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->noiseReductionComboBox->setCurrentIndex(settings.NRType);
     slotNoiseReductionChanged(settings.NRType);
     d->NRThresholdSpinBox->setValue(settings.NRThreshold);
+
     d->enableCACorrection->setChecked(settings.enableCACorrection);
-    slotCACorrectionToggled(settings.enableCACorrection);
     d->caRedMultSpinBox->setValue(settings.caMultiplier[0]);
     d->caBlueMultSpinBox->setValue(settings.caMultiplier[1]);
+    d->autoCACorrection->setChecked((settings.caMultiplier[0] == 0.0) && (settings.caMultiplier[1] == 0.0));
+    slotCACorrectionToggled(settings.enableCACorrection);
+
     d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
     d->outIccUrlEdit->setUrl(KUrl(settings.outputProfile));
 }

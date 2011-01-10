@@ -7,9 +7,9 @@
  * @date   2006-09-13
  * @brief  LibRaw settings widgets
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -108,6 +108,7 @@ private Q_SLOTS:
     void slotUnclipColorActivated(int);
     void slotNoiseReductionChanged(int);
     void slotCACorrectionToggled(bool);
+    void slotAutoCAToggled(bool);
     void processDcrawUrl(const QString&);
     void slotInputColorSpaceChanged(int);
     void slotOutputColorSpaceChanged(int);
