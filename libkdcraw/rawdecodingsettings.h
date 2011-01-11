@@ -115,12 +115,14 @@ public:
      *  NONR:       No noise reduction.
      *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
      *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
+     *  LINENR:     Banding noise suppression. It's applied after interpolation.
      */
     enum NoiseReduction
     {
         NONR = 0,
         WAVELETSNR,
-        FBDDNR
+        FBDDNR,
+        LINENR
     };
 
     /** Input color profile used to decoded image
@@ -243,8 +245,9 @@ public:
     NoiseReduction NRType;
 
     /** Noise reduction threshold value. Null value disable NR.
-     *  For Wavelets NR, range is between 100 and 1000.
-     *  For FBDD NR : 1 apply a light correction and 2-5 a full noise reduction.
+     *  For WAVELETSNR : range is between 100 and 1000.
+     *  For FBDDNR :     1 apply a light correction and 2-5 a full noise reduction.
+     *  For LINENR :     1 apply a light correction, 5 default value, 20 huge correction.
      */
     int NRThreshold;
 

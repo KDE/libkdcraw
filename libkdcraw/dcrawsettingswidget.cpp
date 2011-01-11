@@ -488,12 +488,15 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("Noise Reduction", "None"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("Noise Reduction", "Wavelets"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("Noise Reduction", "FBDD"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("Noise Reduction", "Line Suppression"));
     d->noiseReductionComboBox->setDefaultIndex(RawDecodingSettings::NONR);
     d->noiseReductionComboBox->setWhatsThis(i18n("<p><b>Noise Reduction</b><p>"
                 "Select here the noise reduction method to apply during RAW decoding.<p>"
                 "<b>None</b>: no noise reduction.<p>"
                 "<b>Wavelets</b>: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.<p>"
-                "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation."));
+                "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.<p>"
+                "<b>Line Suppression</b>: Banding noise suppression. It's applied after interpolation.<p>"
+                ));
 
     d->NRThresholdSpinBox = new RIntNumInput(d->correctionsSettings);
     d->NRThresholdSpinBox->setRange(100, 1000, 1);
@@ -884,7 +887,7 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
         case RawDecodingSettings::AMAZE:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(true);
+            d->refineInterpolation->setEnabled(false);
             break;
 
         default: // BILINEAR, VNG, PPG, AHD
@@ -983,6 +986,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     slotInputColorSpaceChanged((int)settings.inputColorSpace);
     d->outputColorSpaceComboBox->setCurrentIndex((int)settings.outputColorSpace);
     slotOutputColorSpaceChanged((int)settings.outputColorSpace);
+
     d->noiseReductionComboBox->setCurrentIndex(settings.NRType);
     slotNoiseReductionChanged(settings.NRType);
     d->NRThresholdSpinBox->setValue(settings.NRThreshold);
@@ -1066,19 +1070,14 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.NRType = (RawDecodingSettings::NoiseReduction)d->noiseReductionComboBox->currentIndex();
     switch (prm.NRType)
     {
-        case RawDecodingSettings::WAVELETSNR:
-        {
-            prm.NRThreshold = d->NRThresholdSpinBox->value();
-            break;
-        }
-        case RawDecodingSettings::FBDDNR:
-        {
-            prm.NRThreshold = lround(d->NRThresholdSpinBox->value() / 100.0);
-            break;
-        }
-        default:   // No Noise Reduction
+        case RawDecodingSettings::NONR:
         {
             prm.NRThreshold = 0;
+            break;
+        }
+        default:
+        {
+            prm.NRThreshold = d->NRThresholdSpinBox->value();
             break;
         }
     }
