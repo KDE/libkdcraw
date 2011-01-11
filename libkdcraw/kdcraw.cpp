@@ -588,12 +588,24 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
             raw.imgdata.params.cfaline      = true;
             break;
         }
+
+        case RawDecodingSettings::IMPULSENR:
+        {
+            // (100 - 1000) => (0.005 - 0.05) conversion.
+            raw.imgdata.params.lclean       = m_rawDecodingSettings.NRThreshold     * 5E-5;
+            raw.imgdata.params.cclean       = m_rawDecodingSettings.NRChroThreshold * 5E-5;
+            raw.imgdata.params.cfa_clean    = true;
+            break;
+        }
         default:   // No Noise Reduction
         {
             raw.imgdata.params.threshold    = 0;
             raw.imgdata.params.fbdd_noiserd = 0;
-            raw.imgdata.params.threshold    = 0;
+            raw.imgdata.params.linenoise    = 0;
             raw.imgdata.params.cfaline      = false;
+            raw.imgdata.params.lclean       = 0;
+            raw.imgdata.params.cclean       = 0;
+            raw.imgdata.params.cfa_clean    = false;
             break;
         }
     }

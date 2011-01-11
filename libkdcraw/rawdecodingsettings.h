@@ -115,14 +115,16 @@ public:
      *  NONR:       No noise reduction.
      *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
      *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
-     *  LINENR:     Banding noise suppression. It's applied after interpolation.
+     *  LINENR:     CFA Line Denoise. It's applied after interpolation.
+     *  IMPULSENR:  Impulse Denoise. It's applied after interpolation.
      */
     enum NoiseReduction
     {
         NONR = 0,
         WAVELETSNR,
         FBDDNR,
-        LINENR
+        LINENR,
+        IMPULSENR
     };
 
     /** Input color profile used to decoded image
@@ -244,10 +246,8 @@ public:
      */
     NoiseReduction NRType;
 
-    /** Noise reduction threshold value. Null value disable NR.
-     *  For WAVELETSNR : range is between 100 and 1000.
-     *  For FBDDNR :     1 apply a light correction and 2-5 a full noise reduction.
-     *  For LINENR :     1 apply a light correction, 5 default value, 20 huge correction.
+    /** Noise reduction threshold value. Null value disable NR. Range is between 100 and 1000.
+     *  For IMPULSENR : set the amount of Luminance impulse denoise.
      */
     int NRThreshold;
 
@@ -333,6 +333,11 @@ public:
      * 1-10 : median filter passes.
      */
     int esMedPasses;
+
+    /** For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
+        Null value disable NR. Range is between 100 and 1000.
+     */
+    int NRChroThreshold;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

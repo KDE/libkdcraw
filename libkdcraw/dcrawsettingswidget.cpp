@@ -86,8 +86,10 @@ public:
         RAWQualityComboBox             = 0;
         RAWQualityLabel                = 0;
         noiseReductionComboBox         = 0;
-        NRThresholdSpinBox             = 0;
-        NRThresholdLabel               = 0;
+        NRSpinBox1                     = 0;
+        NRSpinBox2                     = 0;
+        NRLabel1                       = 0;
+        NRLabel2                       = 0;
         enableCACorrection             = 0;
         autoCACorrection               = 0;
         caRedMultSpinBox               = 0;
@@ -124,7 +126,8 @@ public:
     QLabel*          customWhiteBalanceGreenLabel;
     QLabel*          brightnessLabel;
     QLabel*          RAWQualityLabel;
-    QLabel*          NRThresholdLabel;
+    QLabel*          NRLabel1;
+    QLabel*          NRLabel2;
     QLabel*          caRedMultLabel;
     QLabel*          caBlueMultLabel;
     QLabel*          unclipColorLabel;
@@ -159,7 +162,8 @@ public:
     RIntNumInput*    reconstructSpinBox;
     RIntNumInput*    blackPointSpinBox;
     RIntNumInput*    whitePointSpinBox;
-    RIntNumInput*    NRThresholdSpinBox;
+    RIntNumInput*    NRSpinBox1;
+    RIntNumInput*    NRSpinBox2;
     RIntNumInput*    medianFilterPassesSpinBox;
 
     RDoubleNumInput* customWhiteBalanceGreenSpinBox;
@@ -488,23 +492,29 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("Noise Reduction", "None"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("Noise Reduction", "Wavelets"));
     d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("Noise Reduction", "FBDD"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("Noise Reduction", "Line Suppression"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("Noise Reduction", "CFA Line Denoise"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::IMPULSENR,  i18nc("Noise Reduction", "Impulse Denoise"));
     d->noiseReductionComboBox->setDefaultIndex(RawDecodingSettings::NONR);
     d->noiseReductionComboBox->setWhatsThis(i18n("<p><b>Noise Reduction</b><p>"
                 "Select here the noise reduction method to apply during RAW decoding.<p>"
                 "<b>None</b>: no noise reduction.<p>"
                 "<b>Wavelets</b>: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.<p>"
                 "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.<p>"
-                "<b>Line Suppression</b>: Banding noise suppression. It's applied after interpolation.<p>"
+                "<b>CFA Line Denoise</b>: Banding noise suppression. It's applied after interpolation.<p>"
+                "<b>Impulse Denoise</b>: Impulse noise suppression. It's applied after interpolation.<p>"
                 ));
 
-    d->NRThresholdSpinBox = new RIntNumInput(d->correctionsSettings);
-    d->NRThresholdSpinBox->setRange(100, 1000, 1);
-    d->NRThresholdSpinBox->setDefaultValue(100);
-    d->NRThresholdSpinBox->setSliderEnabled(true);
-    d->NRThresholdLabel   = new QLabel(i18n("Threshold:"), d->correctionsSettings);
-    d->NRThresholdSpinBox->setWhatsThis(i18n("<p><b>Threshold</b><p>"
-                     "Set here the noise reduction threshold value to use."));
+    d->NRSpinBox1 = new RIntNumInput(d->correctionsSettings);
+    d->NRSpinBox1->setRange(100, 1000, 1);
+    d->NRSpinBox1->setDefaultValue(100);
+    d->NRSpinBox1->setSliderEnabled(true);
+    d->NRLabel1   = new QLabel(d->correctionsSettings);
+
+    d->NRSpinBox2 = new RIntNumInput(d->correctionsSettings);
+    d->NRSpinBox2->setRange(100, 1000, 1);
+    d->NRSpinBox2->setDefaultValue(100);
+    d->NRSpinBox2->setSliderEnabled(true);
+    d->NRLabel2   = new QLabel(d->correctionsSettings);
 
     d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
     d->enableCACorrection->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
@@ -534,15 +544,17 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     correctionsLayout->addWidget(d->noiseReductionLabel,    0, 0, 1, 1);
     correctionsLayout->addWidget(d->noiseReductionComboBox, 0, 1, 1, 2);
-    correctionsLayout->addWidget(d->NRThresholdLabel,       1, 0, 1, 1);
-    correctionsLayout->addWidget(d->NRThresholdSpinBox,     1, 1, 1, 2);
-    correctionsLayout->addWidget(d->enableCACorrection,     2, 0, 1, 3);
-    correctionsLayout->addWidget(d->autoCACorrection,       3, 0, 1, 3);
-    correctionsLayout->addWidget(d->caRedMultLabel,         4, 0, 1, 1);
-    correctionsLayout->addWidget(d->caRedMultSpinBox,       4, 1, 1, 2);
-    correctionsLayout->addWidget(d->caBlueMultLabel,        5, 0, 1, 1);
-    correctionsLayout->addWidget(d->caBlueMultSpinBox,      5, 1, 1, 2);
-    correctionsLayout->setRowStretch(6, 10);
+    correctionsLayout->addWidget(d->NRLabel1,               1, 0, 1, 1);
+    correctionsLayout->addWidget(d->NRSpinBox1,             1, 1, 1, 2);
+    correctionsLayout->addWidget(d->NRLabel2,               2, 0, 1, 1);
+    correctionsLayout->addWidget(d->NRSpinBox2,             2, 1, 1, 2);
+    correctionsLayout->addWidget(d->enableCACorrection,     3, 0, 1, 3);
+    correctionsLayout->addWidget(d->autoCACorrection,       4, 0, 1, 3);
+    correctionsLayout->addWidget(d->caRedMultLabel,         5, 0, 1, 1);
+    correctionsLayout->addWidget(d->caRedMultSpinBox,       5, 1, 1, 2);
+    correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
+    correctionsLayout->addWidget(d->caBlueMultSpinBox,      6, 1, 1, 2);
+    correctionsLayout->setRowStretch(7, 10);
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
@@ -714,7 +726,10 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->whitePointSpinBox, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->NRThresholdSpinBox, SIGNAL(valueChanged(int)),
+    connect(d->NRSpinBox1, SIGNAL(valueChanged(int)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->NRSpinBox2, SIGNAL(valueChanged(int)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->medianFilterPassesSpinBox, SIGNAL(valueChanged(int)),
@@ -808,8 +823,44 @@ void DcrawSettingsWidget::slotUnclipColorActivated(int v)
 
 void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
 {
-    d->NRThresholdSpinBox->setEnabled(!item == RawDecodingSettings::NONR);
-    d->NRThresholdLabel->setEnabled(!item == RawDecodingSettings::NONR);
+    d->NRSpinBox1->setEnabled(true);
+    d->NRLabel1->setEnabled(true);
+    d->NRSpinBox2->setEnabled(true);
+    d->NRLabel2->setEnabled(true);
+    d->NRLabel1->setText(i18n("Threshold:"));
+    d->NRSpinBox1->setWhatsThis(i18n("<p><b>Threshold</b><p>"
+                                    "Set here the noise reduction threshold value to use."));
+
+    switch(item)
+    {
+        case RawDecodingSettings::WAVELETSNR:
+        case RawDecodingSettings::FBDDNR:
+        case RawDecodingSettings::LINENR:
+            d->NRSpinBox2->setVisible(false);
+            d->NRLabel2->setVisible(false);
+            break;
+
+        case RawDecodingSettings::IMPULSENR:
+            d->NRLabel1->setText(i18n("Luminance:"));
+            d->NRSpinBox1->setWhatsThis(i18n("<p><b>Luminance</b><p>"
+                                            "Amount of Luminance impulse noise reduction."));
+            d->NRLabel2->setText(i18n("Chrominance:"));
+            d->NRSpinBox2->setWhatsThis(i18n("<p><b>Chrominance</b><p>"
+                                            "Amount of Chrominance impulse noise reduction."));
+            d->NRSpinBox2->setVisible(true);
+            d->NRLabel2->setVisible(true);
+            break;
+
+        default:
+            d->NRSpinBox1->setEnabled(false);
+            d->NRLabel1->setEnabled(false);
+            d->NRSpinBox2->setEnabled(false);
+            d->NRLabel2->setEnabled(false);
+            d->NRSpinBox2->setVisible(false);
+            d->NRLabel2->setVisible(false);
+            break;
+    }
+
     emit signalSettingsChanged();
 }
 
@@ -989,7 +1040,8 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
 
     d->noiseReductionComboBox->setCurrentIndex(settings.NRType);
     slotNoiseReductionChanged(settings.NRType);
-    d->NRThresholdSpinBox->setValue(settings.NRThreshold);
+    d->NRSpinBox1->setValue(settings.NRThreshold);
+    d->NRSpinBox2->setValue(settings.NRChroThreshold);
 
     d->enableCACorrection->setChecked(settings.enableCACorrection);
     d->caRedMultSpinBox->setValue(settings.caMultiplier[0]);
@@ -1072,12 +1124,21 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     {
         case RawDecodingSettings::NONR:
         {
-            prm.NRThreshold = 0;
+            prm.NRThreshold     = 0;
+            prm.NRChroThreshold = 0;
             break;
         }
-        default:
+        case RawDecodingSettings::WAVELETSNR:
+        case RawDecodingSettings::FBDDNR:
+        case RawDecodingSettings::LINENR:
         {
-            prm.NRThreshold = d->NRThresholdSpinBox->value();
+            prm.NRThreshold     = d->NRSpinBox1->value();
+            prm.NRChroThreshold = 0;
+        }
+        default:    // IMPULSENR
+        {
+            prm.NRThreshold     = d->NRSpinBox1->value();
+            prm.NRChroThreshold = d->NRSpinBox2->value();
             break;
         }
     }

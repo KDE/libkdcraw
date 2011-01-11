@@ -11,12 +11,7 @@
 Usable range for exp_shift is  from 0.5 (darken image 1 stop) to 3.0 (lighten ~1.5 photographic stops).
 Usable range for exp_preser is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation, upper half of S-curve applied to image)
 
-2) Impulse noise cleaning. Again, all interpolation methods
-
-   int cfa_clean; Boolean 0/non-zero. Default is 0 (off)
-   fload lclean,cclean;  (L)uminance and (C)olor amount of cleaning. Range between 0.005 and 0.05, commonly 0.01
-
-3) Green channel local averaging. All interpolation methods, but may conflict with green_matching option, so it is safer to use only one green averaging.
+2) Green channel local averaging. All interpolation methods, but may conflict with green_matching option, so it is safer to use only one green averaging.
 
    int cfa_green; Boolean, default is 0 (off)
    float green_threshold;  - Sensitivity of method (green is averaged if difference less than this value in percent).  Usable range between 0.01 and 0.1, commonly 0.03
