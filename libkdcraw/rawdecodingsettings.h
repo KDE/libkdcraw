@@ -338,6 +338,20 @@ public:
         Null value disable NR. Range is between 100 and 1000.
      */
     int NRChroThreshold;
+
+    /** Turn on the Exposure Correction before interpolation.
+     */
+    bool expoCorrection;
+
+    /** Shift of Exposure Correction before interpolation in linear scale.
+     *  Usable range is from 0.5 (darken image 1 stop) to 3.0 (lighten ~1.5 photographic stops).
+     */
+    double expoCorrectionShift;
+
+    /** Amount of highlight preservation for exposure correction before interpolation in E.V.
+     *  Usable range is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation)
+     */
+    double expoCorrectionHighlight;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

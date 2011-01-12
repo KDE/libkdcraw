@@ -108,6 +108,7 @@ private Q_SLOTS:
     void slotUnclipColorActivated(int);
     void slotNoiseReductionChanged(int);
     void slotCACorrectionToggled(bool);
+    void slotExposureCorrectionToggled(bool);
     void slotAutoCAToggled(bool);
     void processDcrawUrl(const QString&);
     void slotInputColorSpaceChanged(int);

@@ -611,9 +611,14 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     }
 
     // Chromatic aberration correction.
-    raw.imgdata.params.ca_correc = m_rawDecodingSettings.enableCACorrection;
-    raw.imgdata.params.cared     = m_rawDecodingSettings.caMultiplier[0];
-    raw.imgdata.params.cablue    = m_rawDecodingSettings.caMultiplier[1];
+    raw.imgdata.params.ca_correc  = m_rawDecodingSettings.enableCACorrection;
+    raw.imgdata.params.cared      = m_rawDecodingSettings.caMultiplier[0];
+    raw.imgdata.params.cablue     = m_rawDecodingSettings.caMultiplier[1];
+
+    // Exposure Correction before interpolation.
+    raw.imgdata.params.exp_correc = m_rawDecodingSettings.expoCorrection;
+    raw.imgdata.params.exp_shift  = m_rawDecodingSettings.expoCorrectionShift;
+    raw.imgdata.params.exp_preser = m_rawDecodingSettings.expoCorrectionHighlight;
 
     switch (m_rawDecodingSettings.inputColorSpace)
     {

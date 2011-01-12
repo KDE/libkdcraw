@@ -60,6 +60,9 @@
 #define OPTIONEECIREFINEENTRY                          "Eeci Refine"
 #define OPTIONESMEDPASSESENTRY                         "Es Median Filter Passes"
 #define OPTIONNRCHROMINANCETHRESHOLDENTRY              "Noise Reduction Chrominance Threshold"
+#define OPTIONEXPOCORRECTIONENTRY                      "Expo Correction"
+#define OPTIONEXPOCORRECTIONSHIFTENTRY                 "Expo Correction Shift"
+#define OPTIONEXPOCORRECTIONHIGHLIGHTENTRY             "Expo Correction Highlight"
 
 #include "rawdecodingsettings.h"
 
@@ -112,6 +115,9 @@ RawDecodingSettings::RawDecodingSettings()
     eeciRefine                 = false;
     esMedPasses                = 0;
     NRChroThreshold            = 0;
+    expoCorrection             = false;
+    expoCorrectionShift        = 1.0;
+    expoCorrectionHighlight    = 0.0;
 }
 
 RawDecodingSettings::~RawDecodingSettings()
@@ -156,6 +162,10 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
     eeciRefine              = o.eeciRefine;
     esMedPasses             = o.esMedPasses;
     NRChroThreshold         = o.NRChroThreshold;
+    expoCorrection          = o.expoCorrection;
+    expoCorrectionShift     = o.expoCorrectionShift;
+    expoCorrectionHighlight = o.expoCorrectionHighlight;
+
     return *this;
 }
 
@@ -197,6 +207,9 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
         && eeciRefine              == o.eeciRefine
         && esMedPasses             == o.esMedPasses
         && NRChroThreshold         == o.NRChroThreshold
+        && expoCorrection          == o.expoCorrection
+        && expoCorrectionShift     == o.expoCorrectionShift
+        && expoCorrectionHighlight == o.expoCorrectionHighlight
         ;
 }
 
@@ -245,6 +258,9 @@ void RawDecodingSettings::optimizeTimeLoading()
     eeciRefine              = false;
     esMedPasses             = 0;
     NRChroThreshold         = 0;
+    expoCorrection          = false;
+    expoCorrectionShift     = 1.0;
+    expoCorrectionHighlight = 0.0;
 }
 
 void RawDecodingSettings::readSettings(KConfigGroup& group)
@@ -260,7 +276,8 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
     RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,            defaultPrm.RGBInterpolate4Colors);
     unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,            defaultPrm.unclipColors);
     DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,       defaultPrm.DontStretchPixels);
-    NRType                  = (NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)defaultPrm.NRType);
+    NRType                  = (NoiseReduction)
+                              group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)defaultPrm.NRType);
     brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    defaultPrm.brightness);
     enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,           defaultPrm.enableBlackPoint);
     blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,              defaultPrm.blackPoint);
@@ -284,6 +301,9 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
     eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,              defaultPrm.eeciRefine);
     esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,             defaultPrm.esMedPasses);
     NRChroThreshold         = group.readEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  defaultPrm.NRChroThreshold);
+    expoCorrection          = group.readEntry(OPTIONEXPOCORRECTIONENTRY,          defaultPrm.expoCorrection);
+    expoCorrectionShift     = group.readEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     defaultPrm.expoCorrectionShift);
+    expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, defaultPrm.expoCorrectionHighlight);
 }
 
 void RawDecodingSettings::writeSettings(KConfigGroup& group)
@@ -318,6 +338,9 @@ void RawDecodingSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(OPTIONEECIREFINEENTRY,              eeciRefine);
     group.writeEntry(OPTIONESMEDPASSESENTRY,             esMedPasses);
     group.writeEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  NRChroThreshold);
+    group.writeEntry(OPTIONEXPOCORRECTIONENTRY,          expoCorrection);
+    group.writeEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     expoCorrectionShift);
+    group.writeEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, expoCorrectionHighlight);
 }
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
@@ -359,6 +382,9 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
     dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
     dbg.nospace() << "-- NRChrominaceThreshold:   " << s.NRChroThreshold         << endl;
+    dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << endl;
+    dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << endl;
+    dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << endl;
     dbg.nospace() << "---------------------------------------------------------" << endl;
 
     return dbg.space();

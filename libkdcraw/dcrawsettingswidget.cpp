@@ -90,8 +90,8 @@ public:
         NRSpinBox2                     = 0;
         NRLabel1                       = 0;
         NRLabel2                       = 0;
-        enableCACorrection             = 0;
-        autoCACorrection               = 0;
+        enableCACorrectionBox          = 0;
+        autoCACorrectionBox            = 0;
         caRedMultSpinBox               = 0;
         caBlueMultSpinBox              = 0;
         caRedMultLabel                 = 0;
@@ -111,9 +111,14 @@ public:
         outIccUrlEdit                  = 0;
         inputColorSpaceLabel           = 0;
         inputColorSpaceComboBox        = 0;
-        fixColorsHighlights            = 0;
-        refineInterpolation            = 0;
+        fixColorsHighlightsBox         = 0;
+        refineInterpolationBox         = 0;
         noiseReductionLabel            = 0;
+        expoCorrectionBox              = 0;
+        expoCorrectionShiftSpinBox     = 0;
+        expoCorrectionHighlightSpinBox = 0;
+        expoCorrectionShiftLabel       = 0;
+        expoCorrectionHighlightLabel   = 0;
     }
 
     QWidget*         demosaicingSettings;
@@ -136,6 +141,8 @@ public:
     QLabel*          outputColorSpaceLabel;
     QLabel*          medianFilterPassesLabel;
     QLabel*          noiseReductionLabel;
+    QLabel*          expoCorrectionShiftLabel;
+    QLabel*          expoCorrectionHighlightLabel;
 
     QCheckBox*       blackPointCheckBox;
     QCheckBox*       whitePointCheckBox;
@@ -143,10 +150,11 @@ public:
     QCheckBox*       autoBrightnessBox;
     QCheckBox*       fourColorCheckBox;
     QCheckBox*       dontStretchPixelsCheckBox;
-    QCheckBox*       enableCACorrection;
-    QCheckBox*       autoCACorrection;
-    QCheckBox*       fixColorsHighlights;
-    QCheckBox*       refineInterpolation;
+    QCheckBox*       enableCACorrectionBox;
+    QCheckBox*       autoCACorrectionBox;
+    QCheckBox*       fixColorsHighlightsBox;
+    QCheckBox*       refineInterpolationBox;
+    QCheckBox*       expoCorrectionBox;
 
     KUrlRequester*   inIccUrlEdit;
     KUrlRequester*   outIccUrlEdit;
@@ -170,6 +178,8 @@ public:
     RDoubleNumInput* caRedMultSpinBox;
     RDoubleNumInput* caBlueMultSpinBox;
     RDoubleNumInput* brightnessSpinBox;
+    RDoubleNumInput* expoCorrectionShiftSpinBox;
+    RDoubleNumInput* expoCorrectionHighlightSpinBox;
 };
 
 DcrawSettingsWidget::DcrawSettingsWidget(QWidget* parent, int advSettings)
@@ -327,14 +337,14 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
     line++;
 
-    d->refineInterpolation       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
-    d->refineInterpolation->setWhatsThis(i18n("<p><b>Refine interpolation</b><p>"
+    d->refineInterpolationBox       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
+    d->refineInterpolationBox->setWhatsThis(i18n("<p><b>Refine interpolation</b><p>"
                                               "This setting is available only for few Quality options:<p>"
                                               "<b>DCB</b>: turn on the enhance interpolated colors filter.<p>"
                                               "<b>VCD & AHD</b>: turn on the enhanced effective "
                                               "color interpolation (EECI) refine to improve sharpness.<p>"
                                         ));
-    demosaicingLayout->addWidget(d->refineInterpolation, line, 0, 1, 2);
+    demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
 
     addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18n("Demosaicing"), QString("demosaicing"), true);
 
@@ -402,8 +412,27 @@ void DcrawSettingsWidget::setup(int advSettings)
                                              "Specify the reconstruct highlight level. "
                                              "Low values favor whites and high values favor colors."));
 
-    d->fixColorsHighlights = new QCheckBox(i18n("Correct false colors in highlights"), d->whiteBalanceSettings);
-    d->fixColorsHighlights->setWhatsThis(i18n("<p>If enabled, images with overblown channels are processed much "
+    d->expoCorrectionBox = new QCheckBox(i18n("Exposure Correction"), d->whiteBalanceSettings);
+    d->expoCorrectionBox->setWhatsThis(i18n("<p>Turn on the exposure correction before interpolation."));
+
+    d->expoCorrectionShiftLabel   = new QLabel(i18n("Shift (linear):"), d->whiteBalanceSettings);
+    d->expoCorrectionShiftSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->expoCorrectionShiftSpinBox->setDecimals(2);
+    d->expoCorrectionShiftSpinBox->setRange(0.5, 3.0, 0.01);
+    d->expoCorrectionShiftSpinBox->setDefaultValue(1.0);
+    d->expoCorrectionShiftSpinBox->setWhatsThis(i18n("<p><b>Shift</b><p>"
+                                            "Shift of exposure correction before interpolation in linear scale.<p>"));
+
+    d->expoCorrectionHighlightLabel   = new QLabel(i18n("Highlight (E.V):"), d->whiteBalanceSettings);
+    d->expoCorrectionHighlightSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
+    d->expoCorrectionHighlightSpinBox->setDecimals(2);
+    d->expoCorrectionHighlightSpinBox->setRange(0.0, 1.0, 0.01);
+    d->expoCorrectionHighlightSpinBox->setDefaultValue(0.0);
+    d->expoCorrectionHighlightSpinBox->setWhatsThis(i18n("<p><b>Highlight</b><p>"
+                                            "Amount of highlight preservation for exposure correction before interpolation in E.V.<p>"));
+
+    d->fixColorsHighlightsBox = new QCheckBox(i18n("Correct false colors in highlights"), d->whiteBalanceSettings);
+    d->fixColorsHighlightsBox->setWhatsThis(i18n("<p>If enabled, images with overblown channels are processed much "
                                               "more accurately, without 'pink clouds' (and blue highlights under "
                                               "tungsten lamps)."));
 
@@ -458,24 +487,29 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->whitePointSpinBox->hide();
     }
 
-    whiteBalanceLayout->addWidget(d->whiteBalanceLabel,              0, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->whiteBalanceComboBox,           0, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->customWhiteBalanceLabel,        1, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->customWhiteBalanceSpinBox,      1, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenLabel,   2, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenSpinBox, 2, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->unclipColorLabel,               3, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->unclipColorComboBox,            3, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->reconstructLabel,               4, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->reconstructSpinBox,             4, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->fixColorsHighlights,            5, 0, 1, 2);
-    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              6, 0, 1, 2);
-    whiteBalanceLayout->addWidget(d->brightnessLabel,                7, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              7, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             8, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              8, 1, 1, 2);
-    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             9, 0, 1, 1);
-    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              9, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->whiteBalanceLabel,              0,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whiteBalanceComboBox,           0,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceLabel,        1,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceSpinBox,      1,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenLabel,   2,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->customWhiteBalanceGreenSpinBox, 2,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->unclipColorLabel,               3,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->unclipColorComboBox,            3,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->reconstructLabel,               4,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->reconstructSpinBox,             4,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->expoCorrectionBox,              5,  0, 1, 2);
+    whiteBalanceLayout->addWidget(d->expoCorrectionShiftLabel,       6,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->expoCorrectionShiftSpinBox,     6,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->expoCorrectionHighlightLabel,   7,  0, 1, 1);
+    whiteBalanceLayout->addWidget(d->expoCorrectionHighlightSpinBox, 7,  1, 1, 2);
+    whiteBalanceLayout->addWidget(d->fixColorsHighlightsBox,         8,  0, 1, 2);
+    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              9,  0, 1, 2);
+    whiteBalanceLayout->addWidget(d->brightnessLabel,                10, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->brightnessSpinBox,              10, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->blackPointCheckBox,             11, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->blackPointSpinBox,              11, 1, 1, 2);
+    whiteBalanceLayout->addWidget(d->whitePointCheckBox,             12, 0, 1, 1);
+    whiteBalanceLayout->addWidget(d->whitePointSpinBox,              12, 1, 1, 2);
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
@@ -516,12 +550,12 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->NRSpinBox2->setSliderEnabled(true);
     d->NRLabel2   = new QLabel(d->correctionsSettings);
 
-    d->enableCACorrection = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
-    d->enableCACorrection->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
+    d->enableCACorrectionBox = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
+    d->enableCACorrectionBox->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
                      "Enlarge the raw red-green and blue-yellow axis by the given factors (automatic by default).<p>"));
 
-    d->autoCACorrection = new QCheckBox(i18n("Automatic color axis adjustements"), d->correctionsSettings);
-    d->autoCACorrection->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b><p>"
+    d->autoCACorrectionBox = new QCheckBox(i18n("Automatic color axis adjustements"), d->correctionsSettings);
+    d->autoCACorrectionBox->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b><p>"
                      "If this option is turned on, It will try to shift image channels sligtly "
                      "and evaluate Chromatic Aberration change. Note that if you shot blue-red pattern, the method may fail. "
                      "In this case, disable this option and tune manually color factors.<p>"));
@@ -548,8 +582,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->addWidget(d->NRSpinBox1,             1, 1, 1, 2);
     correctionsLayout->addWidget(d->NRLabel2,               2, 0, 1, 1);
     correctionsLayout->addWidget(d->NRSpinBox2,             2, 1, 1, 2);
-    correctionsLayout->addWidget(d->enableCACorrection,     3, 0, 1, 3);
-    correctionsLayout->addWidget(d->autoCACorrection,       4, 0, 1, 3);
+    correctionsLayout->addWidget(d->enableCACorrectionBox,  3, 0, 1, 3);
+    correctionsLayout->addWidget(d->autoCACorrectionBox,    4, 0, 1, 3);
     correctionsLayout->addWidget(d->caRedMultLabel,         5, 0, 1, 1);
     correctionsLayout->addWidget(d->caRedMultSpinBox,       5, 1, 1, 2);
     correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
@@ -640,10 +674,10 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->noiseReductionComboBox, SIGNAL(activated(int)),
             this, SLOT(slotNoiseReductionChanged(int)));
 
-    connect(d->enableCACorrection, SIGNAL(toggled(bool)),
+    connect(d->enableCACorrectionBox, SIGNAL(toggled(bool)),
             this, SLOT(slotCACorrectionToggled(bool)));
 
-    connect(d->autoCACorrection, SIGNAL(toggled(bool)),
+    connect(d->autoCACorrectionBox, SIGNAL(toggled(bool)),
             this, SLOT(slotAutoCAToggled(bool)));
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
@@ -663,6 +697,9 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
             this, SLOT(slotOutputColorSpaceChanged(int)));
+
+    connect(d->expoCorrectionBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotExposureCorrectionToggled(bool)));
 
     // Wrapper to emit signal when something is changed in settings.
 
@@ -696,7 +733,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->fixColorsHighlights, SIGNAL(toggled(bool)),
+    connect(d->fixColorsHighlightsBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->autoBrightnessBox, SIGNAL(toggled(bool)),
@@ -708,10 +745,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->dontStretchPixelsCheckBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->refineInterpolation, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->enableCACorrection, SIGNAL(toggled(bool)),
+    connect(d->refineInterpolationBox, SIGNAL(toggled(bool)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->customWhiteBalanceSpinBox, SIGNAL(valueChanged(int)),
@@ -745,6 +779,12 @@ void DcrawSettingsWidget::setup(int advSettings)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->brightnessSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->expoCorrectionShiftSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(signalSettingsChanged()));
+
+    connect(d->expoCorrectionHighlightSpinBox, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 }
 
@@ -866,8 +906,8 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
 
 void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
 {
-    d->autoCACorrection->setEnabled(b);
-    slotAutoCAToggled(d->autoCACorrection->isChecked());
+    d->autoCACorrectionBox->setEnabled(b);
+    slotAutoCAToggled(d->autoCACorrectionBox->isChecked());
 }
 
 void DcrawSettingsWidget::slotAutoCAToggled(bool b)
@@ -878,11 +918,22 @@ void DcrawSettingsWidget::slotAutoCAToggled(bool b)
         d->caBlueMultSpinBox->setValue(0.0);
     }
 
-    bool mult = !b & d->autoCACorrection->isEnabled();
+    bool mult = !b & d->autoCACorrectionBox->isEnabled();
     d->caRedMultSpinBox->setEnabled(mult);
     d->caBlueMultSpinBox->setEnabled(mult);
     d->caRedMultLabel->setEnabled(mult);
     d->caBlueMultLabel->setEnabled(mult);
+    emit signalSettingsChanged();
+}
+
+void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
+{
+    d->expoCorrectionShiftLabel->setEnabled(b);
+    d->expoCorrectionShiftSpinBox->setEnabled(b);
+    d->expoCorrectionHighlightLabel->setEnabled(b);
+    d->expoCorrectionHighlightSpinBox->setEnabled(b);
+
+    emit signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
@@ -902,49 +953,49 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
         case RawDecodingSettings::DCB:
             d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
-            d->refineInterpolation->setEnabled(true);
+            d->refineInterpolationBox->setEnabled(true);
             break;
 
         case RawDecodingSettings::PL_AHD:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
 
         case RawDecodingSettings::AFD:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
 
         case RawDecodingSettings::VCD:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
 
         case RawDecodingSettings::VCD_AHD:
             d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
-            d->refineInterpolation->setEnabled(true);
+            d->refineInterpolationBox->setEnabled(true);
             break;
 
         case RawDecodingSettings::LMMSE:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
 
         case RawDecodingSettings::AMAZE:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
 
         default: // BILINEAR, VNG, PPG, AHD
             d->medianFilterPassesLabel->setEnabled(true);
             d->medianFilterPassesSpinBox->setEnabled(true);
-            d->refineInterpolation->setEnabled(false);
+            d->refineInterpolationBox->setEnabled(false);
             break;
     }
     emit signalSettingsChanged();
@@ -986,7 +1037,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->customWhiteBalanceGreenSpinBox->setValue(settings.customWhiteBalanceGreen);
     d->fourColorCheckBox->setChecked(settings.RGBInterpolate4Colors);
     d->autoBrightnessBox->setChecked(settings.autoBrightness);
-    d->fixColorsHighlights->setChecked(settings.fixColorsHighlights);
+    d->fixColorsHighlightsBox->setChecked(settings.fixColorsHighlights);
 
     switch(settings.unclipColors)
     {
@@ -1020,15 +1071,15 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     {
         case RawDecodingSettings::DCB:
             d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
-            d->refineInterpolation->setChecked(settings.dcbEnhanceFl);
+            d->refineInterpolationBox->setChecked(settings.dcbEnhanceFl);
             break;
         case RawDecodingSettings::VCD_AHD:
             d->medianFilterPassesSpinBox->setValue(settings.eeciRefine);
-            d->refineInterpolation->setChecked(settings.eeciRefine);
+            d->refineInterpolationBox->setChecked(settings.eeciRefine);
             break;
         default:
             d->medianFilterPassesSpinBox->setValue(settings.medianFilterPasses);
-            d->refineInterpolation->setChecked(false); // option not used.
+            d->refineInterpolationBox->setChecked(false); // option not used.
             break;
     }
     slotRAWQualityChanged(settings.RAWQuality);
@@ -1043,11 +1094,16 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->NRSpinBox1->setValue(settings.NRThreshold);
     d->NRSpinBox2->setValue(settings.NRChroThreshold);
 
-    d->enableCACorrection->setChecked(settings.enableCACorrection);
+    d->enableCACorrectionBox->setChecked(settings.enableCACorrection);
     d->caRedMultSpinBox->setValue(settings.caMultiplier[0]);
     d->caBlueMultSpinBox->setValue(settings.caMultiplier[1]);
-    d->autoCACorrection->setChecked((settings.caMultiplier[0] == 0.0) && (settings.caMultiplier[1] == 0.0));
+    d->autoCACorrectionBox->setChecked((settings.caMultiplier[0] == 0.0) && (settings.caMultiplier[1] == 0.0));
     slotCACorrectionToggled(settings.enableCACorrection);
+
+    d->expoCorrectionBox->setChecked(settings.expoCorrection);
+    slotExposureCorrectionToggled(settings.expoCorrection);
+    d->expoCorrectionShiftSpinBox->setValue(settings.expoCorrectionShift);
+    d->expoCorrectionHighlightSpinBox->setValue(settings.expoCorrectionHighlight);
 
     d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
     d->outIccUrlEdit->setUrl(KUrl(settings.outputProfile));
@@ -1078,7 +1134,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.customWhiteBalanceGreen = d->customWhiteBalanceGreenSpinBox->value();
     prm.RGBInterpolate4Colors   = d->fourColorCheckBox->isChecked();
     prm.autoBrightness          = d->autoBrightnessBox->isChecked();
-    prm.fixColorsHighlights     = d->fixColorsHighlights->isChecked();
+    prm.fixColorsHighlights     = d->fixColorsHighlightsBox->isChecked();
 
     switch(d->unclipColorComboBox->currentIndex())
     {
@@ -1108,11 +1164,11 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     {
         case RawDecodingSettings::DCB:
             prm.dcbIterations      = d->medianFilterPassesSpinBox->value();
-            prm.dcbEnhanceFl       = d->refineInterpolation->isChecked();
+            prm.dcbEnhanceFl       = d->refineInterpolationBox->isChecked();
             break;
         case RawDecodingSettings::VCD_AHD:
             prm.esMedPasses        = d->medianFilterPassesSpinBox->value();
-            prm.eeciRefine         = d->refineInterpolation->isChecked();
+            prm.eeciRefine         = d->refineInterpolationBox->isChecked();
             break;
         default:
             prm.medianFilterPasses = d->medianFilterPassesSpinBox->value();
@@ -1143,14 +1199,18 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
         }
     }
 
-    prm.enableCACorrection = d->enableCACorrection->isChecked();
-    prm.caMultiplier[0]    = d->caRedMultSpinBox->value();
-    prm.caMultiplier[1]    = d->caBlueMultSpinBox->value();
+    prm.enableCACorrection      = d->enableCACorrectionBox->isChecked();
+    prm.caMultiplier[0]         = d->caRedMultSpinBox->value();
+    prm.caMultiplier[1]         = d->caBlueMultSpinBox->value();
 
-    prm.inputColorSpace    = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
-    prm.outputColorSpace   = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
-    prm.inputProfile       = d->inIccUrlEdit->url().toLocalFile();
-    prm.outputProfile      = d->outIccUrlEdit->url().toLocalFile();
+    prm.expoCorrection          = d->expoCorrectionBox->isChecked();
+    prm.expoCorrectionShift     = d->expoCorrectionShiftSpinBox->value();
+    prm.expoCorrectionHighlight = d->expoCorrectionHighlightSpinBox->value();
+
+    prm.inputColorSpace         = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
+    prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
+    prm.inputProfile            = d->inIccUrlEdit->url().toLocalFile();
+    prm.outputProfile           = d->outIccUrlEdit->url().toLocalFile();
 
     return prm;
 }
