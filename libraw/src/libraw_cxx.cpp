@@ -19,9 +19,9 @@ it under the terms of the one of three licenses as you choose:
 
  */
 
+#include <math.h>
 #include <errno.h>
 #include <float.h>
-#include <math.h>
 #include <new>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -198,6 +198,7 @@ LibRaw:: LibRaw(unsigned int flags)
     imgdata.params.output_color=1;
     imgdata.params.output_bps=8;
     imgdata.params.use_fuji_rotate=1;
+    imgdata.params.exp_shift = 1.0;
     imgdata.params.auto_bright_thr = LIBRAW_DEFAULT_AUTO_BRIGHTNESS_THRESHOLD;
     imgdata.params.adjust_maximum_thr= LIBRAW_DEFAULT_ADJUST_MAXIMUM_THRESHOLD;
     imgdata.params.green_matching = 0;
@@ -1577,6 +1578,9 @@ int LibRaw::dcraw_process(void)
     float linenoise=0; 
     float lclean=0,cclean=0;
     float thresh=0;
+    float preser=0;
+    float expos=1.0;
+
 
     CHECK_ORDER_LOW(LIBRAW_PROGRESS_LOAD_RAW);
     CHECK_ORDER_HIGH(LIBRAW_PROGRESS_PRE_INTERPOLATE);
@@ -1654,9 +1658,9 @@ int LibRaw::dcraw_process(void)
         if (O.es_med_passes >0 ) es_med_passes_fl = O.es_med_passes;
 
 // LIBRAW_DEMOSAIC_PACK_GPL3
-        //if (quality == 10 && O.amaze_ca_refine >0 ) {CA_correct_RT();}
 
         if (O.cfa_green >0) {thresh=O.green_thresh ;green_equilibrate(thresh);} 
+        if (O.exp_correc >0) {expos=O.exp_shift ; preser=O.exp_preser; exp_bef(expos,preser);} 
         if (O.ca_correc >0 ) {cablue=O.cablue; cared=O.cared; CA_correct_RT(cablue, cared);}
         if (O.cfaline >0 ) {linenoise=O.linenoise; cfa_linedn(linenoise);}
         if (O.cfa_clean >0 ) {lclean=O.lclean; cclean=O.cclean; cfa_impulse_gauss(lclean,cclean);}
