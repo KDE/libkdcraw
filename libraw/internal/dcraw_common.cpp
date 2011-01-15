@@ -3044,9 +3044,12 @@ void CLASS sony_arw_load_raw()
   for (n=i=0; i < 18; i++)
     FORC(32768 >> (tab[i] >> 8)) huff[n++] = tab[i];
 #ifdef LIBRAW_LIBRARY_BUILD
-  if(!data_size)
-      throw LIBRAW_EXCEPTION_IO_BADFILE;
-  LibRaw_byte_buffer *buf = ifp->make_byte_buffer(data_size);
+  LibRaw_byte_buffer *buf=NULL;
+  if(data_size)
+      buf = ifp->make_byte_buffer(data_size);
+  else
+      getbits(-1);
+      
   LibRaw_bit_buffer bits;
   bits.reset();
 #else
@@ -3056,8 +3059,16 @@ void CLASS sony_arw_load_raw()
     for (row=0; row < raw_height+1; row+=2) {
       if (row == raw_height) row = 1;
 #ifdef LIBRAW_LIBRARY_BUILD
-      len = bits._gethuff(buf,15,huff,zero_after_ff);
-      diff = bits._getbits(buf,len,zero_after_ff);
+      if(data_size)
+          {
+              len = bits._gethuff(buf,15,huff,zero_after_ff);
+              diff = bits._getbits(buf,len,zero_after_ff);
+          }
+      else
+          {
+              len = getbithuff(15,huff);
+              diff = getbits(len);
+          }
 #else
       len = getbithuff(15,huff);
       diff = getbits(len);
@@ -3082,7 +3093,7 @@ void CLASS sony_arw_load_raw()
 #endif
     }
 #ifdef LIBRAW_LIBRARY_BUILD
-  delete buf;
+  if(buf) delete buf;
 #endif
 }
 
