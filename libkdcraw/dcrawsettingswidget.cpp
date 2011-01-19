@@ -254,26 +254,26 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->RAWQualityComboBox->setDefaultIndex(RawDecodingSettings::BILINEAR);
     d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality (interpolation)</b><p>"
-                "Select here the demosaicing RAW images decoding "
-                "interpolation method. A demosaicing algorithm is a digital image process used to "
+                "Select here the demosaicing method to use when decoding RAW images. "
+                "A demosaicing algorithm is a digital image process used to "
                 "interpolate a complete image from the partial raw data received from the color-filtered "
-                "image sensor internal to many digital cameras in form of a matrix of colored pixels. "
+                "image sensor, internal to many digital cameras, in form of a matrix of colored pixels. "
                 "Also known as CFA interpolation or color reconstruction, another common spelling "
-                "is demosaicing. See below all methods to demosaicing RAW images:<p>"
+                "is demosaicing. The following methods are available for demosaicing RAW images:<p>"
 
                 // Original dcraw demosaicing methods
 
                 "<b>Bilinear</b>: use high-speed but low-quality bilinear "
-                "interpolation (default - for slow computer). In this method, "
+                "interpolation (default - for slow computers). In this method, "
                 "the red value of a non-red pixel is computed as the average of "
-                "the adjacent red pixels, and similar for blue and green.<p>"
+                "the adjacent red pixels, and similarly for blue and green.<p>"
 
                 "<b>VNG</b>: use Variable Number of Gradients interpolation. "
                 "This method computes gradients near the pixel of interest and uses "
                 "the lower gradients (representing smoother and more similar parts "
                 "of the image) to make an estimate.<p>"
 
-                "<b>PPG</b>: use Patterned Pixel Grouping interpolation. "
+                "<b>PPG</b>: use Patterned-Pixel-Grouping interpolation. "
                 "Pixel Grouping uses assumptions about natural scenery in making estimates. "
                 "It has fewer color artifacts on natural images than the Variable Number of "
                 "Gradients method.<p>"
@@ -295,7 +295,7 @@ void DcrawSettingsWidget::setup(int advSettings)
 
                 "<b>VCD & AHD</b>: Mixed demosaicing between VCD and AHD.<p>"
 
-                "<b>LMMSE</b>: color demosaicing via directional linear minimum mean square-error "
+                "<b>LMMSE</b>: color demosaicing via directional linear minimum mean-square error "
                 "estimation interpolation from PerfectRaw.<p>"
 
                 "<b>AMaZE</b>: Aliasing Minimization interpolation and Zipper Elimination to apply color "
@@ -312,9 +312,9 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesSpinBox->setSliderEnabled(true);
     d->medianFilterPassesLabel   = new QLabel(i18n("Pass:"), d->whiteBalanceSettings);
     d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Pass</b><p>"
-                                                     "Set here the passes used by median filter applied after "
+                                                     "Set here the passes used by the median filter applied after "
                                                      "interpolation to Red-Green and Blue-Green channels.<p>"
-                                                     "This setting is available only for few Quality options: "
+                                                     "This setting is only available for specific Quality options: "
                                                      "<b>Bilinear</b>, <b>VNG</b>, <b>PPG</b>, <b>AHD</b>, "
                                                      "<b>DCB</b>, and <b>VCD & AHD</b>.<p>"));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
@@ -323,10 +323,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     d->refineInterpolation       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
     d->refineInterpolation->setWhatsThis(i18n("<p><b>Refine interpolation</b><p>"
-                                              "This setting is available only for few Quality options:<p>"
+                                              "This setting is only available for specific Quality options:<p>"
                                               "<b>DCB</b>: turn on the enhance interpolated colors filter.<p>"
-                                              "<b>VCD & AHD</b>: turn on the enhanced effective "
-                                              "color interpolation (EECI) refine to improve sharpness.<p>"
+                                              "<b>VCD & AHD</b>: turn on enhanced effective "
+                                              "color interpolation (EECI) refinement to improve sharpness.<p>"
                                               "<b>AMaZE</b>: turn on chromatic abberation correction.<p>"
                                         ));
     demosaicingLayout->addWidget(d->refineInterpolation, line, 0, 1, 2);
@@ -491,8 +491,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->noiseReductionComboBox->setWhatsThis(i18n("<p><b>Noise Reduction</b><p>"
                 "Select here the noise reduction method to apply during RAW decoding.<p>"
                 "<b>None</b>: no noise reduction.<p>"
-                "<b>Wavelets</b>: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.<p>"
-                "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation."));
+                "<b>Wavelets</b>: wavelet correction to erase noise while preserving real detail. This is applied after interpolation.<p>"
+                "<b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. This is applied before interpolation."));
 
     d->NRThresholdSpinBox = new RIntNumInput(d->correctionsSettings);
     d->NRThresholdSpinBox->setRange(100, 1000, 1);
