@@ -65,7 +65,6 @@ else (KDCRAW_INCLUDE_DIR AND KDCRAW_LIBRARIES AND KDCRAW_DEFINITIONS)
   else(KDCRAW_LOCAL_FOUND)
 
     message(STATUS "Check Kdcraw library using pkg-config...")
-    # TODO: also create the variables defined in libkdcaw/version.cmake.cmake
     if (NOT WIN32)
       # use pkg-config to get the directories and then use these values
       # in the FIND_PATH() and FIND_LIBRARY() calls
@@ -114,10 +113,10 @@ else (KDCRAW_INCLUDE_DIR AND KDCRAW_LIBRARIES AND KDCRAW_DEFINITIONS)
          endif (NOT Kdcraw_FIND_QUIETLY)
 
          # try to find version information
-         if (EXISTS "${KDCRAW_INCLUDE_DIR}/version.cmake")
-           include ("${KDCRAW_INCLUDE_DIR}/version.cmake")
+         if (EXISTS "${KDCRAW_INCLUDE_DIR}/libkdcraw/version.cmake")
+           include ("${KDCRAW_INCLUDE_DIR}/libkdcraw/version.cmake")
            message (STATUS "libkdcraw: Found version ${KDCRAW_LIB_VERSION}")
-         endif (EXISTS "${KDCRAW_INCLUDE_DIR}/version.cmake")
+         endif (EXISTS "${KDCRAW_INCLUDE_DIR}/libkdcraw/version.cmake")
      else (KDCRAW_FOUND)
          if (Kdcraw_FIND_REQUIRED)
              if (NOT KDCRAW_INCLUDE_DIR)
