@@ -16,7 +16,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-
 if (KDCRAW_INCLUDE_DIR AND KDCRAW_LIBRARIES AND KDCRAW_DEFINITIONS)
 
   message(STATUS "Found Kdcraw library in cache: ${KDCRAW_LIBRARIES}")
@@ -57,9 +56,16 @@ else (KDCRAW_INCLUDE_DIR AND KDCRAW_LIBRARIES AND KDCRAW_DEFINITIONS)
     set(KDCRAW_FOUND TRUE)
     mark_as_advanced(KDCRAW_INCLUDE_DIR KDCRAW_LIBRARIES KDCRAW_DEFINITIONS)
 
+    # try to find version information
+    if (EXISTS "${CMAKE_BINARY_DIR}/${KDCRAW_LOCAL_DIR}/libkdcraw/version.cmake")
+      include ("${CMAKE_BINARY_DIR}/${KDCRAW_LOCAL_DIR}/libkdcraw/version.cmake")
+      message (STATUS "libkdcraw: Found version ${KDCRAW_LIB_VERSION}")
+    endif (EXISTS "${CMAKE_BINARY_DIR}/${KDCRAW_LOCAL_DIR}/libkdcraw/version.cmake")
+
   else(KDCRAW_LOCAL_FOUND)
 
     message(STATUS "Check Kdcraw library using pkg-config...")
+    # TODO: also create the variables defined in libkdcaw/version.cmake.cmake
     if (NOT WIN32)
       # use pkg-config to get the directories and then use these values
       # in the FIND_PATH() and FIND_LIBRARY() calls
@@ -106,6 +112,12 @@ else (KDCRAW_INCLUDE_DIR AND KDCRAW_LIBRARIES AND KDCRAW_DEFINITIONS)
          if (NOT Kdcraw_FIND_QUIETLY)
              message(STATUS "Found libkdcraw: ${KDCRAW_LIBRARIES}")
          endif (NOT Kdcraw_FIND_QUIETLY)
+
+         # try to find version information
+         if (EXISTS "${KDCRAW_INCLUDE_DIR}/version.cmake")
+           include ("${KDCRAW_INCLUDE_DIR}/version.cmake")
+           message (STATUS "libkdcraw: Found version ${KDCRAW_LIB_VERSION}")
+         endif (EXISTS "${KDCRAW_INCLUDE_DIR}/version.cmake")
      else (KDCRAW_FOUND)
          if (Kdcraw_FIND_REQUIRED)
              if (NOT KDCRAW_INCLUDE_DIR)
