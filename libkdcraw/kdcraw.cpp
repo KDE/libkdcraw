@@ -338,16 +338,38 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     d->setProgress(0.7);
 
     rawData = QByteArray();
-    rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
-
-    unsigned short* output = (unsigned short*)rawData.data();
-
-    for (uint row=0 ; row < raw.imgdata.sizes.iheight ; row++)
+    
+    if (raw.imgdata.idata.filters == 0)
     {
-        for (uint col=0 ; col < raw.imgdata.sizes.iwidth ; col++)
+        rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight  * raw.imgdata.idata.colors * sizeof(unsigned short)));
+        
+        unsigned short* output = (unsigned short*)rawData.data();
+
+        for (unsigned int row = 0; row < raw.imgdata.sizes.iheight; row++)
         {
-            *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col] [raw.COLOR(row, col)];
-            *output++;
+            for (unsigned int col = 0; col < raw.imgdata.sizes.iwidth; col++)
+            {
+                for (int color = 0; color < raw.imgdata.idata.colors; color++)
+                {
+                    *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][color];
+                    *output++;
+                }
+            }
+        }
+    }
+    else
+    {
+        rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
+
+        unsigned short* output = (unsigned short*)rawData.data();
+
+        for (uint row = 0; row < raw.imgdata.sizes.iheight; row++)
+        {
+            for (uint col = 0; col < raw.imgdata.sizes.iwidth; col++)
+            {
+                *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][raw.COLOR(row, col)];
+                *output++;
+            }
         }
     }
 
