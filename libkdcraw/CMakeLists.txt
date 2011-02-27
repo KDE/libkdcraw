@@ -23,7 +23,6 @@
 # ============================================================
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.cmake.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.cmake)
 
 # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
 FOREACH(_curentfile ${libraw_LIB_SRCS})

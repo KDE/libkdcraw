@@ -25,6 +25,7 @@
 #ifndef KDCRAW_VERSION_H
 #define KDCRAW_VERSION_H
 
+// Before changing the line below, make sure that FindKdcraw.cmake can still parse it
 static const char kdcraw_version[] = "${DCRAW_LIB_VERSION_STRING}";
 
 #define KDCRAW_VERSION ${DCRAW_LIB_VERSION_ID}
