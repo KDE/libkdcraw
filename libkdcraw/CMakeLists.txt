@@ -68,5 +68,4 @@ INSTALL(FILES rawdecodingsettings.h
               rawfiles.h
               libkdcraw_export.h
               ${CMAKE_CURRENT_BINARY_DIR}/version.h
-              ${CMAKE_CURRENT_BINARY_DIR}/version.cmake
         DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
