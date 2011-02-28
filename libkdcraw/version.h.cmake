@@ -6,7 +6,7 @@
  * @date   2007-02-12
  * @brief  libraw program interface for KDE
  *
- * @author Copyright (C) 2007-2010 by Gilles Caulier
+ * @author Copyright (C) 2007-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -25,6 +25,7 @@
 #ifndef KDCRAW_VERSION_H
 #define KDCRAW_VERSION_H
 
+// Before changing the line below, make sure that FindKdcraw.cmake can still parse it
 static const char kdcraw_version[] = "${DCRAW_LIB_VERSION_STRING}";
 
 #define KDCRAW_VERSION ${DCRAW_LIB_VERSION_ID}

@@ -7,8 +7,7 @@ Keywords:       kde image raw decode libraw digikam kipi-plugins
 Author:         caulier dot gilles at gmail dot com (Gilles Caulier)
                 marcel dot wiesweg at gmx dot de (Marcel Wiesweg)
 Maintained-by:
-Primary-site:   http://www.kipi-plugins.org
-Alternate-site: http://www.digikam.org
+Primary-site:   http://www.digikam.org/sharedlibs
 Original-site:
 Platforms:      Linux and other Unices, MacOs-X, Win32. Needs KDE 4.x
 Copying-policy: GPL

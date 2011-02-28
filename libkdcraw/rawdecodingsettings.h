@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  Raw decoding settings
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -115,12 +115,16 @@ public:
      *  NONR:       No noise reduction.
      *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
      *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
+     *  LINENR:     CFA Line Denoise. It's applied after interpolation.
+     *  IMPULSENR:  Impulse Denoise. It's applied after interpolation.
      */
     enum NoiseReduction
     {
         NONR = 0,
         WAVELETSNR,
-        FBDDNR
+        FBDDNR,
+        LINENR,
+        IMPULSENR
     };
 
     /** Input color profile used to decoded image
@@ -242,19 +246,19 @@ public:
      */
     NoiseReduction NRType;
 
-    /** Noise reduction threshold value. Null value disable NR.
-     *  For Wavelets NR, range is between 100 and 1000.
-     *  For FBDD NR : 1 apply a light correction and 2-5 a full noise reduction.
+    /** Noise reduction threshold value. Null value disable NR. Range is between 100 and 1000.
+     *  For IMPULSENR : set the amount of Luminance impulse denoise.
      */
     int NRThreshold;
 
-    /** Turn on red and blue layer magnification to reduce chromatic aberrations
+    /** Turn on chromatic aberrations correction
      */
     bool enableCACorrection;
 
     /** Magnification factor for Red and Blue layers
-     *  - caMultiplier[0] = red multiplier
-     *  - caMultiplier[1] = blue multiplier
+     *  - caMultiplier[0] = amount of correction on red-green axis.
+     *  - caMultiplier[1] = amount of correction on blue-yellow axis.
+     *  - Both values set to 0.0 = automatic CA correction.
      */
     double caMultiplier[2];
 
@@ -330,11 +334,24 @@ public:
      */
     int esMedPasses;
 
-    /// For AMAZE interpolation.
-
-    /** Turn on chromatic abberation correction for AMaZE demosaicing.
+    /** For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
+        Null value disable NR. Range is between 100 and 1000.
      */
-    bool amazeCARefine;
+    int NRChroThreshold;
+
+    /** Turn on the Exposure Correction before interpolation.
+     */
+    bool expoCorrection;
+
+    /** Shift of Exposure Correction before interpolation in linear scale.
+     *  Usable range is from 0.5 (darken image 1 stop) to 3.0 (lighten ~1.5 photographic stops).
+     */
+    double expoCorrectionShift;
+
+    /** Amount of highlight preservation for exposure correction before interpolation in E.V.
+     *  Usable range is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation)
+     */
+    double expoCorrectionHighlight;
 };
 
 //! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.

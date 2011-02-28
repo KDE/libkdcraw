@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  Raw decoding settings
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -27,39 +27,42 @@
  *
  * ============================================================ */
 
-#define OPTIONFIXCOLORSHIGHLIGHTSENTRY      "FixColorsHighlights"
-#define OPTIONDECODESIXTEENBITENTRY         "SixteenBitsImage"
-#define OPTIONWHITEBALANCEENTRY             "White Balance"
-#define OPTIONCUSTOMWHITEBALANCEENTRY       "Custom White Balance"
-#define OPTIONCUSTOMWBGREENENTRY            "Custom White Balance Green"
-#define OPTIONFOURCOLORRGBENTRY             "Four Color RGB"
-#define OPTIONUNCLIPCOLORSENTRY             "Unclip Color"
-#define OPTIONDONTSTRETCHPIXELSENTRY        "Dont Stretch Pixels"
-#define OPTIONMEDIANFILTERPASSESENTRY       "Median Filter Passes"
-#define OPTIONNOISEREDUCTIONTYPEENTRY       "Noise Reduction Type"
-#define OPTIONNOISEREDUCTIONTHRESHOLDENTRY  "Noise Reduction Threshold"
-#define OPTIONUSECACORRECTIONENTRY          "EnableCACorrection"
-#define OPTIONCAREDMULTIPLIERENTRY          "caRedMultiplier"
-#define OPTIONCABLUEMULTIPLIERENTRY         "caBlueMultiplier"
-#define OPTIONAUTOBRIGHTNESSENTRY           "AutoBrightness"
-#define OPTIONDECODINGQUALITYENTRY          "Decoding Quality"
-#define OPTIONINPUTCOLORSPACEENTRY          "Input Color Space"
-#define OPTIONOUTPUTCOLORSPACEENTRY         "Output Color Space"
-#define OPTIONINPUTCOLORPROFILEENTRY        "Input Color Profile"
-#define OPTIONOUTPUTCOLORPROFILEENTRY       "Output Color Profile"
-#define OPTIONBRIGHTNESSMULTIPLIERENTRY     "Brightness Multiplier"
-#define OPTIONUSEBLACKPOINTENTRY            "Use Black Point"
-#define OPTIONBLACKPOINTENTRY               "Black Point"
-#define OPTIONUSEWHITEPOINTENTRY            "Use White Point"
-#define OPTIONWHITEPOINTENTRY               "White Point"
+#define OPTIONFIXCOLORSHIGHLIGHTSENTRY                 "FixColorsHighlights"
+#define OPTIONDECODESIXTEENBITENTRY                    "SixteenBitsImage"
+#define OPTIONWHITEBALANCEENTRY                        "White Balance"
+#define OPTIONCUSTOMWHITEBALANCEENTRY                  "Custom White Balance"
+#define OPTIONCUSTOMWBGREENENTRY                       "Custom White Balance Green"
+#define OPTIONFOURCOLORRGBENTRY                        "Four Color RGB"
+#define OPTIONUNCLIPCOLORSENTRY                        "Unclip Color"
+#define OPTIONDONTSTRETCHPIXELSENTRY                   "Dont Stretch Pixels"
+#define OPTIONMEDIANFILTERPASSESENTRY                  "Median Filter Passes"
+#define OPTIONNOISEREDUCTIONTYPEENTRY                  "Noise Reduction Type"
+#define OPTIONNOISEREDUCTIONTHRESHOLDENTRY             "Noise Reduction Threshold"
+#define OPTIONUSECACORRECTIONENTRY                     "EnableCACorrection"
+#define OPTIONCAREDMULTIPLIERENTRY                     "caRedMultiplier"
+#define OPTIONCABLUEMULTIPLIERENTRY                    "caBlueMultiplier"
+#define OPTIONAUTOBRIGHTNESSENTRY                      "AutoBrightness"
+#define OPTIONDECODINGQUALITYENTRY                     "Decoding Quality"
+#define OPTIONINPUTCOLORSPACEENTRY                     "Input Color Space"
+#define OPTIONOUTPUTCOLORSPACEENTRY                    "Output Color Space"
+#define OPTIONINPUTCOLORPROFILEENTRY                   "Input Color Profile"
+#define OPTIONOUTPUTCOLORPROFILEENTRY                  "Output Color Profile"
+#define OPTIONBRIGHTNESSMULTIPLIERENTRY                "Brightness Multiplier"
+#define OPTIONUSEBLACKPOINTENTRY                       "Use Black Point"
+#define OPTIONBLACKPOINTENTRY                          "Black Point"
+#define OPTIONUSEWHITEPOINTENTRY                       "Use White Point"
+#define OPTIONWHITEPOINTENTRY                          "White Point"
 
 //-- Extended demosaicing settings ----------------------------------------------------------
 
-#define OPTIONDCBITERATIONSENTRY            "Dcb Iterations"
-#define OPTIONDCBENHANCEFLENTRY             "Dcb Enhance Filter"
-#define OPTIONEECIREFINEENTRY               "Eeci Refine"
-#define OPTIONESMEDPASSESENTRY              "Es Median Filter Passes"
-#define OPTIONAMAZECAREFINEENTRY            "Amaze CA Refine"
+#define OPTIONDCBITERATIONSENTRY                       "Dcb Iterations"
+#define OPTIONDCBENHANCEFLENTRY                        "Dcb Enhance Filter"
+#define OPTIONEECIREFINEENTRY                          "Eeci Refine"
+#define OPTIONESMEDPASSESENTRY                         "Es Median Filter Passes"
+#define OPTIONNRCHROMINANCETHRESHOLDENTRY              "Noise Reduction Chrominance Threshold"
+#define OPTIONEXPOCORRECTIONENTRY                      "Expo Correction"
+#define OPTIONEXPOCORRECTIONSHIFTENTRY                 "Expo Correction Shift"
+#define OPTIONEXPOCORRECTIONHIGHLIGHTENTRY             "Expo Correction Highlight"
 
 #include "rawdecodingsettings.h"
 
@@ -95,8 +98,8 @@ RawDecodingSettings::RawDecodingSettings()
     NRThreshold                = 0;
 
     enableCACorrection         = false;
-    caMultiplier[0]            = 1.0;
-    caMultiplier[1]            = 1.0;
+    caMultiplier[0]            = 0.0;
+    caMultiplier[1]            = 0.0;
 
     inputProfile               = QString();
     outputProfile              = QString();
@@ -111,7 +114,10 @@ RawDecodingSettings::RawDecodingSettings()
     dcbEnhanceFl               = false;
     eeciRefine                 = false;
     esMedPasses                = 0;
-    amazeCARefine              = false;
+    NRChroThreshold            = 0;
+    expoCorrection             = false;
+    expoCorrectionShift        = 1.0;
+    expoCorrectionHighlight    = 0.0;
 }
 
 RawDecodingSettings::~RawDecodingSettings()
@@ -155,7 +161,11 @@ RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o
     dcbEnhanceFl            = o.dcbEnhanceFl;
     eeciRefine              = o.eeciRefine;
     esMedPasses             = o.esMedPasses;
-    amazeCARefine           = o.amazeCARefine;
+    NRChroThreshold         = o.NRChroThreshold;
+    expoCorrection          = o.expoCorrection;
+    expoCorrectionShift     = o.expoCorrectionShift;
+    expoCorrectionHighlight = o.expoCorrectionHighlight;
+
     return *this;
 }
 
@@ -196,7 +206,10 @@ bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
         && dcbEnhanceFl            == o.dcbEnhanceFl
         && eeciRefine              == o.eeciRefine
         && esMedPasses             == o.esMedPasses
-        && amazeCARefine           == o.amazeCARefine
+        && NRChroThreshold         == o.NRChroThreshold
+        && expoCorrection          == o.expoCorrection
+        && expoCorrectionShift     == o.expoCorrectionShift
+        && expoCorrectionHighlight == o.expoCorrectionHighlight
         ;
 }
 
@@ -228,8 +241,8 @@ void RawDecodingSettings::optimizeTimeLoading()
     NRThreshold             = 0;
 
     enableCACorrection      = false;
-    caMultiplier[0]         = 1.0;
-    caMultiplier[1]         = 1.0;
+    caMultiplier[0]         = 0.0;
+    caMultiplier[1]         = 0.0;
 
     inputProfile            = QString();
     outputProfile           = QString();
@@ -244,7 +257,10 @@ void RawDecodingSettings::optimizeTimeLoading()
     dcbEnhanceFl            = false;
     eeciRefine              = false;
     esMedPasses             = 0;
-    amazeCARefine           = false;
+    NRChroThreshold         = 0;
+    expoCorrection          = false;
+    expoCorrectionShift     = 1.0;
+    expoCorrectionHighlight = 0.0;
 }
 
 void RawDecodingSettings::readSettings(KConfigGroup& group)
@@ -260,7 +276,8 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
     RGBInterpolate4Colors   = group.readEntry(OPTIONFOURCOLORRGBENTRY,            defaultPrm.RGBInterpolate4Colors);
     unclipColors            = group.readEntry(OPTIONUNCLIPCOLORSENTRY,            defaultPrm.unclipColors);
     DontStretchPixels       = group.readEntry(OPTIONDONTSTRETCHPIXELSENTRY,       defaultPrm.DontStretchPixels);
-    NRType                  = (NoiseReduction)group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)defaultPrm.NRType);
+    NRType                  = (NoiseReduction)
+                              group.readEntry(OPTIONNOISEREDUCTIONTYPEENTRY,      (int)defaultPrm.NRType);
     brightness              = group.readEntry(OPTIONBRIGHTNESSMULTIPLIERENTRY,    defaultPrm.brightness);
     enableBlackPoint        = group.readEntry(OPTIONUSEBLACKPOINTENTRY,           defaultPrm.enableBlackPoint);
     blackPoint              = group.readEntry(OPTIONBLACKPOINTENTRY,              defaultPrm.blackPoint);
@@ -283,7 +300,10 @@ void RawDecodingSettings::readSettings(KConfigGroup& group)
     dcbEnhanceFl            = group.readEntry(OPTIONDCBENHANCEFLENTRY,            defaultPrm.dcbEnhanceFl);
     eeciRefine              = group.readEntry(OPTIONEECIREFINEENTRY,              defaultPrm.eeciRefine);
     esMedPasses             = group.readEntry(OPTIONESMEDPASSESENTRY,             defaultPrm.esMedPasses);
-    amazeCARefine           = group.readEntry(OPTIONAMAZECAREFINEENTRY,           defaultPrm.amazeCARefine);
+    NRChroThreshold         = group.readEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  defaultPrm.NRChroThreshold);
+    expoCorrection          = group.readEntry(OPTIONEXPOCORRECTIONENTRY,          defaultPrm.expoCorrection);
+    expoCorrectionShift     = group.readEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     defaultPrm.expoCorrectionShift);
+    expoCorrectionHighlight = group.readEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, defaultPrm.expoCorrectionHighlight);
 }
 
 void RawDecodingSettings::writeSettings(KConfigGroup& group)
@@ -317,7 +337,10 @@ void RawDecodingSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(OPTIONDCBENHANCEFLENTRY,            dcbEnhanceFl);
     group.writeEntry(OPTIONEECIREFINEENTRY,              eeciRefine);
     group.writeEntry(OPTIONESMEDPASSESENTRY,             esMedPasses);
-    group.writeEntry(OPTIONAMAZECAREFINEENTRY,           amazeCARefine);
+    group.writeEntry(OPTIONNRCHROMINANCETHRESHOLDENTRY,  NRChroThreshold);
+    group.writeEntry(OPTIONEXPOCORRECTIONENTRY,          expoCorrection);
+    group.writeEntry(OPTIONEXPOCORRECTIONSHIFTENTRY,     expoCorrectionShift);
+    group.writeEntry(OPTIONEXPOCORRECTIONHIGHLIGHTENTRY, expoCorrectionHighlight);
 }
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
@@ -358,7 +381,10 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
     dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
     dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
-    dbg.nospace() << "-- amazeCARefine:           " << s.amazeCARefine           << endl;
+    dbg.nospace() << "-- NRChrominaceThreshold:   " << s.NRChroThreshold         << endl;
+    dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << endl;
+    dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << endl;
+    dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << endl;
     dbg.nospace() << "---------------------------------------------------------" << endl;
 
     return dbg.space();

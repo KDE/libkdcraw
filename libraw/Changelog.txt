@@ -1,34 +1,76 @@
-2011-02-05 Alex Tutubalin <lexa@lexa.ru>
-        * green_matching() code is disabled for half-size processing
-        * LibRaw 0.12.5-Release
+2011-02-07 Alex Tutubalin <lexa@lexa.ru>
+        * dcraw_emu documentation updated
+        * ./configure stuff changed for correct linking on some systems        
+        * FBDD denoising is disabled for full-color images and 4-color bayer
+          data (including forced 4-color via four_color_rgb option)
+        * LibRaw 0.13.1-Release
 
-2011-02-02 Alex Tutubalin <lexa@lexa.ru>
+2011-02-05 Alex Tutubalin <lexa@lexa.ru>
+        * ./configure fixes for PACKAGE_REQUIRES
+        * Makefile.msvc: correct compiler flags for demosaic packs
         * dcraw.c 9.06/1.440 imported:
           + New camera support: Canon S95, Casio EX-Z1080, Panasonic GF2 
             and GH2, Samsung NX100, Sony A-580
           + New color data for: Canon G12, Nikon D3100, D7000 and P7000,
             Olympus E-5, Pentax K-r and K-5, Samsung NX10 and WB2000 
+        * green_matching() code is disabled for half-size processing
+        * LibRaw 0.13.0-Release
 
-        * LibRaw 0.12.4-Release
+2011-01-15 Alex Tutubalin <lexa@lexa.ru>
+        * Fallback to old huffman decoder for Sony files with unspecified
+          data length (Sony A100)
+        * Fixed incomplete data fields reset in LibRaw::recycle()
+        * LibRaw 0.13.0-Beta3
+   
+2011-01-13 Alex Tutubalin <lexa@lexa.ru>
+        * Better parsing of unknown command-line params in dcraw_emu sample
+        * Brigtness table in ahd_demosaic is calculated in reversed order
+          to prevent possible (very unlikely) multithreaded app problem.
+        * New exposure correction code based on linear-cubic root combination.
+          New working correction range is from 0.25 (-2 stops) to 8 (+3 stops)
+        * LibRaw 0.13.0-Beta2
 
-2011-01-08 Alex Tutubalin <lexa@lexa.ru>
-        * Patches for ./configure system for better LCMS2 support
-        * LibRaw 0.12.3-Release
+2011-01-10 Alex Tutubalin <lexa@lexa.ru>
+	* Fixed file extension in half_mt.c sample
 
-2011-01-04 Alex Tutubalin <lexa@lexa.ru>
-	* Patches for ./configure system
-	* math.h included before any other includes to make KDE compile
-	  with Visual C++ happy
-	* Fuji FinePix S5500 size adjusted to ignore (rare?) garbage 
-	  at top of frame.
-        * LibRaw 0.12.2-Release
+2011-01-10 Alex Tutubalin <lexa@lexa.ru>
+	* Three patches provided by Jacques Desmis:
+          - Exposure correction before demosaic (demosaic pack GPL3)
+	  - OpenMP speed-up in median filters (demosaic pack GPL2)
+	  - OpenMP speed-up in green equilibration (demosaic pack GPL3)
+	* Merged 0.12.2-0.12.3 changes:
+          - Patches for ./configure system for better LCMS2 support
+	  - Patches for ./configure system
+	  - math.h included before any other includes to make KDE compile
+	    with Visual C++ happy
+	  - Fuji FinePix S5500 size adjusted to ignore (rare?) garbage 
+	    at top of frame.
+        * all client code should be recompiled due to internals change.
+        * LibRaw 0.13.0-Beta1
+
+2010-12-22 Alex Tutubalin <lexa@lexa.ru>
+        * Zero copy huffman buffer for LibRaw_buffer_datastream
+        * Fixed memory leak in compressed NEFs handling
+        * LibRaw 0.13.0-Alpha2
 
 2010-12-20 Alex Tutubalin <lexa@lexa.ru>
-        * Sigma DPx processing disabled because of unsupported 
-          compession scheme and incompatible metadata format.
-          These cameras will be supported only if dcraw will
-          support them.
-        * LibRaw 0.12.1-Release
+        * Demosaic-pack-GPL3 changes:
+          + New noise reduction methods before demosaic 
+             - Banding suppression
+             - High-frequency noise suppression
+             - Green channel equalization
+          + New chromatic abberration correction.
+          All three methods are written by Emil Martinec for Raw Therapee.
+          Adapted to LibRaw by Jacques Desmis
+
+        * Merged Foveon code fix from LibRaw 0.12.1
+
+        * LJPEG decompressor speed-up (about 1.5 times for Canon cameras
+          and slightly less for others). Some ideas are from RawSpeed library.
+
+        * all client code should be recompiled due to internals change.
+
+        * LibRaw 0.13.0-Alpha1
 
 2010-12-12 Alex Tutubalin <lexa@lexa.ru>
 	* Thread-safe and demosaic packs support for MinGW build

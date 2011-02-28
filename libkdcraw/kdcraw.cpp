@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  a tread-safe libraw C++ program interface
  *
- * @author Copyright (C) 2006-2010 by Gilles Caulier
+ * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2010 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -599,19 +599,48 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
         }
         case RawDecodingSettings::FBDDNR:
         {
-            raw.imgdata.params.fbdd_noiserd = m_rawDecodingSettings.NRThreshold;
+            // (100 - 1000) => (1 - 10) conversion
+            raw.imgdata.params.fbdd_noiserd = lround(m_rawDecodingSettings.NRThreshold / 100.0);
+            break;
+        }
+        case RawDecodingSettings::LINENR:
+        {
+            // (100 - 1000) => (0.001 - 0.02) conversion.
+            raw.imgdata.params.linenoise    = m_rawDecodingSettings.NRThreshold * 2.11E-5 + 0.00111111;
+            raw.imgdata.params.cfaline      = true;
+            break;
+        }
+
+        case RawDecodingSettings::IMPULSENR:
+        {
+            // (100 - 1000) => (0.005 - 0.05) conversion.
+            raw.imgdata.params.lclean       = m_rawDecodingSettings.NRThreshold     * 5E-5;
+            raw.imgdata.params.cclean       = m_rawDecodingSettings.NRChroThreshold * 5E-5;
+            raw.imgdata.params.cfa_clean    = true;
             break;
         }
         default:   // No Noise Reduction
+        {
+            raw.imgdata.params.threshold    = 0;
+            raw.imgdata.params.fbdd_noiserd = 0;
+            raw.imgdata.params.linenoise    = 0;
+            raw.imgdata.params.cfaline      = false;
+            raw.imgdata.params.lclean       = 0;
+            raw.imgdata.params.cclean       = 0;
+            raw.imgdata.params.cfa_clean    = false;
             break;
+        }
     }
 
-    if (m_rawDecodingSettings.enableCACorrection)
-    {
-        // (-C) Set Correct chromatic aberration correction.
-        raw.imgdata.params.aber[0] = m_rawDecodingSettings.caMultiplier[0];
-        raw.imgdata.params.aber[2] = m_rawDecodingSettings.caMultiplier[1];
-    }
+    // Chromatic aberration correction.
+    raw.imgdata.params.ca_correc  = m_rawDecodingSettings.enableCACorrection;
+    raw.imgdata.params.cared      = m_rawDecodingSettings.caMultiplier[0];
+    raw.imgdata.params.cablue     = m_rawDecodingSettings.caMultiplier[1];
+
+    // Exposure Correction before interpolation.
+    raw.imgdata.params.exp_correc = m_rawDecodingSettings.expoCorrection;
+    raw.imgdata.params.exp_shift  = m_rawDecodingSettings.expoCorrectionShift;
+    raw.imgdata.params.exp_preser = m_rawDecodingSettings.expoCorrectionHighlight;
 
     switch (m_rawDecodingSettings.inputColorSpace)
     {
@@ -659,7 +688,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     raw.imgdata.params.dcb_enhance_fl  = m_rawDecodingSettings.dcbEnhanceFl;
     raw.imgdata.params.eeci_refine     = m_rawDecodingSettings.eeciRefine;
     raw.imgdata.params.es_med_passes   = m_rawDecodingSettings.esMedPasses;
-    raw.imgdata.params.amaze_ca_refine = m_rawDecodingSettings.amazeCARefine;
 
     //-------------------------------------------------------------------------------------------
 
