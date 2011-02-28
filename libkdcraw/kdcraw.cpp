@@ -28,6 +28,7 @@
  * ============================================================ */
 
 #include "kdcraw.moc"
+#include "kdcraw_p.h"
 
 // Qt includes.
 
@@ -43,7 +44,6 @@
 
 #include "version.h"
 #include "rawfiles.h"
-#include "kdcraw_p.h"
 
 namespace KDcrawIface
 {
