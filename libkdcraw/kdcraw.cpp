@@ -728,13 +728,13 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
 
     if (m_rawDecodingSettings.fixColorsHighlights)
     {
-        kDebug() << "Applying LibRaw highlights adjustements";
+        kDebug() << "Applying LibRaw highlights adjustments";
         // 1.0 is fallback to default value
         raw.imgdata.params.adjust_maximum_thr = 1.0;
     }
     else
     {
-        kDebug() << "Disabling LibRaw highlights adjustements";
+        kDebug() << "Disabling LibRaw highlights adjustments";
         // 0.0 disables this feature
         raw.imgdata.params.adjust_maximum_thr = 0.0;
     }

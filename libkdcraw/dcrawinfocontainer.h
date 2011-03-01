@@ -118,7 +118,7 @@ public:
 
     /** White color balance settings. */
     double           daylightMult[3];
-    /** Camera multipliers used for White Balance adjustements */
+    /** Camera multipliers used for White Balance adjustments */
     double           cameraMult[4];
 
     /** Camera Color Matrix */

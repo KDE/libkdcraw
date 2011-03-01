@@ -554,9 +554,9 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->enableCACorrectionBox->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b><p>"
                      "Enlarge the raw red-green and blue-yellow axis by the given factors (automatic by default).<p>"));
 
-    d->autoCACorrectionBox = new QCheckBox(i18n("Automatic color axis adjustements"), d->correctionsSettings);
+    d->autoCACorrectionBox = new QCheckBox(i18n("Automatic color axis adjustments"), d->correctionsSettings);
     d->autoCACorrectionBox->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b><p>"
-                     "If this option is turned on, It will try to shift image channels sligtly "
+                     "If this option is turned on, it will try to shift image channels slightly "
                      "and evaluate Chromatic Aberration change. Note that if you shot blue-red pattern, the method may fail. "
                      "In this case, disable this option and tune manually color factors.<p>"));
 
