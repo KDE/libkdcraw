@@ -104,6 +104,7 @@ IF(NOT WIN32)
 ENDIF(NOT WIN32)
 
 FIND_PACKAGE(LCMS REQUIRED)
+FIND_PACKAGE(JPEG REQUIRED)
 
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
@@ -136,7 +137,7 @@ ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 # Flag to include demosaic pack GPL2
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 
-# Flag to include demosaic pack GPL2
+# Flag to include demosaic pack GPL3
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
 # LibRaw use C++ exception.
