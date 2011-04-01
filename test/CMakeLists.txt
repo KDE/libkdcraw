@@ -27,13 +27,19 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 # add a small macro so that this is a bit cleaner
 MACRO(LIBKDCRAW_BUILD_TEST)
+
     SET(_target ${ARGV0})
     SET(${_target}_SRCS ../libraw/samples/${_target}.cpp)
+
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
+
     TARGET_LINK_LIBRARIES(${_target} libraw ${CMAKE_THREAD_LIBS_INIT})
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
     ENDIF(WIN32)
+
+    SET_TARGET_PROPERTIES(${_target} PROPERTIES DEFINE_SYMBOL LIBRAW_BUILDLIB)
+
 ENDMACRO(LIBKDCRAW_BUILD_TEST)
 
 SET(raw2png_SRCS raw2png.cpp)
