@@ -28,25 +28,9 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 # add a small macro so that this is a bit cleaner
 MACRO(LIBKDCRAW_BUILD_TEST)
     SET(_target ${ARGV0})
-    SET(${_target}_SRCS
-        ../libraw/samples/${_target}.cpp
-        ${libraw_LIB_SRCS}
-       )
-
-    # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
-    FOREACH(_curentfile ${${_target}_SRCS})
-    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
-    ENDFOREACH(_curentfile ${${_target}_SRCS})
-
+    SET(${_target}_SRCS ../libraw/samples/${_target}.cpp)
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
-    TARGET_LINK_LIBRARIES(${_target}
-                          ${MATH_LIBRARY}
-                          ${LCMS_LIBRARIES}
-                          ${JPEG_LIBRARY}
-                          ${OPENMP_LDFLAGS}
-                          ${CMAKE_THREAD_LIBS_INIT}
-                         )
-    SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
+    TARGET_LINK_LIBRARIES(${_target} libraw ${CMAKE_THREAD_LIBS_INIT})
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
     ENDIF(WIN32)

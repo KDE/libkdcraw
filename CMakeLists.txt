@@ -170,6 +170,22 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
    )
 
+# Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
+FOREACH(_curentfile ${libraw_LIB_SRCS})
+    SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS -w)
+ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
+
+KDE4_ADD_LIBRARY(libraw STATIC ${libraw_LIB_SRCS})
+
+TARGET_LINK_LIBRARIES(libraw
+                      ${MATH_LIBRARY}
+                      ${LCMS_LIBRARIES}
+                      ${JPEG_LIBRARY}
+                      ${OPENMP_LDFLAGS}
+                     )
+
+SET_TARGET_PROPERTIES(libraw PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
+
 # =======================================================
 
 IF(NOT WIN32)
