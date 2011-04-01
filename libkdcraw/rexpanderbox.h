@@ -41,6 +41,7 @@
 // KDE includes
 
 #include <ksqueezedtextlabel.h>
+#include <kconfig.h>
 
 // Local includes
 
@@ -250,8 +251,11 @@ public:
     RLabelExpander* widget(int index) const;
     int indexOf(RLabelExpander* widget) const;
 
-    void readSettings();
-    void writeSettings();
+    virtual void readSettings(KConfigGroup& group);
+    virtual void writeSettings(KConfigGroup& group);
+
+    KDE_DEPRECATED void readSettings();
+    KDE_DEPRECATED void writeSettings();
 
 Q_SIGNALS:
 

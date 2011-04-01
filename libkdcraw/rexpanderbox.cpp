@@ -48,7 +48,6 @@
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <klocale.h>
-#include <kconfig.h>
 
 namespace KDcrawIface
 {
@@ -494,7 +493,6 @@ bool RLabelExpander::eventFilter(QObject* obj, QEvent* ev)
 
 class RExpanderBox::RExpanderBoxPriv
 {
-
 public:
 
     RExpanderBoxPriv(RExpanderBox* box)
@@ -532,6 +530,8 @@ public:
                         parent, SLOT(slotItemToggled(bool)));
     }
 
+public:
+
     QList<RLabelExpander*> wList;
 
     QVBoxLayout*           vbox;
@@ -557,7 +557,6 @@ RExpanderBox::RExpanderBox(QWidget* parent)
 
 RExpanderBox::~RExpanderBox()
 {
-    writeSettings();
     d->wList.clear();
     delete d;
 }
@@ -711,7 +710,7 @@ int RExpanderBox::indexOf(RLabelExpander* widget) const
 {
     for (int i = 0 ; i < count(); ++i)
     {
-        RLabelExpander *exp = d->wList[i];
+        RLabelExpander* exp = d->wList[i];
         if (widget == exp)
             return i;
     }
@@ -722,7 +721,7 @@ void RExpanderBox::setItemExpanded(int index, bool b)
 {
     if (index > d->wList.count() || index < 0) return;
 
-    RLabelExpander *exp = d->wList[index];
+    RLabelExpander* exp = d->wList[index];
     if (!exp) return;
 
     exp->setExpanded(b);
@@ -732,17 +731,14 @@ bool RExpanderBox::isItemExpanded(int index) const
 {
     if (index > d->wList.count() || index < 0) return false;
 
-    RLabelExpander *exp = d->wList[index];
+    RLabelExpander* exp = d->wList[index];
     if (!exp) return false;
 
     return (exp->isExpanded());
 }
 
-void RExpanderBox::readSettings()
+void RExpanderBox::readSettings(KConfigGroup& group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-
     for (int i = 0 ; i < count(); ++i)
     {
         RLabelExpander *exp = d->wList[i];
@@ -754,11 +750,8 @@ void RExpanderBox::readSettings()
     }
 }
 
-void RExpanderBox::writeSettings()
+void RExpanderBox::writeSettings(KConfigGroup& group)
 {
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-
     for (int i = 0 ; i < count(); ++i)
     {
         RLabelExpander *exp = d->wList[i];
@@ -768,6 +761,20 @@ void RExpanderBox::writeSettings()
                              exp->isExpanded());
         }
     }
+}
+
+void RExpanderBox::readSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+    readSettings(group);
+}
+
+void RExpanderBox::writeSettings()
+{
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
+    writeSettings(group);
     config->sync();
 }
 

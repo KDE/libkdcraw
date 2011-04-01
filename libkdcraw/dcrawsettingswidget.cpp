@@ -1219,7 +1219,7 @@ void DcrawSettingsWidget::writeSettings(KConfigGroup& group)
 {
     RawDecodingSettings prm = settings();
     prm.writeSettings(group);
-    RExpanderBox::writeSettings();
+    RExpanderBox::writeSettings(group);
 }
 
 void DcrawSettingsWidget::readSettings(KConfigGroup& group)
@@ -1227,7 +1227,7 @@ void DcrawSettingsWidget::readSettings(KConfigGroup& group)
     RawDecodingSettings prm;
     prm.readSettings(group);
     setSettings(prm);
-    RExpanderBox::readSettings();
+    RExpanderBox::readSettings(group);
 }
 
 } // NameSpace KDcrawIface
