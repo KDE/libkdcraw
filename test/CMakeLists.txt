@@ -30,6 +30,7 @@ MACRO(LIBKDCRAW_BUILD_TEST)
 
     SET(_target ${ARGV0})
     SET(${_target}_SRCS ../libraw/samples/${_target}.cpp)
+    SET_SOURCE_FILES_PROPERTIES(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
 
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
 
