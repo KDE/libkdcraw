@@ -13,15 +13,15 @@ function prototypes
 -------- 8x8 DCT (Discrete Cosine Transform) / Inverse of DCT --------
     [definition]
         <case1> Normalized 8x8 IDCT
-            C[k1][k2] = (1/4) * sum_j1=0^7 sum_j2=0^7 
-                            a[j1][j2] * s[j1] * s[j2] * 
-                            cos(pi*j1*(k1+1/2)/8) * 
+            C[k1][k2] = (1/4) * sum_j1=0^7 sum_j2=0^7
+                            a[j1][j2] * s[j1] * s[j2] *
+                            cos(pi*j1*(k1+1/2)/8) *
                             cos(pi*j2*(k2+1/2)/8), 0<=k1<8, 0<=k2<8
                             (s[0] = 1/sqrt(2), s[j] = 1, j > 0)
         <case2> Normalized 8x8 DCT
-            C[k1][k2] = (1/4) * s[k1] * s[k2] * sum_j1=0^7 sum_j2=0^7 
-                            a[j1][j2] * 
-                            cos(pi*(j1+1/2)*k1/8) * 
+            C[k1][k2] = (1/4) * s[k1] * s[k2] * sum_j1=0^7 sum_j2=0^7
+                            a[j1][j2] *
+                            cos(pi*(j1+1/2)*k1/8) *
                             cos(pi*(j2+1/2)*k2/8), 0<=k1<8, 0<=k2<8
                             (s[0] = 1/sqrt(2), s[j] = 1, j > 0)
     [usage]
@@ -55,7 +55,7 @@ void ddct8x8s(int isgn, float **a)
     int j;
     float x0r, x0i, x1r, x1i, x2r, x2i, x3r, x3i;
     float xr, xi;
-    
+
     if (isgn < 0) {
         for (j = 0; j <= 7; j++) {
             x0r = a[0][j] + a[7][j];
