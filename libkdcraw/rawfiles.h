@@ -78,7 +78,11 @@ static const char raw_file_extentions[] =
 
 // NOTE: VERSION 3
 
-                                          "*.rwl "; // Leica Digital Camera Raw Image Format.
+                                          "*.rwl " // Leica Digital Camera Raw Image Format.
+
+// NOTE: VERSION 4
+
+                                          "*.srw "; // Samnsung Raw Image Format.
 
 /* TODO: check if these format are supported
                                           "*.drf "  // Kodak Digital Camera Raw Image Format.
@@ -90,6 +94,6 @@ static const char raw_file_extentions[] =
 */
 
 // increment this number whenever you change the above string
-static const int raw_file_extensions_version = 3;
+static const int raw_file_extensions_version = 4;
 
 #endif // RAW_FILES_H
