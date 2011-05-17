@@ -208,7 +208,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                            "If disabled, all RAW files will be decoded in 8-bit "
                                            "color depth with a BT.709 gamma curve and a 99th-percentile "
                                            "white point. This mode is faster than 16-bit decoding."));
-    demosaicingLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 1);
+    demosaicingLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 2);
 
     if (advSettings & SIXTEENBITS)
     {
@@ -231,7 +231,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                             "To resume, this option blurs the image "
                                             "a little, but it eliminates false 2x2 mesh patterns "
                                             "with VNG quality method or mazes with AHD quality method."));
-    demosaicingLayout->addWidget(d->fourColorCheckBox, line, 0, 1, 2);
+    demosaicingLayout->addWidget(d->fourColorCheckBox, line, 0, 1, line == 0 ? 2 : 3);
     line++;
 
     KUrlLabel *dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
@@ -247,7 +247,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                                     "stretch the image to its correct aspect ratio. In any "
                                                     "case, this option guarantees that each output pixel "
                                                     "corresponds to one RAW pixel.<p>"));
-    demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 0, 1, 2);
+    demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 0, 1, 3);
     line++;
 
     d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
@@ -502,8 +502,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->expoCorrectionShiftSpinBox,     6,  1, 1, 2);
     whiteBalanceLayout->addWidget(d->expoCorrectionHighlightLabel,   7,  0, 1, 1);
     whiteBalanceLayout->addWidget(d->expoCorrectionHighlightSpinBox, 7,  1, 1, 2);
-    whiteBalanceLayout->addWidget(d->fixColorsHighlightsBox,         8,  0, 1, 2);
-    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              9,  0, 1, 2);
+    whiteBalanceLayout->addWidget(d->fixColorsHighlightsBox,         8,  0, 1, 3);
+    whiteBalanceLayout->addWidget(d->autoBrightnessBox,              9,  0, 1, 3);
     whiteBalanceLayout->addWidget(d->brightnessLabel,                10, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->brightnessSpinBox,              10, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->blackPointCheckBox,             11, 0, 1, 1);
