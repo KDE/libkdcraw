@@ -58,7 +58,10 @@ KDcraw::KDcrawPriv::~KDcrawPriv()
 
 void KDcraw::KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img)
 {
-    QString header = QString("P6\n%1 %2\n%3\n").arg(img->width).arg(img->height).arg((1 << img->bits)-1);
+    QString header = QString("P%1\n%2 %3\n%4\n").arg(img->colors == 3 ? "6" : "5")
+                                                .arg(img->width)
+                                                .arg(img->height)
+                                                .arg((1 << img->bits)-1);
     imgData.append(header.toAscii());
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
 }
