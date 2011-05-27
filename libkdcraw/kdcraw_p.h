@@ -68,8 +68,8 @@ public:
 
     int progressCallback(enum LibRaw_progress p, int iteration, int expected);
 
-    void setProgress(double value);
-    double progressValue();
+    void   setProgress(double value);
+    double progressValue() const;
 
 private:
 

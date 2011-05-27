@@ -93,7 +93,7 @@ void KDcraw::KDcrawPriv::setProgress(double value)
     m_parent->setWaitingDataProgress(m_progress);
 }
 
-double KDcraw::KDcrawPriv::progressValue()
+double KDcraw::KDcrawPriv::progressValue() const
 {
     return m_progress;
 }
