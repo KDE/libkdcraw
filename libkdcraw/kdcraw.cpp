@@ -338,11 +338,11 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     d->setProgress(0.7);
 
     rawData = QByteArray();
-    
+
     if (raw.imgdata.idata.filters == 0)
     {
         rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight  * raw.imgdata.idata.colors * sizeof(unsigned short)));
-        
+
         unsigned short* output = (unsigned short*)rawData.data();
 
         for (unsigned int row = 0; row < raw.imgdata.sizes.iheight; row++)
@@ -771,10 +771,25 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     }
     d->setProgress(0.35);
 
-    width     = img->width;
-    height    = img->height;
-    rgbmax    = (1 << img->bits)-1;
-    imageData = QByteArray((const char*)img->data, (int)img->data_size);
+    width  = img->width;
+    height = img->height;
+    rgbmax = (1 << img->bits)-1;
+
+    if (img->colors == 3)
+    {
+        imageData = QByteArray((const char*)img->data, (int)img->data_size);
+    }
+    else
+    {
+        // img->colors == 1 (Grayscale) : convert to RGB
+        imageData = QByteArray();
+        for (int i = 0 ; i < (int)img->data_size ; ++i)
+        {
+            for (int j = 0 ; j < 3 ; ++j)
+	        imageData.append(img->data[i]);
+	}
+    }
+
     // Clear memory allocation. Introduced with LibRaw 0.11.0
     raw.dcraw_clear_mem(img);
     raw.recycle();
