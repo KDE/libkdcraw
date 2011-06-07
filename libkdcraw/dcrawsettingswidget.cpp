@@ -329,7 +329,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesLabel   = new QLabel(i18n("Pass:"), d->whiteBalanceSettings);
     d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Pass</b></p>"
                                       "<p>Set here the passes used by the median filter applied after "
-                                      "interpolation to Red-Green and Blue-Green channels.<p>"
+                                      "interpolation to Red-Green and Blue-Green channels.</p>"
                                       "<p>This setting is only available for specific Quality options: "
                                       "<b>Bilinear</b>, <b>VNG</b>, <b>PPG</b>, <b>AHD</b>, "
                                       "<b>DCB</b>, and <b>VCD & AHD</b>.</p>"));
