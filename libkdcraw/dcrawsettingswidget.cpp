@@ -200,14 +200,14 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     int line = 0;
 
-    d->sixteenBitsImage = new QCheckBox(i18n("16 bits color depth"), d->demosaicingSettings);
-    d->sixteenBitsImage->setWhatsThis(i18n("<p>If enabled, all RAW files will be decoded in 16-bit "
-                                           "color depth using a linear gamma curve. To prevent dark "
-                                           "picture rendering in the editor, it is recommended to "
-                                           "use Color Management in this mode.</p>"
-                                           "<p>If disabled, all RAW files will be decoded in 8-bit "
-                                           "color depth with a BT.709 gamma curve and a 99th-percentile "
-                                           "white point. This mode is faster than 16-bit decoding.</p>"));
+    d->sixteenBitsImage = new QCheckBox(i18nc("@option:check", "16 bits color depth"), d->demosaicingSettings);
+    d->sixteenBitsImage->setWhatsThis(i18nc("@info:whatsthis", "<para>If enabled, all RAW files will "
+                                "be decoded in 16-bit color depth using a linear gamma curve. To "
+                                "prevent dark picture rendering in the editor, it is recommended to "
+                                "use Color Management in this mode.</para>"
+                                "<para>If disabled, all RAW files will be decoded in 8-bit color "
+                                "depth with a BT.709 gamma curve and a 99th-percentile white point. "
+                                "This mode is faster than 16-bit decoding.</para>"));
     demosaicingLayout->addWidget(d->sixteenBitsImage, 0, 0, 1, 2);
 
     if (advSettings & SIXTEENBITS)
@@ -220,103 +220,112 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->sixteenBitsImage->hide();
     }
 
-    d->fourColorCheckBox = new QCheckBox(i18n("Interpolate RGB as four colors"), d->demosaicingSettings);
-    d->fourColorCheckBox->setWhatsThis(i18n("<p><b>Interpolate RGB as four colors</b></p>"
-                                            "<p>The default is to assume that all green "
-                                            "pixels are the same. If even-row green "
-                                            "pixels are more sensitive to ultraviolet light "
-                                            "than odd-row this difference causes a mesh "
-                                            "pattern in the output; using this option solves "
-                                            "this problem with minimal loss of detail.</p>"
-                                            "<p>To resume, this option blurs the image a little, "
-                                            "but it eliminates false 2x2 mesh patterns with VNG "
-                                            "quality method or mazes with AHD quality method.</p>"));
+    d->fourColorCheckBox = new QCheckBox(i18nc("@option:check", "Interpolate RGB as four colors"), d->demosaicingSettings);
+    d->fourColorCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Interpolate RGB as four "
+                                "colors</title>"
+                                "<para>The default is to assume that all green pixels are the same. "
+                                "If even-row green pixels are more sensitive to ultraviolet light "
+                                "than odd-row this difference causes a mesh pattern in the output; "
+                                "using this option solves this problem with minimal loss of detail.</para>"
+                                "<para>To resume, this option blurs the image a little, but it "
+                                "eliminates false 2x2 mesh patterns with VNG quality method or "
+                                "mazes with AHD quality method.</para>"));
     demosaicingLayout->addWidget(d->fourColorCheckBox, line, 0, 1, line == 0 ? 2 : 3);
     line++;
 
     KUrlLabel *dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
                                   .arg(KDcraw::librawVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
-    dcrawVersion->setToolTip(i18n("Visit LibRaw project website"));
+    dcrawVersion->setToolTip(i18nc("@info:tooltip", "Visit LibRaw project website"));
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
-    d->dontStretchPixelsCheckBox = new QCheckBox(i18n("Do not stretch or rotate pixels"), d->demosaicingSettings);
-    d->dontStretchPixelsCheckBox->setWhatsThis(i18n("<p><b>Do not stretch or rotate pixels</b></p>"
-                                                    "<p>For Fuji Super CCD cameras, show the image tilted 45 "
-                                                    "degrees. For cameras with non-square pixels, do not "
-                                                    "stretch the image to its correct aspect ratio. In any "
-                                                    "case, this option guarantees that each output pixel "
-                                                    "corresponds to one RAW pixel.</p>"));
+    d->dontStretchPixelsCheckBox = new QCheckBox(i18nc("@option:check", "Do not stretch or rotate pixels"), d->demosaicingSettings);
+    d->dontStretchPixelsCheckBox->setWhatsThis(i18nc("@info:whatsthis", 
+                                "<title>Do not stretch or rotate pixels</title>"
+                                "<para>For Fuji Super CCD cameras, show the image tilted 45 degrees. "
+                                "For cameras with non-square pixels, do not stretch the image to "
+                                "its correct aspect ratio. In any case, this option guarantees that "
+                                "each output pixel corresponds to one RAW pixel.</para>"));
     demosaicingLayout->addWidget(d->dontStretchPixelsCheckBox, line, 0, 1, 3);
     line++;
 
-    d->RAWQualityLabel    = new QLabel(i18n("Quality:"), d->demosaicingSettings);
+    d->RAWQualityLabel    = new QLabel(i18nc("@label:listbox", "Quality:"), d->demosaicingSettings);
     d->RAWQualityComboBox = new RComboBox(d->demosaicingSettings);
 
     // Original dcraw demosaicing methods
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::BILINEAR, i18n("Bilinear"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VNG,      i18n("VNG"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PPG,      i18n("PPG"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AHD,      i18n("AHD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VNG,      i18nc("@item:inlistbox Quality", "VNG"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AHD,      i18nc("@item:inlistbox Quality", "AHD"));
 
     // Extended demosaicing method
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::DCB,      i18n("DCB"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18n("AHD v2"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18n("AFD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18n("VCD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18n("VCD & AHD"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18n("LMMSE"));
-    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18n("AMaZE"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::DCB,      i18nc("@item:inlistbox Quality", "DCB"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18nc("@item:inlistbox Quality", "AHD v2"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18nc("@item:inlistbox Quality", "AFD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18nc("@item:inlistbox Quality", "VCD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18nc("@item:inlistbox Quality", "VCD & AHD"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
+    d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
 
     d->RAWQualityComboBox->setDefaultIndex(RawDecodingSettings::BILINEAR);
-    d->RAWQualityComboBox->setWhatsThis(i18n("<p><b>Quality (interpolation)</b></p>"
-                "<p>Select here the demosaicing method to use when decoding RAW images. "
-                "A demosaicing algorithm is a digital image process used to "
-                "interpolate a complete image from the partial raw data received from the color-filtered "
-                "image sensor, internal to many digital cameras, in form of a matrix of colored pixels. "
-                "Also known as CFA interpolation or color reconstruction, another common spelling "
-                "is demosaicing. The following methods are available for demosaicing RAW images:</p>"
+    d->RAWQualityComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Quality (interpolation)</title>"
+                                "<para>Select here the demosaicing method to use when decoding RAW "
+                                "images. A demosaicing algorithm is a digital image process used to "
+                                "interpolate a complete image from the partial raw data received "
+                                "from the color-filtered image sensor, internal to many digital "
+                                "cameras, in form of a matrix of colored pixels. Also known as CFA "
+                                "interpolation or color reconstruction, another common spelling is "
+                                "demosaicing. The following methods are available for demosaicing "
+                                "RAW images:</para>"
 
-                // Original dcraw demosaicing methods
+                                        // Original dcraw demosaicing methods
 
-                "<p><b>Bilinear</b>: use high-speed but low-quality bilinear "
-                "interpolation (default - for slow computers). In this method, "
-                "the red value of a non-red pixel is computed as the average of "
-                "the adjacent red pixels, and similarly for blue and green.</p>"
+                                "<para><list><item><emphasis strong='true'>Bilinear</emphasis>: use "
+                                "high-speed but low-quality bilinear interpolation (default - for "
+                                "slow computers). In this method, the red value of a non-red pixel "
+                                "is computed as the average of the adjacent red pixels, and similarly "
+                                "for blue and green.</item>"
 
-                "<p><b>VNG</b>: use Variable Number of Gradients interpolation. "
-                "This method computes gradients near the pixel of interest and uses "
-                "the lower gradients (representing smoother and more similar parts "
-                "of the image) to make an estimate.</p>"
+                                "<item><emphasis strong='true'>VNG</emphasis>: use Variable Number "
+                                "of Gradients interpolation. This method computes gradients near "
+                                "the pixel of interest and uses the lower gradients (representing "
+                                "smoother and more similar parts of the image) to make an estimate.</item>"
 
-                "<p><b>PPG</b>: use Patterned-Pixel-Grouping interpolation. "
-                "Pixel Grouping uses assumptions about natural scenery in making estimates. "
-                "It has fewer color artifacts on natural images than the Variable Number of "
-                "Gradients method.<p>"
+                                "<item><emphasis strong='true'>PPG</emphasis>: use Patterned-Pixel-"
+                                "Grouping interpolation. Pixel Grouping uses assumptions about "
+                                "natural scenery in making estimates. It has fewer color artifacts "
+                                "on natural images than the Variable Number of Gradients method.</item>"
 
-                "<p><b>AHD</b>: use Adaptive Homogeneity-Directed interpolation. "
-                "This method selects the direction of interpolation so as to "
-                "maximize a homogeneity metric, thus typically minimizing color artifacts.</p>"
+                                "<item><emphasis strong='true'>AHD</emphasis>: use Adaptive "
+                                "Homogeneity-Directed interpolation. This method selects the "
+                                "direction of interpolation so as to maximize a homogeneity metric, "
+                                "thus typically minimizing color artifacts.</item>"
 
-                // Extended demosaicing method
+                                        // Extended demosaicing method
 
-                "<p><b>DCB</b>: DCB interpolation from linuxphoto.org project.</p>"
+                                "<item><emphasis strong='true'>DCB</emphasis>: DCB interpolation from "
+                                "linuxphoto.org project.</item>"
 
-                "<p><b>AHD v2</b>: modified AHD interpolation using Variance of Color Differences method.</p>"
+                                "<item><emphasis strong='true'>AHD v2</emphasis>: modified AHD "
+                                "interpolation using Variance of Color Differences method.</item>"
 
-                "<p><b>AFD</b>: Adaptive Filtered Demosaicing interpolation through 5 pass median filter "
-                "from PerfectRaw project.</p>"
+                                "<item><emphasis strong='true'>AFD</emphasis>: Adaptive Filtered "
+                                "Demosaicing interpolation through 5 pass median filter from PerfectRaw "
+                                "project.</item>"
 
-                "<p><b>VCD</b>: Variance of Color Differences interpolation.</p>"
+                                "<item><emphasis strong='true'>VCD</emphasis>: Variance of Color "
+                                "Differences interpolation.</item>"
 
-                "<p><b>VCD & AHD</b>: Mixed demosaicing between VCD and AHD.</p>"
+                                "<item><emphasis strong='true'>VCD & AHD</emphasis>: Mixed demosaicing "
+                                "between VCD and AHD.</item>"
 
-                "<p><b>LMMSE</b>: color demosaicing via directional linear minimum mean-square error "
-                "estimation interpolation from PerfectRaw.</p>"
+                                "<item><emphasis strong='true'>LMMSE</emphasis>: color demosaicing via "
+                                "directional linear minimum mean-square error estimation interpolation "
+                                "from PerfectRaw.</item>"
 
-                "<p><b>AMaZE</b>: Aliasing Minimization interpolation and Zipper Elimination to apply color "
-                "aberration removal from RawTherapee project.</p>"
-                ));
+                                "<item><emphasis strong='true'>AMaZE</emphasis>: Aliasing Minimization "
+                                "interpolation and Zipper Elimination to apply color aberration removal "
+                                "from RawTherapee project.</item></list></para>"));
 
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
@@ -326,26 +335,30 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesSpinBox->setRange(0, 10, 1);
     d->medianFilterPassesSpinBox->setDefaultValue(0);
     d->medianFilterPassesSpinBox->setSliderEnabled(true);
-    d->medianFilterPassesLabel   = new QLabel(i18n("Pass:"), d->whiteBalanceSettings);
-    d->medianFilterPassesSpinBox->setWhatsThis( i18n("<p><b>Pass</b></p>"
-                                      "<p>Set here the passes used by the median filter applied after "
-                                      "interpolation to Red-Green and Blue-Green channels.</p>"
-                                      "<p>This setting is only available for specific Quality options: "
-                                      "<b>Bilinear</b>, <b>VNG</b>, <b>PPG</b>, <b>AHD</b>, "
-                                      "<b>DCB</b>, and <b>VCD & AHD</b>.</p>"));
+    d->medianFilterPassesLabel   = new QLabel(i18nc("@label:slider", "Pass:"), d->whiteBalanceSettings);
+    d->medianFilterPassesSpinBox->setWhatsThis( i18nc("@info:whatsthis", "<title>Pass</title>"
+                                "<para>Set here the passes used by the median filter applied after "
+                                "interpolation to Red-Green and Blue-Green channels.</para>"
+                                "<para>This setting is only available for specific Quality options: "
+                                "<emphasis strong='true'>Bilinear</emphasis>, <emphasis strong='true'>"
+                                "VNG</emphasis>, <emphasis strong='true'>PPG</emphasis>, "
+                                "<emphasis strong='true'>AHD</emphasis>, <emphasis strong='true'>"
+                                "DCB</emphasis>, and <emphasis strong='true'>VCD & AHD</emphasis>.</para>"));
     demosaicingLayout->addWidget(d->medianFilterPassesLabel,   line, 0, 1, 1);
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
     line++;
 
-    d->refineInterpolationBox       = new QCheckBox(i18n("Refine interpolation"), d->demosaicingSettings);
-    d->refineInterpolationBox->setWhatsThis(i18n("<p><b>Refine interpolation</b></p>"
-                                   "<p>This setting is available only for few Quality options:</p>"
-                                   "<p><b>DCB</b>: turn on the enhance interpolated colors filter.</p>"
-                                   "<p><b>VCD & AHD</b>: turn on the enhanced effective "
-                                   "color interpolation (EECI) refine to improve sharpness.</p>"));
+    d->refineInterpolationBox       = new QCheckBox(i18nc("@option:check", "Refine interpolation"), d->demosaicingSettings);
+    d->refineInterpolationBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Refine interpolation</title>"
+                                "<para>This setting is available only for few Quality options:</para>"
+                                "<para><list><item><emphasis strong='true'>DCB</emphasis>: turn on "
+                                "the enhance interpolated colors filter.</item>"
+                                "<item><emphasis strong='true'>VCD & AHD</emphasis>: turn on the "
+                                "enhanced effective color interpolation (EECI) refine to improve "
+                                "sharpness.</item></list></para>"));
     demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
 
-    addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18n("Demosaicing"), QString("demosaicing"), true);
+    addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
@@ -353,101 +366,107 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceSettings         = new QWidget(this);
     QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
 
-    d->whiteBalanceLabel            = new QLabel(i18n("Method:"), d->whiteBalanceSettings);
+    d->whiteBalanceLabel            = new QLabel(i18nc("@label:listbox", "Method:"), d->whiteBalanceSettings);
     d->whiteBalanceComboBox         = new RComboBox(d->whiteBalanceSettings);
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18n("Default D65"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18n("Camera"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18n("Automatic"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18nc("set white balance manually", "Manual"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox", "Automatic"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18nc("@item:inlistbox set white balance manually", "Manual"));
     d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
-    d->whiteBalanceComboBox->setWhatsThis(i18n("<p><b>White Balance</b></p>"
-                                "<p>Configure the raw white balance:</p>"
-                                "<p><b>Default D65</b>: Use a standard daylight D65 white balance.</p>"
-                                "<p><b>Camera</b>: Use the white balance specified by the camera. "
-                                "If not available, reverts to default neutral white balance.</p>"
-                                "<p><b>Automatic</b>: Calculates an automatic white balance "
-                                "averaging the entire image.</p>"
-                                "<p><b>Manual</b>: Set a custom temperature and green level values.</p>"));
+    d->whiteBalanceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White Balance</title>"
+                                "<para>Configure the raw white balance:</para>"
+                                "<para><list><item><emphasis strong='true'>Default D65</emphasis>: "
+                                "Use a standard daylight D65 white balance.</item>"
+                                "<item><emphasis strong='true'>Camera</emphasis>: Use the white "
+                                "balance specified by the camera. If not available, reverts to "
+                                "default neutral white balance.</item>"
+                                "<item><emphasis strong='true'>Automatic</emphasis>: Calculates an "
+                                "automatic white balance averaging the entire image.</item>"
+                                "<item><emphasis strong='true'>Manual</emphasis>: Set a custom "
+                                "temperature and green level values.</item></list></para>"));
 
     d->customWhiteBalanceSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
     d->customWhiteBalanceSpinBox->setDefaultValue(6500);
     d->customWhiteBalanceSpinBox->setSliderEnabled(true);
-    d->customWhiteBalanceLabel   = new QLabel(i18n("T(K):"), d->whiteBalanceSettings);
-    d->customWhiteBalanceSpinBox->setWhatsThis( i18n("<p><b>Temperature</b></p>"
-                                                     "<p>Set here the color temperature in Kelvin.</p>"));
+    d->customWhiteBalanceLabel   = new QLabel(i18nc("@label:slider", "T(K):"), d->whiteBalanceSettings);
+    d->customWhiteBalanceSpinBox->setWhatsThis( i18nc("@info:whatsthis", "<title>Temperature</title>"
+                                "<para>Set here the color temperature in Kelvin.</para>"));
 
     d->customWhiteBalanceGreenSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceGreenSpinBox->setDecimals(2);
     d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01);
     d->customWhiteBalanceGreenSpinBox->setDefaultValue(1.0);
-    d->customWhiteBalanceGreenLabel   = new QLabel(i18n("Green:"), d->whiteBalanceSettings);
-    d->customWhiteBalanceGreenSpinBox->setWhatsThis(i18n("<p>Set here the green component to set magenta color "
-                                                         "cast removal level.</p>"));
+    d->customWhiteBalanceGreenLabel   = new QLabel(i18nc("@label:slider", "Green:"), d->whiteBalanceSettings);
+    d->customWhiteBalanceGreenSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<para>Set here the "
+                                "green component to set magenta color cast removal level.</para>"));
 
-    d->unclipColorLabel    = new QLabel(i18n("Highlights:"), d->whiteBalanceSettings);
+    d->unclipColorLabel    = new QLabel(i18nc("@label:listbox", "Highlights:"), d->whiteBalanceSettings);
     d->unclipColorComboBox = new RComboBox(d->whiteBalanceSettings);
-    d->unclipColorComboBox->insertItem(0, i18n("Solid white"));
-    d->unclipColorComboBox->insertItem(1, i18n("Unclip"));
-    d->unclipColorComboBox->insertItem(2, i18n("Blend"));
-    d->unclipColorComboBox->insertItem(3, i18n("Rebuild"));
+    d->unclipColorComboBox->insertItem(0, i18nc("@item:inlistbox", "Solid white"));
+    d->unclipColorComboBox->insertItem(1, i18nc("@item:inlistbox", "Unclip"));
+    d->unclipColorComboBox->insertItem(2, i18nc("@item:inlistbox", "Blend"));
+    d->unclipColorComboBox->insertItem(3, i18nc("@item:inlistbox", "Rebuild"));
     d->unclipColorComboBox->setDefaultIndex(0);
-    d->unclipColorComboBox->setWhatsThis(i18n("<p><b>Highlights</b></p>"
-                                              "<p>Select here the highlight clipping method:</p>"
-                                              "<p><b>Solid white</b>: clip all highlights to solid white</p>"
-                                              "<p><b>Unclip</b>: leave highlights unclipped in various "
-                                              "shades of pink</p>"
-                                              "<p><b>Blend</b>:Blend clipped and unclipped values together "
-                                              "for a gradual fade to white</p>"
-                                              "<p><b>Rebuild</b>: reconstruct highlights using a "
-                                              "level value</p>"));
+    d->unclipColorComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Highlights</title>"
+                                "<para>Select here the highlight clipping method:</para>"
+                                "<para><list><item><emphasis strong='true'>Solid white</emphasis>: "
+                                "clip all highlights to solid white</item>"
+                                "<item><emphasis strong='true'>Unclip</emphasis>: leave highlights "
+                                "unclipped in various shades of pink</item>"
+                                "<item><emphasis strong='true'>Blend</emphasis>:Blend clipped and "
+                                "unclipped values together for a gradual fade to white</item>"
+                                "<item><emphasis strong='true'>Rebuild</emphasis>: reconstruct "
+                                "highlights using a level value</item></list></para>"));
 
-    d->reconstructLabel   = new QLabel(i18n("Level:"), d->whiteBalanceSettings);
+    d->reconstructLabel   = new QLabel(i18nc("@label:slider", "Level:"), d->whiteBalanceSettings);
     d->reconstructSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->reconstructSpinBox->setRange(0, 6, 1);
     d->reconstructSpinBox->setDefaultValue(0);
     d->reconstructSpinBox->setSliderEnabled(true);
-    d->reconstructSpinBox->setWhatsThis(i18n("<p><b>Level</b></p>"
-                                             "<p>Specify the reconstruct highlight level. "
-                                             "Low values favor whites and high values favor colors.</p>"));
+    d->reconstructSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Level</title>"
+                                "<para>Specify the reconstruct highlight level. Low values favor "
+                                "whites and high values favor colors.</para>"));
 
-    d->expoCorrectionBox = new QCheckBox(i18n("Exposure Correction"), d->whiteBalanceSettings);
-    d->expoCorrectionBox->setWhatsThis(i18n("<p>Turn on the exposure correction before interpolation."));
+    d->expoCorrectionBox = new QCheckBox(i18nc("@option:check", "Exposure Correction"), d->whiteBalanceSettings);
+    d->expoCorrectionBox->setWhatsThis(i18nc("@info:whatsthis", "<para>Turn on the exposure "
+                                "correction before interpolation.</para>"));
 
-    d->expoCorrectionShiftLabel   = new QLabel(i18n("Shift (linear):"), d->whiteBalanceSettings);
+    d->expoCorrectionShiftLabel   = new QLabel(i18nc("@label:slider", "Shift (linear):"), d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox->setDecimals(2);
     d->expoCorrectionShiftSpinBox->setRange(0.5, 3.0, 0.01);
     d->expoCorrectionShiftSpinBox->setDefaultValue(1.0);
-    d->expoCorrectionShiftSpinBox->setWhatsThis(i18n("<p><b>Shift</b></p>"
-                                            "<p>Shift of exposure correction before interpolation in linear scale.</p>"));
+    d->expoCorrectionShiftSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Shift</title>"
+                                "<para>Shift of exposure correction before interpolation in linear "
+                                "scale.</para>"));
 
-    d->expoCorrectionHighlightLabel   = new QLabel(i18n("Highlight (E.V):"), d->whiteBalanceSettings);
+    d->expoCorrectionHighlightLabel   = new QLabel(i18nc("@label:slider", "Highlight (E.V):"), d->whiteBalanceSettings);
     d->expoCorrectionHighlightSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionHighlightSpinBox->setDecimals(2);
     d->expoCorrectionHighlightSpinBox->setRange(0.0, 1.0, 0.01);
     d->expoCorrectionHighlightSpinBox->setDefaultValue(0.0);
-    d->expoCorrectionHighlightSpinBox->setWhatsThis(i18n("<p><b>Highlight</b></p>"
-                                                         "<p>Amount of highlight preservation for exposure "
-                                                         "correction before interpolation in E.V.</p>"));
+    d->expoCorrectionHighlightSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Highlight</title>"
+                                "<para>Amount of highlight preservation for exposure correction "
+                                "before interpolation in E.V.</para>"));
 
-    d->fixColorsHighlightsBox = new QCheckBox(i18n("Correct false colors in highlights"), d->whiteBalanceSettings);
-    d->fixColorsHighlightsBox->setWhatsThis(i18n("<p>If enabled, images with overblown channels are processed much "
-                                                 "more accurately, without 'pink clouds' (and blue highlights under "
-                                                 "tungsten lamps).</p>"));
+    d->fixColorsHighlightsBox = new QCheckBox(i18nc("@option:check", "Correct false colors in highlights"), d->whiteBalanceSettings);
+    d->fixColorsHighlightsBox->setWhatsThis(i18nc("@info:whatsthis", "<para>If enabled, images with "
+                                "overblown channels are processed much more accurately, without "
+                                "'pink clouds' (and blue highlights under tungsten lamps).</para>"));
 
-    d->autoBrightnessBox = new QCheckBox(i18n("Auto Brightness"), d->whiteBalanceSettings);
-    d->autoBrightnessBox->setWhatsThis(i18n("<p>If disable, use a fixed white level "
-                                            "and ignore the image histogram to adjust brightness.</p>"));
+    d->autoBrightnessBox = new QCheckBox(i18nc("@option:check", "Auto Brightness"), d->whiteBalanceSettings);
+    d->autoBrightnessBox->setWhatsThis(i18nc("@info:whatsthis", "<para>If disable, use a fixed white level "
+                                "and ignore the image histogram to adjust brightness.</para>"));
 
-    d->brightnessLabel   = new QLabel(i18n("Brightness:"), d->whiteBalanceSettings);
+    d->brightnessLabel   = new QLabel(i18nc("@label:slider", "Brightness:"), d->whiteBalanceSettings);
     d->brightnessSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->brightnessSpinBox->setDecimals(2);
     d->brightnessSpinBox->setRange(0.0, 10.0, 0.01);
     d->brightnessSpinBox->setDefaultValue(1.0);
-    d->brightnessSpinBox->setWhatsThis(i18n("<p><b>Brightness</b></p>"
-                                            "<p>Specify the brightness level of output image."
-                                            "The default value is 1.0 (works in 8-bit mode only).</p>"));
+    d->brightnessSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Brightness</title>"
+                                "<para>Specify the brightness level of output image. The default "
+                                "value is 1.0 (works in 8-bit mode only).</para>"));
 
     if (! (advSettings & POSTPROCESSING))
     {
@@ -455,29 +474,29 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->brightnessSpinBox->hide();
     }
 
-    d->blackPointCheckBox = new QCheckBox(i18n("Black:"), d->whiteBalanceSettings);
-    d->blackPointCheckBox->setWhatsThis(i18n("<p><b>Black point</b></p>"
-                                             "<p>Use a specific black point value to decode RAW pictures. "
-                                             "If you set this option to off, the Black Point value will be "
-                                             "automatically computed.</p>"));
+    d->blackPointCheckBox = new QCheckBox(i18nc("@option:check", "Black:"), d->whiteBalanceSettings);
+    d->blackPointCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point</title>"
+                                "<para>Use a specific black point value to decode RAW pictures. If "
+                                "you set this option to off, the Black Point value will be "
+                                "automatically computed.</para>"));
     d->blackPointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->blackPointSpinBox->setRange(0, 1000, 1);
     d->blackPointSpinBox->setDefaultValue(0);
     d->blackPointSpinBox->setSliderEnabled(true);
-    d->blackPointSpinBox->setWhatsThis(i18n("<p><b>Black point value</b></p>"
-                                            "<p>Specify specific black point value of the output image.</p>"));
+    d->blackPointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point value</title>"
+                                "<para>Specify specific black point value of the output image.</para>"));
 
-    d->whitePointCheckBox = new QCheckBox(i18n("White:"), d->whiteBalanceSettings);
-    d->whitePointCheckBox->setWhatsThis(i18n("<p><b>White point</b></p>"
-                                             "<p>Use a specific white point value to decode RAW pictures. "
-                                             "If you set this option to off, the White Point value will be "
-                                             "automatically computed.</p>"));
+    d->whitePointCheckBox = new QCheckBox(i18nc("@option:check", "White:"), d->whiteBalanceSettings);
+    d->whitePointCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White point</title>"
+                                "<para>Use a specific white point value to decode RAW pictures. If "
+                                "you set this option to off, the White Point value will be "
+                                "automatically computed.</para>"));
     d->whitePointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->whitePointSpinBox->setRange(0, 20000, 1);
     d->whitePointSpinBox->setDefaultValue(0);
     d->whitePointSpinBox->setSliderEnabled(true);
-    d->whitePointSpinBox->setWhatsThis(i18n("<p><b>White point value</b></p>"
-                                            "<p>Specify specific white point value of the output image.</p>"));
+    d->whitePointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White point value</title>"
+                                "<para>Specify specific white point value of the output image.</para>"));
 
     if (! (advSettings & BLACKWHITEPOINTS))
     {
@@ -513,7 +532,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->setSpacing(KDialog::spacingHint());
     whiteBalanceLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->whiteBalanceSettings, SmallIcon("kdcraw"), i18n("White Balance"), QString("whitebalance"), true);
+    addItem(d->whiteBalanceSettings, SmallIcon("kdcraw"), i18nc("@label", "White Balance"), QString("whitebalance"), true);
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
@@ -521,24 +540,29 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->correctionsSettings         = new QWidget(this);
     QGridLayout* correctionsLayout = new QGridLayout(d->correctionsSettings);
 
-    d->noiseReductionLabel    = new QLabel(i18n("Noise reduction:"), d->correctionsSettings);
+    d->noiseReductionLabel    = new QLabel(i18nc("@label:listbox", "Noise reduction:"), d->correctionsSettings);
     d->noiseReductionComboBox = new RComboBox(d->colormanSettings);
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("Noise Reduction", "None"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("Noise Reduction", "Wavelets"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("Noise Reduction", "FBDD"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("Noise Reduction", "CFA Line Denoise"));
-    d->noiseReductionComboBox->insertItem(RawDecodingSettings::IMPULSENR,  i18nc("Noise Reduction", "Impulse Denoise"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::NONR,       i18nc("@item:inlistbox Noise Reduction", "None"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::WAVELETSNR, i18nc("@item:inlistbox Noise Reduction", "Wavelets"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::FBDDNR,     i18nc("@item:inlistbox Noise Reduction", "FBDD"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::LINENR,     i18nc("@item:inlistbox Noise Reduction", "CFA Line Denoise"));
+    d->noiseReductionComboBox->insertItem(RawDecodingSettings::IMPULSENR,  i18nc("@item:inlistbox Noise Reduction", "Impulse Denoise"));
     d->noiseReductionComboBox->setDefaultIndex(RawDecodingSettings::NONR);
-    d->noiseReductionComboBox->setWhatsThis(i18n("<p><b>Noise Reduction</b></p>"
-                "<p>Select here the noise reduction method to apply during RAW decoding.</p>"
-                "<p><b>None</b>: no noise reduction.</p>"
-                "<p><b>Wavelets</b>: wavelets correction to erase noise while preserving real "
-                "detail. It's applied after interpolation.</p>"
-                "<p><b>FBDD</b>: Fake Before Demosaicing Denoising noise reduction. It's applied "
-                "before interpolation.</p>"
-                "<p><b>CFA Line Denoise</b>: Banding noise suppression. It's applied after interpolation.</p>"
-                "<p><b>Impulse Denoise</b>: Impulse noise suppression. It's applied after interpolation.</p>"
-                ));
+    d->noiseReductionComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Noise Reduction</title>"
+                                "<para>Select here the noise reduction method to apply during RAW "
+                                "decoding.</para>"
+                                "<para><list><item><emphasis strong='true'>None</emphasis>: no "
+                                "noise reduction.</item>"
+                                "<item><emphasis strong='true'>Wavelets</emphasis>: wavelets "
+                                "correction to erase noise while preserving real detail. It's "
+                                "applied after interpolation.</item>"
+                                "<item><emphasis strong='true'>FBDD</emphasis>: Fake Before "
+                                "Demosaicing Denoising noise reduction. It's applied before "
+                                "interpolation.</item>"
+                                "<item><emphasis strong='true'>CFA Line Denoise</emphasis>: Banding "
+                                "noise suppression. It's applied after interpolation.</item>"
+                                "<item><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse "
+                                "noise suppression. It's applied after interpolation.</item></list></para>"));
 
     d->NRSpinBox1 = new RIntNumInput(d->correctionsSettings);
     d->NRSpinBox1->setRange(100, 1000, 1);
@@ -552,31 +576,35 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->NRSpinBox2->setSliderEnabled(true);
     d->NRLabel2   = new QLabel(d->correctionsSettings);
 
-    d->enableCACorrectionBox = new QCheckBox(i18n("Enable Chromatic Aberration correction"), d->correctionsSettings);
-    d->enableCACorrectionBox->setWhatsThis(i18n("<p><b>Enable Chromatic Aberration correction</b></p>"
-                     "<p>Enlarge the raw red-green and blue-yellow axis by the given factors (automatic by default).</p>"));
+    d->enableCACorrectionBox = new QCheckBox(i18nc("@option:check", "Enable Chromatic Aberration correction"), d->correctionsSettings);
+    d->enableCACorrectionBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Enable Chromatic "
+                                "Aberration correction</title>"
+                                "<para>Enlarge the raw red-green and blue-yellow axis by the given "
+                                "factors (automatic by default).</para>"));
 
-    d->autoCACorrectionBox = new QCheckBox(i18n("Automatic color axis adjustments"), d->correctionsSettings);
-    d->autoCACorrectionBox->setWhatsThis(i18n("<p><b>Automatic Chromatic Aberration correction</b></p>"
-                     "<p>If this option is turned on, it will try to shift image channels slightly "
-                     "and evaluate Chromatic Aberration change. Note that if you shot blue-red pattern, the method may fail. "
-                     "In this case, disable this option and tune manually color factors.</p>"));
+    d->autoCACorrectionBox = new QCheckBox(i18nc("@option:check", "Automatic color axis adjustments"), d->correctionsSettings);
+    d->autoCACorrectionBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Automatic Chromatic "
+                                "Aberration correction</title>"
+                                "<para>If this option is turned on, it will try to shift image "
+                                "channels slightly and evaluate Chromatic Aberration change. Note "
+                                "that if you shot blue-red pattern, the method may fail. In this "
+                                "case, disable this option and tune manually color factors.</para>"));
 
-    d->caRedMultLabel   = new QLabel(i18n("Red-Green:"), d->correctionsSettings);
+    d->caRedMultLabel   = new QLabel(i18nc("@label:slider", "Red-Green:"), d->correctionsSettings);
     d->caRedMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
     d->caRedMultSpinBox->setDecimals(1);
     d->caRedMultSpinBox->setRange(-4.0, 4.0, 0.1);
     d->caRedMultSpinBox->setDefaultValue(0.0);
-    d->caRedMultSpinBox->setWhatsThis(i18n("<p><b>Red-Green multiplier</b></p>"
-                                           "<p>Set here the amount of correction on red-green axis</p>"));
+    d->caRedMultSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Red-Green multiplier</title>"
+                                "<para>Set here the amount of correction on red-green axis</para>"));
 
-    d->caBlueMultLabel   = new QLabel(i18n("Blue-Yellow:"), d->correctionsSettings);
+    d->caBlueMultLabel   = new QLabel(i18nc("@label:slider", "Blue-Yellow:"), d->correctionsSettings);
     d->caBlueMultSpinBox = new RDoubleNumInput(d->correctionsSettings);
     d->caBlueMultSpinBox->setDecimals(1);
     d->caBlueMultSpinBox->setRange(-4.0, 4.0, 0.1);
     d->caBlueMultSpinBox->setDefaultValue(0.0);
-    d->caBlueMultSpinBox->setWhatsThis(i18n("<p><b>Blue-Yellow multiplier</b></p>"
-                                            "<p>Set here the amount of correction on blue-yellow axis</p>"));
+    d->caBlueMultSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Blue-Yellow multiplier</title>"
+                                "<para>Set here the amount of correction on blue-yellow axis</para>"));
 
     correctionsLayout->addWidget(d->noiseReductionLabel,    0, 0, 1, 1);
     correctionsLayout->addWidget(d->noiseReductionComboBox, 0, 1, 1, 2);
@@ -594,7 +622,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->setSpacing(KDialog::spacingHint());
     correctionsLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->correctionsSettings, SmallIcon("kdcraw"), i18n("Corrections"), QString("corrections"), false);
+    addItem(d->correctionsSettings, SmallIcon("kdcraw"), i18nc("@label", "Corrections"), QString("corrections"), false);
 
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
@@ -602,47 +630,54 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->colormanSettings         = new QWidget(this);
     QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings);
 
-    d->inputColorSpaceLabel     = new QLabel(i18n("Camera Profile:"), d->colormanSettings);
+    d->inputColorSpaceLabel     = new QLabel(i18nc("@label:listbox", "Camera Profile:"), d->colormanSettings);
     d->inputColorSpaceComboBox  = new RComboBox(d->colormanSettings);
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18nc("Camera Profile", "None"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18nc("Camera Profile", "Embedded"));
-    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18nc("Camera Profile", "Custom"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::NOINPUTCS,     i18nc("@item:inlistbox Camera Profile", "None"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::EMBEDDED,      i18nc("@item:inlistbox Camera Profile", "Embedded"));
+    d->inputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMINPUTCS, i18nc("@item:inlistbox Camera Profile", "Custom"));
     d->inputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::NOINPUTCS);
-    d->inputColorSpaceComboBox->setWhatsThis(i18n("<p><b>Camera Profile</b></p>"
-                "<p>Select here the input color space used to decode RAW data.</p>"
-                "<p><b>None</b>: no input color profile is used during RAW decoding.</p>"
-                "<p><b>Embedded</b>: use embedded color profile from RAW file, if it exists.</p>"
-                "<p><b>Custom</b>: use a custom input color space profile.</p>"));
+    d->inputColorSpaceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Camera Profile</title>"
+                                "<para>Select here the input color space used to decode RAW data.</para>"
+                                "<para><list><item><emphasis strong='true'>None</emphasis>: no "
+                                "input color profile is used during RAW decoding.</item>"
+                                "<item><emphasis strong='true'>Embedded</emphasis>: use embedded "
+                                "color profile from RAW file, if it exists.</item>"
+                                "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
+                                "input color space profile.</item></list></para>"));
 
     d->inIccUrlEdit = new KUrlRequester(d->colormanSettings);
     d->inIccUrlEdit->setMode(KFile::LocalOnly | KFile::ExistingOnly | KFile::File);
     d->inIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
 
-    d->outputColorSpaceLabel    = new QLabel(i18n("Workspace:"), d->colormanSettings);
+    d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18nc("Workspace", "Raw (no profile)"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18nc("Workspace", "sRGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18nc("Workspace", "Adobe RGB"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18nc("Workspace", "Wide Gamut"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::PROPHOTO,       i18nc("Workspace", "Pro-Photo"));
-    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMOUTPUTCS, i18nc("Workspace", "Custom"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::RAWCOLOR,       i18nc("@item:inlistbox Workspace", "Raw (no profile)"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::SRGB,           i18nc("@item:inlistbox Workspace", "sRGB"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::ADOBERGB,       i18nc("@item:inlistbox Workspace", "Adobe RGB"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::WIDEGAMMUT,     i18nc("@item:inlistbox Workspace", "Wide Gamut"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::PROPHOTO,       i18nc("@item:inlistbox Workspace", "Pro-Photo"));
+    d->outputColorSpaceComboBox->insertItem(RawDecodingSettings::CUSTOMOUTPUTCS, i18nc("@item:inlistbox Workspace", "Custom"));
     d->outputColorSpaceComboBox->setDefaultIndex(RawDecodingSettings::SRGB);
-    d->outputColorSpaceComboBox->setWhatsThis(i18n("<p><b>Workspace</b></p>"
-                "<p>Select here the output color space used to decode RAW data.</p>"
-                "<p><b>Raw (linear)</b>: in this mode, no output color space is used "
-                "during RAW decoding.</p>"
-                "<p><b>sRGB</b>: this is an RGB color space, created "
-                "cooperatively by Hewlett-Packard and Microsoft. It is the "
-                "best choice for images destined for the Web and portrait photography.</p>"
-                "<p><b>Adobe RGB</b>: this color space is an extended RGB color space, developed by "
-                "Adobe. It is used for photography applications such as advertising "
-                "and fine art.</p>"
-                "<p><b>Wide Gamut</b>: this color space is an expanded version of the "
-                "Adobe RGB color space.</p>"
-                "<p><b>Pro-Photo</b>: this color space is an RGB color space, developed by "
-                "Kodak, that offers an especially large gamut designed for use with "
-                "photographic outputs in mind.</p>"
-                "<p><b>Custom</b>: use a custom output color space profile.</p>"));
+    d->outputColorSpaceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Workspace</title>"
+                                "<para>Select here the output color space used to decode RAW data.</para>"
+                                "<para><list><item><emphasis strong='true'>Raw (linear)</emphasis>: "
+                                "in this mode, no output color space is used during RAW decoding.</item>"
+                                "<item><emphasis strong='true'>sRGB</emphasis>: this is an RGB "
+                                "color space, created cooperatively by Hewlett-Packard and "
+                                "Microsoft. It is the best choice for images destined for the Web "
+                                "and portrait photography.</item>"
+                                "<item><emphasis strong='true'>Adobe RGB</emphasis>: this color "
+                                "space is an extended RGB color space, developed by Adobe. It is "
+                                "used for photography applications such as advertising and fine "
+                                "art.</item>"
+                                "<item><emphasis strong='true'>Wide Gamut</emphasis>: this color "
+                                "space is an expanded version of the Adobe RGB color space.</item>"
+                                "<item><emphasis strong='true'>Pro-Photo</emphasis>: this color "
+                                "space is an RGB color space, developed by Kodak, that offers an "
+                                "especially large gamut designed for use with photographic outputs "
+                                "in mind.</item>"
+                                "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
+                                "output color space profile.</item></list></para>"));
 
     d->outIccUrlEdit = new KUrlRequester(d->colormanSettings);
     d->outIccUrlEdit->setMode(KFile::LocalOnly | KFile::File | KFile::ExistingOnly);
@@ -658,7 +693,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->setSpacing(KDialog::spacingHint());
     colormanLayout->setMargin(KDialog::spacingHint());
 
-    addItem(d->colormanSettings, SmallIcon("kdcraw"), i18n("Color Management"), QString("colormanagement"), false);
+    addItem(d->colormanSettings, SmallIcon("kdcraw"), i18nc("@label", "Color Management"), QString("colormanagement"), false);
 
     if (! (advSettings & COLORSPACE))
         removeItem(COLORMANAGEMENT);
@@ -869,9 +904,9 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
     d->NRLabel1->setEnabled(true);
     d->NRSpinBox2->setEnabled(true);
     d->NRLabel2->setEnabled(true);
-    d->NRLabel1->setText(i18n("Threshold:"));
-    d->NRSpinBox1->setWhatsThis(i18n("<p><b>Threshold</b></p>"
-                                     "<p>Set here the noise reduction threshold value to use.</p>"));
+    d->NRLabel1->setText(i18nc("@label", "Threshold:"));
+    d->NRSpinBox1->setWhatsThis(i18nc("@info:whatsthis", "<title>Threshold</title>"
+                                "<para>Set here the noise reduction threshold value to use.</para>"));
 
     switch(item)
     {
@@ -883,12 +918,12 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
             break;
 
         case RawDecodingSettings::IMPULSENR:
-            d->NRLabel1->setText(i18n("Luminance:"));
-            d->NRSpinBox1->setWhatsThis(i18n("<p><b>Luminance</b></p>"
-                                             "<p>Amount of Luminance impulse noise reduction.</p>"));
-            d->NRLabel2->setText(i18n("Chrominance:"));
-            d->NRSpinBox2->setWhatsThis(i18n("<p><b>Chrominance</b></p>"
-                                             "<p>Amount of Chrominance impulse noise reduction.</p>"));
+            d->NRLabel1->setText(i18nc("@label", "Luminance:"));
+            d->NRSpinBox1->setWhatsThis(i18nc("@info:whatsthis", "<title>Luminance</title>"
+                                "<para>Amount of Luminance impulse noise reduction.</para>"));
+            d->NRLabel2->setText(i18nc("@label", "Chrominance:"));
+            d->NRSpinBox2->setWhatsThis(i18nc("@info:whatsthis", "<title>Chrominance</title>"
+                                "<para>Amount of Chrominance impulse noise reduction.</para>"));
             d->NRSpinBox2->setVisible(true);
             d->NRLabel2->setVisible(true);
             break;

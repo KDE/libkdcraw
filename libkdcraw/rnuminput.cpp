@@ -67,7 +67,7 @@ RIntNumInput::RIntNumInput(QWidget* parent)
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
     d->resetButton->setIcon(SmallIcon("document-revert"));
-    d->resetButton->setToolTip(i18n("Reset to default value"));
+    d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     setStretchFactor(d->input, 10);
     setMargin(0);
@@ -166,7 +166,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* parent)
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
     d->resetButton->setIcon(SmallIcon("document-revert"));
-    d->resetButton->setToolTip(i18n("Reset to default value"));
+    d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     setStretchFactor(d->input, 10);
     setMargin(0);
