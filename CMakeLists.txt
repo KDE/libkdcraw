@@ -56,9 +56,9 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 0.5.0 => 7.1.0  (Released with KDE 4.3.0)
 # 1.0.0 => 8.0.0  (Released with KDE 4.4.0)
 # 1.1.0 => 8.1.0  (Released with KDE 4.4.2)
-# 1.2.0 => 9.0.0  (Released with KDE 4.6.0)
-# 1.3.0 => 10.0.0 (Released with KDE 4.7.0)
-# 2.0.0 => 20.0.0 (Included into digiKam 2.0.0 collection)
+# 1.2.0 => 9.0.0  (Released with KDE 4.5.0)
+# 1.3.0 => 10.0.0 (Released with KDE 4.6.0)
+# 2.0.0 => 20.0.0 (Released with KDE 4.7.0)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
