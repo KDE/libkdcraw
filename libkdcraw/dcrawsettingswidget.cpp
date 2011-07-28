@@ -726,8 +726,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
             this, SLOT(slotsixteenBitsImageToggled(bool)));
 
-    connect(dcrawVersion, SIGNAL(leftClickedUrl(const QString&)),
-            this, SLOT(processDcrawUrl(const QString&)));
+    connect(dcrawVersion, SIGNAL(leftClickedUrl(QString)),
+            this, SLOT(processDcrawUrl(QString)));
 
     connect(d->inputColorSpaceComboBox, SIGNAL(activated(int)),
             this, SLOT(slotInputColorSpaceChanged(int)));
@@ -740,10 +740,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     // Wrapper to emit signal when something is changed in settings.
 
-    connect(d->inIccUrlEdit, SIGNAL(urlSelected(const KUrl&)),
+    connect(d->inIccUrlEdit, SIGNAL(urlSelected(KUrl)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->outIccUrlEdit, SIGNAL(urlSelected(const KUrl&)),
+    connect(d->outIccUrlEdit, SIGNAL(urlSelected(KUrl)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
