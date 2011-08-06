@@ -103,8 +103,11 @@ IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
 
-FIND_PACKAGE(LCMS REQUIRED)
-FIND_PACKAGE(JPEG REQUIRED)
+FIND_PACKAGE(LCMS)
+macro_log_feature(LCMS_FOUND "lcms" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
+
+FIND_PACKAGE(JPEG)
+macro_log_feature(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")
 
 # Flag to compile Little CMS code from LibRaw
 ADD_DEFINITIONS(-DUSE_LCMS)
@@ -203,3 +206,5 @@ ADD_SUBDIRECTORY(icons)
 ADD_SUBDIRECTORY(libkdcraw)
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(profiles)
+
+macro_display_feature_log()
