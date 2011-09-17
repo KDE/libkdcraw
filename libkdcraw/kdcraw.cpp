@@ -352,7 +352,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
                 for (int color = 0; color < raw.imgdata.idata.colors; color++)
                 {
                     *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][color];
-                    *output++;
+                    output++;
                 }
             }
         }
@@ -368,7 +368,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
             for (uint col = 0; col < raw.imgdata.sizes.iwidth; col++)
             {
                 *output = raw.imgdata.image[raw.imgdata.sizes.iwidth*row + col][raw.COLOR(row, col)];
-                *output++;
+                output++;
             }
         }
     }
