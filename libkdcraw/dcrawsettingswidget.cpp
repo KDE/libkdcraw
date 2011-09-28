@@ -370,7 +370,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whiteBalanceComboBox         = new RComboBox(d->whiteBalanceSettings);
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
-    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox", "Automatic"));
+    d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox set while balance automatically", "Automatic"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CUSTOM, i18nc("@item:inlistbox set white balance manually", "Manual"));
     d->whiteBalanceComboBox->setDefaultIndex(RawDecodingSettings::CAMERA);
     d->whiteBalanceComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White Balance</title>"
@@ -397,7 +397,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->customWhiteBalanceGreenSpinBox->setDecimals(2);
     d->customWhiteBalanceGreenSpinBox->setRange(0.2, 2.5, 0.01);
     d->customWhiteBalanceGreenSpinBox->setDefaultValue(1.0);
-    d->customWhiteBalanceGreenLabel   = new QLabel(i18nc("@label:slider", "Green:"), d->whiteBalanceSettings);
+    d->customWhiteBalanceGreenLabel   = new QLabel(i18nc("@label:slider Green component", "Green:"), d->whiteBalanceSettings);
     d->customWhiteBalanceGreenSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<para>Set here the "
                                 "green component to set magenta color cast removal level.</para>"));
 
@@ -419,7 +419,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Rebuild</emphasis>: reconstruct "
                                 "highlights using a level value</item></list></para>"));
 
-    d->reconstructLabel   = new QLabel(i18nc("@label:slider", "Level:"), d->whiteBalanceSettings);
+    d->reconstructLabel   = new QLabel(i18nc("@label:slider Highlight reconstruct level", "Level:"), d->whiteBalanceSettings);
     d->reconstructSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->reconstructSpinBox->setRange(0, 6, 1);
     d->reconstructSpinBox->setDefaultValue(0);
@@ -474,7 +474,7 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->brightnessSpinBox->hide();
     }
 
-    d->blackPointCheckBox = new QCheckBox(i18nc("@option:check", "Black:"), d->whiteBalanceSettings);
+    d->blackPointCheckBox = new QCheckBox(i18nc("@option:check Black point", "Black:"), d->whiteBalanceSettings);
     d->blackPointCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point</title>"
                                 "<para>Use a specific black point value to decode RAW pictures. If "
                                 "you set this option to off, the Black Point value will be "
@@ -486,7 +486,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->blackPointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point value</title>"
                                 "<para>Specify specific black point value of the output image.</para>"));
 
-    d->whitePointCheckBox = new QCheckBox(i18nc("@option:check", "White:"), d->whiteBalanceSettings);
+    d->whitePointCheckBox = new QCheckBox(i18nc("@option:check White point", "White:"), d->whiteBalanceSettings);
     d->whitePointCheckBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White point</title>"
                                 "<para>Use a specific white point value to decode RAW pictures. If "
                                 "you set this option to off, the White Point value will be "

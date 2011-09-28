@@ -34,7 +34,10 @@
 #define OPTIONCUSTOMWBGREENENTRY                       "Custom White Balance Green"
 #define OPTIONFOURCOLORRGBENTRY                        "Four Color RGB"
 #define OPTIONUNCLIPCOLORSENTRY                        "Unclip Color"
+// Wrong spelling, but do not fix it since it is a configuration key
+// krazy:cond=spelling
 #define OPTIONDONTSTRETCHPIXELSENTRY                   "Dont Stretch Pixels"
+// krazy:endcond=spelling
 #define OPTIONMEDIANFILTERPASSESENTRY                  "Median Filter Passes"
 #define OPTIONNOISEREDUCTIONTYPEENTRY                  "Noise Reduction Type"
 #define OPTIONNOISEREDUCTIONTHRESHOLDENTRY             "Noise Reduction Threshold"
