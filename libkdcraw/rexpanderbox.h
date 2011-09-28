@@ -57,8 +57,8 @@ class LIBKDCRAW_EXPORT RClickLabel : public QLabel
 public:
 
     RClickLabel(QWidget* parent = 0);
-    RClickLabel(const QString& text, QWidget* parent = 0);
-    ~RClickLabel(){};
+    explicit RClickLabel(const QString& text, QWidget* parent = 0);
+    ~RClickLabel();
 
 Q_SIGNALS:
 
@@ -83,8 +83,8 @@ class LIBKDCRAW_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
 public:
 
     RSqueezedClickLabel(QWidget* parent = 0);
-    RSqueezedClickLabel(const QString& text, QWidget* parent = 0);
-    ~RSqueezedClickLabel(){};
+    explicit RSqueezedClickLabel(const QString& text, QWidget* parent = 0);
+    ~RSqueezedClickLabel();
 
 Q_SIGNALS:
 
@@ -107,7 +107,7 @@ class LIBKDCRAW_EXPORT RArrowClickLabel : public QWidget
 public:
 
     RArrowClickLabel(QWidget* parent = 0);
-    ~RArrowClickLabel(){};
+    ~RArrowClickLabel();
 
     void setArrowType(Qt::ArrowType arrowType);
     Qt::ArrowType arrowType() const;

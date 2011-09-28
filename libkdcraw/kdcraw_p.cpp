@@ -23,14 +23,12 @@
  *
  * ============================================================ */
 
+#include "kdcraw.h"
+#include "kdcraw_p.h"
+
 // Qt includes.
 
 #include <QString>
-
-// Local includes.
-
-#include "kdcraw.h"
-#include "kdcraw_p.h"
 
 namespace KDcrawIface
 {

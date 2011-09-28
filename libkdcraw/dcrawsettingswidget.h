@@ -75,7 +75,7 @@ public:
     /**
      * @param advSettings the default value is COLORSPACE
      */
-    DcrawSettingsWidget(QWidget* parent, int advSettings = COLORSPACE);
+    explicit DcrawSettingsWidget(QWidget* parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
     KUrlRequester* inputProfileUrlEdit() const;

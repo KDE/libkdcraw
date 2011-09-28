@@ -64,6 +64,10 @@ RClickLabel::RClickLabel(const QString& text, QWidget* parent)
     setCursor(Qt::PointingHandCursor);
 }
 
+RClickLabel::~RClickLabel()
+{
+}
+
 void RClickLabel::mousePressEvent(QMouseEvent* event)
 {
     QLabel::mousePressEvent(event);
@@ -118,6 +122,10 @@ RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget* parent)
                    : KSqueezedTextLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
+}
+
+RSqueezedClickLabel::~RSqueezedClickLabel()
+{
 }
 
 void RSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
@@ -177,6 +185,10 @@ void RArrowClickLabel::setArrowType(Qt::ArrowType type)
 {
     m_arrowType = type;
     update();
+}
+
+RArrowClickLabel::~RArrowClickLabel()
+{
 }
 
 Qt::ArrowType RArrowClickLabel::arrowType() const
