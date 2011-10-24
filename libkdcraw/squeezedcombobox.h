@@ -11,7 +11,7 @@
  * @author Copyright (C) 2006-2011 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008 by Andi Clemens
- *         <a href="mailto:andi dot clemens at gmx dot net">andi dot clemens at gmx dot net</a>
+ *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>
  * @author Copyright (C) 2005 by Tom Albers
  *         <a href="mailto:tomalbers at kde dot nl">tomalbers at kde dot nl</a>
  *
