@@ -147,9 +147,11 @@ public:
             - A byte array container 'rawData' with raw data.
             - All info about Raw image into 'identify' container.
             - 'false' is returned if loadding failed, else 'true'.
+            
+        NOTE: 'addMaskedBorders' argument is deprectaed and will be removed in the future.
      */
-    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
-                        bool addMaskedBorders, unsigned int shotSelect);
+    KDE_DEPRECATED bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
+                                       bool addMaskedBorders, unsigned int shotSelect);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using
         'rawDecodingSettings' settings. This is a cancelable method which require

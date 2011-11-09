@@ -95,11 +95,8 @@ public:
     /** Left margin of raw image. */
     unsigned int     leftMargin;
 
-    /** Right margin of raw image. */
-    unsigned int     rightMargin;
-
-    /** Bottom margin of raw image. */
-    unsigned int     bottomMargin;
+    unsigned int KDE_DEPRECATED rightMargin;
+    unsigned int KDE_DEPRECATED bottomMargin;
 
     /** The raw image orientation */
     ImageOrientation orientation;

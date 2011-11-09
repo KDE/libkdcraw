@@ -169,9 +169,6 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     raw.imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
     raw.imgdata.params.half_size     = 1;         // Half-size color image (3x faster than -q).
 
-    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
-    raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
-
     int ret = raw.open_file(QFile::encodeName(path));
     if (ret != LIBRAW_SUCCESS)
     {
@@ -264,7 +261,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 // ----------------------------------------------------------------------------------
 
 bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
-                            bool addMaskedBorders, unsigned int shotSelect)
+                            bool /*addMaskedBorders*/, unsigned int shotSelect)
 {
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
@@ -310,15 +307,19 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         return false;
     }
 
-    if (addMaskedBorders)
+    if (m_cancel)
     {
-        ret = raw.add_masked_borders_to_bitmap();
-        if (ret != LIBRAW_SUCCESS)
-        {
-            kDebug() << "LibRaw: failed to add masked borders: " << libraw_strerror(ret);
-            raw.recycle();
-            return false;
-        }
+        raw.recycle();
+        return false;
+    }
+    d->setProgress(0.4);
+
+    ret = raw.raw2image();
+    if (ret != LIBRAW_SUCCESS)
+    {
+        kDebug() << "LibRaw: failed to run raw2image: " << libraw_strerror(ret);
+        raw.recycle();
+        return false;
     }
 
     if (m_cancel)
@@ -326,8 +327,8 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         raw.recycle();
         return false;
     }
-    d->setProgress(0.5);
-
+    d->setProgress(0.6);
+        
     KDcrawPriv::fillIndentifyInfo(&raw, identify);
 
     if (m_cancel)
@@ -335,7 +336,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         raw.recycle();
         return false;
     }
-    d->setProgress(0.7);
+    d->setProgress(0.8);
 
     rawData = QByteArray();
 
@@ -415,9 +416,6 @@ bool KDcraw::loadFromLibraw(const QString& filePath, QByteArray& imageData,
     QByteArray deadpixelPath = QFile::encodeName(m_rawDecodingSettings.deadPixelMap);
     QByteArray cameraProfile = QFile::encodeName(m_rawDecodingSettings.inputProfile);
     QByteArray outputProfile = QFile::encodeName(m_rawDecodingSettings.outputProfile);
-
-    // NOTE: new magic option introduced by LibRaw 0.7.0 to to make better noise filtration.
-    raw.imgdata.params.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 
     if (!m_rawDecodingSettings.autoBrightness)
     {

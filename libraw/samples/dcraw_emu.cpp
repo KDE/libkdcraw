@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: dcraw_emu.cpp
- * Copyright 2008-2010 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2011 LibRaw LLC (info@libraw.org)
  * Created: Sun Mar 23,   2008
  *
  * LibRaw simple C++ API sample: almost complete dcraw emulator
@@ -266,8 +266,10 @@ int main(int argc, char *argv[])
               case 'p':  OUT.camera_profile = argv[arg++];
 #endif
                   break;
-              case 'h':  OUT.half_size         = 1;		
-                  // no break:  "-h" implies "-f" 
+              case 'h':  
+                  OUT.half_size         = 1;		
+                  OUT.four_color_rgb    = 1;  
+                  break;
               case 'f':  
                   if(!strcmp(optstr,"-fbdd"))
                       OUT.fbdd_noiserd = atoi(argv[arg++]);
@@ -355,7 +357,6 @@ int main(int argc, char *argv[])
 #else
   _putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
 #endif
-  OUT.filtering_mode = LIBRAW_FILTERING_AUTOMATIC;
 #define P1 RawProcessor.imgdata.idata
 #define S RawProcessor.imgdata.sizes
 #define C RawProcessor.imgdata.color

@@ -56,8 +56,6 @@ DcrawInfoContainer::DcrawInfoContainer()
     whitePoint        = 0;
     topMargin         = 0;
     leftMargin        = 0;
-    rightMargin       = 0;
-    bottomMargin      = 0;
     orientation       = ORIENTATION_NONE;
 
     for (int x=0 ; x<3 ; x++)
@@ -101,8 +99,6 @@ bool DcrawInfoContainer::isEmpty()
         whitePoint       == 0           &&
         topMargin        == 0           &&
         leftMargin       == 0           &&
-        rightMargin      == 0           &&
-        bottomMargin     == 0           &&
         !dateTime.isValid()             &&
         !imageSize.isValid()            &&
         !fullSize.isValid()             &&
@@ -172,8 +168,6 @@ QDebug operator<<(QDebug dbg, const DcrawInfoContainer& c)
     dbg.nospace() << "DcrawInfoContainer::whitePoint: "       << c.whitePoint << ", ";
     dbg.nospace() << "DcrawInfoContainer::topMargin: "        << c.topMargin << ", ";
     dbg.nospace() << "DcrawInfoContainer::leftMargin: "       << c.leftMargin << ", ";
-    dbg.nospace() << "DcrawInfoContainer::rightMargin: "      << c.rightMargin << ", ";
-    dbg.nospace() << "DcrawInfoContainer::bottomMargin: "     << c.bottomMargin << ", ";
     dbg.nospace() << "DcrawInfoContainer::orientation: "      << c.orientation;
     return dbg.space();
 }

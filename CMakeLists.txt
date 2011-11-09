@@ -59,11 +59,12 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 1.2.0 => 9.0.0  (Released with KDE 4.5.0)
 # 1.3.0 => 10.0.0 (Released with KDE 4.6.0)
 # 2.0.0 => 20.0.0 (Released with KDE 4.7.0)
+# 2.0.1 => 20.0.1 (Released with KDE 4.8.0 - Introducing new deprecated members due to use libraw 0.14.x)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
 SET(DCRAW_LIB_MINOR_VERSION "0")
-SET(DCRAW_LIB_PATCH_VERSION "0")
+SET(DCRAW_LIB_PATCH_VERSION "1")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -78,7 +79,7 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(DCRAW_LIB_SO_CUR_VERSION "20")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
-SET(DCRAW_LIB_SO_AGE_VERSION "0")
+SET(DCRAW_LIB_SO_AGE_VERSION "1")
 
 # ==================================================================================================
 # Set env. variables accordinly.
@@ -171,6 +172,7 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/demosaic_packs.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_cxx.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_c_api.cpp
+                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_datastream.cpp
    )
 
 # Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
