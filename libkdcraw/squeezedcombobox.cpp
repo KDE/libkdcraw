@@ -30,7 +30,7 @@
 
 #include "squeezedcombobox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QComboBox>
 #include <QPair>

@@ -30,17 +30,17 @@
 #include "kdcraw.moc"
 #include "kdcraw_p.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
 
-// LibRaw includes.
+// LibRaw includes
 
 #include "libraw/libraw_version.h"
 
-// Local includes.
+// Local includes
 
 #include "version.h"
 #include "rawfiles.h"

@@ -26,14 +26,14 @@
 #ifndef DCRAW_INFO_CONTAINER_H
 #define DCRAW_INFO_CONTAINER_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QSize>
 #include <QtCore/QDebug>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 

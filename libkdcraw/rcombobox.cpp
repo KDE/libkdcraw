@@ -26,11 +26,11 @@
 
 #include "rcombobox.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <kdialog.h>
 #include <klocale.h>

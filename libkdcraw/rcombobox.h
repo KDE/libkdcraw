@@ -27,12 +27,12 @@
 #ifndef RCOMBOBOX_H
 #define RCOMBOBOX_H
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 #include <kcombobox.h>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 

@@ -22,14 +22,14 @@
  *
  * ============================================================ */
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
 
-// Local includes.
+// Local includes
 
 #include "kdcraw.h"
 

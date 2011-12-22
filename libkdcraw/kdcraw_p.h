@@ -26,19 +26,19 @@
 #ifndef KDCRAWPRIVATE_H
 #define KDCRAWPRIVATE_H
 
-// Qt includes.
+// Qt includes
 
 #include <QByteArray>
 
-// KDE includes.
+// KDE includes
 
 #include <kdebug.h>
 
-// LibRaw includes.
+// LibRaw includes
 
 #include "libraw/libraw.h"
 
-// Local includes.
+// Local includes
 
 #include "dcrawinfocontainer.h"
 

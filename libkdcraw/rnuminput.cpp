@@ -27,11 +27,11 @@
 
 #include "rnuminput.moc"
 
-// Qt includes.
+// Qt includes
 
 #include <QToolButton>
 
-// KDE includes.
+// KDE includes
 
 #include <klocale.h>
 #include <kiconloader.h>

@@ -31,11 +31,11 @@
 #ifndef SQUEEZEDCOMBOBOX_H
 #define SQUEEZEDCOMBOBOX_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtGui/QComboBox>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 

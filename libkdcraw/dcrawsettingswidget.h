@@ -30,16 +30,16 @@
 #ifndef DCRAW_SETTINGS_WIDGET_H
 #define DCRAW_SETTINGS_WIDGET_H
 
-// Qt includes.
+// Qt includes
 
 #include <QtCore/QString>
 
-// KDE includes.
+// KDE includes
 
 #include <kurlrequester.h>
 #include <kconfig.h>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"

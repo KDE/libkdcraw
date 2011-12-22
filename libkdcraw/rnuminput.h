@@ -28,12 +28,12 @@
 #ifndef RNUMINPUT_H
 #define RNUMINPUT_H
 
-// KDE includes.
+// KDE includes
 
 #include <khbox.h>
 #include <knuminput.h>
 
-// Local includes.
+// Local includes
 
 #include "libkdcraw_export.h"
 

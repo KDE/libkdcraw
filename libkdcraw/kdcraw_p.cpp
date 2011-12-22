@@ -26,7 +26,7 @@
 #include "kdcraw.h"
 #include "kdcraw_p.h"
 
-// Qt includes.
+// Qt includes
 
 #include <QString>
 
