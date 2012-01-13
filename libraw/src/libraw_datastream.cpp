@@ -9,6 +9,7 @@
 #else
 #define NO_JASPER
 #endif
+#include <stdexcept>
 
 
 LibRaw_byte_buffer::LibRaw_byte_buffer(unsigned sz) 
