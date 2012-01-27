@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2011 by Gilles Caulier
+# @author Copyright (C) 2006-2012 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -62,11 +62,12 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 1.3.0 => 10.0.0 (Released with KDE 4.6.0)
 # 2.0.0 => 20.0.0 (Released with KDE 4.7.0)
 # 2.0.1 => 20.0.1 (Released with KDE 4.8.0 - Introducing new deprecated members due to use libraw 0.14.x)
+# 2.1.0 => 21.0.0 (Released with KDE 4.8.1 - Remove deprecated members
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
-SET(DCRAW_LIB_MINOR_VERSION "0")
-SET(DCRAW_LIB_PATCH_VERSION "1")
+SET(DCRAW_LIB_MINOR_VERSION "1")
+SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -79,9 +80,9 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "20")
+SET(DCRAW_LIB_SO_CUR_VERSION "21")
 SET(DCRAW_LIB_SO_REV_VERSION "0")
-SET(DCRAW_LIB_SO_AGE_VERSION "1")
+SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
 # ==================================================================================================
 # Set env. variables accordinly.
@@ -120,8 +121,6 @@ else (LCMS2_FOUND)
  INCLUDE_DIRECTORIES( ${LCMS_INCLUDE_DIR} )
  set(LCMS2_LIBRARIES ${LCMS_LIBRARIES} )
 endif (LCMS2_FOUND)
-
-
 
 FIND_PACKAGE(JPEG)
 macro_log_feature(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")

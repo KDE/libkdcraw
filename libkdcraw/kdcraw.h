@@ -7,7 +7,7 @@
  * @date   2006-12-09
  * @brief  a tread-safe libraw C++ program interface
  *
- * @author Copyright (C) 2006-2011 by Gilles Caulier
+ * @author Copyright (C) 2006-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -136,22 +136,7 @@ public:
             - All info about Raw image into 'identify' container.
             - 'false' is returned if loadding failed, else 'true'.
      */
-    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify);
-
-    /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file.
-        This is a cancelable method which require a class instance to run because RAW pictures loading
-        can take a while.
-
-        This method return:
-
-            - A byte array container 'rawData' with raw data.
-            - All info about Raw image into 'identify' container.
-            - 'false' is returned if loadding failed, else 'true'.
-            
-        NOTE: 'addMaskedBorders' argument is deprectaed and will be removed in the future.
-     */
-    KDE_DEPRECATED bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
-                                       bool addMaskedBorders, unsigned int shotSelect);
+    bool extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify, unsigned int shotSelect=0);
 
     /** Extract a small size of decode RAW data from 'filePath' picture file using
         'rawDecodingSettings' settings. This is a cancelable method which require

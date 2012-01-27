@@ -7,7 +7,7 @@
  * @date   2006-12-09
  * @brief  a tread-safe libraw C++ program interface
  *
- * @author Copyright (C) 2006-2011 by Gilles Caulier
+ * @author Copyright (C) 2006-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -253,15 +253,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 
 // ----------------------------------------------------------------------------------
 
-bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify)
-{
-    return extractRAWData(filePath, rawData, identify, false, 0);
-}
-
-// ----------------------------------------------------------------------------------
-
-bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify,
-                            bool /*addMaskedBorders*/, unsigned int shotSelect)
+bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify, unsigned int shotSelect)
 {
     QFileInfo fileInfo(filePath);
     QString   rawFilesExt(rawFiles());
@@ -328,7 +320,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
         return false;
     }
     d->setProgress(0.6);
-        
+
     KDcrawPriv::fillIndentifyInfo(&raw, identify);
 
     if (m_cancel)

@@ -7,7 +7,7 @@
  * @date   2007-05-02
  * @brief  RAW file identification information container
  *
- * @author Copyright (C) 2007-2011 by Gilles Caulier
+ * @author Copyright (C) 2007-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -82,7 +82,7 @@ public:
 
     /** Black level from Raw histogram. */
     unsigned int     blackPoint;
-    
+
     /** Channel black levels from Raw histogram. */
     unsigned int     blackPointCh[8];
 
@@ -94,9 +94,6 @@ public:
 
     /** Left margin of raw image. */
     unsigned int     leftMargin;
-
-    unsigned int KDE_DEPRECATED rightMargin;
-    unsigned int KDE_DEPRECATED bottomMargin;
 
     /** The raw image orientation */
     ImageOrientation orientation;
