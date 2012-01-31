@@ -254,9 +254,6 @@ public:
     virtual void readSettings(KConfigGroup& group);
     virtual void writeSettings(KConfigGroup& group);
 
-    KDE_DEPRECATED void readSettings();
-    KDE_DEPRECATED void writeSettings();
-
 Q_SIGNALS:
 
     void signalItemExpanded(int index, bool b);

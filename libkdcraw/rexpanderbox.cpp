@@ -775,21 +775,6 @@ void RExpanderBox::writeSettings(KConfigGroup& group)
     }
 }
 
-void RExpanderBox::readSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    readSettings(group);
-}
-
-void RExpanderBox::writeSettings()
-{
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group        = config->group(QString("%1").arg(objectName()));
-    writeSettings(group);
-    config->sync();
-}
-
 // ------------------------------------------------------------------------
 
 RExpanderBoxExclusive::RExpanderBoxExclusive(QWidget* parent)
