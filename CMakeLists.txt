@@ -24,7 +24,7 @@
 
 PROJECT(libkdcraw)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: libkdcraw")
@@ -107,23 +107,26 @@ IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
 
+# Try to find LCMS version 2 in first, else LCMS version 1
 FIND_PACKAGE(LCMS2)
-macro_log_feature(LCMS2_FOUND "lcms2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+MACRO_LOG_FEATURE(LCMS2_FOUND "lcms2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+
 if (LCMS2_FOUND)
-# Flag to compile Little CMS code from LibRaw
- ADD_DEFINITIONS(-DUSE_LCMS2)
- INCLUDE_DIRECTORIES( ${LCMS2_INCLUDE_DIR} )
-else (LCMS2_FOUND)
- FIND_PACKAGE(LCMS)
- macro_log_feature(LCMS_FOUND "lcms" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
-# Flag to compile Little CMS code from LibRaw
- ADD_DEFINITIONS(-DUSE_LCMS)
- INCLUDE_DIRECTORIES( ${LCMS_INCLUDE_DIR} )
- set(LCMS2_LIBRARIES ${LCMS_LIBRARIES} )
-endif (LCMS2_FOUND)
+    # Flag to compile Little CMS version 2 with LibRaw
+    ADD_DEFINITIONS(-DUSE_LCMS2)
+    INCLUDE_DIRECTORIES( ${LCMS2_INCLUDE_DIR} )
+ELSE (LCMS2_FOUND)
+    FIND_PACKAGE(LCMS)
+    MACRO_LOG_FEATURE(LCMS_FOUND "lcms" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
+    # Flag to compile Little CMS version 1 with LibRaw
+    ADD_DEFINITIONS(-DUSE_LCMS)
+    INCLUDE_DIRECTORIES( ${LCMS_INCLUDE_DIR} )
+    # For compatibility
+    SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES} )
+ENDIF (LCMS2_FOUND)
 
 FIND_PACKAGE(JPEG)
-macro_log_feature(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")
+MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")
 
 # To prevent warnings from M$ compiler
 IF(WIN32 AND MSVC)
@@ -220,4 +223,4 @@ ADD_SUBDIRECTORY(libkdcraw)
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(profiles)
 
-macro_display_feature_log()
+MACRO_DISPLAY_FEATURE_LOG()
