@@ -24,7 +24,7 @@
 
 PROJECT(libkdcraw)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: libkdcraw")
