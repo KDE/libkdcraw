@@ -114,15 +114,15 @@ MACRO_LOG_FEATURE(LCMS2_FOUND "lcms2" "A small-footprint color management engine
 if (LCMS2_FOUND)
     # Flag to compile Little CMS version 2 with LibRaw
     ADD_DEFINITIONS(-DUSE_LCMS2)
-    INCLUDE_DIRECTORIES( ${LCMS2_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
 ELSE (LCMS2_FOUND)
     FIND_PACKAGE(LCMS)
     MACRO_LOG_FEATURE(LCMS_FOUND "lcms" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
     # Flag to compile Little CMS version 1 with LibRaw
     ADD_DEFINITIONS(-DUSE_LCMS)
-    INCLUDE_DIRECTORIES( ${LCMS_INCLUDE_DIR} )
+    INCLUDE_DIRECTORIES(${LCMS_INCLUDE_DIR})
     # For compatibility
-    SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES} )
+    SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES})
 ENDIF (LCMS2_FOUND)
 
 FIND_PACKAGE(JPEG)
@@ -143,12 +143,12 @@ IF(NOT APPLE)
 
     IF(OPENMP_FOUND)
         ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
-        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
             SET(OPENMP_LDFLAGS "-lgomp")
-        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp" )
-        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
             SET(OPENMP_LDFLAGS "-xopenmp")
-        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp" )
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
     ENDIF(OPENMP_FOUND)
 ENDIF(NOT APPLE)
 
@@ -166,13 +166,12 @@ ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 # Under Windows, use specific flag to compile.
 IF(WIN32)
-    ADD_DEFINITIONS( -DDJGPP )
+    ADD_DEFINITIONS(-DDJGPP)
 ENDIF(WIN32)
 
 # ==================================================================================================
 
-INCLUDE_DIRECTORIES(
-                    ${JPEG_INCLUDE_DIR}
+INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL3
