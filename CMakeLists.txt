@@ -29,6 +29,8 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mod
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: libkdcraw")
 
+OPTION(ENABLE_LCMS2 "Link libraw to LCMS2 else LCMS1 (default=OFF)" OFF)
+
 FIND_PACKAGE(KDE4 REQUIRED)
 INCLUDE(KDE4Defaults)
 INCLUDE(MacroLibrary)
@@ -107,23 +109,41 @@ IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
 ENDIF(NOT WIN32)
 
-# Try to find LCMS version 2 in first, else LCMS version 1
-FIND_PACKAGE(LCMS2)
-MACRO_LOG_FEATURE(LCMS2_FOUND "lcms2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
-
-if (LCMS2_FOUND)
-    # Flag to compile Little CMS version 2 with LibRaw
-    ADD_DEFINITIONS(-DUSE_LCMS2)
-    INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
-ELSE (LCMS2_FOUND)
+# LCMS version 1 and 2 library handling
+# See B.K.O #294105
+IF (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS2 availability...")
+    PKG_CHECK_MODULES(LCMS2 REQUIRED lcms2)
+    IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+        MESSAGE(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+        INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
+        MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+        # Flag to compile Little CMS version 2 with LibRaw
+        ADD_DEFINITIONS(-DUSE_LCMS2)
+    ENDIF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+ELSE (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS1 availability...")
     FIND_PACKAGE(LCMS)
-    MACRO_LOG_FEATURE(LCMS_FOUND "lcms" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
-    # Flag to compile Little CMS version 1 with LibRaw
-    ADD_DEFINITIONS(-DUSE_LCMS)
-    INCLUDE_DIRECTORIES(${LCMS_INCLUDE_DIR})
-    # For compatibility
-    SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES})
-ENDIF (LCMS2_FOUND)
+    IF (LCMS_FOUND)
+        MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
+        INCLUDE_DIRECTORIES(${LCMS_INCLUDE_DIR})
+        MACRO_LOG_FEATURE(LCMS_FOUND "LCMS1" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
+        # Flag to compile Little CMS version 1 with LibRaw
+        ADD_DEFINITIONS(-DUSE_LCMS)
+        # For compatibility
+        SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES})
+    ELSE (LCMS_FOUND)
+        MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
+        PKG_CHECK_MODULES(LCMS2 REQUIRED lcms2)
+        IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION  VERSION_GREATER 2.1))
+            MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+            INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
+            MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+            # Flag to compile Little CMS version 2 with LibRaw
+            ADD_DEFINITIONS(-DUSE_LCMS2)
+        ENDIF (LCMS_FOUND)
+    ENDIF (LCMS_FOUND)
+ENDIF (ENABLE_LCMS2)
 
 FIND_PACKAGE(JPEG)
 MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")
