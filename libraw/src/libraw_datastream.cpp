@@ -1,3 +1,6 @@
+        
+#include <math.h>
+
 #ifdef WIN32
 #ifdef __MINGW32__
     #define _WIN32_WINNT 0x0500
