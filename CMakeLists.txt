@@ -162,7 +162,7 @@ IF(NOT APPLE)
     MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
 
     IF(OPENMP_FOUND)
-        ADD_DEFINITIONS(${OpenMP_CXX_FLAGS})
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
             SET(OPENMP_LDFLAGS "-lgomp")
         ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
