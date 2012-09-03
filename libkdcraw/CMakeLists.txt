@@ -48,15 +48,18 @@ SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} S
 
 INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL(FILES rawdecodingsettings.h
-              kdcraw.h
-              dcrawsettingswidget.h
-              rnuminput.h
-              rcombobox.h
-              rexpanderbox.h
-              squeezedcombobox.h
-              dcrawinfocontainer.h
-              rawfiles.h
-              libkdcraw_export.h
-              ${CMAKE_CURRENT_BINARY_DIR}/version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
+    INSTALL(FILES rawdecodingsettings.h
+                  kdcraw.h
+                  dcrawsettingswidget.h
+                  rnuminput.h
+                  rcombobox.h
+                  rexpanderbox.h
+                  squeezedcombobox.h
+                  dcrawinfocontainer.h
+                  rawfiles.h
+                  libkdcraw_export.h
+                  ${CMAKE_CURRENT_BINARY_DIR}/version.h
+            DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
+ENDIF()
