@@ -287,9 +287,8 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     }
     d->setProgress(0.3);
 
-    raw.imgdata.params.output_bps    = 16;
-//    raw.imgdata.params.document_mode = 2;
-    raw.imgdata.params.shot_select   = shotSelect;
+    raw.imgdata.params.output_bps  = 16;
+    raw.imgdata.params.shot_select = shotSelect;
 
     ret = raw.unpack();
     if (ret != LIBRAW_SUCCESS)
