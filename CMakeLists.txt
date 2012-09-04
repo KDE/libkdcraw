@@ -175,6 +175,9 @@ ENDIF(NOT APPLE)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
+# Flag to use libjpeg with LibRaw DNG lossy codec
+ADD_DEFINITIONS(-DUSE_JPEG)
+
 # Flag to include demosaic pack GPL2
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 
