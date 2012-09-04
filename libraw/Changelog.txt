@@ -1,12 +1,93 @@
-2012-06-27 Alex Tutubalin <lexa@lexa.ru>
-        * Imported dcraw 9.15 (1.449):
-          - New cameras supported: Canon 5D Mark III, G1 X, 1D X and Powershot SX200;
-            Nikon D4,D800/D800E and D3200; Fuji X-S1 and HS30EXR; Casio EX-Z8;
-            Olympus E-M5; Panasonic GF5; Sony NEX-F3, SLT-A37 and SLT-A57;
-            Samsung NX20 and NX210;
-          - Support for updated Samsung NX200 firmware.
-        * Makefile.msvc: additional compiler flags
-        * LibRaw 0.14.7-Release
+2012-08-20 Alex Tutubalin <lexa@lexa.ru>
+   * reverted (internal) changes to PhaseOne processing
+   * subtract_black() works again
+   * cropping works again (note: for Fuji SuperCCD files cropping is
+     approximate)
+   * color_data.channel_maximum[4] is replaced to color_data.data_maximum
+     (max value from all image color channels). This value is calculated
+     on subtract_black() call.
+   * PhaseOne (compressed RAW): black level subtracted on postprocessing
+     stage (or in raw2image() call). It requires addtional memory 
+     allocation.
+   * Fixed minor problem in lossy DNG tone curve generation
+   * Imported dcraw 1.452:
+     - Changed color data for Canon 1D-X camera
+     - New camera support: Samsung NX-1000, Sony DSC-RX100
+
+   * LibRaw 0.15.0-Alpha2
+
+2012-07-03 Alex Tutubalin <lexa@lexa.ru>
+    === LibRaw 0.15 (Alpha1) ===
+    1) API Changes:
+     =>  Removed, because no one uses it:
+          * LibRaw::dcraw_document_mode_processing (and C-API call)
+          * Data field imgdata.color.color_flags
+
+     =>  Removed, because internal logic changed:
+          * LIBRAW_DECODER_4COMPONENTS
+            Now unpack() unpacks RAW data in only two possible formats:
+             i. imgdata.rawdata.raw_image[] - flat buffer with bayer data
+              (one value per pixel) with masked pixels.
+             ii. imgdata.rawdata.color_image - 4-components array (similar
+              to imgdata.image) with 3 or 4 components per pixel and
+              without masked pixels.
+
+      =>  Changed:
+           * imgdata.color.cblack[4] instead of [8] - for now cblack[4..7]
+             (count of pixels used for black level calculation) is not used,
+             so removed
+            * LibRaw::fc() renamed to LibRaw::fcol() to maintain compatibility
+             with dcraw internals
+
+      => Temporary not working properly or disabled (to be fixed in next 
+         Alpha-versions, see also TODO section below)
+            * imgdata.params.cropbox[] - cropping not works yet, so disabled
+            * LibRaw::subtract_black() - don't works properly, so not used
+              in LibRaw internals until next Alpha
+
+       => Added:
+            * WF debanding code (banding suppression):
+              int imgdata.params.wf_debanding - enables debanding
+              float imgdata.params.wf_deband_threshold[4] - set threshold
+              levels for debanding (in pixel values, so usual value is several units)
+            * LibRaw::open_wfile(wchar_t *filename) (WIN32 only) - opens
+              RAW filename passed in Windows unicode encoding.
+            * imgdata.params.user_cblack[4] - allows to set per-channel
+              black levels
+   	    * User-provided data streams (derived from 
+	      LibRaw_abstract_datastream) should implement jpeg_src() method 
+	      to provide data source for JPEG decoder used in lossy DNG 
+	      processing. See src/libraw_datastream.cpp for sample 
+	      implementation.   
+
+     2) Imported dcraw 9.16/1.450, added support for several cameras:
+        Adobe DNG: Fast Load DNG (LightRoom 4.x),lossy-compressed DNG (LR 4.x,
+        you need to compile with -DUSE_JPEG and link with libjpeg 8)
+        Canon: G1 X, SX220 HS, EOS 5D Mark III, EOS 650D, EOS 1D-X
+        Casio: EX-Z8
+        Fujifilm: X-S1, HS30EXR, X1-Pro
+        Nikon: D4, D3200, D800, D800E
+        Olympus: E-M5
+        Panasonic: DMC-GF5
+        Samsung: NX20, NX210, ?>445@6:0 =>2>3> firmware NX100
+        Sigma: SD15,SD1, SD1 Merill, DP1, DP1S, DP1X, DP2, DP2S, DP2X 
+        (in LibRaw-demosaic-pack-GPL2)
+        Sony: NEX-F3, SLT-A37, SLT-A57
+
+    3) TODO (additional to 'not working' section above)
+         * Sony ARW2 Hack - turns off division by 4 of RAW values unpacked from
+             sony ARW2 files. 
+           int imgdata.params.sony_arw2_hack;
+         * Some optimizations introduced in previous LibRaw versions are
+           temporarilyy removed:
+            - OpenMP
+            - One pass data copy + black subtraction + fuji data rotation
+              (LibRaw::raw2image_ex() )
+            - Callbacks for more efficient data handling (SSE2 or multithreaded)
+              introduced in 0.15-PreAlpha
+	    - Fast LJPEG decoder
+         * Black level subtraction for Phase One files is performed on unpack()
+           stage, not on postprocessing one.
 
 2012-04-11 Alex Tutubalin <lexa@lexa.ru>
         * Fixed thumbnail processing (esp. for Adobe Lightroom DNGs)
