@@ -146,7 +146,25 @@ ELSE (ENABLE_LCMS2)
 ENDIF (ENABLE_LCMS2)
 
 FIND_PACKAGE(JPEG)
-MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" TRUE "" "Required by libkdcraw")
+if(JPEG_FOUND)
+  # check version of libjpeg
+  # inspired from digikam/CMakeLists.txt
+  set(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
+  set(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
+  file(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
+  set(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
+
+  try_compile(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
+    CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
+    COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var)
+
+  if(_jpeglib_version_compile_result)
+    message(STATUS "Identified libjpeg version less than 80 (too low)")
+    set(JPEG_FOUND FALSE)
+  endif()
+endif(JPEG_FOUND)
+
+MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" FALSE "80" "needed for the LibRaw DNG lossy codec")
 
 # To prevent warnings from M$ compiler
 IF(WIN32 AND MSVC)
@@ -176,7 +194,9 @@ ENDIF(NOT APPLE)
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
-ADD_DEFINITIONS(-DUSE_JPEG)
+if(JPEG_FOUND)
+  ADD_DEFINITIONS(-DUSE_JPEG)
+endif()
 
 # Flag to include demosaic pack GPL2
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
@@ -194,11 +214,13 @@ ENDIF(WIN32)
 
 # ==================================================================================================
 
-INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/libraw
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL3
                    )
+if(JPEG_FOUND)
+  include_directories(${JPEG_INCLUDE_DIR})
+endif()
 
 # Do not compile LibRaw with KDE FINAL mode.
 KDE4_NO_ENABLE_FINAL(libraw)
@@ -226,9 +248,11 @@ KDE4_ADD_LIBRARY(libraw STATIC ${libraw_LIB_SRCS})
 TARGET_LINK_LIBRARIES(libraw
                       ${MATH_LIBRARY}
                       ${LCMS2_LIBRARIES}
-                      ${JPEG_LIBRARY}
                       ${OPENMP_LDFLAGS}
                      )
+if(JPEG_FOUND)
+  target_link_libraries(libraw ${JPEG_LIBRARY})
+endif()
 
 SET_TARGET_PROPERTIES(libraw PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
 
