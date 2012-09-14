@@ -37,14 +37,20 @@ int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int exp
 {
     if (data)
     {
-        KDcraw::KDcrawPriv* d = static_cast<KDcraw::KDcrawPriv*>(data);
-        if (d) return d->progressCallback(p, iteration, expected);
+        KDcraw::KDcrawPriv* const d = static_cast<KDcraw::KDcrawPriv*>(data);
+
+        if (d)
+        {
+            return d->progressCallback(p, iteration, expected);
+        }
     }
 
     return 0;
 }
 
-KDcraw::KDcrawPriv::KDcrawPriv(KDcraw* p)
+// --------------------------------------------------------------------------------------------------
+
+KDcraw::KDcrawPriv::KDcrawPriv(KDcraw* const p)
 {
     m_progress = 0.0;
     m_parent   = p;
@@ -54,7 +60,7 @@ KDcraw::KDcrawPriv::~KDcrawPriv()
 {
 }
 
-void KDcraw::KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img)
+void KDcraw::KDcrawPriv::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img)
 {
     QString header = QString("P%1\n%2 %3\n%4\n").arg(img->colors == 3 ? "6" : "5")
                                                 .arg(img->width)
@@ -73,11 +79,11 @@ int KDcraw::KDcrawPriv::progressCallback(enum LibRaw_progress p, int iteration, 
     setProgress(progressValue()+0.01);
 
     // Clean processing termination by user...
-    if(m_parent->checkToCancelWaitingData())
+    if (m_parent->checkToCancelWaitingData())
     {
         kDebug() << "LibRaw process terminaison invoked...";
         m_parent->m_cancel = true;
-        m_progress = 0.0;
+        m_progress         = 0.0;
         return 1;
     }
 
@@ -96,7 +102,7 @@ double KDcraw::KDcrawPriv::progressValue() const
     return m_progress;
 }
 
-void KDcraw::KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& identify)
+void KDcraw::KDcrawPriv::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify)
 {
     identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
     identify.make             = QString(raw->imgdata.idata.make);
@@ -119,32 +125,43 @@ void KDcraw::KDcrawPriv::fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& iden
     identify.rawColors        = raw->imgdata.idata.colors;
     identify.rawImages        = raw->imgdata.idata.raw_count;
     identify.blackPoint       = raw->imgdata.color.black;
+
     for (int ch = 0; ch < 8; ch++)
     {
         identify.blackPointCh[ch] = raw->imgdata.color.cblack[ch];
     }
+
     identify.whitePoint       = raw->imgdata.color.maximum;
     identify.orientation      = (DcrawInfoContainer::ImageOrientation)raw->imgdata.sizes.flip;
+
     memcpy(&identify.cameraColorMatrix1, &raw->imgdata.color.cmatrix, sizeof(raw->imgdata.color.cmatrix));
     memcpy(&identify.cameraColorMatrix2, &raw->imgdata.color.rgb_cam, sizeof(raw->imgdata.color.rgb_cam));
     memcpy(&identify.cameraXYZMatrix,    &raw->imgdata.color.cam_xyz, sizeof(raw->imgdata.color.cam_xyz));
 
     if (raw->imgdata.idata.filters)
     {
-        if (!raw->imgdata.idata.cdesc[3]) raw->imgdata.idata.cdesc[3] = 'G';
+        if (!raw->imgdata.idata.cdesc[3])
+            raw->imgdata.idata.cdesc[3] = 'G';
+
         for (int i=0; i < 16; i++)
+        {
             identify.filterPattern.append(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1,i & 1)]);
+        }
 
         identify.colorKeys = raw->imgdata.idata.cdesc;
     }
 
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)
+    {
         identify.daylightMult[c] = raw->imgdata.color.pre_mul[c];
+    }
 
     if (raw->imgdata.color.cam_mul[0] > 0)
     {
         for(int c = 0 ; c < 4 ; c++)
+        {
             identify.cameraMult[c] = raw->imgdata.color.cam_mul[c];
+        }
     }
 }
 

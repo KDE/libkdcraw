@@ -57,19 +57,19 @@ class KDcraw::KDcrawPriv
 
 public:
 
-    KDcrawPriv(KDcraw* p);
+    KDcrawPriv(KDcraw* const p);
     ~KDcrawPriv();
 
 public:
 
-    static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t* img);
-
-    static void fillIndentifyInfo(LibRaw* raw, DcrawInfoContainer& identify);
-
-    int progressCallback(enum LibRaw_progress p, int iteration, int expected);
+    int    progressCallback(enum LibRaw_progress p, int iteration, int expected);
 
     void   setProgress(double value);
     double progressValue() const;
+
+    static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img);
+
+    static void fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify);
 
 private:
 
