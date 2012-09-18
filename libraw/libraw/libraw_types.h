@@ -163,7 +163,8 @@ typedef struct
 typedef struct
 {
     ushort      raw_height, 
-                raw_width, 
+                raw_width,
+                raw_pitch,
                 height, 
                 width, 
                 top_margin, 
@@ -295,6 +296,8 @@ typedef struct
    /* WF debanding */
     int   wf_debanding;
     float wf_deband_treshold[4];
+	/* Raw speed */
+	int use_rawspeed;
 }libraw_output_params_t;
 
 typedef struct

@@ -96,7 +96,6 @@ class DllDef LibRaw
     int verbose;
 
     LibRaw(unsigned int flags = LIBRAW_OPTIONS_NONE);
-    
     libraw_output_params_t*     output_params_ptr() { return &imgdata.params;}
     int                         open_file(const char *fname, INT64 max_buffered_sz=LIBRAW_USE_STREAMS_DATASTREAM_MAXSIZE);
 #ifdef WIN32
@@ -110,7 +109,7 @@ class DllDef LibRaw
     int                         adjust_sizes_info_only(void);
     void                        subtract_black();
     int                         raw2image();
-    int                         raw2image_ex();
+    int                         raw2image_ex(int do_subtract_black);
     void                        raw2image_start();
     void                        free_image();
     int                         adjust_maximum();
@@ -140,7 +139,7 @@ class DllDef LibRaw
 
     /* free all internal data structures */
     void         recycle(); 
-    virtual ~LibRaw(void) { recycle(); delete tls; }
+    virtual ~LibRaw(void); 
 
     int COLOR(int row, int col) { return libraw_internal_data.internal_output_params.fuji_width? FCF(row,col):FC(row,col);}
  
@@ -154,8 +153,23 @@ class DllDef LibRaw
     /* Debanding filter */
     int                         wf_remove_banding();
 
+  /* Phase one correction/subtractBL calls */
+  void phase_one_subtract_black(ushort *src, ushort *dest);
+  void        phase_one_correct();
+  int set_rawspeed_camerafile(char *filename);
+
 
 protected:
+    void phase_one_allocate_tempbuffer();
+    void phase_one_free_tempbuffer();
+    virtual int  is_phaseone_compressed();
+    /* Hotspots */
+    virtual void copy_fuji_uncropped(unsigned short cblack[4], unsigned short *dmaxp);
+    virtual void copy_bayer(unsigned short cblack[4], unsigned short *dmaxp);
+    virtual void fuji_rotate();
+    virtual void convert_to_rgb_loop(float out_cam[3][4]);
+    virtual void lin_interpolate_loop(int code[16][16][32],int size);
+    virtual void scale_colors_loop(float scale_mul[4]);
 
     int FCF(int row,int col) { 
         int rr,cc;
@@ -169,8 +183,7 @@ protected:
         return FC(rr,cc);
     }
 
-    virtual void copy_fuji_uncropped();
-    virtual void copy_bayer();
+    void adjust_bl();
     void*        malloc(size_t t);
     void*        calloc(size_t n,size_t t);
     void*        realloc(void *p, size_t s);
@@ -186,6 +199,7 @@ protected:
     libraw_callbacks_t callbacks;
 
     LibRaw_constants rgb_constants;
+
     void        (LibRaw:: *write_thumb)();
     void        (LibRaw:: *write_fun)();
     void        (LibRaw:: *load_raw)();
@@ -200,7 +214,6 @@ protected:
     void        identify2(unsigned, unsigned, char*);
     void        write_ppm_tiff ();
     void        convert_to_rgb();
-	virtual		void convert_to_rgb_loop(float out_cam[3][4]);
     void        remove_zeroes();
     void        crop_masked_pixels();
 #ifndef NO_LCMS
@@ -235,13 +248,11 @@ protected:
     void        hat_transform (float *temp, float *base, int st, int size, int sc);
     void        wavelet_denoise();
     void        scale_colors();
-	virtual void scale_colors_loop(float scale_mul[4]);
     void        median_filter ();
     void        blend_highlights();
     void        recover_highlights();
     void        green_matching();
 
-    void        fuji_rotate();
     void        stretch();
 
     void        foveon_thumb ();
@@ -258,6 +269,11 @@ protected:
 
     int         flip_index (int row, int col);
     void        gamma_curve (double pwr, double ts, int mode, int imax);
+
+  /* RawSpeed data */
+  void		*_rawspeed_camerameta;
+  void	    *_rawspeed_decoder;
+  void		fix_after_rawspeed();
 
 
 #ifdef LIBRAW_LIBRARY_BUILD 

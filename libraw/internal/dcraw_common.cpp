@@ -2897,7 +2897,7 @@ void CLASS crop_masked_pixels()
   int row, col;
   unsigned 
 #ifndef LIBRAW_LIBRARY_BUILD
-    r,
+    r, raw_pitch = raw_width,
 #endif
     c, m, mblack[8], zero, val;
 
@@ -2957,14 +2957,16 @@ mask_set:
     for (row=mask[m][0]; row < mask[m][2]; row++)
       for (col=mask[m][1]; col < mask[m][3]; col++) {
 	c = FC(row-top_margin,col-left_margin);
-	mblack[c] += val = RAW(row,col);
+	mblack[c] += val = raw_image[(row)*raw_pitch+(col)];
 	mblack[4+c]++;
 	zero += !val;
       }
   if (load_raw == &CLASS canon_600_load_raw && width < raw_width) {
     black = (mblack[0]+mblack[1]+mblack[2]+mblack[3]) /
 	    (mblack[4]+mblack[5]+mblack[6]+mblack[7]) - 4;
+#ifndef LIBRAW_LIBRARY_BUILD
     canon_600_correct();
+#endif
   } else if (zero < mblack[4] && mblack[5] && mblack[6] && mblack[7])
     FORC4 cblack[c] = mblack[c] / mblack[4+c];
 }
@@ -3586,11 +3588,35 @@ void CLASS border_interpolate (int border)
     }
 }
 
+void CLASS lin_interpolate_loop(int code[16][16][32],int size)
+{
+  int row;
+#if defined(LIBRAW_USE_OPENMP)
+#pragma omp parallel default(shared)
+#endif
+  for (row=1; row < height-1; row++)
+    {
+      int col,*ip;
+      ushort *pix;
+      for (col=1; col < width-1; col++) {
+        int i;
+        int sum[4];
+        pix = image[row*width+col];
+        ip = code[row % size][col % size];
+        memset (sum, 0, sizeof sum);
+        for (i=*ip++; i--; ip+=3)
+          sum[ip[2]] += pix[ip[0]] << ip[1];
+        for (i=colors; --i; ip+=2)
+          pix[ip[0]] = sum[ip[0]] * ip[1] >> 8;
+      }
+    }
+}
+
 void CLASS lin_interpolate()
 {
   int code[16][16][32], size=16, *ip, sum[4];
-  int f, c, i, x, y, row, col, shift, color;
-  ushort *pix;
+  int f, c, x, y, row, col, shift, color;
+
 
 #ifdef DCRAW_VERBOSE
   if (verbose) fprintf (stderr,_("Bilinear interpolation...\n"));
@@ -3626,16 +3652,7 @@ void CLASS lin_interpolate()
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,1,3);
 #endif
-  for (row=1; row < height-1; row++)
-    for (col=1; col < width-1; col++) {
-      pix = image[row*width+col];
-      ip = code[row % size][col % size];
-      memset (sum, 0, sizeof sum);
-      for (i=*ip++; i--; ip+=3)
-	sum[ip[2]] += pix[ip[0]] << ip[1];
-      for (i=colors; --i; ip+=2)
-	pix[ip[0]] = sum[ip[0]] * ip[1] >> 8;
-    }
+  lin_interpolate_loop(code,size);
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_INTERPOLATE,2,3);
 #endif
