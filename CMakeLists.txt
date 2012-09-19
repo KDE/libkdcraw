@@ -29,7 +29,8 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 MESSAGE(STATUS "----------------------------------------------------------------------------------")
 MESSAGE(STATUS "Starting CMake configuration for: libkdcraw")
 
-OPTION(ENABLE_LCMS2 "Link libraw to LCMS2 else LCMS1 (default=OFF)" OFF)
+OPTION(ENABLE_LCMS2    "Link libraw to LCMS2 else LCMS1 (default=OFF)"    OFF)
+OPTION(ENABLE_RAWSPEED "Compile libraw with RawSpeed codec (default=OFF)" OFF)
 
 FIND_PACKAGE(KDE4 REQUIRED)
 INCLUDE(KDE4Defaults)
@@ -204,7 +205,7 @@ ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 # Flag to include demosaic pack GPL3
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
-# LibRaw use C++ exception.
+# LibRaw use C++ exception
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 # Under Windows, use specific flag to compile.
@@ -212,15 +213,124 @@ IF(WIN32)
     ADD_DEFINITIONS(-DDJGPP)
 ENDIF(WIN32)
 
+IF(JPEG_FOUND)
+    INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
+ENDIF()
+
+# For RawSpeed
+FIND_PACKAGE(LibXml2)
+
+IF(ENABLE_RAWSPEED AND JPEG_FOUND AND LIBXML2_FOUND)
+
+    MESSAGE(STATUS "LibRaw will be compiled with RawSpeed codec")
+    SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
+
+ELSE()
+
+    IF (NOT JPEG_FOUND)
+        MESSAGE(STATUS "LibJPEG depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
+    IF (NOT LIBXML2_FOUND)
+        MESSAGE(STATUS "LibXML2 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
+    IF (NOT ENABLE_RAWSPEED)
+        MESSAGE(STATUS "LibRaw will not be compiled with RawSpeed codec")
+    ENDIF()
+
+    SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
+
+ENDIF()
+
+# ==================================================================================================
+
+IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed)
+
+    INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+
+    # Flag to include RawSpeed codec with Libraw
+    ADD_DEFINITIONS(-DUSE_RAWSPEED)
+
+    ADD_DEFINITIONS(${LIBXML2_DEFINITIONS})
+
+    # Do not compile RawSpeed with KDE FINAL mode.
+    KDE4_NO_ENABLE_FINAL(librawspeed)
+
+    SET(librawspeed_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/ArwDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/BitPumpJPEG.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/BitPumpMSB.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/BitPumpMSB32.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/BitPumpPlain.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/BlackArea.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/ByteStream.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/ByteStreamSwap.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/Camera.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/CameraMetaData.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/CameraMetadataException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/CameraSensorInfo.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/ColorFilterArray.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/Common.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/Cr2Decoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/DngDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/DngDecoderSlices.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/DngOpcodes.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/FileIOException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/FileMap.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/IOException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/LJpegDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/LJpegPlain.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/NefDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/NikonDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/OrfDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/PefDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/PentaxDecompressor.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawDecoderException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawImage.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawImageDataFloat.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawImageDataU16.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/RawParser.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/Rw2Decoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/SrwDecoder.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffEntry.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffEntryBE.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffIFD.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffIFDBE.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffParser.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffParserException.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffParserHeaderless.cpp
+                             ${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed/TiffParserOlympus.cpp
+    )
+
+    # Disable compilation warnings from RawSpeed. Just to be clear on the console.
+    # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
+    FOREACH(_curentfile ${librawspeed_LIB_SRCS})
+        IF(WIN32 AND MSVC)
+            SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
+        ELSE(WIN32 AND MSVC)
+            SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC")
+        ENDIF(WIN32 AND MSVC)
+    ENDFOREACH(_curentfile ${librawspeed_LIB_SRCS})
+
+    KDE4_ADD_LIBRARY(librawspeed STATIC ${librawspeed_LIB_SRCS})
+
+    TARGET_LINK_LIBRARIES(librawspeed
+                        ${MATH_LIBRARY}
+                        ${JPEG_LIBRARY}
+                        ${LIBXML2_LIBRARIES}
+                        )
+
+ENDIF()
+
 # ==================================================================================================
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL3
                    )
-IF(JPEG_FOUND)
-    INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
-ENDIF()
 
 # Do not compile LibRaw with KDE FINAL mode.
 KDE4_NO_ENABLE_FINAL(libraw)
@@ -233,7 +343,7 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/libraw/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/src/libraw_datastream.cpp
    )
 
-# Disable dcraw C Ansi code warnings from LibRaw. Just to be clear on the console.
+# Disable compilation warnings from LibRaw. Just to be clear on the console.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
 FOREACH(_curentfile ${libraw_LIB_SRCS})
     IF(WIN32 AND MSVC)

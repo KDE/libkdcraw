@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2011 by Gilles Caulier
+# @author Copyright (C) 2006-2012 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -35,6 +35,11 @@ MACRO(LIBKDCRAW_BUILD_TEST)
     KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
 
     TARGET_LINK_LIBRARIES(${_target} libraw ${CMAKE_THREAD_LIBS_INIT} ${OPENMP_LDFLAGS})
+
+    IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+        TARGET_LINK_LIBRARIES(${_target} librawspeed)
+    ENDIF()
+
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
     ENDIF(WIN32)
