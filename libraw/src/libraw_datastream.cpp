@@ -5,6 +5,7 @@
 #endif
 #endif
 
+#include <math.h>
 #define LIBRAW_LIBRARY_BUILD
 #include "libraw/libraw_types.h"
 #include "libraw/libraw.h"
