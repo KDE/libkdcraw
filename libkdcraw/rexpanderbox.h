@@ -9,7 +9,7 @@
  *
  * @author Copyright (C) 2008-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2008-2011 by Marcel Wiesweg
+ * @author Copyright (C) 2008-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Manuel Viet
  *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>
@@ -56,8 +56,8 @@ class LIBKDCRAW_EXPORT RClickLabel : public QLabel
 
 public:
 
-    RClickLabel(QWidget* parent = 0);
-    explicit RClickLabel(const QString& text, QWidget* parent = 0);
+    RClickLabel(QWidget* const parent = 0);
+    explicit RClickLabel(const QString& text, QWidget* const parent = 0);
     ~RClickLabel();
 
 Q_SIGNALS:
@@ -82,8 +82,8 @@ class LIBKDCRAW_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
 
 public:
 
-    RSqueezedClickLabel(QWidget* parent = 0);
-    explicit RSqueezedClickLabel(const QString& text, QWidget* parent = 0);
+    RSqueezedClickLabel(QWidget* const parent = 0);
+    explicit RSqueezedClickLabel(const QString& text, QWidget* const parent = 0);
     ~RSqueezedClickLabel();
 
 Q_SIGNALS:
@@ -106,7 +106,7 @@ class LIBKDCRAW_EXPORT RArrowClickLabel : public QWidget
 
 public:
 
-    RArrowClickLabel(QWidget* parent = 0);
+    RArrowClickLabel(QWidget* const parent = 0);
     ~RArrowClickLabel();
 
     void setArrowType(Qt::ArrowType arrowType);
@@ -139,7 +139,7 @@ class LIBKDCRAW_EXPORT RLabelExpander : public QWidget
 
 public:
 
-    RLabelExpander(QWidget* parent = 0);
+    RLabelExpander(QWidget* const parent = 0);
     ~RLabelExpander();
 
     void setCheckBoxVisible(bool b);
@@ -157,7 +157,7 @@ public:
     void setIcon(const QPixmap& pix);
     const QPixmap* icon() const;
 
-    void setWidget(QWidget* widget);
+    void setWidget(QWidget* const widget);
     QWidget* widget() const;
 
     void setExpanded(bool b);
@@ -181,8 +181,8 @@ private:
 
 private:
 
-    class RLabelExpanderPriv;
-    RLabelExpanderPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -193,7 +193,7 @@ class LIBKDCRAW_EXPORT RExpanderBox : public QScrollArea
 
 public:
 
-    RExpanderBox(QWidget* parent = 0);
+    RExpanderBox(QWidget* const parent = 0);
     ~RExpanderBox();
 
     /** Add RLabelExpander item at end of box layout with these settings :
@@ -203,9 +203,9 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void addItem(QWidget* w, const QPixmap& pix, const QString& txt,
+    void addItem(QWidget* const w, const QPixmap& pix, const QString& txt,
                  const QString& objName, bool expandBydefault);
-    void addItem(QWidget* w, const QString& txt,
+    void addItem(QWidget* const w, const QString& txt,
                  const QString& objName, bool expandBydefault);
 
     /** Insert RLabelExpander item at box layout index with these settings :
@@ -215,9 +215,9 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void insertItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
+    void insertItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
                     const QString& objName, bool expandBydefault);
-    void insertItem(int index, QWidget* w, const QString& txt,
+    void insertItem(int index, QWidget* const w, const QString& txt,
                     const QString& objName, bool expandBydefault);
 
     void removeItem(int index);
@@ -249,7 +249,7 @@ public:
     int  count() const;
 
     RLabelExpander* widget(int index) const;
-    int indexOf(RLabelExpander* widget) const;
+    int indexOf(RLabelExpander* const widget) const;
 
     virtual void readSettings(KConfigGroup& group);
     virtual void writeSettings(KConfigGroup& group);
@@ -266,8 +266,8 @@ private Q_SLOTS:
 
 private:
 
-    class RExpanderBoxPriv;
-    RExpanderBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // -------------------------------------------------------------------------
@@ -278,7 +278,7 @@ class LIBKDCRAW_EXPORT RExpanderBoxExclusive : public RExpanderBox
 
 public:
 
-    RExpanderBoxExclusive(QWidget* parent = 0);
+    RExpanderBoxExclusive(QWidget* const parent = 0);
     ~RExpanderBoxExclusive();
 
     /** Show one expander open at most */

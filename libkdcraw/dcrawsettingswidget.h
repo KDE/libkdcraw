@@ -75,16 +75,16 @@ public:
     /**
      * @param advSettings the default value is COLORSPACE
      */
-    explicit DcrawSettingsWidget(QWidget* parent, int advSettings = COLORSPACE);
+    explicit DcrawSettingsWidget(QWidget* const parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
-    KUrlRequester* inputProfileUrlEdit() const;
+    KUrlRequester* inputProfileUrlEdit()  const;
     KUrlRequester* outputProfileUrlEdit() const;
 
     void setup(int advSettings);
 
     void setEnabledBrightnessSettings(bool b);
-    bool brightnessSettingsIsEnabled();
+    bool brightnessSettingsIsEnabled() const;
 
     void updateMinimumWidth();
 
@@ -117,8 +117,8 @@ private Q_SLOTS:
 
 private:
 
-    class DcrawSettingsWidgetPriv;
-    DcrawSettingsWidgetPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // NameSpace KDcrawIface

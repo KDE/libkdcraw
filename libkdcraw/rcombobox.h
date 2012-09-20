@@ -46,14 +46,14 @@ class LIBKDCRAW_EXPORT RComboBox : public KHBox
 
 public:
 
-    RComboBox(QWidget* parent=0);
+    RComboBox(QWidget* const parent=0);
     ~RComboBox();
 
     void setCurrentIndex(int d);
-    int  currentIndex();
+    int  currentIndex() const;
 
     void setDefaultIndex(int d);
-    int  defaultIndex();
+    int  defaultIndex() const;
 
     KComboBox* combo() const;
 
@@ -77,8 +77,8 @@ private Q_SLOTS:
 
 private:
 
-    class RComboBoxPriv;
-    RComboBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KDcrawIface

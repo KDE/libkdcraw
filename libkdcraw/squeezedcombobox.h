@@ -61,7 +61,7 @@ public:
      * @param parent parent widget
      * @param name name to give to the widget
      */
-    explicit SqueezedComboBox(QWidget* parent = 0, const char* name = 0 );
+    explicit SqueezedComboBox(QWidget* const parent = 0, const char* name = 0 );
     /**
      * destructor
      */
@@ -118,14 +118,14 @@ public:
      * highlighted item.
      * @return full text of the highlighted item
      */
-    QString itemHighlighted();
+    QString itemHighlighted() const;
 
     /**
      * This method returns the full text (not squeezed) for the index.
      * @param index the position in the widget.
      * @return full text of the item
      */
-    QString item(int index);
+    QString item(int index) const;
 
     /**
      * Sets the sizeHint() of this widget.
@@ -140,7 +140,7 @@ private Q_SLOTS:
 private:
 
     void    resizeEvent(QResizeEvent*);
-    QString squeezeText(const QString& original);
+    QString squeezeText(const QString& original) const;
 
     // Prevent these from being used.
     QString currentText() const;
@@ -156,8 +156,8 @@ private:
 
 private:
 
-    class SqueezedComboBoxPriv;
-    SqueezedComboBoxPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KDcrawIface

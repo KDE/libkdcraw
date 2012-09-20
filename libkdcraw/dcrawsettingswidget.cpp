@@ -60,11 +60,11 @@
 namespace KDcrawIface
 {
 
-class DcrawSettingsWidget::DcrawSettingsWidgetPriv
+class DcrawSettingsWidget::Private
 {
 public:
 
-    DcrawSettingsWidgetPriv()
+    Private()
     {
         autoBrightnessBox              = 0;
         sixteenBitsImage               = 0;
@@ -182,8 +182,8 @@ public:
     RDoubleNumInput* expoCorrectionHighlightSpinBox;
 };
 
-DcrawSettingsWidget::DcrawSettingsWidget(QWidget* parent, int advSettings)
-    : RExpanderBox(parent), d(new DcrawSettingsWidgetPriv)
+DcrawSettingsWidget::DcrawSettingsWidget(QWidget* const parent, int advSettings)
+    : RExpanderBox(parent), d(new Private)
 {
     setup(advSettings);
 }
@@ -1044,7 +1044,7 @@ void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)
     d->brightnessSpinBox->setEnabled(b);
 }
 
-bool DcrawSettingsWidget::brightnessSettingsIsEnabled()
+bool DcrawSettingsWidget::brightnessSettingsIsEnabled() const
 {
     return d->brightnessSpinBox->isEnabled();
 }

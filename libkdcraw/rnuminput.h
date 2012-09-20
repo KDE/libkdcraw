@@ -46,16 +46,16 @@ class LIBKDCRAW_EXPORT RIntNumInput : public KHBox
 
 public:
 
-    RIntNumInput(QWidget* parent=0);
+    RIntNumInput(QWidget* const parent=0);
     ~RIntNumInput();
 
-    int  value();
+    int  value() const;
 
     void setSliderEnabled(bool b);
     void setRange(int min, int max, int step);
 
     void setDefaultValue(int d);
-    int  defaultValue();
+    int  defaultValue() const;
 
     KIntNumInput* input() const;
 
@@ -75,8 +75,8 @@ private Q_SLOTS:
 
 private:
 
-    class RIntNumInputPriv;
-    RIntNumInputPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 // ---------------------------------------------------------
@@ -87,16 +87,16 @@ class LIBKDCRAW_EXPORT RDoubleNumInput : public KHBox
 
 public:
 
-    RDoubleNumInput(QWidget* parent=0);
+    RDoubleNumInput(QWidget* const parent=0);
     ~RDoubleNumInput();
 
-    double value();
+    double value() const;
 
     void   setDecimals(int p);
     void   setRange(double min, double max, double step, bool slider=true);
 
     void   setDefaultValue(double d);
-    double defaultValue();
+    double defaultValue() const;
 
     KDoubleNumInput* input() const;
 
@@ -116,8 +116,8 @@ private Q_SLOTS:
 
 private:
 
-    class RDoubleNumInputPriv;
-    RDoubleNumInputPriv* const d;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace KDcrawIface

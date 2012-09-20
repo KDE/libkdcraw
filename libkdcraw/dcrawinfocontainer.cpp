@@ -49,10 +49,12 @@ DcrawInfoContainer::DcrawInfoContainer()
     cameraMult[2]     = 0.0;
     cameraMult[3]     = 0.0;
     blackPoint        = 0;
+
     for (int ch=0; ch<8; ch++)
     {
         blackPointCh[ch] = 0;
     }
+
     whitePoint        = 0;
     topMargin         = 0;
     leftMargin        = 0;

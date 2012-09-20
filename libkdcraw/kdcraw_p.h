@@ -52,13 +52,13 @@ extern "C"
     int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int expected);
 }
 
-class KDcraw::KDcrawPriv
+class KDcraw::Private
 {
 
 public:
 
-    KDcrawPriv(KDcraw* const p);
-    ~KDcrawPriv();
+    Private(KDcraw* const p);
+    ~Private();
 
 public:
 
@@ -66,6 +66,9 @@ public:
 
     void   setProgress(double value);
     double progressValue() const;
+
+    bool loadFromLibraw(const QString& filePath, QByteArray& imageData,
+                        int& width, int& height, int& rgbmax);
 
     static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img);
 

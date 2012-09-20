@@ -9,7 +9,7 @@
  *
  * @author Copyright (C) 2006-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2011 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -124,6 +124,10 @@ public:
      */
     static bool librawUseGomp();
 
+    /** Return true if LibRaw use RawSpeed codec.
+     */
+    static bool librawUseRawSpeed();
+
 public:
 
     /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file.
@@ -203,19 +207,16 @@ protected:
      */
     virtual void setWaitingDataProgress(double value);
 
-private:
-
-    bool loadFromLibraw(const QString& filePath, QByteArray& imageData,
-                        int& width, int& height, int& rgbmax);
-
 public:
 
     // Declared public to be called externally by callbackForLibRaw() static method.
-    class KDcrawPriv;
+    class Private;
 
 private:
 
-    KDcrawPriv* const d;
+    Private* const d;
+
+    friend class Private;
 };
 
 }  // namespace KDcrawIface

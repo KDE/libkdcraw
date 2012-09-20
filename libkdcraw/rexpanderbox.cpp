@@ -9,7 +9,7 @@
  *
  * @author Copyright (C) 2008-2012 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2008-2011 by Marcel Wiesweg
+ * @author Copyright (C) 2008-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Manuel Viet
  *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>
@@ -52,14 +52,14 @@
 namespace KDcrawIface
 {
 
-RClickLabel::RClickLabel(QWidget* parent)
-           : QLabel(parent)
+RClickLabel::RClickLabel(QWidget* const parent)
+    : QLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
-RClickLabel::RClickLabel(const QString& text, QWidget* parent)
-           : QLabel(text, parent)
+RClickLabel::RClickLabel(const QString& text, QWidget* const parent)
+    : QLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
@@ -112,14 +112,14 @@ void RClickLabel::keyPressEvent(QKeyEvent* e)
 
 // ------------------------------------------------------------------------
 
-RSqueezedClickLabel::RSqueezedClickLabel(QWidget* parent)
-                   : KSqueezedTextLabel(parent)
+RSqueezedClickLabel::RSqueezedClickLabel(QWidget* const parent)
+    : KSqueezedTextLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
-RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget* parent)
-                   : KSqueezedTextLabel(text, parent)
+RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget* const parent)
+    : KSqueezedTextLabel(text, parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
@@ -172,8 +172,8 @@ void RSqueezedClickLabel::keyPressEvent(QKeyEvent* e)
 
 // ------------------------------------------------------------------------
 
-RArrowClickLabel::RArrowClickLabel(QWidget* parent)
-                : QWidget(parent), m_arrowType(Qt::DownArrow)
+RArrowClickLabel::RArrowClickLabel(QWidget* const parent)
+    : QWidget(parent), m_arrowType(Qt::DownArrow)
 {
     setCursor(Qt::PointingHandCursor);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -262,15 +262,16 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
         y = (height() - m_size) / 2;
     }
 
-    /*
+/*
     if (isDown())
     {
         ++x;
         ++y;
     }
-    */
+*/
 
     QStyle::PrimitiveElement e = QStyle::PE_IndicatorArrowLeft;
+
     switch (m_arrowType)
     {
         case Qt::LeftArrow:
@@ -302,12 +303,12 @@ QSize RArrowClickLabel::sizeHint() const
 
 // ------------------------------------------------------------------------
 
-class RLabelExpander::RLabelExpanderPriv
+class RLabelExpander::Private
 {
 
 public:
 
-    RLabelExpanderPriv()
+    Private()
     {
         clickLabel      = 0;
         containerWidget = 0;
@@ -334,8 +335,8 @@ public:
     RClickLabel*      clickLabel;
 };
 
-RLabelExpander::RLabelExpander(QWidget* parent)
-              : QWidget(parent), d(new RLabelExpanderPriv)
+RLabelExpander::RLabelExpander(QWidget* const parent)
+    : QWidget(parent), d(new Private)
 {
     d->grid        = new QGridLayout(this);
     d->line        = new KSeparator(Qt::Horizontal, this);
@@ -430,7 +431,7 @@ const QPixmap* RLabelExpander::icon() const
     return d->pixmapLabel->pixmap();
 }
 
-void RLabelExpander::setWidget(QWidget* widget)
+void RLabelExpander::setWidget(QWidget* const widget)
 {
     if (widget)
     {
@@ -503,20 +504,20 @@ bool RLabelExpander::eventFilter(QObject* obj, QEvent* ev)
 
 // ------------------------------------------------------------------------
 
-class RExpanderBox::RExpanderBoxPriv
+class RExpanderBox::Private
 {
 public:
 
-    RExpanderBoxPriv(RExpanderBox* box)
+    Private(RExpanderBox* const box)
     {
         parent = box;
         vbox   = 0;
     }
 
-    void createItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
+    void createItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
                     const QString& objName, bool expandBydefault)
     {
-        RLabelExpander* exp = new RLabelExpander(parent->viewport());
+        RLabelExpander* const exp = new RLabelExpander(parent->viewport());
         exp->setText(txt);
         exp->setIcon(pix);
         exp->setWidget(w);
@@ -551,8 +552,8 @@ public:
     RExpanderBox*          parent;
 };
 
-RExpanderBox::RExpanderBox(QWidget* parent)
-            : QScrollArea(parent), d(new RExpanderBoxPriv(this))
+RExpanderBox::RExpanderBox(QWidget* const parent)
+    : QScrollArea(parent), d(new Private(this))
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
@@ -597,13 +598,13 @@ bool RExpanderBox::isChecked(int index) const
     return d->wList[index]->isChecked();
 }
 
-void RExpanderBox::addItem(QWidget* w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::addItem(QWidget* const w, const QPixmap& pix, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
     d->createItem(-1, w, pix, txt, objName, expandBydefault);
 }
 
-void RExpanderBox::addItem(QWidget* w, const QString& txt,
+void RExpanderBox::addItem(QWidget* const w, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
     addItem(w, QPixmap(), txt, objName, expandBydefault);
@@ -614,7 +615,7 @@ void RExpanderBox::addStretch()
     d->vbox->addStretch(10);
 }
 
-void RExpanderBox::insertItem(int index, QWidget* w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::insertItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
     d->createItem(index, w, pix, txt, objName, expandBydefault);
@@ -622,7 +623,7 @@ void RExpanderBox::insertItem(int index, QWidget* w, const QPixmap& pix, const Q
 
 void RExpanderBox::slotItemExpanded(bool b)
 {
-    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    RLabelExpander* const exp = dynamic_cast<RLabelExpander*>(sender());
     if (exp)
     {
         int index = indexOf(exp);
@@ -632,7 +633,7 @@ void RExpanderBox::slotItemExpanded(bool b)
 
 void RExpanderBox::slotItemToggled(bool b)
 {
-    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    RLabelExpander* const exp = dynamic_cast<RLabelExpander*>(sender());
     if (exp)
     {
         int index = indexOf(exp);
@@ -640,7 +641,7 @@ void RExpanderBox::slotItemToggled(bool b)
     }
 }
 
-void RExpanderBox::insertItem(int index, QWidget* w, const QString& txt,
+void RExpanderBox::insertItem(int index, QWidget* const w, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
     insertItem(index, w, QPixmap(), txt, objName, expandBydefault);
@@ -718,7 +719,7 @@ RLabelExpander* RExpanderBox::widget(int index) const
     return d->wList[index];
 }
 
-int RExpanderBox::indexOf(RLabelExpander* widget) const
+int RExpanderBox::indexOf(RLabelExpander* const widget) const
 {
     for (int i = 0 ; i < count(); ++i)
     {
@@ -777,8 +778,8 @@ void RExpanderBox::writeSettings(KConfigGroup& group)
 
 // ------------------------------------------------------------------------
 
-RExpanderBoxExclusive::RExpanderBoxExclusive(QWidget* parent)
-                     : RExpanderBox(parent)
+RExpanderBoxExclusive::RExpanderBoxExclusive(QWidget* const parent)
+    : RExpanderBox(parent)
 {
     setIsToolBox(true);
 }
@@ -789,7 +790,7 @@ RExpanderBoxExclusive::~RExpanderBoxExclusive()
 
 void RExpanderBoxExclusive::slotItemExpanded(bool b)
 {
-    RLabelExpander* exp = dynamic_cast<RLabelExpander*>(sender());
+    RLabelExpander* const exp = dynamic_cast<RLabelExpander*>(sender());
     if (!exp) return;
 
     if (isToolBox() && b)

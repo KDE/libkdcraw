@@ -39,12 +39,12 @@
 namespace KDcrawIface
 {
 
-class RComboBox::RComboBoxPriv
+class RComboBox::Private
 {
 
 public:
 
-    RComboBoxPriv()
+    Private()
     {
         defaultIndex = 0;
         resetButton  = 0;
@@ -58,8 +58,8 @@ public:
     KComboBox*   combo;
 };
 
-RComboBox::RComboBox(QWidget* parent)
-         : KHBox(parent), d(new RComboBoxPriv)
+RComboBox::RComboBox(QWidget* const parent)
+         : KHBox(parent), d(new Private)
 {
     d->combo       = new KComboBox(this);
     d->resetButton = new QToolButton(this);
@@ -104,7 +104,7 @@ void RComboBox::insertItem(int index, const QString& t)
     d->combo->insertItem(index, t);
 }
 
-int RComboBox::currentIndex()
+int RComboBox::currentIndex() const
 {
     return d->combo->currentIndex();
 }
@@ -114,7 +114,7 @@ void RComboBox::setCurrentIndex(int v)
     d->combo->setCurrentIndex(v);
 }
 
-int RComboBox::defaultIndex()
+int RComboBox::defaultIndex() const
 {
     return d->defaultIndex;
 }

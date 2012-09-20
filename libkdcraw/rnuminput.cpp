@@ -40,12 +40,12 @@
 namespace KDcrawIface
 {
 
-class RIntNumInput::RIntNumInputPriv
+class RIntNumInput::Private
 {
 
 public:
 
-    RIntNumInputPriv()
+    Private()
     {
         defaultValue = 0;
         resetButton  = 0;
@@ -59,8 +59,8 @@ public:
     KIntNumInput* input;
 };
 
-RIntNumInput::RIntNumInput(QWidget* parent)
-            : KHBox(parent), d(new RIntNumInputPriv)
+RIntNumInput::RIntNumInput(QWidget* const parent)
+    : KHBox(parent), d(new Private)
 {
     d->input       = new KIntNumInput(this);
     d->resetButton = new QToolButton(this);
@@ -102,7 +102,7 @@ void RIntNumInput::setRange(int min, int max, int step)
     d->input->setRange(min, max, step);
 }
 
-int RIntNumInput::value()
+int RIntNumInput::value() const
 {
     return d->input->value();
 }
@@ -112,7 +112,7 @@ void RIntNumInput::setValue(int v)
     d->input->setValue(v);
 }
 
-int RIntNumInput::defaultValue()
+int RIntNumInput::defaultValue() const
 {
     return d->defaultValue;
 }
@@ -139,12 +139,12 @@ void RIntNumInput::slotValueChanged(int v)
 
 // ----------------------------------------------------
 
-class RDoubleNumInput::RDoubleNumInputPriv
+class RDoubleNumInput::Private
 {
 
 public:
 
-    RDoubleNumInputPriv()
+    Private()
     {
         defaultValue = 0.0;
         resetButton  = 0;
@@ -158,8 +158,8 @@ public:
     KDoubleNumInput* input;
 };
 
-RDoubleNumInput::RDoubleNumInput(QWidget* parent)
-               : KHBox(parent), d(new RDoubleNumInputPriv)
+RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
+    : KHBox(parent), d(new Private)
 {
     d->input       = new KDoubleNumInput(this);
     d->resetButton = new QToolButton(this);
@@ -201,7 +201,7 @@ void RDoubleNumInput::setRange(double min, double max, double step, bool slider)
     d->input->setRange(min, max, step, slider);
 }
 
-double RDoubleNumInput::value()
+double RDoubleNumInput::value() const
 {
     return d->input->value();
 }
@@ -211,7 +211,7 @@ void RDoubleNumInput::setValue(double v)
     d->input->setValue(v);
 }
 
-double RDoubleNumInput::defaultValue()
+double RDoubleNumInput::defaultValue() const
 {
     return d->defaultValue;
 }

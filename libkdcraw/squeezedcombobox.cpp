@@ -43,11 +43,11 @@
 namespace KDcrawIface
 {
 
-class SqueezedComboBox::SqueezedComboBoxPriv
+class SqueezedComboBox::Private
 {
 public:
 
-    SqueezedComboBoxPriv()
+    Private()
     {
         timer = 0;
     }
@@ -57,8 +57,8 @@ public:
     QTimer*            timer;
 };
 
-SqueezedComboBox::SqueezedComboBox(QWidget* parent, const char* name)
-                : QComboBox(parent), d(new SqueezedComboBoxPriv)
+SqueezedComboBox::SqueezedComboBox(QWidget* const parent, const char* name)
+    : QComboBox(parent), d(new Private)
 {
     setObjectName(name);
     setMinimumWidth(100);
@@ -97,9 +97,8 @@ QSize SqueezedComboBox::sizeHint() const
 {
     ensurePolished();
     QFontMetrics fm = fontMetrics();
-
-    int maxW = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
-    int maxH = qMax( fm.lineSpacing(), 14 ) + 2;
+    int maxW        = count() ? 18 : 7 * fm.width(QChar('x')) + 18;
+    int maxH        = qMax( fm.lineSpacing(), 14 ) + 2;
 
     QStyleOptionComboBox options;
     options.initFrom(this);
@@ -138,6 +137,7 @@ void SqueezedComboBox::setCurrent(const QString& itemText)
 {
     QString squeezedText = squeezeText(itemText);
     qint32 itemIndex     = findText(squeezedText);
+
     if (itemIndex >= 0)
         setCurrentIndex(itemIndex);
 }
@@ -156,7 +156,7 @@ void SqueezedComboBox::slotTimeOut()
     }
 }
 
-QString SqueezedComboBox::squeezeText(const QString& original)
+QString SqueezedComboBox::squeezeText(const QString& original) const
 {
     // not the complete widgetSize is usable. Need to compensate for that.
     int widgetSize = width()-30;
@@ -169,6 +169,7 @@ QString SqueezedComboBox::squeezeText(const QString& original)
     // We need to squeeze.
     QString sqItem = original; // prevent empty return value;
     widgetSize     = widgetSize-fm.width("...");
+
     for (int i = 0 ; i != original.length(); ++i)
     {
         if ( (int)fm.width(original.right(i)) > widgetSize)
@@ -177,6 +178,7 @@ QString SqueezedComboBox::squeezeText(const QString& original)
             break;
         }
     }
+
     return sqItem;
 }
 
@@ -185,13 +187,13 @@ void SqueezedComboBox::slotUpdateToolTip(int index)
      setToolTip(d->originalItems[index]);
 }
 
-QString SqueezedComboBox::itemHighlighted()
+QString SqueezedComboBox::itemHighlighted() const
 {
     int curItem = currentIndex();
     return d->originalItems[curItem];
 }
 
-QString SqueezedComboBox::item(int index)
+QString SqueezedComboBox::item(int index) const
 {
     return d->originalItems[index];
 }
