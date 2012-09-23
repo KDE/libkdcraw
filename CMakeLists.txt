@@ -105,7 +105,6 @@ IF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 ENDIF (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
 # ==================================================================================================
-# LibRAW source code
 
 IF(NOT WIN32)
     FIND_LIBRARY(MATH_LIBRARY m)
@@ -206,7 +205,7 @@ ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 # Flag to include demosaic pack GPL3
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
-# LibRaw use C++ exception
+# LibRaw use C++ exception${CMAKE_THREAD_LIBS_INIT}
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
 
 # Under Windows, use specific flag to compile.
@@ -218,10 +217,11 @@ IF(JPEG_FOUND)
     INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
 ENDIF()
 
-# For RawSpeed
+# For RawSpeed Codec Support
 FIND_PACKAGE(LibXml2)
+FIND_PACKAGE(Pthreads)
 
-IF(ENABLE_RAWSPEED AND JPEG_FOUND AND LIBXML2_FOUND)
+IF(ENABLE_RAWSPEED AND JPEG_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
 
     MESSAGE(STATUS "LibRaw will be compiled with RawSpeed codec")
     SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
@@ -236,6 +236,10 @@ ELSE()
         MESSAGE(STATUS "LibXML2 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
     ENDIF()
 
+    IF (NOT PTHREADS_FOUND)
+        MESSAGE(STATUS "Pthreads depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
     IF (NOT ENABLE_RAWSPEED)
         MESSAGE(STATUS "LibRaw will not be compiled with RawSpeed codec")
     ENDIF()
@@ -245,17 +249,18 @@ ELSE()
 ENDIF()
 
 # ==================================================================================================
+# RawSpeed source codec
 
 IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw/RawSpeed)
 
-    INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
+    INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR} ${PTHREADS_INCLUDE_DIR})
 
     # Flag to include RawSpeed codec with Libraw
     ADD_DEFINITIONS(-DUSE_RAWSPEED)
 
-    ADD_DEFINITIONS(${LIBXML2_DEFINITIONS})
+    ADD_DEFINITIONS(${LIBXML2_DEFINITIONS} ${PTHREADS_DEFINITIONS})
 
     # Do not compile RawSpeed with KDE FINAL mode.
     KDE4_NO_ENABLE_FINAL(librawspeed)
@@ -322,11 +327,13 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
                         ${MATH_LIBRARY}
                         ${JPEG_LIBRARY}
                         ${LIBXML2_LIBRARIES}
+                        ${PTHREADS_LIBRARY}
                         )
 
 ENDIF()
 
 # ==================================================================================================
+# LibRAW source code
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/libraw
                     ${CMAKE_CURRENT_SOURCE_DIR}/libraw/demosaic-pack-GPL2
