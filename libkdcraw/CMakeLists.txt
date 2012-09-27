@@ -32,6 +32,8 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     rcombobox.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
+                    ractionthreadbase.cpp
+                    ractionthreadbase_p.cpp
                     squeezedcombobox.cpp
    )
 
@@ -41,6 +43,8 @@ TARGET_LINK_LIBRARIES(kdcraw
                       libraw
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KIO_LIBS}
+                      ${KDE4_SOLID_LIBS}
+                      ${KDE4_THREADWEAVER_LIBRARIES}
                      )
 
 IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
@@ -60,6 +64,7 @@ IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
                   rnuminput.h
                   rcombobox.h
                   rexpanderbox.h
+                  ractionthreadbase.h
                   squeezedcombobox.h
                   dcrawinfocontainer.h
                   rawfiles.h
