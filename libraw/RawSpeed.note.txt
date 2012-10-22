@@ -1,0 +1,15 @@
+if you want to import RawSpeed into libkdcraw:
+
+  - Fetch RawSpeed source code http://rawstudio.org/svn/rawspeed/ using right svn revision tested with LibRaw.
+
+  - Copy all source code from RawSpeed sub-dir, excepted :
+    * RawSpeed.cpp (it is test application source).
+    * FileReader.cpp/h (LibRaw uses own LibRaw_datastream).
+    * RawSpeed.vcproj (MSVC project).
+
+  - Apply these patches from LibRaw to RawSpeed source code :
+    * rawspeed.cpucount-unix.patch.
+    * rawspeed.win32-dll.patch.
+
+  - From RawSpeed project, get camera.xml data file and run over script rsxml2c.sh from LibRaw
+    to make RawSpeed/rawspeed_xmldata.cpp from it.

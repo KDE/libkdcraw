@@ -41,7 +41,7 @@ class DllDef FileMap
 {
 public:
   FileMap(uint32 _size);                 // Allocates the data array itself
-  FileMap(uchar8* _data, uint32 _size);  // Data already allocated.
+  FileMap(uchar8* _data, uint32 _size);  // Data already allocated, if possible allocate 16 extra bytes.
   ~FileMap(void);
   const uchar8* getData(uint32 offset);
   uchar8* getDataWrt(uint32 offset) {return &data[offset];}

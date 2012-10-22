@@ -1,10 +1,3 @@
-#ifndef CAMERA_META_DATA_H
-#define CAMERA_META_DATA_H
-
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-#include <libxml/xmlschemas.h>
-#include "Camera.h"
 /* 
     RawSpeed - RAW file decoder.
 
@@ -26,24 +19,26 @@
 
     http://www.klauspost.com
 */
+#ifndef FILE_READER_H
+#define FILE_READER_H
 
+#include "FileIOException.h"
+#include "FileMap.h"
 #include "dlldef.h"
+
 namespace RawSpeed {
 
-class DllDef CameraMetaData
+class DllDef FileReader
 {
 public:
-  CameraMetaData();
-  CameraMetaData(char *docname);
-  virtual ~CameraMetaData(void);
-  xmlDocPtr doc;
-  xmlParserCtxtPtr ctxt; /* the parser context */
-  map<string,Camera*> cameras;
-  Camera* getCamera(string make, string model, string mode);
-  bool hasCamera(string make, string model, string mode);
-protected:
-  void addCamera(Camera* cam);
-
+	FileReader(LPCWSTR filename);
+public:
+	FileMap* readFile();
+	virtual ~FileReader();
+  LPCWSTR Filename() const { return mFilename; }
+//  void Filename(LPCWSTR val) { mFilename = val; }
+private:
+  LPCWSTR mFilename;
 };
 
 } // namespace RawSpeed
