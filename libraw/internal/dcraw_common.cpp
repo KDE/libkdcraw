@@ -5844,8 +5844,8 @@ void CLASS parse_ciff (int offset, int length)
       thumb_length = len;
     }
     if (type == 0x1818) {
-      shutter = pow (2, (double)(-int_to_float((get4(),get4()))));
-      aperture = pow (2, (double)(int_to_float(get4())/2));
+      shutter = pow (2, -int_to_float((get4(),get4())));
+      aperture = pow (2, int_to_float(get4())/2);
     }
     if (type == 0x102a) {
       iso_speed = pow (2, (get4(),get2())/32.0 - 4) * 50;
@@ -7889,6 +7889,7 @@ canon_cr2:
 	     !strcmp(model,"D7000")) {
     width -= 44;
   } else if (!strcmp(model,"D3200") ||
+	     !strcmp(model,"D800E") ||
 	     !strcmp(model,"D800")) {
     width -= 46;
   } else if (!strcmp(model,"D4")) {

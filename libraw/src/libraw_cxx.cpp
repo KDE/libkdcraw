@@ -38,6 +38,7 @@ it under the terms of the one of three licenses as you choose:
 #ifdef USE_RAWSPEED
 #include "../RawSpeed/rawspeed_xmldata.cpp"
 #include <RawSpeed/StdAfx.h>
+#include <RawSpeed/FileMap.h>
 #include <RawSpeed/RawParser.h>
 #include <RawSpeed/RawDecoder.h>
 #include <RawSpeed/CameraMetaData.h>
@@ -534,10 +535,7 @@ int LibRaw::get_decoder_info(libraw_decoder_info_t* d_info)
         {
             d_info->decoder_name = "packed_load_raw()";
             d_info->decoder_flags = LIBRAW_DECODER_FLATFIELD;
-#ifndef NOSONY_RAWSPEED
-            d_info->decoder_flags |= LIBRAW_DECODER_TRYRAWSPEED;
-#endif
-
+            //d_info->decoder_flags |= LIBRAW_DECODER_TRYRAWSPEED;
         }
     else if (load_raw == &LibRaw::nokia_load_raw )
         {
@@ -897,7 +895,13 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
     S.iheight = (S.height + IO.shrink) >> IO.shrink;
     S.iwidth  = (S.width  + IO.shrink) >> IO.shrink;
 
-
+    if(imgdata.idata.filters == 303979333U)
+     {
+    	//printf("BL=%d [%d,%d,%d,%d]\n",C.black,C.cblack[0],C.cblack[1],C.cblack[2],C.cblack[3]);
+		C.black = C.cblack[0];
+		C.cblack[0]=C.cblack[1]=C.cblack[2]=C.cblack[3];
+		imgdata.idata.filters = 2;	
+     }
     // Save color,sizes and internal data into raw_image fields
     memmove(&imgdata.rawdata.color,&imgdata.color,sizeof(imgdata.color));
     memmove(&imgdata.rawdata.sizes,&imgdata.sizes,sizeof(imgdata.sizes));
@@ -920,12 +924,12 @@ void LibRaw::fix_after_rawspeed()
   else if (load_raw == &LibRaw::sony_load_raw)
     C.maximum = 0x3ff0;
   else if (load_raw == &LibRaw::sony_arw2_load_raw || load_raw == &LibRaw::packed_load_raw )
-	{
-		C.maximum *=4;
-		C.black *=4;
-		for(int c=0; c< 4; c++)
-			C.cblack[c]*=4;
-	}
+    {
+      C.maximum *=4;
+      C.black *=4;
+      for(int c=0; c< 4; c++)
+        C.cblack[c]*=4;
+    }
 }
 #else
 void LibRaw::fix_after_rawspeed()
@@ -1005,7 +1009,14 @@ int LibRaw::unpack(void)
                 RawDecoder *d = 0;
                 CameraMetaDataLR *meta = static_cast<CameraMetaDataLR*>(_rawspeed_camerameta);
                 d = t.getDecoder();
-                d->checkSupport(meta);
+                try {
+                  d->checkSupport(meta);
+                }
+                catch (const RawDecoderException& e)
+                  {
+                    imgdata.process_warnings |= LIBRAW_WARN_RAWSPEED_UNSUPPORTED;
+                    throw e;
+                  }
                 d->decodeRaw();
                 d->decodeMetaData(meta);
                 RawImage r = d->mRaw;
