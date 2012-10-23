@@ -218,6 +218,60 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     return true;
 }
 
+bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecodingSettings& settings)
+{
+    QFileInfo fileInfo(path);
+    QString   rawFilesExt(rawFiles());
+    QString   ext = fileInfo.suffix().toUpper();
+
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
+        return false;
+
+    kDebug() << "Try to load full RAW picture...";
+
+    RawDecodingSettings prm = settings;
+    prm.sixteenBitsImage    = false;
+    QByteArray imgData;
+    int width, height, rgbmax;
+
+    KDcraw decoder;
+    bool ret = decoder.decodeRAWImage(path, prm, imgData, width, height, rgbmax);
+    if (!ret)
+    {
+        kDebug() << "Failled to load full RAW picture";
+        return false;
+    }
+        
+    uchar* sptr  = (uchar*)imgData.data();
+    uchar tmp8[2];
+
+    // Set RGB color components.
+    for (int i = 0 ; i < width * height ; ++i)
+    {
+        // Swap Red and Blue
+        tmp8[0] = sptr[2];
+        tmp8[1] = sptr[0];
+        sptr[0] = tmp8[0];
+        sptr[2] = tmp8[1];
+
+        sptr += 3;
+    }
+
+    image = QImage(width, height, QImage::Format_ARGB32);
+    uint*  dptr  = (uint*)image.bits();
+    sptr         = (uchar*)imgData.data();
+    
+    for (int i = 0 ; i < width * height ; ++i)
+    {
+        *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], 0xFF);
+        sptr += 3;
+    }
+
+    kDebug() << "Load full RAW picture done";
+
+    return true;
+}
+
 bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 {
     QFileInfo fileInfo(path);

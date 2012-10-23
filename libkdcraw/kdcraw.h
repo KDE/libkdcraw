@@ -74,7 +74,7 @@ public:
     /** This is a non cancelable method witch do not require a class instance to run.
         It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview().
      */
-    static bool loadDcrawPreview(QImage& image, const QString& path);
+    KDE_DEPRECATED static bool loadDcrawPreview(QImage& image, const QString& path);
 
     /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data.
         This is a fast and non cancelable. This method do not require a class instance to run.
@@ -86,10 +86,15 @@ public:
      */
     static bool loadEmbeddedPreview(QImage& image, const QString& path);
 
-    /** Get the half decode RAW picture. This is a more slower than loadEmbeddedPreview() method
+    /** Get the half decoded RAW picture. This is a more slower than loadEmbeddedPreview() method
         and non cancelable. This method do not require a class instance to run.
      */
     static bool loadHalfPreview(QImage& image, const QString& path);
+
+    /** Get the full decoded RAW picture. This is a more slower than loadHalfPreview() method
+        and non cancelable. This method do not require a class instance to run.
+     */
+    static bool loadFullImage(QImage& image, const QString& path, const RawDecodingSettings& settings = RawDecodingSettings());
 
     /** Get the camera settings witch have taken RAW file. Look into dcrawinfocontainer.h
         for more details. This is a fast and non cancelable method witch do not require

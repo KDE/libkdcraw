@@ -32,10 +32,11 @@
 // Local includes
 
 #include "kdcraw.h"
+#include "rawdecodingsettings.h"
 
 using namespace KDcrawIface;
 
-int main (int argc, char** argv)
+int main(int argc, char** argv)
 {
     if(argc != 2)
     {
@@ -50,6 +51,8 @@ int main (int argc, char** argv)
     QFileInfo          previewOutput(previewFilePath);
     QString            halfFilePath(input.baseName() + QString(".half.png"));
     QFileInfo          halfOutput(halfFilePath);
+    QString            fullFilePath(input.baseName() + QString(".full.png"));
+    QFileInfo          fullOutput(fullFilePath);
     QImage             image;
     DcrawInfoContainer identify;
 
@@ -107,6 +110,29 @@ int main (int argc, char** argv)
              << image.width() << "x" << image.height()
              << ")";
     image.save(halfFilePath, "PNG");
+
+    // -----------------------------------------------------------
+
+    qDebug() << "raw2png: Loading full RAW image";
+
+    image = QImage();
+    RawDecodingSettings settings;
+    settings.halfSizeColorImage    = false;
+    settings.sixteenBitsImage      = false;
+    settings.RGBInterpolate4Colors = false;
+    settings.RAWQuality            = RawDecodingSettings::AHD;
+    
+    if (!rawProcessor.loadFullImage(image, filePath, settings))
+    {
+        qDebug() << "raw2png: Loading full RAW image failed. Aborted...";
+        return -1;
+    }
+
+    qDebug() << "raw2png: Saving full RAW image to "
+             << fullOutput.fileName() << " size ("
+             << image.width() << "x" << image.height()
+             << ")";
+    image.save(fullFilePath, "PNG");
 
     return 0;
 }
