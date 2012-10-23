@@ -120,8 +120,8 @@ int main(int argc, char** argv)
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = false;
     settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = RawDecodingSettings::AHD;
-    
+    settings.RAWQuality            = RawDecodingSettings::BILINEAR;
+
     if (!rawProcessor.loadFullImage(image, filePath, settings))
     {
         qDebug() << "raw2png: Loading full RAW image failed. Aborted...";
