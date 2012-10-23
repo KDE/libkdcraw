@@ -194,7 +194,8 @@ ENDIF(NOT APPLE)
 # Flag to debug LibRaw
 ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 
-#ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
+# Flag used by default into LibRaw to not use dedicated external thread
+ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
 IF(JPEG_FOUND)
