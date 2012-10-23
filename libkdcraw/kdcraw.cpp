@@ -49,7 +49,7 @@ namespace KDcrawIface
 {
 
 KDcraw::KDcraw()
-      : d(new Private(this))
+    : d(new Private(this))
 {
     m_cancel = false;
 }
@@ -70,7 +70,7 @@ void KDcraw::cancel()
     m_cancel = true;
 }
 
-bool KDcraw::loadDcrawPreview(QImage& image, const QString& path)
+bool KDcraw::loadRawPreview(QImage& image, const QString& path)
 {
     // In first, try to extract the embedded JPEG preview. Very fast.
     bool ret = loadEmbeddedPreview(image, path);

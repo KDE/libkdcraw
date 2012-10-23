@@ -74,7 +74,7 @@ public:
     /** This is a non cancelable method witch do not require a class instance to run.
         It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview().
      */
-    KDE_DEPRECATED static bool loadDcrawPreview(QImage& image, const QString& path);
+    static bool loadRawPreview(QImage& image, const QString& path);
 
     /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data.
         This is a fast and non cancelable. This method do not require a class instance to run.

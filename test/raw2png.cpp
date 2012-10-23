@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 
     qDebug() << "raw2png: Loading RAW image preview";
 
-    if (!rawProcessor.loadDcrawPreview(image, filePath))
+    if (!rawProcessor.loadRawPreview(image, filePath))
     {
         qDebug() << "raw2png: Loading RAW image preview failed. Aborted...";
         return -1;
