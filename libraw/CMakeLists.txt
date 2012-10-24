@@ -103,7 +103,7 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
 ENDIF()
 
-# ==================================================================================================
+# =================================================================================================
 
 # Flag to include demosaic pack GPL2
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
@@ -159,3 +159,43 @@ ENDIF()
 IF(JASPER_FOUND)
     TARGET_LINK_LIBRARIES(libraw ${JASPER_LIBRARIES})
 ENDIF()
+
+# =================================================================================================
+
+# add a small macro so that this is a bit cleaner
+MACRO(LIBRAW_BUILD_SAMPLES)
+
+    SET(_target ${ARGV0})
+    SET(${_target}_SRCS samples/${_target}.cpp)
+    SET_SOURCE_FILES_PROPERTIES(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
+
+    ADD_EXECUTABLE(${_target} ${${_target}_SRCS})
+
+    TARGET_LINK_LIBRARIES(${_target} libraw ${OPENMP_LDFLAGS})
+
+    IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+        TARGET_LINK_LIBRARIES(${_target} librawspeed)
+    ENDIF()
+
+    IF(WIN32)
+        TARGET_LINK_LIBRARIES(${_target} ws2_32)
+    ENDIF(WIN32)
+
+    SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
+
+ENDMACRO(LIBRAW_BUILD_SAMPLES)
+
+LIBRAW_BUILD_SAMPLES(simple_dcraw)
+LIBRAW_BUILD_SAMPLES(mem_image)
+LIBRAW_BUILD_SAMPLES(dcraw_emu)
+LIBRAW_BUILD_SAMPLES(4channels)
+LIBRAW_BUILD_SAMPLES(unprocessed_raw)
+LIBRAW_BUILD_SAMPLES(raw-identify)
+LIBRAW_BUILD_SAMPLES(multirender_test)
+LIBRAW_BUILD_SAMPLES(postprocessing_benchmark)
+#IF(WIN32)
+#    LIBRAW_BUILD_SAMPLES(half_mt_win32)
+#ELSE(WIN32)
+#    LIBRAW_BUILD_SAMPLES(half_mt)
+#    LIBRAW_BUILD_SAMPLES(dcraw_half)
+#ENDIF(WIN32)
