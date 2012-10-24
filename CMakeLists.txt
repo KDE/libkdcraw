@@ -191,12 +191,6 @@ IF(NOT APPLE)
     ENDIF(OPENMP_FOUND)
 ENDIF(NOT APPLE)
 
-# Flag to debug LibRaw
-ADD_DEFINITIONS(-DDCRAW_VERBOSE)
-
-# Flag used by default into LibRaw to not use dedicated external thread
-ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
-
 # Flag to use libjpeg with LibRaw DNG lossy codec
 IF(JPEG_FOUND)
     ADD_DEFINITIONS(-DUSE_JPEG8)
@@ -210,12 +204,6 @@ IF(JASPER_FOUND)
     ADD_DEFINITIONS(-DUSE_JASPER)
     INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
 ENDIF()
-
-# Flag to include demosaic pack GPL2
-ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
-
-# Flag to include demosaic pack GPL3
-ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
 # LibRaw use C++ exception${CMAKE_THREAD_LIBS_INIT}
 ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})

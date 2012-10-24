@@ -105,6 +105,18 @@ ENDIF()
 
 # ==================================================================================================
 
+# Flag to include demosaic pack GPL2
+ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
+
+# Flag to include demosaic pack GPL3
+ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL3)
+
+# Flag to debug LibRaw
+ADD_DEFINITIONS(-DDCRAW_VERBOSE)
+
+# Flag used by default into LibRaw to not use dedicated external thread
+ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL3
