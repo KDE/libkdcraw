@@ -32,7 +32,7 @@ MACRO(LIBKDCRAW_BUILD_TEST)
     SET(${_target}_SRCS ../libraw/samples/${_target}.cpp)
     SET_SOURCE_FILES_PROPERTIES(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
 
-    KDE4_ADD_EXECUTABLE(${_target} NOGUI ${${_target}_SRCS})
+    ADD_EXECUTABLE(${_target} ${${_target}_SRCS})
 
     TARGET_LINK_LIBRARIES(${_target} libraw ${OPENMP_LDFLAGS})
 
@@ -49,7 +49,7 @@ MACRO(LIBKDCRAW_BUILD_TEST)
 ENDMACRO(LIBKDCRAW_BUILD_TEST)
 
 SET(raw2png_SRCS raw2png.cpp)
-KDE4_ADD_EXECUTABLE(raw2png NOGUI ${raw2png_SRCS})
+ADD_EXECUTABLE(raw2png ${raw2png_SRCS})
 TARGET_LINK_LIBRARIES(raw2png kdcraw ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${OPENMP_LDFLAGS})
 
 LIBKDCRAW_BUILD_TEST(simple_dcraw)
