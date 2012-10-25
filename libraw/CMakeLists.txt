@@ -117,6 +117,10 @@ ADD_DEFINITIONS(-DDCRAW_VERBOSE)
 # Flag used by default into LibRaw to not use dedicated external thread
 ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
 
+IF (WIN32)
+    ADD_DEFINTION(-DLIBRAW_BUILDLIB)
+ENDIF()
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL3
@@ -165,8 +169,11 @@ ENDIF()
 # add a small macro so that this is a bit cleaner
 MACRO(LIBRAW_BUILD_SAMPLES)
 
-    SET(_target ${ARGV0})
-    SET(${_target}_SRCS samples/${_target}.cpp)
+    SET(_filename ${ARGV0})
+    STRING(REPLACE "." ";" _temp ${_filename})
+    LIST(GET _temp 0 _target)
+
+    SET(${_target}_SRCS samples/${_filename})
     SET_SOURCE_FILES_PROPERTIES(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
 
     ADD_EXECUTABLE(${_target} ${${_target}_SRCS})
@@ -181,21 +188,19 @@ MACRO(LIBRAW_BUILD_SAMPLES)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
     ENDIF(WIN32)
 
-    SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
-
 ENDMACRO(LIBRAW_BUILD_SAMPLES)
 
-LIBRAW_BUILD_SAMPLES(simple_dcraw)
-LIBRAW_BUILD_SAMPLES(mem_image)
-LIBRAW_BUILD_SAMPLES(dcraw_emu)
-LIBRAW_BUILD_SAMPLES(4channels)
-LIBRAW_BUILD_SAMPLES(unprocessed_raw)
-LIBRAW_BUILD_SAMPLES(raw-identify)
-LIBRAW_BUILD_SAMPLES(multirender_test)
-LIBRAW_BUILD_SAMPLES(postprocessing_benchmark)
+LIBRAW_BUILD_SAMPLES(simple_dcraw.cpp)
+LIBRAW_BUILD_SAMPLES(mem_image.cpp)
+LIBRAW_BUILD_SAMPLES(dcraw_emu.cpp)
+LIBRAW_BUILD_SAMPLES(4channels.cpp)
+LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
+LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
+LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
+LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
 #IF(WIN32)
-#    LIBRAW_BUILD_SAMPLES(half_mt_win32)
+#    LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
 #ELSE(WIN32)
-#    LIBRAW_BUILD_SAMPLES(half_mt)
-#    LIBRAW_BUILD_SAMPLES(dcraw_half)
+#    LIBRAW_BUILD_SAMPLES(dcraw_half.c)
+#    LIBRAW_BUILD_SAMPLES(half_mt.c)
 #ENDIF(WIN32)
