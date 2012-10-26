@@ -22,6 +22,158 @@
 #
 # ============================================================
 
+# General definitions rules
+
+# To prevent warnings from M$ compiler
+IF(WIN32 AND MSVC)
+    ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_ATL_SECURE_NO_WARNINGS)
+    ADD_DEFINITIONS(-D_AFX_SECURE_NO_WARNINGS)
+ENDIF(WIN32 AND MSVC)
+
+# Under Windows, use specific flag to compile.
+IF(WIN32)
+    ADD_DEFINITIONS(-DDJGPP)
+ENDIF(WIN32)
+
+# LibRaw use C++ exception${CMAKE_THREAD_LIBS_INIT}
+ADD_DEFINITIONS(${KDE4_ENABLE_EXCEPTIONS})
+
+# -- Check dependencies --------------------------------------------------------------------------------
+
+# Math library check
+
+IF(NOT WIN32)
+    FIND_LIBRARY(MATH_LIBRARY m)
+ENDIF(NOT WIN32)
+
+# LCMS version 1 and 2 library handling
+# See B.K.O #294105
+
+IF (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS2 availability...")
+    FIND_PACKAGE(LCMS2)
+    IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+        MESSAGE(STATUS "Found LCMS2: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+        INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
+        MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+        # Flag to compile Little CMS version 2 with LibRaw
+        ADD_DEFINITIONS(-DUSE_LCMS2)
+    ENDIF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+ELSE (ENABLE_LCMS2)
+    MESSAGE(STATUS "Check for LCMS1 availability...")
+    FIND_PACKAGE(LCMS)
+    IF (LCMS_FOUND)
+        MESSAGE(STATUS "Found LCMS1: ${LCMS_LIBRARIES} ${LCMS_INCLUDE_DIR}")
+        INCLUDE_DIRECTORIES(${LCMS_INCLUDE_DIR})
+        MACRO_LOG_FEATURE(LCMS_FOUND "LCMS1" "A small-footprint color management engine" "http://www.littlecms.com" TRUE "" "Needed by libkdcraw")
+        # Flag to compile Little CMS version 1 with LibRaw
+        ADD_DEFINITIONS(-DUSE_LCMS)
+        # For compatibility
+        SET(LCMS2_LIBRARIES ${LCMS_LIBRARIES})
+    ELSE (LCMS_FOUND)
+        MESSAGE(STATUS "Check for LCMS2 availability instead LCMS1...")
+        FIND_PACKAGE(LCMS2)
+        IF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+            MESSAGE(STATUS "Found LCMS2 instead LCMS1: ${LCMS2_LIBRARIES} ${LCMS2_INCLUDE_DIR}")
+            INCLUDE_DIRECTORIES(${LCMS2_INCLUDE_DIR})
+            MACRO_LOG_FEATURE(LCMS2_FOUND "LCMS2" "A small-footprint color management engine" "http://www.littlecms.com" FALSE "" "Needed by libkdcraw")
+            # Flag to compile Little CMS version 2 with LibRaw
+            ADD_DEFINITIONS(-DUSE_LCMS2)
+        ENDIF (LCMS2_FOUND AND (LCMS2_VERSION VERSION_EQUAL 2.1 OR LCMS2_VERSION VERSION_GREATER 2.1))
+    ENDIF (LCMS_FOUND)
+ENDIF (ENABLE_LCMS2)
+
+# JPEG library check
+
+FIND_PACKAGE(JPEG)
+IF(JPEG_FOUND)
+    # check version of libjpeg
+    # inspired from digikam/CMakeLists.txt
+    SET(_jpeglib_version_source "#include <stddef.h>\n#include<stdio.h>\n#include <jpeglib.h>\n int main()\n {\n #if (JPEG_LIB_VERSION >= 80) \n #error JPEG_LIB_VERSION >= 80 found \n #endif \n }\n")
+    SET(_jpeglib_version_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/cmake_jpeglib_version_check.cpp)
+    FILE(WRITE "${_jpeglib_version_source_file}" "${_jpeglib_version_source}")
+    SET(_jpeglib_version_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${JPEG_INCLUDE_DIR}")
+
+    TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
+                CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
+                COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var
+               )
+    IF(_jpeglib_version_compile_result)
+        MESSAGE(STATUS "Identified libjpeg version less than 80 (too low)")
+        SET(JPEG_FOUND FALSE)
+    ENDIF()
+ENDIF(JPEG_FOUND)
+
+MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.ijg.org" FALSE "80" "needed for the LibRaw DNG lossy codec")
+
+# Flag to use libjpeg with LibRaw DNG lossy codec
+IF(JPEG_FOUND)
+    ADD_DEFINITIONS(-DUSE_JPEG)
+    ADD_DEFINITIONS(-DUSE_JPEG8)
+    INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
+ENDIF()
+
+# OpenMP library detection (requires CMake >= 2.6.3)
+# NOTE: OpenMP under MacOSX do not support multithreading.
+
+IF(NOT APPLE)
+    MACRO_OPTIONAL_FIND_PACKAGE(OpenMP)
+
+    IF(OPENMP_FOUND)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
+            SET(OPENMP_LDFLAGS "-lgomp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-fopenmp")
+        IF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
+            SET(OPENMP_LDFLAGS "-xopenmp")
+        ENDIF("${OpenMP_CXX_FLAGS}" STREQUAL "-xopenmp")
+    ENDIF(OPENMP_FOUND)
+ENDIF(NOT APPLE)
+
+# Jasper library check
+
+FIND_PACKAGE(Jasper)
+
+# Flag to use libjasper with LibRaw RedCine codec
+IF(JASPER_FOUND)
+    ADD_DEFINITIONS(-DUSE_JASPER)
+    INCLUDE_DIRECTORIES(${JASPER_INCLUDE_DIR})
+ENDIF()
+
+# For RawSpeed Codec Support
+FIND_PACKAGE(LibXml2)
+FIND_PACKAGE(Pthreads)
+
+IF(ENABLE_RAWSPEED AND JPEG_FOUND AND LIBXML2_FOUND AND PTHREADS_FOUND)
+
+    MESSAGE(STATUS "LibRaw will be compiled with RawSpeed codec")
+    SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED true)
+
+ELSE()
+
+    IF (NOT JPEG_FOUND)
+        MESSAGE(STATUS "LibJPEG depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
+    IF (NOT LIBXML2_FOUND)
+        MESSAGE(STATUS "LibXML2 depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
+    IF (NOT PTHREADS_FOUND)
+        MESSAGE(STATUS "Pthreads depency not resolved. LibRaw cannot be compiled with RawSpeed codec")
+    ENDIF()
+
+    IF (NOT ENABLE_RAWSPEED)
+        MESSAGE(STATUS "LibRaw will not be compiled with RawSpeed codec")
+    ENDIF()
+
+    SET(RAWSPEED_SUPPORT_CAN_BE_COMPILED false)
+
+ENDIF()
+
+# -- Compile RAWSpeed library --------------------------------------------------------------------------------
+
 IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
     INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed)
@@ -103,7 +255,7 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
 ENDIF()
 
-# =================================================================================================
+# -- Compile LibRaw library --------------------------------------------------------------------------------
 
 # Flag to include demosaic pack GPL2
 ADD_DEFINITIONS(-DLIBRAW_DEMOSAIC_PACK_GPL2)
@@ -164,7 +316,7 @@ IF(JASPER_FOUND)
     TARGET_LINK_LIBRARIES(libraw ${JASPER_LIBRARIES})
 ENDIF()
 
-# =================================================================================================
+# -- Compile LibRaw Samples --------------------------------------------------------------------------------
 
 # add a small macro so that this is a bit cleaner
 MACRO(LIBRAW_BUILD_SAMPLES)

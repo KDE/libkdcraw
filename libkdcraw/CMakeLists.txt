@@ -22,6 +22,8 @@
 #
 # ============================================================
 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libraw)
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 SET(kdcraw_LIB_SRCS kdcraw.cpp
