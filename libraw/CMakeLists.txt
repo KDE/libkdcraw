@@ -302,8 +302,6 @@ ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
 
 ADD_LIBRARY(libraw STATIC ${libraw_LIB_SRCS})
 
-SET_TARGET_PROPERTIES(libraw PROPERTIES COMPILE_FLAGS -DLIBRAW_BUILDLIB)
-
 TARGET_LINK_LIBRARIES(libraw
                       ${MATH_LIBRARY}
                       ${LCMS2_LIBRARIES}
