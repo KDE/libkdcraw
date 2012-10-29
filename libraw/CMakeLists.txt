@@ -185,9 +185,6 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
     ADD_DEFINITIONS(${LIBXML2_DEFINITIONS} ${PTHREADS_DEFINITIONS})
 
-    # Do not compile RawSpeed with KDE FINAL mode.
-    KDE4_NO_ENABLE_FINAL(librawspeed)
-
     SET(librawspeed_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/ArwDecoder.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpJPEG.cpp
                              ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/BitPumpMSB.cpp
@@ -234,25 +231,6 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
                              ${CMAKE_CURRENT_SOURCE_DIR}/RawSpeed/TiffParserOlympus.cpp
     )
 
-    # Disable compilation warnings from RawSpeed. Just to be clear on the console.
-    # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
-    FOREACH(_curentfile ${librawspeed_LIB_SRCS})
-        IF(WIN32 AND MSVC)
-            SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
-        ELSE(WIN32 AND MSVC)
-            SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC")
-        ENDIF(WIN32 AND MSVC)
-    ENDFOREACH(_curentfile ${librawspeed_LIB_SRCS})
-
-    ADD_LIBRARY(librawspeed STATIC ${librawspeed_LIB_SRCS})
-
-    TARGET_LINK_LIBRARIES(librawspeed
-                          ${MATH_LIBRARY}
-                          ${JPEG_LIBRARY}
-                          ${LIBXML2_LIBRARIES}
-                          ${PTHREADS_LIBRARY}
-                         )
-
 ENDIF()
 
 # -- Compile LibRaw library --------------------------------------------------------------------------------
@@ -290,6 +268,10 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/libraw_datastream.cpp
    )
 
+IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+    SET(libraw_LIB_SRCS ${libraw_LIB_SRCS} ${librawspeed_LIB_SRCS})
+ENDIF()
+
 # Disable compilation warnings from LibRaw. Just to be clear on the console.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
 # Use O4 GCC compilation option to prevent artifacts with OpenMP (B.K.O #305382)
@@ -316,6 +298,10 @@ IF(JASPER_FOUND)
     TARGET_LINK_LIBRARIES(libraw ${JASPER_LIBRARIES})
 ENDIF()
 
+IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
+    TARGET_LINK_LIBRARIES(libraw ${LIBXML2_LIBRARIES} ${PTHREADS_LIBRARY})
+ENDIF()
+
 # -- Compile LibRaw Samples --------------------------------------------------------------------------------
 
 # add a small macro so that this is a bit cleaner
@@ -331,10 +317,6 @@ MACRO(LIBRAW_BUILD_SAMPLES)
     ADD_EXECUTABLE(${_target} ${${_target}_SRCS})
 
     TARGET_LINK_LIBRARIES(${_target} libraw ${OPENMP_LDFLAGS})
-
-    IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
-        TARGET_LINK_LIBRARIES(${_target} librawspeed)
-    ENDIF()
 
     IF(WIN32)
         TARGET_LINK_LIBRARIES(${_target} ws2_32)
