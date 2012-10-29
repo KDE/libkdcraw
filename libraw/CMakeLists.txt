@@ -292,11 +292,12 @@ SET(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
 
 # Disable compilation warnings from LibRaw. Just to be clear on the console.
 # Adjust flag for static lib and 64 bits computers using -fPIC for GCC compiler (B.K.O: #269903)
+# Use O4 GCC compilation option to prevent artifacts with OpenMP (B.K.O #305382)
 FOREACH(_curentfile ${libraw_LIB_SRCS})
     IF(WIN32 AND MSVC)
         SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w")
     ELSE(WIN32 AND MSVC)
-        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC")
+        SET_SOURCE_FILES_PROPERTIES(${_curentfile} PROPERTIES COMPILE_FLAGS "-w -fPIC -O4")
     ENDIF(WIN32 AND MSVC)
 ENDFOREACH(_curentfile ${libraw_LIB_SRCS})
 
