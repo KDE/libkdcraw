@@ -304,8 +304,6 @@ ENDIF()
 
 # -- Compile LibRaw Samples --------------------------------------------------------------------------------
 
-STRING(REPLACE "-std=iso9899:1990" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
-
 # add a small macro so that this is a bit cleaner
 MACRO(LIBRAW_BUILD_SAMPLES)
 
@@ -334,10 +332,15 @@ LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
 LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
 LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
 LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
-#IF(WIN32)
-#    LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
-#ELSE(WIN32)
-    LIBRAW_BUILD_SAMPLES(dcraw_half.c)
-    LIBRAW_BUILD_SAMPLES(half_mt.c)
-#ENDIF(WIN32)
+
+# C sample files will be compiled only if LCMS v2 is detected, to prevent broken compilation
+IF(LCMS2_FOUND)
+   IF(WIN32)
+        LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
+   ELSE(WIN32)
+        LIBRAW_BUILD_SAMPLES(dcraw_half.c)
+        LIBRAW_BUILD_SAMPLES(half_mt.c)
+   ENDIF(WIN32)
+ENDIF(LCMS2_FOUND)
+
 
