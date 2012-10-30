@@ -304,6 +304,8 @@ ENDIF()
 
 # -- Compile LibRaw Samples --------------------------------------------------------------------------------
 
+STRING(REPLACE "-std=iso9899:1990" "" CMAKE_C_FLAGS ${CMAKE_C_FLAGS})
+
 # add a small macro so that this is a bit cleaner
 MACRO(LIBRAW_BUILD_SAMPLES)
 
@@ -338,3 +340,4 @@ LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
     LIBRAW_BUILD_SAMPLES(dcraw_half.c)
     LIBRAW_BUILD_SAMPLES(half_mt.c)
 #ENDIF(WIN32)
+
