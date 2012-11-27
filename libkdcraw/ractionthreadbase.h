@@ -61,8 +61,15 @@ public:
 protected:
 
     void run();
+    
+    /** Append a collection of jobs to process in pending list.
+     */
     void appendJob(JobCollection* const job);
-
+    
+    /** Return true if list of pending jobs to process is empty.
+     */
+    bool isEmpty() const;
+    
 protected Q_SLOTS:
 
     void slotFinished();

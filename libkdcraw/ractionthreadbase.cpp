@@ -78,9 +78,9 @@ RActionThreadBase::~RActionThreadBase()
 void RActionThreadBase::slotFinished()
 {
     kDebug() << "Finish Main Thread";
-    emit QThread::finished();
     d->weaverRunning = false;
     d->condVarJobs.wakeAll();
+    emit QThread::finished();
 }
 
 void RActionThreadBase::cancel()
@@ -98,6 +98,11 @@ void RActionThreadBase::cancel()
 void RActionThreadBase::finish()
 {
     d->weaver->finish();
+}
+
+bool RActionThreadBase::isEmpty() const
+{
+    return d->todo.isEmpty();
 }
 
 void RActionThreadBase::appendJob(JobCollection* const job)
@@ -118,7 +123,7 @@ void RActionThreadBase::run()
         JobCollection* t = 0;
         {
             QMutexLocker lock(&d->mutex);
-            if (!d->todo.isEmpty() && !d->weaverRunning)
+            if (!isEmpty() && !d->weaverRunning)
             {
                 t = d->todo.takeFirst();
             }
