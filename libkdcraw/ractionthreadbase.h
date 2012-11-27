@@ -55,6 +55,12 @@ public:
     RActionThreadBase(QObject* const parent=0);
     ~RActionThreadBase();
 
+    /** Adjust maximum number of thread used to parallelize collection of job processing.
+     *  By default in constructor, Solid api is used to determine the number of CPU avaialble and adjust 
+     *  this value automatically.
+     */
+    void setMaximumNumberOfThreads(int n);
+
     void cancel();
     void finish();
 

@@ -75,6 +75,11 @@ RActionThreadBase::~RActionThreadBase()
     delete d;
 }
 
+void RActionThreadBase::setMaximumNumberOfThreads(int n)
+{
+    d->weaver->setMaximumNumberOfThreads(n);
+}
+    
 void RActionThreadBase::slotFinished()
 {
     kDebug() << "Finish Main Thread";
