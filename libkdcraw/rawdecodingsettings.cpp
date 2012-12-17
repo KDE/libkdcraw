@@ -384,7 +384,7 @@ QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
     dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
     dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
     dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
-    dbg.nospace() << "-- NRChrominaceThreshold:   " << s.NRChroThreshold         << endl;
+    dbg.nospace() << "-- NRChrominanceThreshold:  " << s.NRChroThreshold         << endl;
     dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << endl;
     dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << endl;
     dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << endl;
