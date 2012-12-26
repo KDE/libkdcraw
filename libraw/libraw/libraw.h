@@ -111,7 +111,7 @@ class DllDef LibRaw
     int                         unpack_thumb(void);
 
     int                         adjust_sizes_info_only(void);
-    void                        subtract_black();
+    int                         subtract_black();
     int                         raw2image();
     int                         raw2image_ex(int do_subtract_black);
     void                        raw2image_start();
@@ -132,6 +132,8 @@ class DllDef LibRaw
     int                         dcraw_ppm_tiff_writer(const char *filename);
     int                         dcraw_thumb_writer(const char *fname);
     int                         dcraw_process(void);
+    /* information calls */
+    int is_fuji_rotated(){return libraw_internal_data.internal_output_params.fuji_width;}
     /* memory writers */
     virtual libraw_processed_image_t*   dcraw_make_mem_image(int *errcode=NULL);  
     virtual libraw_processed_image_t*   dcraw_make_mem_thumb(int *errcode=NULL);
