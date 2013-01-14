@@ -97,7 +97,6 @@ IF(JPEG_FOUND)
 
     TRY_COMPILE(_jpeglib_version_compile_result ${CMAKE_BINARY_DIR} ${_jpeglib_version_source_file}
                 CMAKE_FLAGS "${_jpeglib_version_include_dirs}"
-                COMPILE_OUTPUT_VARIABLE _jpeglib_version_compile_output_var
                )
     IF(_jpeglib_version_compile_result)
         MESSAGE(STATUS "Identified libjpeg version less than 80 (too low)")
@@ -109,7 +108,6 @@ MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.i
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
 IF(JPEG_FOUND)
-    ADD_DEFINITIONS(-DUSE_JPEG)
     ADD_DEFINITIONS(-DUSE_JPEG8)
     INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
 ENDIF()

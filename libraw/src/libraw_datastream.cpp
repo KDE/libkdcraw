@@ -1,4 +1,5 @@
 #ifdef WIN32
+#include <math.h>
 #ifdef __MINGW32__
     #define _WIN32_WINNT 0x0500
     #include <stdexcept>
