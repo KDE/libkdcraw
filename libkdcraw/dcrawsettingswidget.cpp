@@ -1227,6 +1227,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
         {
             prm.NRThreshold     = d->NRSpinBox1->value();
             prm.NRChroThreshold = 0;
+            break;
         }
         default:    // IMPULSENR
         {
