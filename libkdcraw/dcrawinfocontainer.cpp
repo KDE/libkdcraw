@@ -50,7 +50,7 @@ DcrawInfoContainer::DcrawInfoContainer()
     cameraMult[3]     = 0.0;
     blackPoint        = 0;
 
-    for (int ch=0; ch<8; ch++)
+    for (int ch=0; ch<4; ch++)
     {
         blackPointCh[ch] = 0;
     }
@@ -94,10 +94,6 @@ bool DcrawInfoContainer::isEmpty()
         blackPointCh[1]  == 0           &&
         blackPointCh[2]  == 0           &&
         blackPointCh[3]  == 0           &&
-        blackPointCh[4]  == 0           &&
-        blackPointCh[5]  == 0           &&
-        blackPointCh[6]  == 0           &&
-        blackPointCh[7]  == 0           &&
         whitePoint       == 0           &&
         topMargin        == 0           &&
         leftMargin       == 0           &&

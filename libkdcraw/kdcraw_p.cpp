@@ -127,7 +127,7 @@ void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& i
     identify.rawImages        = raw->imgdata.idata.raw_count;
     identify.blackPoint       = raw->imgdata.color.black;
 
-    for (int ch = 0; ch < 8; ch++)
+    for (int ch = 0; ch < 4; ch++)
     {
         identify.blackPointCh[ch] = raw->imgdata.color.cblack[ch];
     }
