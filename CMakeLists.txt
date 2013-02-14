@@ -67,10 +67,11 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 2.0.1 => 20.0.1 (Released with KDE 4.8.0  - Introducing new deprecated members due to use libraw 0.14.x)
 # 2.1.0 => 21.0.0 (Released with KDE 4.8.1  - Remove deprecated members)
 # 2.2.0 => 22.0.0 (Released with KDE 4.10.0 - Including RawSpeed Codec)
+# 2.3.0 => 22.1.0 (Released with KDE 4.11.0 - Including Coverity Report fixes)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
-SET(DCRAW_LIB_MINOR_VERSION "2")
+SET(DCRAW_LIB_MINOR_VERSION "3")
 SET(DCRAW_LIB_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
@@ -85,7 +86,7 @@ SET(DCRAW_LIB_SUFFIX_VERSION "")
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
 SET(DCRAW_LIB_SO_CUR_VERSION "22")
-SET(DCRAW_LIB_SO_REV_VERSION "0")
+SET(DCRAW_LIB_SO_REV_VERSION "1")
 SET(DCRAW_LIB_SO_AGE_VERSION "0")
 
 # ==================================================================================================
