@@ -7,7 +7,7 @@
  * @date   2008-10-09
  * @brief  internal private container for KDcraw
  *
- * @author Copyright (C) 2008-2012 by Gilles Caulier
+ * @author Copyright (C) 2008-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -280,9 +280,11 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
              * are my own and should be taken with a grain of salt.
              */
             const double XYZ_to_RGB[3][3] = {
-                { 3.24071,  -0.969258,  0.0556352 },
-                {-1.53726,  1.87599,    -0.203996 },
-                {-0.498571, 0.0415557,  1.05707 } };
+                                                { 3.24071,  -0.969258,  0.0556352 },
+                                                {-1.53726,  1.87599,    -0.203996 },
+                                                {-0.498571, 0.0415557,  1.05707   }
+                                            };
+
             // Fit for CIE Daylight illuminant
             if (T <= 4000)
             {

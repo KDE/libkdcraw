@@ -7,9 +7,9 @@
  * @date   2008-03-14
  * @brief  A widget to host settings as expander box
  *
- * @author Copyright (C) 2008-2012 by Gilles Caulier
+ * @author Copyright (C) 2008-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2008-2012 by Marcel Wiesweg
+ * @author Copyright (C) 2008-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Manuel Viet
  *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>
@@ -236,8 +236,7 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
     if (m_arrowType == Qt::NoArrow)
         return;
 
-    if (width() < m_size + m_margin ||
-        height() < m_size + m_margin)
+    if (width() < m_size + m_margin || height() < m_size + m_margin)
         return; // don't draw arrows if we are too small
 
     unsigned int x = 0, y = 0;
@@ -346,7 +345,7 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     d->pixmapLabel = new QLabel(d->hbox);
     d->clickLabel  = new RClickLabel(d->hbox);
 
-    QHBoxLayout* hlay = new QHBoxLayout(d->hbox);
+    QHBoxLayout* const hlay = new QHBoxLayout(d->hbox);
     hlay->addWidget(d->arrow);
     hlay->addWidget(d->checkBox);
     hlay->addWidget(d->pixmapLabel);
@@ -557,8 +556,8 @@ RExpanderBox::RExpanderBox(QWidget* const parent)
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
-    QWidget* main = new QWidget(viewport());
-    d->vbox       = new QVBoxLayout(main);
+    QWidget* const main = new QWidget(viewport());
+    d->vbox             = new QVBoxLayout(main);
     d->vbox->setMargin(0);
     d->vbox->setSpacing(KDialog::spacingHint());
     setWidget(main);
@@ -723,7 +722,8 @@ int RExpanderBox::indexOf(RLabelExpander* const widget) const
 {
     for (int i = 0 ; i < count(); ++i)
     {
-        RLabelExpander* exp = d->wList[i];
+        RLabelExpander* const exp = d->wList[i];
+
         if (widget == exp)
             return i;
     }
@@ -734,7 +734,8 @@ void RExpanderBox::setItemExpanded(int index, bool b)
 {
     if (index > d->wList.count() || index < 0) return;
 
-    RLabelExpander* exp = d->wList[index];
+    RLabelExpander* const exp = d->wList[index];
+
     if (!exp) return;
 
     exp->setExpanded(b);
@@ -744,7 +745,8 @@ bool RExpanderBox::isItemExpanded(int index) const
 {
     if (index > d->wList.count() || index < 0) return false;
 
-    RLabelExpander* exp = d->wList[index];
+    RLabelExpander* const exp = d->wList[index];
+
     if (!exp) return false;
 
     return (exp->isExpanded());
@@ -754,7 +756,8 @@ void RExpanderBox::readSettings(KConfigGroup& group)
 {
     for (int i = 0 ; i < count(); ++i)
     {
-        RLabelExpander *exp = d->wList[i];
+        RLabelExpander* const exp = d->wList[i];
+
         if (exp)
         {
             exp->setExpanded(group.readEntry(QString("%1 Expanded").arg(exp->objectName()),
@@ -767,7 +770,8 @@ void RExpanderBox::writeSettings(KConfigGroup& group)
 {
     for (int i = 0 ; i < count(); ++i)
     {
-        RLabelExpander *exp = d->wList[i];
+        RLabelExpander* const exp = d->wList[i];
+
         if (exp)
         {
             group.writeEntry(QString("%1 Expanded").arg(exp->objectName()),
@@ -803,6 +807,7 @@ void RExpanderBoxExclusive::slotItemExpanded(bool b)
             {
                 setItemExpanded(item, false);
             }
+
             item++;
         }
     }

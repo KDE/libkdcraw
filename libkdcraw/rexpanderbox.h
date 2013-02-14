@@ -7,9 +7,9 @@
  * @date   2008-03-14
  * @brief  A widget to host settings as expander box
  *
- * @author Copyright (C) 2008-2012 by Gilles Caulier
+ * @author Copyright (C) 2008-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2008-2012 by Marcel Wiesweg
+ * @author Copyright (C) 2008-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2010 by Manuel Viet
  *         <a href="mailto:contact at 13zenrv dot fr">contact at 13zenrv dot fr</a>

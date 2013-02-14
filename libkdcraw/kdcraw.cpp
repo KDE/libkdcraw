@@ -7,9 +7,9 @@
  * @date   2006-12-09
  * @brief  a tread-safe libraw C++ program interface
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2012 by Marcel Wiesweg
+ * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
  * @author Copyright (C) 2007-2008 by Guillaume Castagnino
  *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
@@ -74,7 +74,9 @@ bool KDcraw::loadRawPreview(QImage& image, const QString& path)
 {
     // In first, try to extract the embedded JPEG preview. Very fast.
     bool ret = loadEmbeddedPreview(image, path);
-    if (ret) return true;
+
+    if (ret)
+        return true;
 
     // In second, decode and half size of RAW picture. More slow.
     return (loadHalfPreview(image, path));
@@ -127,7 +129,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
     }
 
-    libraw_processed_image_t* thumb = raw.dcraw_make_mem_thumb(&ret);
+    libraw_processed_image_t* const thumb = raw.dcraw_make_mem_thumb(&ret);
     if(!thumb)
     {
         kDebug() << "LibRaw: failed to run dcraw_make_mem_thumb: " << libraw_strerror(ret);
@@ -241,7 +243,7 @@ bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecoding
         kDebug() << "Failled to load full RAW picture";
         return false;
     }
-        
+
     uchar* sptr  = (uchar*)imgData.data();
     uchar tmp8[2];
 
@@ -260,7 +262,7 @@ bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecoding
     image = QImage(width, height, QImage::Format_ARGB32);
     uint*  dptr  = (uint*)image.bits();
     sptr         = (uchar*)imgData.data();
-    
+
     for (int i = 0 ; i < width * height ; ++i)
     {
         *dptr++ = qRgba(sptr[2], sptr[1], sptr[0], 0xFF);

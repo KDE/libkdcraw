@@ -7,7 +7,7 @@
  * @date   2006-09-13
  * @brief  LibRaw settings widgets
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -195,8 +195,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     // ---------------------------------------------------------------
     // DEMOSAICING Settings panel
 
-    d->demosaicingSettings         = new QWidget(this);
-    QGridLayout* demosaicingLayout = new QGridLayout(d->demosaicingSettings);
+    d->demosaicingSettings               = new QWidget(this);
+    QGridLayout* const demosaicingLayout = new QGridLayout(d->demosaicingSettings);
 
     int line = 0;
 
@@ -233,13 +233,13 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addWidget(d->fourColorCheckBox, line, 0, 1, line == 0 ? 2 : 3);
     line++;
 
-    KUrlLabel *dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
+    KUrlLabel* const dcrawVersion = new KUrlLabel("http://www.libraw.org", QString("libraw %1")
                                   .arg(KDcraw::librawVersion()), d->demosaicingSettings);
     dcrawVersion->setAlignment(Qt::AlignRight);
     dcrawVersion->setToolTip(i18nc("@info:tooltip", "Visit LibRaw project website"));
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
-    d->dontStretchPixelsCheckBox = new QCheckBox(i18nc("@option:check", "Do not stretch or rotate pixels"), d->demosaicingSettings);
+    d->dontStretchPixelsCheckBox  = new QCheckBox(i18nc("@option:check", "Do not stretch or rotate pixels"), d->demosaicingSettings);
     d->dontStretchPixelsCheckBox->setWhatsThis(i18nc("@info:whatsthis", 
                                 "<title>Do not stretch or rotate pixels</title>"
                                 "<para>For Fuji Super CCD cameras, show the image tilted 45 degrees. "
@@ -348,7 +348,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     demosaicingLayout->addWidget(d->medianFilterPassesSpinBox, line, 1, 1, 2);
     line++;
 
-    d->refineInterpolationBox       = new QCheckBox(i18nc("@option:check", "Refine interpolation"), d->demosaicingSettings);
+    d->refineInterpolationBox = new QCheckBox(i18nc("@option:check", "Refine interpolation"), d->demosaicingSettings);
     d->refineInterpolationBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Refine interpolation</title>"
                                 "<para>This setting is available only for few Quality options:</para>"
                                 "<para><list><item><emphasis strong='true'>DCB</emphasis>: turn on "
@@ -363,11 +363,11 @@ void DcrawSettingsWidget::setup(int advSettings)
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
 
-    d->whiteBalanceSettings         = new QWidget(this);
-    QGridLayout* whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
+    d->whiteBalanceSettings               = new QWidget(this);
+    QGridLayout* const whiteBalanceLayout = new QGridLayout(d->whiteBalanceSettings);
 
-    d->whiteBalanceLabel            = new QLabel(i18nc("@label:listbox", "Method:"), d->whiteBalanceSettings);
-    d->whiteBalanceComboBox         = new RComboBox(d->whiteBalanceSettings);
+    d->whiteBalanceLabel    = new QLabel(i18nc("@label:listbox", "Method:"), d->whiteBalanceSettings);
+    d->whiteBalanceComboBox = new RComboBox(d->whiteBalanceSettings);
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::NONE,   i18nc("@item:inlistbox", "Default D65"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::CAMERA, i18nc("@item:inlistbox", "Camera"));
     d->whiteBalanceComboBox->insertItem(RawDecodingSettings::AUTO,   i18nc("@item:inlistbox set while balance automatically", "Automatic"));
@@ -537,8 +537,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel
 
-    d->correctionsSettings         = new QWidget(this);
-    QGridLayout* correctionsLayout = new QGridLayout(d->correctionsSettings);
+    d->correctionsSettings               = new QWidget(this);
+    QGridLayout* const correctionsLayout = new QGridLayout(d->correctionsSettings);
 
     d->noiseReductionLabel    = new QLabel(i18nc("@label:listbox", "Noise reduction:"), d->correctionsSettings);
     d->noiseReductionComboBox = new RComboBox(d->colormanSettings);
@@ -627,8 +627,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     // ---------------------------------------------------------------
     // COLOR MANAGEMENT Settings panel
 
-    d->colormanSettings         = new QWidget(this);
-    QGridLayout* colormanLayout = new QGridLayout(d->colormanSettings);
+    d->colormanSettings               = new QWidget(this);
+    QGridLayout* const colormanLayout = new QGridLayout(d->colormanSettings);
 
     d->inputColorSpaceLabel     = new QLabel(i18nc("@label:listbox", "Camera Profile:"), d->colormanSettings);
     d->inputColorSpaceComboBox  = new RComboBox(d->colormanSettings);
@@ -833,9 +833,12 @@ DcrawSettingsWidget::~DcrawSettingsWidget()
 void DcrawSettingsWidget::updateMinimumWidth()
 {
     int width = 0;
+
     for (int i = 0; i < count(); i++)
+    {
         if (widget(i)->width() > width)
             width = widget(i)->width();
+    }
 
     setMinimumWidth(width);
 }

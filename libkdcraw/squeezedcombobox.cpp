@@ -8,7 +8,7 @@
  * @brief  a combo box with a width not depending of text
  *         content size
  *
- * @author Copyright (C) 2006-2012 by Gilles Caulier
+ * @author Copyright (C) 2006-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008 by Andi Clemens
  *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>
@@ -83,8 +83,7 @@ bool SqueezedComboBox::contains(const QString& text) const
     if (text.isEmpty())
         return false;
 
-    for (QMap<int, QString>::const_iterator it = d->originalItems.constBegin() ; it != d->originalItems.constEnd();
-         ++it)
+    for (QMap<int, QString>::const_iterator it = d->originalItems.constBegin() ; it != d->originalItems.constEnd(); ++it)
     {
         if (it.value() == text)
             return true;
@@ -149,8 +148,7 @@ void SqueezedComboBox::resizeEvent(QResizeEvent *)
 
 void SqueezedComboBox::slotTimeOut()
 {
-    for (QMap<int, QString>::iterator it = d->originalItems.begin() ;
-         it != d->originalItems.end(); ++it)
+    for (QMap<int, QString>::iterator it = d->originalItems.begin() ; it != d->originalItems.end(); ++it)
     {
         setItemText( it.key(), squeezeText( it.value() ) );
     }
@@ -172,7 +170,7 @@ QString SqueezedComboBox::squeezeText(const QString& original) const
 
     for (int i = 0 ; i != original.length(); ++i)
     {
-        if ( (int)fm.width(original.right(i)) > widgetSize)
+        if ((int)fm.width(original.right(i)) > widgetSize)
         {
             sqItem = QString(original.left(i) + "...");
             break;

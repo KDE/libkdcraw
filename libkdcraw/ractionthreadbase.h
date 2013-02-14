@@ -7,7 +7,7 @@
  * @date   2011-12-28
  * @brief  re-implementation of action thread using threadweaver
  *
- * @author Copyright (C) 2011-2012 by Gilles Caulier
+ * @author Copyright (C) 2011-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2011-2012 by A Janardhan Reddy
  *         <a href="annapareddyjanardhanreddy at gmail dot com">annapareddyjanardhanreddy at gmail dot com</a>
@@ -67,15 +67,15 @@ public:
 protected:
 
     void run();
-    
+
     /** Append a collection of jobs to process in pending list.
      */
     void appendJob(JobCollection* const job);
-    
+
     /** Return true if list of pending jobs to process is empty.
      */
     bool isEmpty() const;
-    
+
 protected Q_SLOTS:
 
     void slotFinished();

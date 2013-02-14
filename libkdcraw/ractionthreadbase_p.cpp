@@ -7,7 +7,7 @@
  * @date   2011-12-28
  * @brief  internal RActionThreadBase classes
  *
- * @author Copyright (C) 2011-2012 by Gilles Caulier
+ * @author Copyright (C) 2011-2013 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2011-2012 by A Janardhan Reddy
  *         <a href="annapareddyjanardhanreddy at gmail dot com">annapareddyjanardhanreddy at gmail dot com</a>
