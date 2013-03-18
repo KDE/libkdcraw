@@ -43,8 +43,8 @@ RWeaverObserver::RWeaverObserver(QObject* const parent)
     connect(this, SIGNAL(threadStarted(ThreadWeaver::Thread*)),
             this, SLOT(slotThreadStarted(ThreadWeaver::Thread*)));
 
-    connect(this, SIGNAL(threadBusy(ThreadWeaver::Thread*, ThreadWeaver::Job*)),
-            this, SLOT(slotThreadBusy(ThreadWeaver::Thread*, ThreadWeaver::Job*)));
+    connect(this, SIGNAL(threadBusy(ThreadWeaver::Thread*,ThreadWeaver::Job*)),
+            this, SLOT(slotThreadBusy(ThreadWeaver::Thread*,ThreadWeaver::Job*)));
 
     connect(this, SIGNAL(threadSuspended(ThreadWeaver::Thread*)),
             this, SLOT(slotThreadSuspended(ThreadWeaver::Thread*)));
