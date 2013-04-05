@@ -958,7 +958,7 @@ void DcrawSettingsWidget::slotAutoCAToggled(bool b)
         d->caBlueMultSpinBox->setValue(0.0);
     }
 
-    bool mult = !b & d->autoCACorrectionBox->isEnabled();
+    bool mult = (!b) && (d->autoCACorrectionBox->isEnabled());
     d->caRedMultSpinBox->setEnabled(mult);
     d->caBlueMultSpinBox->setEnabled(mult);
     d->caRedMultLabel->setEnabled(mult);
