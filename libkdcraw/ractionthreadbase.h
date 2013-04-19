@@ -56,7 +56,7 @@ public:
     ~RActionThreadBase();
 
     /** Adjust maximum number of thread used to parallelize collection of job processing.
-     *  By default in constructor, Solid api is used to determine the number of CPU avaialble and adjust 
+     *  By default in constructor, KDE::Solid API is used to determine the number of CPU available and adjust
      *  this value automatically.
      */
     void setMaximumNumberOfThreads(int n);
