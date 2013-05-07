@@ -108,6 +108,7 @@ MACRO_LOG_FEATURE(JPEG_FOUND "libjpeg" "JPEG image format support" "http://www.i
 
 # Flag to use libjpeg with LibRaw DNG lossy codec
 IF(JPEG_FOUND)
+    ADD_DEFINITIONS(-DUSE_JPEG)
     ADD_DEFINITIONS(-DUSE_JPEG8)
     INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
 ENDIF()
