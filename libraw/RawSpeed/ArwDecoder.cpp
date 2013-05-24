@@ -26,7 +26,7 @@ namespace RawSpeed {
 
 ArwDecoder::ArwDecoder(TiffIFD *rootIFD, FileMap* file) :
     RawDecoder(file), mRootIFD(rootIFD) {
-
+  mShiftDownScale = 0;
 }
 
 ArwDecoder::~ArwDecoder(void) {
@@ -64,9 +64,14 @@ RawImage ArwDecoder::decodeRawInternal() {
   // This camera has however another MAKER entry, so we MAY be able
   // to detect it this way in the future.
   data = mRootIFD->getIFDsWithTag(MAKE);
-  string make = data[0]->getEntry(MAKE)->getString();
-  if (!make.compare("SONY"))
-    bitPerPixel = 8;
+  if (data.size() > 1) {
+    for (uint32 i = 0; i < data.size(); i++) {
+      string make = data[i]->getEntry(MAKE)->getString();
+      /* Check for maker "SONY" without spaces */
+      if (!make.compare("SONY"))
+        bitPerPixel = 8;
+    }
+  }
 
   bool arw1 = counts->getInt() * 8 != width * height * bitPerPixel;
   if (arw1)
@@ -161,12 +166,13 @@ void ArwDecoder::DecodeARW2(ByteStream &input, uint32 w, uint32 h, uint32 bpp) {
       for (uint32 x = 0 ; x < w; x += 2) {
         uint32 g1 = *in++;
         uint32 g2 = *in++;
-        // Shift up to match compressed precision
-        dest[x] = (g1 | ((g2 & 0xf) << 8)) << 2;
+        dest[x] = (g1 | ((g2 & 0xf) << 8));
         uint32 g3 = *in++;
-        dest[x+1] = ((g2 >> 4) | (g3 << 4)) << 2;
+        dest[x+1] = ((g2 >> 4) | (g3 << 4));
       }
     }
+    // Shift scales, since black and white are the same as compressed precision
+    mShiftDownScale = 2;
     return;
   }
   ThrowRDE("Unsupported bit depth");
@@ -200,6 +206,8 @@ void ArwDecoder::decodeMetaDataInternal(CameraMetaData *meta) {
     iso = mRootIFD->getEntryRecursive(ISOSPEEDRATINGS)->getInt();
 
   setMetaData(meta, make, model, "", iso);
+  mRaw->whitePoint >>= mShiftDownScale;
+  mRaw->blackLevel >>= mShiftDownScale;
 }
 
 /* Since ARW2 compressed images have predictable offsets, we decode them threaded */

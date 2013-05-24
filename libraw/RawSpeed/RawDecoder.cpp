@@ -27,6 +27,8 @@ namespace RawSpeed {
 	RawDecoder::RawDecoder(FileMap* file) : mRaw(RawImage::create()), mFile(file) {
   decoderVersion = 0;
   failOnUnknown = FALSE;
+  interpolateBadPixels = TRUE;
+  applyStage1DngOpcodes = TRUE;
 }
 
 RawDecoder::~RawDecoder(void) {
@@ -205,7 +207,7 @@ bool RawDecoder::checkCameraSupported(CameraMetaData *meta, string make, string 
       printf("Unable to find camera in database: %s %s %s\n", make.c_str(), model.c_str(), mode.c_str());
 
      if (failOnUnknown)
-       ThrowRDE("Camera not supported, and not allowed to guess. Sorry.");
+       ThrowRDE("Camera '%s' '%s', mode '%s' not supported, and not allowed to guess. Sorry.", make.c_str(), model.c_str(), mode.c_str());
 
     // Assume the camera can be decoded, but return false, so decoders can see that we are unsure.
     return false;    
@@ -261,7 +263,7 @@ void RawDecoder::setMetaData(CameraMetaData *meta, string make, string model, st
 void *RawDecoderDecodeThread(void *_this) {
   RawDecoderThread* me = (RawDecoderThread*)_this;
   try {
-    me->parent->decodeThreaded(me);
+      me->parent->decodeThreaded(me);
   } catch (RawDecoderException &ex) {
     me->parent->mRaw->setError(ex.what());
   } catch (IOException &ex) {
@@ -310,7 +312,10 @@ void RawDecoder::decodeThreaded(RawDecoderThread * t) {
 RawSpeed::RawImage RawDecoder::decodeRaw()
 {
   try {
-    return decodeRawInternal();
+    RawImage raw = decodeRawInternal();
+    if (interpolateBadPixels)
+      raw->fixBadPixels();
+    return raw;
   } catch (TiffParserException &e) {
     ThrowRDE("%s", e.what());
   } catch (FileIOException &e) {

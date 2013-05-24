@@ -25,11 +25,10 @@
 
 #include "FileMap.h"
 #include "RawDecoder.h"
-#include "dlldef.h"
 
 namespace RawSpeed {
 
-class DllDef RawParser 
+class RawParser 
 {
 public:
   RawParser(FileMap* input);

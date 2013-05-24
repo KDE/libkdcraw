@@ -10,7 +10,6 @@
 #include "BitPumpPlain.h"
 #include "CameraMetaData.h"
 #include "TiffIFD.h"
-#include "dlldef.h"
 
 /* 
     RawSpeed - RAW file decoder.
@@ -50,7 +49,7 @@ class RawDecoderThread
     RawDecoder* parent;
 };
 
-class DllDef RawDecoder 
+class RawDecoder 
 {
 public:
   /* Construct decoder instance - FileMap is a filemap of the file to be decoded */
@@ -93,6 +92,14 @@ public:
   /* support unknown cameras, you can enable this */
   /* DNGs are always attempted to be decoded, so this variable has no effect on DNGs */
   bool failOnUnknown;
+
+  /* Set how to handle bad pixels. */
+  /* If you disable this parameter, no bad pixel interpolation will be done */
+  bool interpolateBadPixels;
+
+  /* Apply stage 1 DNG opcodes. */
+  /* This usually maps out bad pixels, etc */
+  bool applyStage1DngOpcodes;
 
 protected:
   /* Attempt to decode the image */

@@ -8,8 +8,6 @@ If you want to import RawSpeed into libkdcraw, follow these instructions :
 
   - Apply these patches from LibRaw to RawSpeed source code :
     * rawspeed.cpucount-unix.patch.
-    * rawspeed.win32-dll.patch.
-    * rawspeed.uncompressed-color-dng.patch
 
   - Remove these files from RawSpeed :
     * RawSpeed.cpp (it is test application source).
@@ -20,3 +18,5 @@ If you want to import RawSpeed into libkdcraw, follow these instructions :
     to make RawSpeed/rawspeed_xmldata.cpp from it :
 
     > ./rsxml2c.sh camera.xml > rawspeed_xmldata.cpp
+
+  - Apply crlf2lf.sh script to patch EOF in all source code files.

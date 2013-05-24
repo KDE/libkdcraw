@@ -22,11 +22,10 @@
 #ifndef CAMERA_METADATA_EXCEPTION_H
 #define CAMERA_METADATA_EXCEPTION_H
 
-#include "dlldef.h"
 
 namespace RawSpeed {
 
-void DllDef ThrowCME(const char* fmt, ...);
+void ThrowCME(const char* fmt, ...);
 
 class CameraMetadataException :
   public std::runtime_error

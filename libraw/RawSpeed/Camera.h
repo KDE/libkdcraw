@@ -6,7 +6,6 @@
 #include <libxml/parser.h>
 #include "BlackArea.h"
 #include "CameraMetadataException.h"
-#include "dlldef.h"
 /* 
     RawSpeed - RAW file decoder.
 
@@ -31,7 +30,7 @@
 
 namespace RawSpeed {
 
-class DllDef Camera
+class Camera
 {
 public:
   Camera(xmlDocPtr doc, xmlNodePtr cur);

@@ -27,14 +27,13 @@
     http://www.klauspost.com
 */
 
-#include "dlldef.h"
 namespace RawSpeed {
 
-class DllDef CameraMetaData
+class CameraMetaData
 {
 public:
   CameraMetaData();
-  CameraMetaData(char *docname);
+  CameraMetaData(const char *docname);
   virtual ~CameraMetaData(void);
   xmlDocPtr doc;
   xmlParserCtxtPtr ctxt; /* the parser context */

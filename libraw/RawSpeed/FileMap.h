@@ -25,7 +25,6 @@
 */
 
 #include "IOException.h"
-#include "dlldef.h"
 
 namespace RawSpeed {
 
@@ -37,7 +36,7 @@ namespace RawSpeed {
  * This can also be done as a MemMap 
  * 
  *****************************/
-class DllDef FileMap
+class FileMap
 {
 public:
   FileMap(uint32 _size);                 // Allocates the data array itself

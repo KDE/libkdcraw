@@ -91,6 +91,7 @@ LJpegDecompressor::LJpegDecompressor(FileMap* file, RawImage img):
   mDNGCompatible = false;
   slicesW.clear();
   mUseBigtable = false;
+  mCanonFlipDim = false;
 }
 
 LJpegDecompressor::~LJpegDecompressor(void) {
@@ -467,7 +468,8 @@ void LJpegDecompressor::createBigTable(HuffmanTable *htbl) {
   int temp;
   uint32 l;
 
-  htbl->bigTable = (int*)_aligned_malloc(size * sizeof(int), 16);
+  if (!htbl->bigTable)
+    htbl->bigTable = (int*)_aligned_malloc(size * sizeof(int), 16);
   if (!htbl->bigTable)
 	ThrowRDE("Out of memory, failed to allocate %d bytes", size*sizeof(int));
   for (uint32 i = 0; i < size; i++) {
