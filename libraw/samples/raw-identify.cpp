@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: identify.cpp
- * Copyright 2008-2011 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008
  *
  * LibRaw C++ demo: emulates dcraw -i [-v]
@@ -105,7 +105,7 @@ int main(int ac, char *av[])
                     printf ("\nFilter pattern: ");
                     if (!P1.cdesc[3]) P1.cdesc[3] = 'G';
                     for (int i=0; i < 16; i++)
-                        putchar (P1.cdesc[MyCoolRawProcessor.fc(i >> 1,i & 1)]);
+                        putchar (P1.cdesc[MyCoolRawProcessor.fcol(i >> 1,i & 1)]);
                 }
             printf ("\nDaylight multipliers:");
             for(int c=0;c<P1.colors;c++) printf (" %f", C.pre_mul[c]);
@@ -114,13 +114,6 @@ int main(int ac, char *av[])
                     printf ("\nCamera multipliers:");
                     for(int c=0;c<4;c++) printf (" %f", C.cam_mul[c]);
                 }
-            const char *csl[] = {"U","I","CO","L","CA"};
-            printf("\nColor sources /Legend: (U)nknown, (I)nit, (CO)nstant, (L)oaded, (CA)lculated/:\n");
-            printf("\tcurve=%s; rgb_cam=%s; cmatrix=%s, pre_mul=%s, cam_mul=%s",
-                   csl[C.color_flags.curve_state],csl[C.color_flags.rgb_cam_state],
-                   csl[C.color_flags.cmatrix_state],csl[C.color_flags.pre_mul_state],
-                   csl[C.color_flags.cam_mul_state]);
-            putchar ('\n');
             printf("Cam->XYZ matrix:\n");
             for(int i=0; i< 4; i++)
                 printf("%6.4f\t%6.4f\t%6.4f\n",C.cam_xyz[i][0],C.cam_xyz[i][1],C.cam_xyz[i][2]);

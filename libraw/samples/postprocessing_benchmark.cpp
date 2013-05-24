@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: postprocessing_benchmark.cpp
- * Copyright 2008-2010 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
  * Created: Jul 13, 2011
  *
  * LibRaw simple C++ API:  creates 8 different renderings from 1 source file. The 1st and 4th one should be identical
@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
 {
     int  i, ret,rep=1;
     LibRaw RawProcessor;
+#ifdef OUT
+#undef OUT
+#endif
 #define OUT RawProcessor.imgdata.params
 #define S RawProcessor.imgdata.sizes
 
@@ -60,6 +63,7 @@ int main(int argc, char *argv[])
                 "-s <num>       Select one raw image from input file\n"
                 "-B <x y w h>   Crop output image\n"
                 "-R <num>       Number of repetitions\n"
+				"-c             Dont use rawspeed\n"
                 ,LibRaw::version(), LibRaw::cameraCount(),
                 argv[0]);
             return 0;
@@ -106,12 +110,15 @@ int main(int argc, char *argv[])
                     OUT.shot_select = abs(atoi(argv[arg++])); 
                     break;
                 case 'B':  
-                    for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]); 
-                    break;
+                  for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]); 
+                  break;
                 case 'R':  
                     rep = abs(atoi(argv[arg++])); 
                     if(rep<1) rep = 1;
                     break;
+				case 'c':
+					OUT.use_rawspeed = 0;
+					break;
                 default:
                     fprintf (stderr,"Unknown option \"-%c\".\n", opt);
                     return 1;
@@ -120,7 +127,8 @@ int main(int argc, char *argv[])
     for ( ; arg < argc; arg++)
         {
             printf("Processing file %s\n",argv[arg]);
-            if( (ret = RawProcessor.open_file(argv[arg])) != LIBRAW_SUCCESS)
+			timerstart();
+			if( (ret = RawProcessor.open_file(argv[arg])) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot open_file %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
@@ -131,6 +139,8 @@ int main(int argc, char *argv[])
                     fprintf(stderr,"Cannot unpack %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue;
                 }
+			float qsec = timerend();
+			printf("\n%.1f msec for unpack\n",qsec);
             float mpix,rmpix;
             timerstart();
             for(c=0; c < rep; c++)

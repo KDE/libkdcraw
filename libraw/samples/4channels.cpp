@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: 4channels.cpp
- * Copyright 2008-2011 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
  * Created: Mon Feb 09, 2009
  *
  * LibRaw sample
@@ -48,7 +48,7 @@ int main(int ac, char *av[])
         {
           usage:
             printf(
-                "4channeld - LibRaw %s sample. %d cameras supported\n"
+                "4channels - LibRaw %s sample. %d cameras supported\n"
                 "Usage: %s [-s N] [-g] [-A] [-B] [-N] raw-files....\n"
                 "\t-s N - select Nth image in file (default=0)\n"
                 "\t-g - use gamma correction with gamma 2.2 (not precise,use for visual inspection only)\n"
@@ -67,7 +67,6 @@ int main(int ac, char *av[])
 #define P2 RawProcessor.imgdata.other
 #define OUT RawProcessor.imgdata.params
 
-    OUT.document_mode=2;
     OUT.output_bps=16;
     OUT.output_tiff=1;
     OUT.user_flip=0;

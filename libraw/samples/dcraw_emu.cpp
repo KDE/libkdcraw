@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: dcraw_emu.cpp
- * Copyright 2008-2011 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2013 LibRaw LLC (info@libraw.org)
  * Created: Sun Mar 23,   2008
  *
  * LibRaw simple C++ API sample: almost complete dcraw emulator
@@ -113,11 +113,14 @@ void usage(const char *prog)
 "-agreen <g> equilibrate green\n"
 #endif
 "-aexpo <e p> exposure correction\n"
+// WF
+"-dbnd <r g b g> debanding\n"
 #ifndef WIN32
 "-mmap     Use mmap()-ed buffer instead of plain FILE I/O\n"
 #endif
 "-mem	   Use memory buffer instead of FILE I/O\n"
-        );
+"-disars   Do not use RawSpeed library\n"
+);
     exit(1);
 }
 
@@ -197,7 +200,7 @@ int main(int argc, char *argv[])
           char *optstr = argv[arg];
           opt = argv[arg++][1];
           if ((cp = strchr (sp=(char*)"cnbrkStqmHABCgU", opt))!=0)
-              for (i=0; i < "111411111142"[cp-sp]-'0'; i++)
+              for (i=0; i < "111411111144221"[cp-sp]-'0'; i++)
                   if (!isdigit(argv[arg+i][0]) && !optstr[2]) 
                       {
                           fprintf (stderr,"Non-numeric argument to \"-%c\"\n", opt);
@@ -332,8 +335,16 @@ int main(int argc, char *argv[])
               case 'd':
                   if(!strcmp(optstr,"-dcbi"))
                       OUT.dcb_iterations = atoi(argv[arg++]);
+				  else if(!strcmp(optstr,"-disars"))
+					  OUT.use_rawspeed=0;
                   else if(!strcmp(optstr,"-dcbe"))
                       OUT.dcb_enhance_fl = 1;
+                  else if(!strcmp(optstr,"-dbnd"))
+                  {
+                  	for(c=0; c<4; c++)
+                            OUT.wf_deband_treshold[c] = (float)atof(argv[arg++]);
+					OUT.wf_debanding = 1;
+                  }
                   else
                       fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                   break;
@@ -430,14 +441,14 @@ int main(int argc, char *argv[])
                         }
 					if(!(iobuffer = malloc(st.st_size)))
 					{
-						fprintf(stderr,"Cannot allocate %d kbytes for memory buffer\n",st.st_size/1024);
+                                          fprintf(stderr,"Cannot allocate %d kbytes for memory buffer\n",(int)(st.st_size/1024));
 						close(file);
 						continue;
 					}
 					int rd;
 					if(st.st_size!=(rd=read(file,iobuffer,st.st_size)))
 					{
-						fprintf(stderr,"Cannot read %d bytes instead of  %d to memory buffer\n",rd,st.st_size);
+                                          fprintf(stderr,"Cannot read %d bytes instead of  %d to memory buffer\n",(int)rd,(int)st.st_size);
 						close(file);
 						free(iobuffer);
 						continue;
