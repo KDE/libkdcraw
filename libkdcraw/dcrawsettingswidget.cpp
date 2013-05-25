@@ -278,7 +278,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "demosaicing. The following methods are available for demosaicing "
                                 "RAW images:</para>"
 
-                                        // Original dcraw demosaicing methods
+                                // Original dcraw demosaicing methods
 
                                 "<para><list><item><emphasis strong='true'>Bilinear</emphasis>: use "
                                 "high-speed but low-quality bilinear interpolation (default - for "
@@ -301,7 +301,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "direction of interpolation so as to maximize a homogeneity metric, "
                                 "thus typically minimizing color artifacts.</item>"
 
-                                        // Extended demosaicing method
+                                // Extended demosaicing method
 
                                 "<item><emphasis strong='true'>DCB</emphasis>: DCB interpolation from "
                                 "linuxphoto.org project.</item>"
@@ -435,7 +435,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->expoCorrectionShiftLabel   = new QLabel(i18nc("@label:slider", "Shift (linear):"), d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox->setDecimals(2);
-    d->expoCorrectionShiftSpinBox->setRange(0.5, 3.0, 0.01);
+    d->expoCorrectionShiftSpinBox->setRange(0.25, 8.0, 0.01);
     d->expoCorrectionShiftSpinBox->setDefaultValue(1.0);
     d->expoCorrectionShiftSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Shift</title>"
                                 "<para>Shift of exposure correction before interpolation in linear "
@@ -448,7 +448,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->expoCorrectionHighlightSpinBox->setDefaultValue(0.0);
     d->expoCorrectionHighlightSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Highlight</title>"
                                 "<para>Amount of highlight preservation for exposure correction "
-                                "before interpolation in E.V.</para>"));
+                                "before interpolation in E.V. Only take effect if Shift Correction is > 1.0</para>"));
 
     d->fixColorsHighlightsBox = new QCheckBox(i18nc("@option:check", "Correct false colors in highlights"), d->whiteBalanceSettings);
     d->fixColorsHighlightsBox->setWhatsThis(i18nc("@info:whatsthis", "<para>If enabled, images with "
@@ -738,6 +738,9 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->expoCorrectionBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExposureCorrectionToggled(bool)));
 
+    connect(d->expoCorrectionShiftSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(slotExpoCorrectionShiftChanged(double)));
+
     // Wrapper to emit signal when something is changed in settings.
 
     connect(d->inIccUrlEdit, SIGNAL(urlSelected(KUrl)),
@@ -816,9 +819,6 @@ void DcrawSettingsWidget::setup(int advSettings)
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->brightnessSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
-
-    connect(d->expoCorrectionShiftSpinBox, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->expoCorrectionHighlightSpinBox, SIGNAL(valueChanged(double)),
@@ -973,6 +973,17 @@ void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
     d->expoCorrectionHighlightLabel->setEnabled(b);
     d->expoCorrectionHighlightSpinBox->setEnabled(b);
 
+    slotExpoCorrectionShiftChanged(d->expoCorrectionShiftSpinBox->value());
+}
+
+void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double shift)
+{
+    // Only enable Highligh exposure correction if Shift correction is >= 1.0, else this settings do not take effect.
+    bool b = (shift >= 1.0);
+
+    d->expoCorrectionHighlightLabel->setEnabled(b);
+    d->expoCorrectionHighlightSpinBox->setEnabled(b);
+    
     emit signalSettingsChanged();
 }
 
@@ -1038,6 +1049,7 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
             d->refineInterpolationBox->setEnabled(false);
             break;
     }
+    
     emit signalSettingsChanged();
 }
 

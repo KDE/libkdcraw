@@ -114,6 +114,7 @@ private Q_SLOTS:
     void slotInputColorSpaceChanged(int);
     void slotOutputColorSpaceChanged(int);
     void slotRAWQualityChanged(int);
+    void slotExpoCorrectionShiftChanged(double);
 
 private:
 

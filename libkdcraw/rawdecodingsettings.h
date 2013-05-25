@@ -344,12 +344,13 @@ public:
     bool expoCorrection;
 
     /** Shift of Exposure Correction before interpolation in linear scale.
-     *  Usable range is from 0.5 (darken image 1 stop) to 3.0 (lighten ~1.5 photographic stops).
+     *  Usable range is from 0.25 (darken image 1 stop : -2EV) to 8.0 (lighten ~1.5 photographic stops : +3EV).
      */
     double expoCorrectionShift;
 
     /** Amount of highlight preservation for exposure correction before interpolation in E.V.
      *  Usable range is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation)
+     *  This settings can only take effect if expoCorrectionShift > 1.0. 
      */
     double expoCorrectionHighlight;
 };
