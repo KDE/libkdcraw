@@ -121,6 +121,26 @@ public:
         expoCorrectionHighlightLabel   = 0;
     }
 
+    /** Convert Exposure correction shift E.V value from GUI to Linear value needs by libraw decoder.
+     */
+    double shiftExpoFromEvToLinear(double ev) const
+    {
+        // From GUI : -2.0EV => 0.25
+        //            +3.0EV => 8.00  
+        return (1.55*ev + 3.35);
+    }
+
+    /** Convert Exposure correction shift Linear value from liraw decoder to E.V value needs by GUI.
+     */
+    double shiftExpoFromLinearToEv(double lin) const
+    {
+        // From GUI : 0.25 => -2.0EV
+        //            8.00 => +3.0EV  
+        return ((lin-3.35) / 1.55);
+    }
+
+public:
+
     QWidget*         demosaicingSettings;
     QWidget*         whiteBalanceSettings;
     QWidget*         correctionsSettings;
@@ -428,27 +448,26 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<para>Specify the reconstruct highlight level. Low values favor "
                                 "whites and high values favor colors.</para>"));
 
-    d->expoCorrectionBox = new QCheckBox(i18nc("@option:check", "Exposure Correction"), d->whiteBalanceSettings);
+    d->expoCorrectionBox = new QCheckBox(i18nc("@option:check", "Exposure Correction (E.V)"), d->whiteBalanceSettings);
     d->expoCorrectionBox->setWhatsThis(i18nc("@info:whatsthis", "<para>Turn on the exposure "
                                 "correction before interpolation.</para>"));
 
-    d->expoCorrectionShiftLabel   = new QLabel(i18nc("@label:slider", "Shift (linear):"), d->whiteBalanceSettings);
+    d->expoCorrectionShiftLabel   = new QLabel(i18nc("@label:slider", "Linear Shift:"), d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionShiftSpinBox->setDecimals(2);
-    d->expoCorrectionShiftSpinBox->setRange(0.25, 8.0, 0.01);
-    d->expoCorrectionShiftSpinBox->setDefaultValue(1.0);
+    d->expoCorrectionShiftSpinBox->setRange(-2.0, 3.0, 0.01);
+    d->expoCorrectionShiftSpinBox->setDefaultValue(0.0);
     d->expoCorrectionShiftSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Shift</title>"
-                                "<para>Shift of exposure correction before interpolation in linear "
-                                "scale.</para>"));
+                                "<para>Linear Shift of exposure correction before interpolation in E.V</para>"));
 
-    d->expoCorrectionHighlightLabel   = new QLabel(i18nc("@label:slider", "Highlight (E.V):"), d->whiteBalanceSettings);
+    d->expoCorrectionHighlightLabel   = new QLabel(i18nc("@label:slider", "Highlight:"), d->whiteBalanceSettings);
     d->expoCorrectionHighlightSpinBox = new RDoubleNumInput(d->whiteBalanceSettings);
     d->expoCorrectionHighlightSpinBox->setDecimals(2);
     d->expoCorrectionHighlightSpinBox->setRange(0.0, 1.0, 0.01);
     d->expoCorrectionHighlightSpinBox->setDefaultValue(0.0);
     d->expoCorrectionHighlightSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Highlight</title>"
                                 "<para>Amount of highlight preservation for exposure correction "
-                                "before interpolation in E.V. Only take effect if Shift Correction is > 1.0</para>"));
+                                "before interpolation in E.V. Only take effect if Shift Correction is > 1.0 E.V</para>"));
 
     d->fixColorsHighlightsBox = new QCheckBox(i18nc("@option:check", "Correct false colors in highlights"), d->whiteBalanceSettings);
     d->fixColorsHighlightsBox->setWhatsThis(i18nc("@info:whatsthis", "<para>If enabled, images with "
@@ -976,10 +995,10 @@ void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
     slotExpoCorrectionShiftChanged(d->expoCorrectionShiftSpinBox->value());
 }
 
-void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double shift)
+void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double ev)
 {
     // Only enable Highligh exposure correction if Shift correction is >= 1.0, else this settings do not take effect.
-    bool b = (shift >= 1.0);
+    bool b = (ev >= 1.0);
 
     d->expoCorrectionHighlightLabel->setEnabled(b);
     d->expoCorrectionHighlightSpinBox->setEnabled(b);
@@ -1154,7 +1173,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
 
     d->expoCorrectionBox->setChecked(settings.expoCorrection);
     slotExposureCorrectionToggled(settings.expoCorrection);
-    d->expoCorrectionShiftSpinBox->setValue(settings.expoCorrectionShift);
+    d->expoCorrectionShiftSpinBox->setValue(d->shiftExpoFromLinearToEv(settings.expoCorrectionShift));
     d->expoCorrectionHighlightSpinBox->setValue(settings.expoCorrectionHighlight);
 
     d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
@@ -1257,7 +1276,7 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
     prm.caMultiplier[1]         = d->caBlueMultSpinBox->value();
 
     prm.expoCorrection          = d->expoCorrectionBox->isChecked();
-    prm.expoCorrectionShift     = d->expoCorrectionShiftSpinBox->value();
+    prm.expoCorrectionShift     = d->shiftExpoFromEvToLinear(d->expoCorrectionShiftSpinBox->value());
     prm.expoCorrectionHighlight = d->expoCorrectionHighlightSpinBox->value();
 
     prm.inputColorSpace         = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
