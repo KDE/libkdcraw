@@ -36,7 +36,7 @@
 
 // LibRaw includes
 
-#include "libraw/libraw.h"
+#include <libraw.h>
 
 // Local includes
 
