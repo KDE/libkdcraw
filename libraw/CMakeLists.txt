@@ -130,6 +130,8 @@ IF(NOT APPLE)
     ENDIF(OPENMP_FOUND)
 ENDIF(NOT APPLE)
 
+MACRO_BOOL_TO_01(OPENMP_FOUND LIBRAW_USE_OPENMP)
+
 # Jasper library check
 
 FIND_PACKAGE(Jasper)
@@ -232,6 +234,8 @@ IF(RAWSPEED_SUPPORT_CAN_BE_COMPILED)
 
 ENDIF()
 
+MACRO_BOOL_TO_01(RAWSPEED_SUPPORT_CAN_BE_COMPILED LIBRAW_USE_RAWSPEED)
+
 # -- Compile LibRaw library --------------------------------------------------------------------------------
 
 # Flag to include demosaic pack GPL2
@@ -250,6 +254,8 @@ ADD_DEFINITIONS(-DLIBRAW_NOTHREADS)
 IF (WIN32)
     ADD_DEFINITIONS(-DLIBRAW_BUILDLIB)
 ENDIF()
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config-libraw.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-libraw.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
@@ -341,5 +347,3 @@ IF(LCMS2_FOUND)
         LIBRAW_BUILD_SAMPLES(half_mt.c)
    ENDIF(WIN32)
 ENDIF(LCMS2_FOUND)
-
-
