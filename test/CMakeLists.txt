@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2012 by Gilles Caulier
+# @author Copyright (C) 2006-2013 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -28,3 +28,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 SET(raw2png_SRCS raw2png.cpp)
 ADD_EXECUTABLE(raw2png ${raw2png_SRCS})
 TARGET_LINK_LIBRARIES(raw2png kdcraw ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+
+SET(libinfo_SRCS libinfo.cpp)
+ADD_EXECUTABLE(libinfo ${libinfo_SRCS})
+TARGET_LINK_LIBRARIES(libinfo kdcraw ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
