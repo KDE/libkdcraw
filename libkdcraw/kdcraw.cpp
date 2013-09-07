@@ -495,7 +495,7 @@ bool KDcraw::librawUseGomp()
 
 bool KDcraw::librawUseRawSpeed()
 {
-#ifdef USE_RAWSPEED
+#ifdef LIBRAW_USE_RAWSPEED
     return true;
 #else
     return false;
