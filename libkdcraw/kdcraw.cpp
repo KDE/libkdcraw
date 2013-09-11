@@ -502,4 +502,22 @@ bool KDcraw::librawUseRawSpeed()
 #endif
 }
 
+bool KDcraw::librawUseGPL2DemosaicPack()
+{
+#ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL2
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool KDcraw::librawUseGPL3DemosaicPack()
+{
+#ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL3
+    return true;
+#else
+    return false;
+#endif
+}
+
 }  // namespace KDcrawIface

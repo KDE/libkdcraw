@@ -278,16 +278,31 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AHD,      i18nc("@item:inlistbox Quality", "AHD"));
 
-    // Extended demosaicing method
+    // Extended demosaicing method from GPL2 pack
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::DCB,      i18nc("@item:inlistbox Quality", "DCB"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::PL_AHD,   i18nc("@item:inlistbox Quality", "AHD v2"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AFD,      i18nc("@item:inlistbox Quality", "AFD"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD,      i18nc("@item:inlistbox Quality", "VCD"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::VCD_AHD,  i18nc("@item:inlistbox Quality", "VCD & AHD"));
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::LMMSE,    i18nc("@item:inlistbox Quality", "LMMSE"));
+    // Extended demosaicing method from GPL3 pack
     d->RAWQualityComboBox->insertItem(RawDecodingSettings::AMAZE,    i18nc("@item:inlistbox Quality", "AMaZE"));
 
+    // If Libraw do not support GPL2 pack, disable entries relevant.
+    if (!KDcraw::librawUseGPL2DemosaicPack())
+    {
+        for (int i=RawDecodingSettings::DCB ; i <=RawDecodingSettings::LMMSE ; ++i)
+            d->RAWQualityComboBox->combo()->setItemData(i, false, Qt::UserRole-1);
+    }
+
+    // If Libraw do not support GPL3 pack, disable entries relevant.
+    if (!KDcraw::librawUseGPL3DemosaicPack())
+    {
+        d->RAWQualityComboBox->combo()->setItemData(RawDecodingSettings::AMAZE, false, Qt::UserRole-1);
+    }
+
     d->RAWQualityComboBox->setDefaultIndex(RawDecodingSettings::BILINEAR);
+    d->RAWQualityComboBox->setCurrentIndex(RawDecodingSettings::BILINEAR);
     d->RAWQualityComboBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Quality (interpolation)</title>"
                                 "<para>Select here the demosaicing method to use when decoding RAW "
                                 "images. A demosaicing algorithm is a digital image process used to "
@@ -345,7 +360,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
                                 "<item><emphasis strong='true'>AMaZE</emphasis>: Aliasing Minimization "
                                 "interpolation and Zipper Elimination to apply color aberration removal "
-                                "from RawTherapee project.</item></list></para>"));
+                                "from RawTherapee project.</item></list></para>"
+                                
+                                "<para>Note: some methods can be unavailable if RAW decoder have been built "
+                                "without extention packs.</para>"));
 
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
@@ -377,6 +395,14 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "enhanced effective color interpolation (EECI) refine to improve "
                                 "sharpness.</item></list></para>"));
     demosaicingLayout->addWidget(d->refineInterpolationBox, line, 0, 1, 2);
+         
+    // If Libraw do not support GPL2 pack, disable options relevant.
+    if (!KDcraw::librawUseGPL2DemosaicPack())
+    {
+        d->medianFilterPassesLabel->setEnabled(false);
+        d->medianFilterPassesSpinBox->setEnabled(false);
+        d->refineInterpolationBox->setEnabled(false);
+    }
 
     addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
 
@@ -1021,41 +1047,17 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
     switch(quality)
     {
         case RawDecodingSettings::DCB:
-            d->medianFilterPassesLabel->setEnabled(true);
-            d->medianFilterPassesSpinBox->setEnabled(true);
-            d->refineInterpolationBox->setEnabled(true);
+        case RawDecodingSettings::VCD_AHD:
+            // These options can be only avaialble if Libraw use GPL2 pack.
+            d->medianFilterPassesLabel->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
+            d->medianFilterPassesSpinBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
+            d->refineInterpolationBox->setEnabled(KDcraw::librawUseGPL2DemosaicPack());
             break;
 
         case RawDecodingSettings::PL_AHD:
-            d->medianFilterPassesLabel->setEnabled(false);
-            d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolationBox->setEnabled(false);
-            break;
-
         case RawDecodingSettings::AFD:
-            d->medianFilterPassesLabel->setEnabled(false);
-            d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolationBox->setEnabled(false);
-            break;
-
         case RawDecodingSettings::VCD:
-            d->medianFilterPassesLabel->setEnabled(false);
-            d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolationBox->setEnabled(false);
-            break;
-
-        case RawDecodingSettings::VCD_AHD:
-            d->medianFilterPassesLabel->setEnabled(true);
-            d->medianFilterPassesSpinBox->setEnabled(true);
-            d->refineInterpolationBox->setEnabled(true);
-            break;
-
         case RawDecodingSettings::LMMSE:
-            d->medianFilterPassesLabel->setEnabled(false);
-            d->medianFilterPassesSpinBox->setEnabled(false);
-            d->refineInterpolationBox->setEnabled(false);
-            break;
-
         case RawDecodingSettings::AMAZE:
             d->medianFilterPassesLabel->setEnabled(false);
             d->medianFilterPassesSpinBox->setEnabled(false);
@@ -1137,8 +1139,32 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->whitePointSpinBox->setEnabled(settings.enableWhitePoint);
     d->whitePointSpinBox->setValue(settings.whitePoint);
 
-    d->RAWQualityComboBox->setCurrentIndex(settings.RAWQuality);
-    switch(settings.RAWQuality)
+    int q = settings.RAWQuality;
+    
+    // If Libraw do not support GPL2 pack, reset to BILINEAR.
+    if (!KDcraw::librawUseGPL2DemosaicPack())
+    {
+        for (int i=RawDecodingSettings::DCB ; i <=RawDecodingSettings::LMMSE ; ++i)
+        {
+            if (q == i)
+            {
+                q = RawDecodingSettings::BILINEAR;
+                kDebug() << "Libraw GPL2 pack not avaialble. Raw quality set to Bilinear";
+                break;
+            }
+        }
+    }
+
+    // If Libraw do not support GPL3 pack, reset to BILINEAR.
+    if (!KDcraw::librawUseGPL3DemosaicPack() && (q == RawDecodingSettings::AMAZE))
+    {
+        q = RawDecodingSettings::BILINEAR;
+        kDebug() << "Libraw GPL3 pack not avaialble. Raw quality set to Bilinear";
+    }
+    
+    d->RAWQualityComboBox->setCurrentIndex(q);
+
+    switch(q)
     {
         case RawDecodingSettings::DCB:
             d->medianFilterPassesSpinBox->setValue(settings.dcbIterations);
@@ -1153,7 +1179,8 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
             d->refineInterpolationBox->setChecked(false); // option not used.
             break;
     }
-    slotRAWQualityChanged(settings.RAWQuality);
+
+    slotRAWQualityChanged(q);
 
     d->inputColorSpaceComboBox->setCurrentIndex((int)settings.inputColorSpace);
     slotInputColorSpaceChanged((int)settings.inputColorSpace);

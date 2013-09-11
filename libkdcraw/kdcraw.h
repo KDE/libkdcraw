@@ -133,6 +133,14 @@ public:
      */
     static bool librawUseRawSpeed();
 
+    /** Return true if LibRaw use Demosaic Pack GPL2.
+     */
+    static bool librawUseGPL2DemosaicPack();
+    
+    /** Return true if LibRaw use Demosaic Pack GPL3.
+     */
+    static bool librawUseGPL3DemosaicPack();
+    
 public:
 
     /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file.
