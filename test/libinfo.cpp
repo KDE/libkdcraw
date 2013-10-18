@@ -39,6 +39,8 @@ int main(int /*argc*/, char** /*argv*/)
     qDebug() << "Libraw version    : " << KDcraw::librawVersion();
     qDebug() << "Use OpenMP        : " << KDcraw::librawUseGomp();
     qDebug() << "Use RawSpeed      : " << KDcraw::librawUseRawSpeed();
+    qDebug() << "Use GPL2 Pack     : " << KDcraw::librawUseGPL2DemosaicPack();
+    qDebug() << "Use GPL3 Pack     : " << KDcraw::librawUseGPL3DemosaicPack();
     qDebug() << "Raw files list    : " << KDcraw::rawFilesList();
     qDebug() << "Raw files version : " << KDcraw::rawFilesVersion();
     qDebug() << "Supported camera  : " << KDcraw::supportedCamera();

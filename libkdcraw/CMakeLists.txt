@@ -22,10 +22,6 @@
 #
 # ============================================================
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libraw/libraw
-                    ${CMAKE_CURRENT_BINARY_DIR}/../libraw
-                   )
-
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 SET(kdcraw_LIB_SRCS kdcraw.cpp
@@ -44,15 +40,14 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
 TARGET_LINK_LIBRARIES(kdcraw
-                      libraw
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KIO_LIBS}
                       ${KDE4_SOLID_LIBS}
                       ${KDE4_THREADWEAVER_LIBRARIES}
+                      ${LibRaw_r_LIBRARIES}
                      )
 
-SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION}
-                                        DEFINE_SYMBOL LIBRAW_BUILDLIB)
+SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION})
 
 INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -1,6 +1,6 @@
 LibRaw C++ interface for KDE
 
-This library is a part of Kipi-Plugins project (http://www.digikam.org)
+This library is a part of digiKam project (http://www.digikam.org)
 
 -- AUTHORS -----------------------------------------------------------
 
@@ -20,25 +20,10 @@ The library documentation is available on header files.
 CMake      >= 2.4.3                    http://www.cmake.org
 libqt      >= 4.2.x                    http://www.qtsoftware.com
 libkde     >= 4.0.x                    http://www.kde.org
-liblcms    >= 1.14.x (used by libraw)  http://www.littlecms.com
-
-Optional :
-
-libjpeg    >= 8      (used by libraw)  http://www.ijg.org
-libjasper  >= 1.7.x  (used by libraw)  http://www.ece.uvic.ca/~mdadams/jasper8
-libxml2    >= 2.7.x  (used by libraw)  http://xmlsoft.org
-libgomp    >= 4.3.x  (used by libraw)  http://gcc.gnu.org/projects/gomp
-
-Note: OpenMP support is hightly recommended to speed-up RAW demosaicing
-operations using parallelized code.
+libraw     >= 0.16.x                   http://www.libraw.org
 
 Note: all library dependencies require development and binary packages installed on your
 computer to compile digiKam.
-
-CMake compilation option de customized for libkdcraw:
-
-Use CMake "-ENABLE_LCMS2=on"     flag to link libraw to LCMS2 else LCMS1         (disabled by default).
-Use CMake "-ENABLE_RAWSPEED=on"  flag to compile libraw with RawSpeed codec      (disabled by default).
 
 -- INSTALL ------------------------------------------------------------
 
@@ -88,4 +73,4 @@ or a devel wish.
 The current Kipi bugs and devel wish reported to the Kde bugs report can be see 
 at this url :
 
-http://bugs.kde.org/buglist.cgi?product=kipiplugins&component=libkdcraw&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
+http://bugs.kde.org/buglist.cgi?product=digikam&component=libkdcraw&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED

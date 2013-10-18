@@ -22,7 +22,6 @@
 #
 # ============================================================
 
-KDE4_NO_ENABLE_FINAL(kdcraw)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 SET(raw2png_SRCS raw2png.cpp)

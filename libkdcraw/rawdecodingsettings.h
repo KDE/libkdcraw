@@ -54,6 +54,8 @@ public:
 
     /** RAW decoding Interpolation methods
      *
+     * NOTE: from original dcraw demosaic
+     * 
      *  Bilinear: use high-speed but low-quality bilinear
      *            interpolation (default - for slow computer). In this method,
      *            the red value of a non-red pixel is computed as the average of
@@ -69,29 +71,36 @@ public:
      *  AHD:      use Adaptive Homogeneity-Directed interpolation.
      *            This method selects the direction of interpolation so as to
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
+     * 
+     * NOTE: from GPL2 demosaic pack.
+     * 
      *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
      *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
-     *            for details)
+     *            for details).
      *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
      *  VCD:      VCD interpolation.
      *  VCD_AHD:  mixed demosaicing between VCD and AHD.
      *  LMMSE:    LMMSE interpolation from PerfectRaw.
+     * 
+     * NOTE: from GPL3 demosaic pack.
+     * 
      *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
      */
     enum DecodingQuality
     {
-        // Original dcraw demosaicing methods
+        // from original dcraw demosaic
         BILINEAR = 0,
         VNG      = 1,
         PPG      = 2,
         AHD      = 3,
-        // Extended demosaicing method
+        // Extended demosaicing method from GPL2 demosaic pack
         DCB      = 4,
         PL_AHD   = 5,
         AFD      = 6,
         VCD      = 7,
         VCD_AHD  = 8,
         LMMSE    = 9,
+        // Extended demosaicing methods from GPL3 demosaic pack
         AMAZE    = 10
     };
 
