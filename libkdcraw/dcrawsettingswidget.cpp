@@ -363,7 +363,7 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "from RawTherapee project.</item></list></para>"
                                 
                                 "<para>Note: some methods can be unavailable if RAW decoder have been built "
-                                "without extention packs.</para>"));
+                                "without extension packs.</para>"));
 
     demosaicingLayout->addWidget(d->RAWQualityLabel,    line, 0, 1, 1);
     demosaicingLayout->addWidget(d->RAWQualityComboBox, line, 1, 1, 2);
