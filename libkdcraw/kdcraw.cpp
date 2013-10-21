@@ -474,7 +474,7 @@ int KDcraw::rawFilesVersion()
 QStringList KDcraw::supportedCamera()
 {
     QStringList camera;
-    const char** list = LibRaw::cameraList();
+    const char** const list = LibRaw::cameraList();
 
     for (int i = 0; i < LibRaw::cameraCount(); i++)
         camera.append(list[i]);
@@ -487,39 +487,55 @@ QString KDcraw::librawVersion()
     return QString(LIBRAW_VERSION_STR).remove("-Release");
 }
 
-bool KDcraw::librawUseGomp()
+int KDcraw::librawUseGomp()
 {
-#ifdef LIBRAW_USE_OPENMP
+#ifdef LIBRAW_HAS_CONFIG
+#   ifdef LIBRAW_USE_OPENMP
     return true;
-#else
+#   else
     return false;
+#   endif
+#else
+    return -1;
 #endif
 }
 
-bool KDcraw::librawUseRawSpeed()
+int KDcraw::librawUseRawSpeed()
 {
-#ifdef LIBRAW_USE_RAWSPEED
+#ifdef LIBRAW_HAS_CONFIG
+#   ifdef LIBRAW_USE_RAWSPEED
     return true;
-#else
+#   else
     return false;
+#   endif
+#else
+    return -1;
 #endif
 }
 
-bool KDcraw::librawUseGPL2DemosaicPack()
+int KDcraw::librawUseGPL2DemosaicPack()
 {
-#ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL2
+#ifdef LIBRAW_HAS_CONFIG
+#   ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL2
     return true;
-#else
+#   else
     return false;
+#   endif
+#else
+    return -1;
 #endif
 }
 
-bool KDcraw::librawUseGPL3DemosaicPack()
+int KDcraw::librawUseGPL3DemosaicPack()
 {
-#ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL3
+#ifdef LIBRAW_HAS_CONFIG
+#   ifdef LIBRAW_USE_DEMOSAIC_PACK_GPL3
     return true;
-#else
+#   else
     return false;
+#   endif
+#else
+    return -1;
 #endif
 }
 

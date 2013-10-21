@@ -125,22 +125,26 @@ public:
      */
     static QString librawVersion();
 
-    /** Return true if LibRaw use parallel demosaicing (libgomp support).
+    /** Return true or false if LibRaw use parallel demosaicing or not (libgomp support).
+     *  Return -1 if undefined.
      */
-    static bool librawUseGomp();
+    static int librawUseGomp();
 
-    /** Return true if LibRaw use RawSpeed codec.
+    /** Return true or false if LibRaw use RawSpeed codec or not.
+     *  Return -1 if undefined.
      */
-    static bool librawUseRawSpeed();
+    static int librawUseRawSpeed();
 
-    /** Return true if LibRaw use Demosaic Pack GPL2.
+    /** Return true or false if LibRaw use Demosaic Pack GPL2 or not.
+     *  Return -1 if undefined.
      */
-    static bool librawUseGPL2DemosaicPack();
-    
-    /** Return true if LibRaw use Demosaic Pack GPL3.
+    static int librawUseGPL2DemosaicPack();
+
+    /** Return true or false if LibRaw use Demosaic Pack GPL3 or not.
+     *  Return -1 if undefined.
      */
-    static bool librawUseGPL3DemosaicPack();
-    
+    static int librawUseGPL3DemosaicPack();
+
 public:
 
     /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file.
