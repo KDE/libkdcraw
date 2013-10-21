@@ -263,9 +263,9 @@ bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecoding
         sptr += 3;
     }
 
-    image = QImage(width, height, QImage::Format_ARGB32);
-    uint*  dptr  = (uint*)image.bits();
-    sptr         = (uchar*)imgData.data();
+    image       = QImage(width, height, QImage::Format_ARGB32);
+    uint* dptr  = reinterpret_cast<uint*>(image.bits());
+    sptr        = (uchar*)imgData.data();
 
     for (int i = 0 ; i < width * height ; ++i)
     {
@@ -395,7 +395,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     {
         rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight  * raw.imgdata.idata.colors * sizeof(unsigned short)));
 
-        unsigned short* output = (unsigned short*)rawData.data();
+        unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
         for (unsigned int row = 0; row < raw.imgdata.sizes.iheight; row++)
         {
@@ -413,7 +413,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
     {
         rawData.resize((int)(raw.imgdata.sizes.iwidth * raw.imgdata.sizes.iheight * sizeof(unsigned short)));
 
-        unsigned short* output = (unsigned short*)rawData.data();
+        unsigned short* output = reinterpret_cast<unsigned short*>(rawData.data());
 
         for (uint row = 0; row < raw.imgdata.sizes.iheight; row++)
         {
