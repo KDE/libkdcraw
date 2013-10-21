@@ -39,7 +39,10 @@
 // LibRaw includes
 
 #include <libraw_version.h>
+
+#ifdef LIBRAW_HAS_CONFIG
 #include <libraw_config.h>
+#endif
 
 // Local includes
 
