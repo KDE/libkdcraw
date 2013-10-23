@@ -39,12 +39,14 @@ INCLUDE(FindPackageHandleStandardArgs)
 # Until libraw 0.16.0 is release (ends of 2013), we will support previous version (with limited support)
 FIND_PACKAGE(LibRaw 0.15 REQUIRED)
 
-#Check LibRaw Major and Minor version to rules compilation.
-MACRO_ENSURE_VERSION("0.16.0" "${LibRaw_VERSION_STRING}" VERSION_LIBRAW_WITH_CMAKE_SUPPORT)
-MESSAGE(STATUS "LibRaw version: ${LibRaw_VERSION_STRING} - has config file: ${VERSION_LIBRAW_WITH_CMAKE_SUPPORT}")
+# Check LibRaw config header.
+MESSAGE(STATUS "LibRaw version: ${LibRaw_VERSION_STRING}")
 
-IF(VERSION_LIBRAW_WITH_CMAKE_SUPPORT)
+IF(EXISTS "${LibRaw_INCLUDE_DIR}/libraw_config.h")
     ADD_DEFINITIONS(-DLIBRAW_HAS_CONFIG)
+    MESSAGE(STATUS "LibRaw config file exists: yes")
+ELSE()
+    MESSAGE(STATUS "LibRaw config file exists: no")
 ENDIF()
 
 ADD_DEFINITIONS(${QT_DEFINITIONS}
