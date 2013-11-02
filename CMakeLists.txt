@@ -95,7 +95,7 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
 SET(DCRAW_LIB_MINOR_VERSION "4")
-SET(DCRAW_LIB_PATCH_VERSION "0")
+SET(DCRAW_LIB_PATCH_VERSION "1")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
