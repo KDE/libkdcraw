@@ -36,6 +36,7 @@
 
 // Qt includes
 
+#include <QtCore/QBuffer>
 #include <QtCore/QString>
 #include <QtCore/QObject>
 #include <QtGui/QImage>
@@ -85,6 +86,11 @@ public:
         This method do not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QImage& image, const QString& path);
+
+    /** Get the embedded JPEG preview image from RAW image passed in QBuffer as a QByteArray witch will include Exif Data.
+        This is a fast and non cancelable. This method do not require a class instance to run.
+     */
+    static bool loadEmbeddedPreview(QByteArray& imgData, const QBuffer& inBuffer);
 
     /** Get the half decoded RAW picture. This is a more slower than loadEmbeddedPreview() method
         and non cancelable. This method do not require a class instance to run.

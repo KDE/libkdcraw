@@ -67,12 +67,16 @@ public:
     void   setProgress(double value);
     double progressValue() const;
 
-    bool loadFromLibraw(const QString& filePath, QByteArray& imageData,
-                        int& width, int& height, int& rgbmax);
+    bool   loadFromLibraw(const QString& filePath, QByteArray& imageData,
+                          int& width, int& height, int& rgbmax);
+
+public:
 
     static void createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img);
 
     static void fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify);
+
+    static bool loadEmbeddedPreview(QByteArray&, LibRaw&);
 
 private:
 
