@@ -131,8 +131,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
 {
     QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
-
-    LibRaw raw;
+    LibRaw  raw;
 
     QByteArray inData = buffer.data();
     int ret           = raw.open_buffer((void*) inData.data(), (size_t) inData.size());
@@ -172,16 +171,31 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
         return false;
     }
 
-    ret = raw.unpack();
 
-    if (ret != LIBRAW_SUCCESS)
+    if(!Private::loadHalfPreview(image, raw))
     {
-        kDebug() << "LibRaw: failed to run unpack: " << libraw_strerror(ret);
-        raw.recycle();
+        kDebug() << "Failed to get half preview from LibRaw!";
         return false;
     }
 
-    ret = raw.dcraw_process();
+    kDebug() << "Using reduced RAW picture extraction";
+
+    return true;
+}
+
+bool KDcraw::loadHalfPreview(QByteArray& imgData, const QString& path)
+{
+    QFileInfo fileInfo(path);
+    QString   rawFilesExt(rawFiles());
+    QString   ext = fileInfo.suffix().toUpper();
+
+    if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
+        return false;
+
+    kDebug() << "Try to use reduced RAW picture extraction";
+
+    LibRaw raw;
+    int ret = raw.open_file(QFile::encodeName(path));
 
     if (ret != LIBRAW_SUCCESS)
     {
@@ -190,28 +204,47 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
         return false;
     }
 
-    libraw_processed_image_t* halfImg = raw.dcraw_make_mem_image(&ret);
+    QImage image;
 
-    if(!halfImg)
+    if (!Private::loadHalfPreview(image, raw))
+    {
+        kDebug() << "KDcraw: failed to get half preview: " << libraw_strerror(ret);
+        return false;
+    }
+
+    QBuffer buffer(&imgData);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "JPEG"); 
+
+    return true;
+}
+
+bool KDcraw::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
+{
+    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+    LibRaw  raw;
+
+    QByteArray inData = inBuffer.data();
+    int ret           = raw.open_buffer((void*) inData.data(), (size_t) inData.size());
+
+    if (ret != LIBRAW_SUCCESS)
     {
         kDebug() << "LibRaw: failed to run dcraw_make_mem_image: " << libraw_strerror(ret);
         raw.recycle();
         return false;
     }
 
-    QByteArray imgData;
-    Private::createPPMHeader(imgData, halfImg);
-    // Clear memory allocation. Introduced with LibRaw 0.11.0
-    raw.dcraw_clear_mem(halfImg);
-    raw.recycle();
+    QImage image;
 
-    if (!image.loadFromData(imgData))
+    if (!Private::loadHalfPreview(image, raw))
     {
-        kDebug() << "Failed to load PPM data from LibRaw!";
+        kDebug() << "KDcraw: failed to get half preview: " << libraw_strerror(ret);
         return false;
     }
 
-    kDebug() << "Using reduced RAW picture extraction";
+    QBuffer buffer(&imgData);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "JPG"); 
 
     return true;
 }

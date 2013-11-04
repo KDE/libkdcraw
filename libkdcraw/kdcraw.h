@@ -72,33 +72,53 @@ public:
      */
     static QString version();
 
-    /** This is a non cancelable method witch do not require a class instance to run.
-        It can loadEmbeddedPreview() in first and if it failed, call loadHalfPreview().
+    /** Get the preview of RAW picture as a QImage.
+        It tries loadEmbeddedPreview() first and if it fails, calls loadHalfPreview().
      */
     static bool loadRawPreview(QImage& image, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW picture as a QByteArray witch will include Exif Data.
-        This is a fast and non cancelable. This method do not require a class instance to run.
+    /** Get the preview of RAW picture as a QByteArray holding JPEG data.
+        It tries loadEmbeddedPreview() first and if it fails, calls loadHalfPreview().
+     */
+    static bool loadRawPreview(QByteArray& imgData, const QString& path);
+
+    /** Get the preview of RAW picture passed in QBuffer as a QByteArray holding JPEG data.
+        It tries loadEmbeddedPreview() first and if it fails, calls loadHalfPreview().
+     */
+    static bool loadRawPreview(QByteArray& imgData, const QBuffer& inBuffer);
+
+    /** Get the embedded JPEG preview image from RAW picture as a QByteArray which will include Exif Data.
+        This is fast and non cancelable. This method does not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QByteArray& imgData, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW picture has a QImage. This is a fast and non cancelable
-        This method do not require a class instance to run.
+    /** Get the embedded JPEG preview image from RAW picture as a QImage. This is fast and non cancelable
+        This method does not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QImage& image, const QString& path);
 
-    /** Get the embedded JPEG preview image from RAW image passed in QBuffer as a QByteArray witch will include Exif Data.
-        This is a fast and non cancelable. This method do not require a class instance to run.
+    /** Get the embedded JPEG preview image from RAW image passed in QBuffer as a QByteArray which will include Exif Data.
+        This is fast and non cancelable. This method does not require a class instance to run.
      */
     static bool loadEmbeddedPreview(QByteArray& imgData, const QBuffer& inBuffer);
 
-    /** Get the half decoded RAW picture. This is a more slower than loadEmbeddedPreview() method
-        and non cancelable. This method do not require a class instance to run.
+    /** Get the half decoded RAW picture. This is slower than loadEmbeddedPreview() method
+        and non cancelable. This method does not require a class instance to run.
      */
     static bool loadHalfPreview(QImage& image, const QString& path);
 
+    /** Get the half decoded RAW picture as JPEG data in QByteArray. This is slower than loadEmbeddedPreview()
+        method and non cancelable. This method does not require a class instance to run.
+     */
+    static bool loadHalfPreview(QByteArray& imgData, const QString& path);
+
+    /** Get the half decoded RAW picture passed in QBuffer as JPEG data in QByteArray. This is slower than loadEmbeddedPreview()
+        method and non cancelable. This method does not require a class instance to run.
+     */
+    static bool loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer);
+
     /** Get the full decoded RAW picture. This is a more slower than loadHalfPreview() method
-        and non cancelable. This method do not require a class instance to run.
+        and non cancelable. This method does not require a class instance to run.
      */
     static bool loadFullImage(QImage& image, const QString& path, const RawDecodingSettings& settings = RawDecodingSettings());
 
@@ -225,7 +245,7 @@ protected:
     virtual bool checkToCancelWaitingData();
 
     /** Re-implement this method to control the pseudo progress value during RAW decoding (when dcraw run with an
-        internal loop without feedback) with your proper environment. By default, this method do nothing.
+        internal loop without feedback) with your proper environment. By default, this method does nothing.
         Progress value average for this stage is 0%-n%, with 'n' == 40% max (see setWaitingDataProgress() method).
      */
     virtual void setWaitingDataProgress(double value);

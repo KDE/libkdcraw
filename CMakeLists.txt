@@ -90,12 +90,12 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 2.2.0 => 22.0.0 (Released with KDE 4.10.0 - Including RawSpeed Codec)
 # 2.3.0 => 22.1.0 (Released with KDE 4.11.0 - Including Coverity Report fixes)
 # 2.3.1 => 22.1.1 (Released with KDE 4.11.2 - Including settings widget fixes)
-# 2.4.0 => 23.0.0 (Released with KDE 4.12.0 - Drop internal Libraw source code)
+# 2.4.0 => 23.0.2 (Released with KDE 4.12.0 - Drop internal Libraw source code + new methods to get thumb and preview from QBuffer)
 
 # Library API version
 SET(DCRAW_LIB_MAJOR_VERSION "2")
 SET(DCRAW_LIB_MINOR_VERSION "4")
-SET(DCRAW_LIB_PATCH_VERSION "1")
+SET(DCRAW_LIB_PATCH_VERSION "2")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production

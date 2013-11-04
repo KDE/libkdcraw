@@ -78,6 +78,8 @@ public:
 
     static bool loadEmbeddedPreview(QByteArray&, LibRaw&);
 
+    static bool loadHalfPreview(QImage&, LibRaw&);
+
 private:
 
     double  m_progress;
