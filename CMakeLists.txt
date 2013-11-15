@@ -37,7 +37,16 @@ INCLUDE(FindPackageHandleStandardArgs)
 
 # NOTE: Libraw 0.16.x is prefered version to use because it's ported to Cmake with full features supported.
 # Until libraw 0.16.0 is release (ends of 2013), we will support previous version (with limited support)
-FIND_PACKAGE(LibRaw 0.15 REQUIRED)
+FIND_PACKAGE(LibRaw 0.15)
+SET_PACKAGE_PROPERTIES(LibRaw PROPERTIES DESCRIPTION "library that provides direct access to the IEEE-1394 bus" URL "http://www.libraw.org" TYPE REQUIRED PURPOSE "Required to build libkdcraw")
+IF(NOT LIBRAW_FOUND)
+  FEATURE_SUMMARY(
+    WHAT ALL
+    INCLUDE_QUIET_PACKAGES
+    FATAL_ON_MISSING_REQUIRED_PACKAGES
+  )
+  RETURN()
+ENDIF()
 
 # Check LibRaw config header.
 MESSAGE(STATUS "LibRaw version: ${LibRaw_VERSION_STRING}")
@@ -133,4 +142,8 @@ IF(NOT WIN32)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 ENDIF(NOT WIN32)
 
-MACRO_DISPLAY_FEATURE_LOG()
+FEATURE_SUMMARY(
+  WHAT ALL
+  INCLUDE_QUIET_PACKAGES
+  FATAL_ON_MISSING_REQUIRED_PACKAGES
+)
