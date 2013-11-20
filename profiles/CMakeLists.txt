@@ -22,7 +22,7 @@
 #
 # ============================================================
 
-FILE(GLOB icmfiles *.icm)
+FILE(GLOB icmfiles *.icm *.icc)
 
 INSTALL(FILES  ${icmfiles}
         DESTINATION ${DATA_INSTALL_DIR}/libkdcraw/profiles )
