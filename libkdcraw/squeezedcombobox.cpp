@@ -74,6 +74,7 @@ SqueezedComboBox::SqueezedComboBox(QWidget* const parent, const char* name)
 
 SqueezedComboBox::~SqueezedComboBox()
 {
+    d->originalItems.clear();
     delete d->timer;
     delete d;
 }
