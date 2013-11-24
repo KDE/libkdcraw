@@ -38,7 +38,7 @@ INCLUDE(FindPackageHandleStandardArgs)
 # NOTE: Libraw 0.16.x is prefered version to use because it's ported to Cmake with full features supported.
 # Until libraw 0.16.0 is release (ends of 2013), we will support previous version (with limited support)
 FIND_PACKAGE(LibRaw 0.15)
-SET_PACKAGE_PROPERTIES(LibRaw PROPERTIES DESCRIPTION "library that provides direct access to the IEEE-1394 bus" URL "http://www.libraw.org" TYPE REQUIRED PURPOSE "Required to build libkdcraw")
+SET_PACKAGE_PROPERTIES(LibRaw PROPERTIES DESCRIPTION "library that provides image Raw file demosaicing" URL "http://www.libraw.org" TYPE REQUIRED PURPOSE "Required to build libkdcraw")
 IF(NOT LIBRAW_FOUND)
   FEATURE_SUMMARY(
     WHAT ALL
