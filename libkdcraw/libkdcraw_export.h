@@ -31,7 +31,7 @@
 #include <kdemacros.h>
 
 #ifndef LIBKDCRAW_EXPORT
-# if defined(MAKE_DCRAW_LIB)
+# if defined(MAKE_KDCRAW_LIB)
    /* We are building this library */ 
 #  define LIBKDCRAW_EXPORT KDE_EXPORT
 # else
