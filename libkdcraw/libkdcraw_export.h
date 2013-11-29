@@ -31,11 +31,11 @@
 #include <kdemacros.h>
 
 #ifndef LIBKDCRAW_EXPORT
-# if defined(MAKE_DCRAW_LIB)
-   /* We are building this library */ 
+# if defined(MAKE_KDCRAW_LIB)
+   /* We are building this library */
 #  define LIBKDCRAW_EXPORT KDE_EXPORT
 # else
-   /* We are using this library */ 
+   /* We are using this library */
 #  define LIBKDCRAW_EXPORT KDE_IMPORT
 # endif
 #endif
