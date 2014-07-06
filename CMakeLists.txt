@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2013 by Gilles Caulier
+# @author Copyright (C) 2006-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -132,10 +132,13 @@ SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_
 # ==================================================================================================
 
 ADD_SUBDIRECTORY(libkdcraw)
-ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(icons)
 ADD_SUBDIRECTORY(profiles)
 
+IF(KDE4_BUILD_TESTS)
+    MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
+ENDIF(KDE4_BUILD_TESTS)
+  
 IF(NOT WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
