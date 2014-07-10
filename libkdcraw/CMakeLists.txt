@@ -22,7 +22,7 @@
 #
 # ============================================================
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 SET(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
