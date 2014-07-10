@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2013 by Gilles Caulier
+# @author Copyright (C) 2006-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -22,7 +22,7 @@
 #
 # ============================================================
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
 SET(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp

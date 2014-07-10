@@ -40,12 +40,11 @@ INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE(LibRaw 0.15)
 SET_PACKAGE_PROPERTIES(LibRaw PROPERTIES DESCRIPTION "library that provides image Raw file demosaicing" URL "http://www.libraw.org" TYPE REQUIRED PURPOSE "Required to build libkdcraw")
 IF(NOT LIBRAW_FOUND)
-  FEATURE_SUMMARY(
-    WHAT ALL
-    INCLUDE_QUIET_PACKAGES
-    FATAL_ON_MISSING_REQUIRED_PACKAGES
-  )
-  RETURN()
+    FEATURE_SUMMARY(WHAT ALL
+                    INCLUDE_QUIET_PACKAGES
+                    FATAL_ON_MISSING_REQUIRED_PACKAGES
+                   )
+    RETURN()
 ENDIF()
 
 # Check LibRaw config header.
@@ -140,13 +139,12 @@ IF(KDE4_BUILD_TESTS)
 ENDIF(KDE4_BUILD_TESTS)
   
 IF(NOT WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.pc.cmake  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libkdcraw.lsm.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.pc.in_cmake  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.lsm.in_cmake ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
     INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
 ENDIF(NOT WIN32)
 
-FEATURE_SUMMARY(
-  WHAT ALL
-  INCLUDE_QUIET_PACKAGES
-  FATAL_ON_MISSING_REQUIRED_PACKAGES
-)
+FEATURE_SUMMARY(WHAT ALL
+                INCLUDE_QUIET_PACKAGES
+                FATAL_ON_MISSING_REQUIRED_PACKAGES
+               )
