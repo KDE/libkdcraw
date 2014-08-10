@@ -49,6 +49,7 @@
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
+#include <KIconLoader>
 
 // Local includes
 
@@ -404,7 +405,7 @@ void DcrawSettingsWidget::setup(int advSettings)
         d->refineInterpolationBox->setEnabled(false);
     }
 
-    addItem(d->demosaicingSettings, SmallIcon("kdcraw"), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
+    addItem(d->demosaicingSettings, KIconLoader::global()->loadIcon("kdcraw", KIconLoader::Small), i18nc("@label", "Demosaicing"), QString("demosaicing"), true);
 
     // ---------------------------------------------------------------
     // WHITE BALANCE Settings Panel
