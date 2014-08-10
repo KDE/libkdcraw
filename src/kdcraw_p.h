@@ -41,11 +41,10 @@
 // Local includes
 
 #include "dcrawinfocontainer.h"
+#include "kdcraw.h"
 
 namespace KDcrawIface
 {
-
-class KDcraw;
 
 extern "C"
 {
