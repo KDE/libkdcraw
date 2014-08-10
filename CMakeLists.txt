@@ -4,7 +4,7 @@ project(LibKDcraw)
 
 find_package(ECM 1.1.0 REQUIRED NO_MODULE)
 
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 include(KDEInstallDirs)
 include(KDEFrameworkCompilerSettings)
@@ -17,6 +17,8 @@ find_package(KF5 CONFIG REQUIRED
     KDELibs4Support
 )
 
+find_package(LibRaw 0.15 REQUIRED)
+
 include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMPackageConfigHelpers)
@@ -24,7 +26,7 @@ include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(ECMMarkNonGuiExecutable)
 
-set(KF5_VERSION "5.1.0") # handled by release scripts
+set(KF5_VERSION "5.1.0")
 
 ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX LIBKDCRAW
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
