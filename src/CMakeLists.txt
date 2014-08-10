@@ -37,14 +37,10 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     squeezedcombobox.cpp
    )
 
-KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
+add_library(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdcraw
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_SOLID_LIBS}
-                      ${KDE4_THREADWEAVER_LIBRARIES}
-                      ${LibRaw_r_LIBRARIES}
+target_link_libraries(kdcraw
+                    KF5::KDELibs4Support
                      )
 
 SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION})
