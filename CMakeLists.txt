@@ -33,6 +33,11 @@ ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX LIBKDCRAW
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfigVersion.cmake"
                         SOVERSION 5)
 
+
+# TODO: Remove these
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+remove_definitions(-DQT_NO_CAST_FROM_BYTEARRAY)
+
 add_subdirectory(src)
 # add_subdirectory(tests)
 
