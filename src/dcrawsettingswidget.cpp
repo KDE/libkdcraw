@@ -788,10 +788,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     // Wrapper to emit signal when something is changed in settings.
 
-    connect(d->inIccUrlEdit, SIGNAL(urlSelected(KUrl)),
+    connect(d->inIccUrlEdit, SIGNAL(urlSelected(QUrl)),
             this, SIGNAL(signalSettingsChanged()));
 
-    connect(d->outIccUrlEdit, SIGNAL(urlSelected(KUrl)),
+    connect(d->outIccUrlEdit, SIGNAL(urlSelected(QUrl)),
             this, SIGNAL(signalSettingsChanged()));
 
     connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
@@ -1203,8 +1203,8 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->expoCorrectionShiftSpinBox->setValue(d->shiftExpoFromLinearToEv(settings.expoCorrectionShift));
     d->expoCorrectionHighlightSpinBox->setValue(settings.expoCorrectionHighlight);
 
-    d->inIccUrlEdit->setUrl(KUrl(settings.inputProfile));
-    d->outIccUrlEdit->setUrl(KUrl(settings.outputProfile));
+    d->inIccUrlEdit->setUrl(QUrl(settings.inputProfile));
+    d->outIccUrlEdit->setUrl(QUrl(settings.outputProfile));
 }
 
 RawDecodingSettings DcrawSettingsWidget::settings() const

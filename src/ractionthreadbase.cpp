@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 #include <kdebug.h>
 #include <ThreadWeaver/JobCollection>
 #include <ThreadWeaver/Weaver>
