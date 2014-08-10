@@ -32,11 +32,11 @@
 
 // Qt includes
 
-#include <QtCore/QObject>
-#include <QtGui/QPixmap>
-#include <QtGui/QLabel>
-#include <QtGui/QWidget>
-#include <QtGui/QScrollArea>
+#include <QObject>
+#include <QPixmap>
+#include <QLabel>
+#include <QWidget>
+#include <QScrollArea>
 
 // KDE includes
 

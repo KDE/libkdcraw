@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "ractionthreadbase.moc"
+#include "ractionthreadbase.h"
 
 // Qt includes
 

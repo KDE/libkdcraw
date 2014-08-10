@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "kdcraw.moc"
+#include "kdcraw.h"
 #include "kdcraw_p.h"
 
 // Qt includes

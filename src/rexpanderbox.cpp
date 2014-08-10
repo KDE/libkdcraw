@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "rexpanderbox.moc"
+#include "rexpanderbox.h"
 
 // Qt includes
 

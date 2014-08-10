@@ -25,7 +25,7 @@
  *
  * ============================================================ */
 
-#include "ractionthreadbase_p.moc"
+#include "ractionthreadbase_p.h"
 
 // KDE includes
 

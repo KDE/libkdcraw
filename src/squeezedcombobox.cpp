@@ -28,7 +28,7 @@
  *
  * ============================================================ */
 
-#include "squeezedcombobox.moc"
+#include "squeezedcombobox.h"
 
 // Qt includes
 

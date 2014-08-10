@@ -27,7 +27,7 @@
  *
  * ============================================================ */
 
-#include "dcrawsettingswidget.moc"
+#include "dcrawsettingswidget.h"
 
 // C++ includes
 
