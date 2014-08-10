@@ -50,9 +50,9 @@ install(FILES  "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfig.cmake"
         COMPONENT Devel )
 
 
-#TODO should I really be using Namespace KF5? Baloo does.
+# 
 # install(EXPORT LibKDcrawTargets  DESTINATION "${CMAKECONFIG_INSTALL_DIR}"  FILE LibKDcrawTargets.cmake  NAMESPACE KF5:: )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h  DESTINATION ${KF5_INCLUDE_INSTALL_DIR}  COMPONENT Devel )
+# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h  DESTINATION ${KF5_INCLUDE_INSTALL_DIR}  COMPONENT Devel )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -37,15 +37,18 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     squeezedcombobox.cpp
    )
 
-add_library(kdcraw SHARED ${kdcraw_LIB_SRCS})
+add_library(LibKDcraw SHARED ${kdcraw_LIB_SRCS})
 
-target_link_libraries(kdcraw
+target_link_libraries(LibKDcraw
                     KF5::KDELibs4Support
                      )
 
-SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION})
+set_target_properties(LibKDcraw PROPERTIES  VERSION ${DCRAW_LIB_SO_VERSION_STRING}
+                                           SOVERSION ${DCRAW_LIB_SO_CUR_VERSION}
+                                           EXPORT_NAME KDcraw
+)
 
-INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS LibKDcraw EXPORT LibKDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
