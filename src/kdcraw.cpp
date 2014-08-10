@@ -53,8 +53,6 @@
 #include "version.h"
 #include "rawfiles.h"
 
-static const KCatalogLoader loader("libkdcraw");
-
 namespace KDcrawIface
 {
 
