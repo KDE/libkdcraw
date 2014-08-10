@@ -45,6 +45,7 @@ add_library(LibKDcraw SHARED ${kdcraw_LIB_SRCS})
 
 target_link_libraries(LibKDcraw
                     KF5::KDELibs4Support
+                    KF5::ThreadWeaver
                      )
 
 set_target_properties(LibKDcraw PROPERTIES  VERSION ${DCRAW_LIB_SO_VERSION_STRING}

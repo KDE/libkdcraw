@@ -15,6 +15,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui)
 
 find_package(KF5 CONFIG REQUIRED
     KDELibs4Support
+    ThreadWeaver
 )
 
 find_package(LibRaw 0.15 REQUIRED)
