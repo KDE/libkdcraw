@@ -24,6 +24,8 @@
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
+include_directories(${LibRaw_INCLUDE_DIR})
+
 SET(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawsettingswidget.cpp
