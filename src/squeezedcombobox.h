@@ -33,7 +33,7 @@
 
 // Qt includes
 
-#include <QtGui/QComboBox>
+#include <QComboBox>
 
 // Local includes
 
