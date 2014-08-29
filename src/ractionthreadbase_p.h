@@ -36,10 +36,10 @@
 
 // KDE includes
 
-#include <threadweaver/Job.h>
-#include <threadweaver/WeaverObserver.h>
-#include <threadweaver/State.h>
-#include <threadweaver/Thread.h>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/WeaverObserver>
+#include <ThreadWeaver/State>
+#include <ThreadWeaver/Thread>
 
 // Local includes
 

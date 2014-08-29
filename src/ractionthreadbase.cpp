@@ -37,9 +37,9 @@
 #include <kdebug.h>
 #include <ThreadWeaver/JobCollection>
 #include <ThreadWeaver/Weaver>
-#include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/Job.h>
-#include <threadweaver/DebuggingAids.h>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/DebuggingAids>
 #include <solid/device.h>
 
 // Local includes
@@ -47,7 +47,7 @@
 #include "ractionthreadbase_p.h"
 
 using namespace Solid;
-
+using namespace ThreadWeaver;
 namespace KDcrawIface
 {
 
