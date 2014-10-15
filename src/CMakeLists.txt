@@ -40,8 +40,8 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
                     squeezedcombobox.cpp
-                    ractionthreadbase.cpp
-                    ractionthreadbase_p.cpp
+#TODO                    ractionthreadbase.cpp
+#TODO                    ractionthreadbase_p.cpp
 )
 
 ecm_generate_headers(kdcraw_CamelCase_HEADERS
@@ -54,8 +54,8 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      RComboBox
                      RNumInput
                      RExpanderBox
-                     RActionThreadBase
                      SqueezedComboBox
+                     RActionThreadBase
 
                      PREFIX           KDCRAW
                      REQUIRED_HEADERS kdcraw_HEADERS
