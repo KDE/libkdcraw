@@ -17,9 +17,9 @@ The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.4.3                    http://www.cmake.org
-libqt      >= 4.2.x                    http://www.qtsoftware.com
-libkde     >= 4.0.x                    http://www.kde.org
+CMake      >= 2.8.12                   http://www.cmake.org
+libqt      >= 5.2.x                    http://www.qtsoftware.com
+libkde     >= 5.x                      http://www.kde.org
 libraw     >= 0.16.x                   http://www.libraw.org
 
 Note: all library dependencies require development and binary packages installed on your
@@ -56,11 +56,11 @@ Note: To know KDE install path on your computer, use 'kde-config --prefix' comma
 
 If you have questions, comments, suggestions to make do email at :
 
-kde-imaging@kde.org
+digikam-devel@kde.org
 
 IRC channel from freenode.net server:
 
-#kde-imaging
+#digikam
 
 -- BUGS ---------------------------------------------------------------
 
