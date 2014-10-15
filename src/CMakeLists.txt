@@ -39,11 +39,10 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     rcombobox.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
+                    squeezedcombobox.cpp
                     ractionthreadbase.cpp
                     ractionthreadbase_p.cpp
-                    squeezedcombobox.cpp
 )
-
 
 ecm_generate_headers(kdcraw_CamelCase_HEADERS
 
