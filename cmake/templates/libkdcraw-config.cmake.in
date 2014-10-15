@@ -1,10 +1,10 @@
 @PACKAGE_INIT@
 
-set_and_check(libkexiv2_INCLUDE_DIR @PACKAGE_INCLUDE_INSTALL_DIR@)
+set_and_check(libkdcraw_INCLUDE_DIR @PACKAGE_INCLUDE_INSTALL_DIR@)
 
-if(NOT TARGET Libkexiv2::kexiv2)
-  include(${CMAKE_CURRENT_LIST_DIR}/libkexiv2-export.cmake)
+if(NOT TARGET Libkdcraw::kdcraw)
+  include(${CMAKE_CURRENT_LIST_DIR}/libkdcraw-export.cmake)
 endif()
 
-set(libkexiv2_LIBRARY   Libkexiv2::kexiv2)
-set(libkexiv2_LIBRARIES ${libkexiv2_LIBRARY})
+set(libkdcraw_LIBRARY   Libkdcraw::kdcraw)
+set(libkdcraw_LIBRARIES ${libkdcraw_LIBRARY})
