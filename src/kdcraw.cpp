@@ -50,7 +50,7 @@
 
 // Local includes
 
-#include "version.h"
+#include "libkdcraw_version.h"
 #include "rawfiles.h"
 
 namespace KDcrawIface
@@ -70,7 +70,7 @@ KDcraw::~KDcraw()
 
 QString KDcraw::version()
 {
-    return QString(kdcraw_version);
+    return QString(KDCRAW_VERSION_STRING);
 }
 
 void KDcraw::cancel()
@@ -113,7 +113,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 {
     QFileInfo fileInfo(path);
     QString   rawFilesExt(rawFiles());
-    QString ext = fileInfo.suffix().toUpper();
+    QString   ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;

@@ -6,7 +6,7 @@
 # @date   2006-12-09
 # @brief  a tread-safe libraw C++ program interface for KDE
 #
-# @author Copyright (C) 2006-2013 by Gilles Caulier
+# @author Copyright (C) 2006-2014 by Gilles Caulier
 #         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
 #
 # This program is free software; you can redistribute it
@@ -22,11 +22,14 @@
 #
 # ============================================================
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+kde_enable_exceptions()
 
 include_directories(${LibRaw_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
-add_definitions(-DTRANSLATION_DOMAIN=\"libkdcraw\")
+add_definitions(${LibRaw_DEFINITIONS})
+
+remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
 SET(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
@@ -39,35 +42,64 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
                     ractionthreadbase.cpp
                     ractionthreadbase_p.cpp
                     squeezedcombobox.cpp
-   )
-
-add_library(LibKDcraw SHARED ${kdcraw_LIB_SRCS})
-
-target_link_libraries(LibKDcraw
-                    KF5::KDELibs4Support
-                    KF5::ThreadWeaver
-                     )
-
-set_target_properties(LibKDcraw PROPERTIES  VERSION ${DCRAW_LIB_SO_VERSION_STRING}
-                                           SOVERSION ${DCRAW_LIB_SO_CUR_VERSION}
-                                           EXPORT_NAME KDcraw
 )
 
-install(TARGETS LibKDcraw EXPORT LibKDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-IF(NOT DIGIKAMSC_USE_PRIVATE_KDEGRAPHICS)
-    INSTALL(FILES rawdecodingsettings.h
-                  kdcraw.h
-                  dcrawsettingswidget.h
-                  rnuminput.h
-                  rcombobox.h
-                  rexpanderbox.h
-                  ractionthreadbase.h
-                  squeezedcombobox.h
-                  dcrawinfocontainer.h
-                  rawfiles.h
-                  libkdcraw_export.h
-                  ${CMAKE_CURRENT_BINARY_DIR}/version.h
-            DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
-ENDIF()
+ecm_generate_headers(kdcraw_CamelCase_HEADERS
+
+                     HEADER_NAMES
+                     KDcraw
+                     DcrawSettingsWidget
+                     DcrawInfoContainer
+                     RawDecodingSettings
+                     RComboBox
+                     RNumInput
+                     RExpanderBox
+                     RActionThreadBase
+                     SqueezedComboBox
+
+                     PREFIX           KDCRAW
+                     REQUIRED_HEADERS kdcraw_HEADERS
+)
+
+install(FILES       ${kdcraw_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KExiv2
+        COMPONENT   Devel
+)
+
+install(FILES       ${kdcraw_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
+        COMPONENT   Devel
+)
+
+add_library(KF5Kdcraw SHARED ${kdcraw_LIB_SRCS})
+
+generate_export_header(KF5Kdcraw BASE_NAME kdcraw)
+
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
+        COMPONENT   Devel
+)
+
+add_library(KF5::Kdcraw ALIAS KF5Kdcraw)
+
+target_include_directories(KF5Kdcraw INTERFACE 
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
+)
+
+target_link_libraries(KF5Kdcraw
+                      KF5::KDELibs4Support
+                      KF5::ThreadWeaver
+                      Qt5::Core
+                      ${LibRaw_LIBRARIES}
+)
+
+install(TARGETS KF5Kdcraw
+        EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+)
+
+set_target_properties(KF5Kdcraw   PROPERTIES
+                      VERSION     ${KDCRAW_VERSION_STRING}
+                      SOVERSION   ${KDCRAW_SOVERSION}
+                      EXPORT_NAME Kdcraw
+)
