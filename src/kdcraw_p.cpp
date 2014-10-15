@@ -463,7 +463,7 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
     kDebug() << filePath;
     kDebug() << m_parent->m_rawDecodingSettings;
 
-    int ret = raw.open_file(QFile::encodeName(filePath));
+    int ret = raw.open_file((const char*)(QFile::encodeName(filePath)).constData());
 
     if (ret != LIBRAW_SUCCESS)
     {
