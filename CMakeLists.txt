@@ -31,7 +31,7 @@ set(KF5_VERSION "5.1.0")
 
 ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX LIBKDCRAW
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfigVersion.cmake"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
                         SOVERSION 5)
 
 
@@ -45,13 +45,13 @@ add_subdirectory(src)
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/LibKDcraw")
 
-ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/LibKDcrawConfig.cmake.in"
-                              "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfig.cmake"
-                              INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-                              )
+ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KF5KDcrawConfig.cmake.in"
+                                  "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
+                                  INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
 
-install(FILES  "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfig.cmake"
-               "${CMAKE_CURRENT_BINARY_DIR}/LibKDcrawConfigVersion.cmake"
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel )
 
