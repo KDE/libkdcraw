@@ -1,12 +1,13 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.digikam.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * Date        : 2011-12-28
  * Description : test for implementation of threadWeaver api
  *
- * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,6 +24,7 @@
 // Qt includes
 
 #include <QApplication>
+#include <QDebug>
 
 // KDE includes
 
@@ -34,6 +36,13 @@
 
 int main(int argc, char* argv[])
 {
+    if (argc <= 1)
+    {
+        qDebug() << "multicoreraw2png - RAW Camera Image to PNG Converter using multi-core CPU";
+        qDebug() << "Usage: multicoreraw2png <rawfile> <rawfile> <rawfile> ... <rawfile>";
+        return -1;
+    }
+
     QApplication app(argc, argv);
 
     KUrl::List list;

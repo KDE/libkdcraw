@@ -28,15 +28,15 @@ INCLUDE_DIRECTORIES(${KDE4_INCLUDES}
                     ${CMAKE_CURRENT_SOURCE_DIR}/../../libkdcraw
 )
 
-SET(multithread_SRCS
+SET(multicorerawtopng_SRCS
     main.cpp
     processordlg.cpp
     actionthread.cpp
 )
 
-KDE4_ADD_EXECUTABLE(multithread ${multithread_SRCS})
+KDE4_ADD_EXECUTABLE(multicorerawtopng ${multicorerawtopng_SRCS})
 
-TARGET_LINK_LIBRARIES(multithread
+TARGET_LINK_LIBRARIES(multicorerawtopng
                       ${QT_QTGUI_LIBRARY}
                       ${QT_QTCORE_LIBRARY}
                       ${KDE4_KDEUI_LIBS}

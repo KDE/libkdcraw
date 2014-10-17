@@ -1,12 +1,13 @@
-/* ============================================================
+/** ===========================================================
  *
- * This file is a part of kipi-plugins project
- * http://www.digikam.org
+ * This file is a part of digiKam project
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * Date        : 2014-10-17
  * Description : test for implementation of threadWeaver api
  *
- * Copyright (C) 2014 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QThreadPool>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -47,13 +49,17 @@ public:
 
     Private()
     {
+        count  = 0;
         page   = 0;
+        items  = 0;
         vlay   = 0;
         thread = 0;
     }
 
-    QWidget*             page;
+    int                  count;
 
+    QWidget*             page;
+    QLabel*              items;
     QVBoxLayout*         vlay;
 
     KUrl::List           list;
@@ -68,24 +74,32 @@ ProcessorDlg::ProcessorDlg(const KUrl::List& list)
     setButtonText(Apply, i18n("Start"));
     setDefaultButton(Close);
     setModal(false);
+    setCaption(i18n("Convert RAW files To PNG"));
 
     d->list                 = list;
+    d->count                = d->list.count()-1;
     d->page                 = new QWidget(this);
     setMainWidget(d->page);
 
-    d->vlay = new QVBoxLayout(d->page);
-    QLabel* const pid       = new QLabel(QString("PID : %1")
-                                         .arg(kapp->applicationPid()), this);
-    QLabel* const core      = new QLabel(QString("Core : %1")
-                                         .arg(QThreadPool::globalInstance()->maxThreadCount()), this);
+    d->vlay                 = new QVBoxLayout(d->page);
+    QLabel* const pid       = new QLabel(i18n("PID : %1", kapp->applicationPid()), this);
+    QLabel* const core      = new QLabel(i18n("Core : %1", QThreadPool::globalInstance()->maxThreadCount()), this);
+    d->items                = new QLabel(this);
     d->vlay->addWidget(pid);
     d->vlay->addWidget(core);
+    d->vlay->addWidget(d->items);
+    d->vlay->addStretch();
 
-    for (int i = 0 ; i < d->list.count() ; i++)
+    for (int i = 1; i < d->count ; i++)
     {
         QProgressBar* const bar = new QProgressBar(this);
-        bar->setRange(0, 100);
-        bar->setObjectName(d->list[i].toLocalFile());
+        QString file            = d->list[i].toLocalFile();
+        bar->setMaximum(100);
+        bar->setMinimum(0);
+        bar->setValue(100);
+        bar->setObjectName(file);
+        QFileInfo fi(file);
+        bar->setFormat(fi.baseName());
         d->vlay->addWidget(bar);
     }
 
@@ -102,11 +116,19 @@ ProcessorDlg::ProcessorDlg(const KUrl::List& list)
 
     connect(d->thread, SIGNAL(failed(KUrl,QString)),
             this, SLOT(slotFailed(KUrl,QString)));
+
+    updateCount();
+    resize(500, 400);
 }
 
 ProcessorDlg::~ProcessorDlg()
 {
     delete d;
+}
+
+void ProcessorDlg::updateCount()
+{
+    d->items->setText(i18n("Files to process : %1", d->count));
 }
 
 void ProcessorDlg::slotStart()
@@ -121,7 +143,7 @@ void ProcessorDlg::slotStart()
 
 QProgressBar* ProcessorDlg::findProgressBar(const KUrl& url) const
 {
-    QList<QProgressBar*> bars = d->vlay->findChildren<QProgressBar*>();
+    QList<QProgressBar*> bars = findChildren<QProgressBar*>();
 
     foreach(QProgressBar* const b, bars)
     {
@@ -155,6 +177,9 @@ void ProcessorDlg::slotFinished(const KUrl& url)
         b->setMaximum(100);
         b->setMinimum(0);
         b->setValue(100);
+        b->setFormat(i18n("Done"));
+        d->count--;
+        updateCount();
     }
 }
 
@@ -168,5 +193,7 @@ void ProcessorDlg::slotFailed(const KUrl& url, const QString& err)
         b->setMinimum(0);
         b->setValue(100);
         b->setFormat(err);
+        d->count--;
+        updateCount();
     }
 }
