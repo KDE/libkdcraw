@@ -77,7 +77,7 @@ SET(LIBDCRAW_SO_VERSION   "${KDCRAW_LIB_SO_CUR_VERSION}.${KDCRAW_LIB_SO_REV_VERS
 ############## ECM setup ######################
 
 find_package(ECM ${ECM_MIN_VERSION} CONFIG REQUIRED)
-set(CMAKE_MODULE_PATH ${libkexiv2_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${libkdcraw_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(ECMGenerateHeaders)
 include(ECMGeneratePriFile)
