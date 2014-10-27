@@ -122,7 +122,7 @@ set_package_properties("LibRaw"    PROPERTIES
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
                   VARIABLE_PREFIX      KDCRAW
                   VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KdcrawConfigVersion.cmake"
                   SOVERSION            ${LIBKDCRAW_SO_VERSION})
 
 ############## Targets #########################
@@ -138,21 +138,21 @@ message("${CMAKECONFIG_INSTALL_DIR}")
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Kdcraw")
 
 ecm_configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KDcrawConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KdcrawConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5KdcrawConfig.cmake"
     INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KF5KdcrawConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/KF5KdcrawConfigVersion.cmake"
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT   Devel
 )
 
-install(EXPORT      KF5KDcrawTargets
+install(EXPORT      KF5KdcrawTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE        KF5KDcrawTargets.cmake
+        FILE        KF5KdcrawTargets.cmake
         NAMESPACE   KF5::
 )
 

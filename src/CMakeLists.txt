@@ -94,7 +94,7 @@ target_link_libraries(KF5Kdcraw
 )
 
 install(TARGETS KF5Kdcraw
-        EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+        EXPORT  KF5KdcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 set_target_properties(KF5Kdcraw   PROPERTIES
