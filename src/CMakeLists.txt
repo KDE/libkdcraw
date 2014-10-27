@@ -62,7 +62,7 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
 )
 
 install(FILES       ${kdcraw_CamelCase_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KExiv2
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KDCRAW
         COMPONENT   Devel
 )
 
