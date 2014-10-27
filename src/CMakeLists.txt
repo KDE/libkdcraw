@@ -80,7 +80,7 @@ install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
         COMPONENT   Devel
 )
 
-add_library(KF5::Kdcraw ALIAS KF5KDcraw)
+add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
 target_include_directories(KF5KDcraw INTERFACE 
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
@@ -100,5 +100,5 @@ install(TARGETS KF5KDcraw
 set_target_properties(KF5KDcraw   PROPERTIES
                       VERSION     ${KDCRAW_VERSION_STRING}
                       SOVERSION   ${KDCRAW_SOVERSION}
-                      EXPORT_NAME Kdcraw
+                      EXPORT_NAME KDcraw
 )
