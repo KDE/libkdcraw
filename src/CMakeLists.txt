@@ -31,7 +31,7 @@ add_definitions(${LibRaw_DEFINITIONS})
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
-SET(kdcraw_LIB_SRCS kdcraw.cpp
+set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawsettingswidget.cpp
                     dcrawinfocontainer.cpp
@@ -82,7 +82,7 @@ install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
 
 add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
-target_include_directories(KF5KDcraw INTERFACE 
+target_include_directories(KF5KDcraw INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
 )
 
