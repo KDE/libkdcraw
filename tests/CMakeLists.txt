@@ -29,8 +29,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../libkdcraw)
 
 set(raw2png_SRCS raw2png.cpp)
 add_executable(raw2png ${raw2png_SRCS})
-target_link_libraries(raw2png KF5Kdcraw)
+target_link_libraries(raw2png KF5KDcraw)
 
 set(libinfo_SRCS libinfo.cpp)
 add_executable(libinfo ${libinfo_SRCS})
-target_link_libraries(libinfo KF5Kdcraw)
+target_link_libraries(libinfo KF5KDcraw)

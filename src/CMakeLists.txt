@@ -71,33 +71,33 @@ install(FILES       ${kdcraw_HEADERS}
         COMPONENT   Devel
 )
 
-add_library(KF5Kdcraw SHARED ${kdcraw_LIB_SRCS})
+add_library(KF5KDcraw SHARED ${kdcraw_LIB_SRCS})
 
-generate_export_header(KF5Kdcraw BASE_NAME kdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
+generate_export_header(KF5KDcraw BASE_NAME kdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
 install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
         COMPONENT   Devel
 )
 
-add_library(KF5::Kdcraw ALIAS KF5Kdcraw)
+add_library(KF5::Kdcraw ALIAS KF5KDcraw)
 
-target_include_directories(KF5Kdcraw INTERFACE 
+target_include_directories(KF5KDcraw INTERFACE 
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
 )
 
-target_link_libraries(KF5Kdcraw
+target_link_libraries(KF5KDcraw
                       KF5::KDELibs4Support
                       KF5::ThreadWeaver
                       Qt5::Core
                       ${LibRaw_LIBRARIES}
 )
 
-install(TARGETS KF5Kdcraw
-        EXPORT  KF5KdcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+install(TARGETS KF5KDcraw
+        EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-set_target_properties(KF5Kdcraw   PROPERTIES
+set_target_properties(KF5KDcraw   PROPERTIES
                       VERSION     ${KDCRAW_VERSION_STRING}
                       SOVERSION   ${KDCRAW_SOVERSION}
                       EXPORT_NAME Kdcraw
