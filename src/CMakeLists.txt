@@ -73,7 +73,7 @@ install(FILES       ${kdcraw_HEADERS}
 
 add_library(KF5Kdcraw SHARED ${kdcraw_LIB_SRCS})
 
-generate_export_header(KF5Kdcraw BASE_NAME kdcraw)
+generate_export_header(KF5Kdcraw BASE_NAME kdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
 install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW

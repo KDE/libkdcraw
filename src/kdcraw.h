@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "libkdcraw_export.h"
+#include "kdcraw_export.h"
 #include "rawdecodingsettings.h"
 #include "dcrawinfocontainer.h"
 
