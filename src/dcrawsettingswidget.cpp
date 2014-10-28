@@ -37,10 +37,8 @@
 
 #include <QCheckBox>
 #include <QLabel>
-#include <QLayout>
 #include <QWhatsThis>
-#include <QToolTip>
-
+#include <QGridLayout>
 // KDE includes
 
 #include <kapplication.h>

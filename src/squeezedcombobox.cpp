@@ -33,11 +33,9 @@
 // Qt includes
 
 #include <QComboBox>
-#include <QPair>
 #include <QTimer>
 #include <QStyle>
 #include <QApplication>
-#include <QToolTip>
 #include <QResizeEvent>
 
 namespace KDcrawIface

@@ -33,8 +33,6 @@
 
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPen>
-#include <QCursor>
 #include <QStyle>
 #include <QStyleOption>
 #include <QGridLayout>
