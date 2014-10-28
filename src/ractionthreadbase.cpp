@@ -140,11 +140,9 @@ void RActionThreadBase::run()
 
         if (t)
         {
-            connect(t, SIGNAL(done(ThreadWeaver::Job*)),
-                    this, SLOT(slotFinished()));
+            connect(t, &JobCollection::done, this, &RActionThreadBase::slotFinished);
 
-            connect(t, SIGNAL(done(ThreadWeaver::Job*)),
-                    t, SLOT(deleteLater()));
+            connect(t, &JobCollection::done, t, &JobCollection::deleteLater);
 
             d->weaverRunning = true;
             d->weaver->enqueue(t);

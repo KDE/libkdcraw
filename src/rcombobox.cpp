@@ -74,14 +74,11 @@ RComboBox::RComboBox(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotReset()));
+    connect(d->resetButton, &QToolButton::clicked, this, &RComboBox::slotReset);
 
-    connect(d->combo, SIGNAL(activated(int)),
-            this, SLOT(slotItemActivated(int)));
+    connect(d->combo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &RComboBox::slotItemActivated);
 
-    connect(d->combo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotCurrentIndexChanged(int)));
+    connect(d->combo, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &RComboBox::slotCurrentIndexChanged);
 }
 
 RComboBox::~RComboBox()

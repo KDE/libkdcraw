@@ -75,11 +75,9 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotReset()));
+    connect(d->resetButton, &QToolButton::clicked, this, &RIntNumInput::slotReset);
 
-    connect(d->input, SIGNAL(valueChanged(int)),
-            this, SLOT(slotValueChanged(int)));
+    connect(d->input, &KIntNumInput::valueChanged, this, &RIntNumInput::slotValueChanged);
 }
 
 RIntNumInput::~RIntNumInput()
@@ -174,11 +172,9 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
 
     // -------------------------------------------------------------
 
-    connect(d->resetButton, SIGNAL(clicked()),
-            this, SLOT(slotReset()));
+    connect(d->resetButton, &QToolButton::clicked, this, &RDoubleNumInput::slotReset);
 
-    connect(d->input, SIGNAL(valueChanged(double)),
-            this, SLOT(slotValueChanged(double)));
+    connect(d->input, &KDoubleNumInput::valueChanged, this, &RDoubleNumInput::slotValueChanged);
 }
 
 RDoubleNumInput::~RDoubleNumInput()

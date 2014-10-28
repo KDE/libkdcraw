@@ -363,14 +363,11 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     d->grid->setMargin(KDialog::spacingHint());
     d->grid->setSpacing(KDialog::spacingHint());
 
-    connect(d->arrow, SIGNAL(leftClicked()),
-            this, SLOT(slotToggleContainer()));
+    connect(d->arrow, &RArrowClickLabel::leftClicked, this, &RLabelExpander::slotToggleContainer);
 
-    connect(d->clickLabel, SIGNAL(activated()),
-            this, SLOT(slotToggleContainer()));
+    connect(d->clickLabel, &RClickLabel::activated, this, &RLabelExpander::slotToggleContainer);
 
-    connect(d->checkBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalToggled(bool)));
+    connect(d->checkBox, &QCheckBox::toggled, this, &RLabelExpander::signalToggled);
 }
 
 RLabelExpander::~RLabelExpander()

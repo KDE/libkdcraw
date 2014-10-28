@@ -37,20 +37,15 @@ namespace KDcrawIface
 RWeaverObserver::RWeaverObserver(QObject* const parent)
     : WeaverObserver(parent)
 {
-    connect(this, SIGNAL(weaverStateChanged(ThreadWeaver::State*)),
-            this, SLOT(slotWeaverStateChanged(ThreadWeaver::State*)));
+    connect(this, &RWeaverObserver::weaverStateChanged, this, &RWeaverObserver::slotWeaverStateChanged);
 
-    connect(this, SIGNAL(threadStarted(ThreadWeaver::Thread*)),
-            this, SLOT(slotThreadStarted(ThreadWeaver::Thread*)));
+    connect(this, &RWeaverObserver::threadStarted, this, &RWeaverObserver::slotThreadStarted);
 
-    connect(this, SIGNAL(threadBusy(ThreadWeaver::Thread*,ThreadWeaver::Job*)),
-            this, SLOT(slotThreadBusy(ThreadWeaver::Thread*,ThreadWeaver::Job*)));
+    connect(this, &RWeaverObserver::threadBusy, this, &RWeaverObserver::slotThreadBusy);
 
-    connect(this, SIGNAL(threadSuspended(ThreadWeaver::Thread*)),
-            this, SLOT(slotThreadSuspended(ThreadWeaver::Thread*)));
+    connect(this, &RWeaverObserver::threadSuspended, this, &RWeaverObserver::slotThreadSuspended);
 
-    connect(this, SIGNAL(threadExited(ThreadWeaver::Thread*)),
-            this, SLOT(slotThreadExited(ThreadWeaver::Thread*)));
+    connect(this, &RWeaverObserver::threadExited, this, &RWeaverObserver::slotThreadExited);
 }
 
 RWeaverObserver::~RWeaverObserver()

@@ -63,11 +63,9 @@ SqueezedComboBox::SqueezedComboBox(QWidget* const parent, const char* name)
     d->timer = new QTimer(this);
     d->timer->setSingleShot(true);
 
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotTimeOut()));
+    connect(d->timer, &QTimer::timeout, this, &SqueezedComboBox::slotTimeOut);
 
-    connect(this, SIGNAL(activated(int)),
-            SLOT(slotUpdateToolTip(int)));
+    connect(this, static_cast<void (SqueezedComboBox::*)(int)>(&SqueezedComboBox::activated), this, &SqueezedComboBox::slotUpdateToolTip);
 }
 
 SqueezedComboBox::~SqueezedComboBox()

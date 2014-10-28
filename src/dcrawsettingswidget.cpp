@@ -746,20 +746,15 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     // ---------------------------------------------------------------
 
-    connect(d->unclipColorComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotUnclipColorActivated(int)));
+    connect(d->unclipColorComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotUnclipColorActivated);
 
-    connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotWhiteBalanceToggled(int)));
+    connect(d->whiteBalanceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotWhiteBalanceToggled);
 
-    connect(d->noiseReductionComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotNoiseReductionChanged(int)));
+    connect(d->noiseReductionComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotNoiseReductionChanged);
 
-    connect(d->enableCACorrectionBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotCACorrectionToggled(bool)));
+    connect(d->enableCACorrectionBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::slotCACorrectionToggled);
 
-    connect(d->autoCACorrectionBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotAutoCAToggled(bool)));
+    connect(d->autoCACorrectionBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::slotAutoCAToggled);
 
     connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
             d->blackPointSpinBox, SLOT(setEnabled(bool)));
@@ -767,106 +762,73 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->whitePointCheckBox, SIGNAL(toggled(bool)),
             d->whitePointSpinBox, SLOT(setEnabled(bool)));
 
-    connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
-            this, SLOT(slotsixteenBitsImageToggled(bool)));
+    connect(d->sixteenBitsImage, &QCheckBox::toggled, this, &DcrawSettingsWidget::slotsixteenBitsImageToggled);
 
-    connect(dcrawVersion, SIGNAL(leftClickedUrl(QString)),
-            this, SLOT(processDcrawUrl(QString)));
+    connect(dcrawVersion, static_cast<void (KUrlLabel::*)(const QString &)>(&KUrlLabel::leftClickedUrl), this, &DcrawSettingsWidget::processDcrawUrl);
 
-    connect(d->inputColorSpaceComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotInputColorSpaceChanged(int)));
+    connect(d->inputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotInputColorSpaceChanged);
 
-    connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotOutputColorSpaceChanged(int)));
+    connect(d->outputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotOutputColorSpaceChanged);
 
-    connect(d->expoCorrectionBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotExposureCorrectionToggled(bool)));
+    connect(d->expoCorrectionBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::slotExposureCorrectionToggled);
 
-    connect(d->expoCorrectionShiftSpinBox, SIGNAL(valueChanged(double)),
-            this, SLOT(slotExpoCorrectionShiftChanged(double)));
+    connect(d->expoCorrectionShiftSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::slotExpoCorrectionShiftChanged);
 
     // Wrapper to emit signal when something is changed in settings.
 
-    connect(d->inIccUrlEdit, SIGNAL(urlSelected(QUrl)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->inIccUrlEdit, &KUrlRequester::urlSelected, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->outIccUrlEdit, SIGNAL(urlSelected(QUrl)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->outIccUrlEdit, &KUrlRequester::urlSelected, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->whiteBalanceComboBox, SIGNAL(activated(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->whiteBalanceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->RAWQualityComboBox, SIGNAL(activated(int)),
-            this, SLOT(slotRAWQualityChanged(int)));
+    connect(d->RAWQualityComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::slotRAWQualityChanged);
 
-    connect(d->unclipColorComboBox, SIGNAL(activated(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->unclipColorComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->inputColorSpaceComboBox, SIGNAL(activated(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->inputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->outputColorSpaceComboBox, SIGNAL(activated(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->outputColorSpaceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated), this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->blackPointCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->blackPointCheckBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->whitePointCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->whitePointCheckBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->sixteenBitsImage, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->sixteenBitsImage, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->fixColorsHighlightsBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->fixColorsHighlightsBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->autoBrightnessBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->autoBrightnessBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->fourColorCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->fourColorCheckBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->dontStretchPixelsCheckBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->dontStretchPixelsCheckBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->refineInterpolationBox, SIGNAL(toggled(bool)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->refineInterpolationBox, &QCheckBox::toggled, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->customWhiteBalanceSpinBox, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->customWhiteBalanceSpinBox, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->reconstructSpinBox, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->reconstructSpinBox, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->blackPointSpinBox, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->blackPointSpinBox, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->whitePointSpinBox, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->whitePointSpinBox, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->NRSpinBox1, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->NRSpinBox1, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->NRSpinBox2, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->NRSpinBox2, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->medianFilterPassesSpinBox, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->medianFilterPassesSpinBox, &RIntNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->customWhiteBalanceGreenSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->customWhiteBalanceGreenSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->caRedMultSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->caRedMultSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->caBlueMultSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->caBlueMultSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->brightnessSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->brightnessSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->expoCorrectionHighlightSpinBox, SIGNAL(valueChanged(double)),
-            this, SIGNAL(signalSettingsChanged()));
+    connect(d->expoCorrectionHighlightSpinBox, &RDoubleNumInput::valueChanged, this, &DcrawSettingsWidget::signalSettingsChanged);
 }
 
 DcrawSettingsWidget::~DcrawSettingsWidget()
