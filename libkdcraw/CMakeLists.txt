@@ -1,30 +1,12 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2006-12-09
-# @brief  a tread-safe libraw C++ program interface for KDE
-#
-# @author Copyright (C) 2006-2014 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 
-SET(kdcraw_LIB_SRCS kdcraw.cpp
+set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawsettingswidget.cpp
                     dcrawinfocontainer.cpp
@@ -39,7 +21,7 @@ SET(kdcraw_LIB_SRCS kdcraw.cpp
 
 KDE4_ADD_LIBRARY(kdcraw SHARED ${kdcraw_LIB_SRCS})
 
-TARGET_LINK_LIBRARIES(kdcraw
+target_link_libraries(kdcraw
                       ${KDE4_KDEUI_LIBS}
                       ${KDE4_KIO_LIBS}
                       ${KDE4_SOLID_LIBS}
@@ -47,13 +29,13 @@ TARGET_LINK_LIBRARIES(kdcraw
                       ${LibRaw_r_LIBRARIES}
                      )
 
-SET_TARGET_PROPERTIES(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION})
+set_target_properties(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} SOVERSION ${DCRAW_LIB_SO_CUR_VERSION})
 
-INSTALL(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
-    INSTALL(FILES rawdecodingsettings.h
+if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+    install(FILES rawdecodingsettings.h
                   kdcraw.h
                   dcrawsettingswidget.h
                   rnuminput.h
@@ -66,4 +48,4 @@ IF(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
                   libkdcraw_export.h
                   ${CMAKE_CURRENT_BINARY_DIR}/version.h
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
-ENDIF()
+endif()

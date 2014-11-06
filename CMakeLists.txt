@@ -1,77 +1,59 @@
-# ===========================================================
 #
-# This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
-# @date   2006-12-09
-# @brief  a tread-safe libraw C++ program interface for KDE
-#
-# @author Copyright (C) 2006-2014 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
-#
-# This program is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General
-# Public License as published by the Free Software Foundation;
-# either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# ============================================================
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-PROJECT(libkdcraw)
+project(libkdcraw)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
-MESSAGE(STATUS "----------------------------------------------------------------------------------")
-MESSAGE(STATUS "Starting CMake configuration for: libkdcraw")
+message(STATUS "----------------------------------------------------------------------------------")
+message(STATUS "Starting CMake configuration for: libkdcraw")
 
-FIND_PACKAGE(KDE4 REQUIRED)
-INCLUDE(KDE4Defaults)
-INCLUDE(MacroLibrary)
-INCLUDE(MacroOptionalAddSubdirectory)
-INCLUDE(FindPackageHandleStandardArgs)
+find_package(KDE4 REQUIRED)
+include(KDE4Defaults)
+include(MacroLibrary)
+include(MacroOptionalAddSubdirectory)
+include(FindPackageHandleStandardArgs)
 
 # NOTE: Libraw 0.16.x is prefered version to use because it's ported to Cmake with full features supported.
 # Until libraw 0.16.0 is release (ends of 2013), we will support previous version (with limited support)
-FIND_PACKAGE(LibRaw 0.15)
+find_package(LibRaw 0.15)
 SET_PACKAGE_PROPERTIES(LibRaw PROPERTIES DESCRIPTION "library that provides image Raw file demosaicing" URL "http://www.libraw.org" TYPE REQUIRED PURPOSE "Required to build libkdcraw")
-IF(NOT LIBRAW_FOUND)
+if(NOT LIBRAW_FOUND)
     FEATURE_SUMMARY(WHAT ALL
                     INCLUDE_QUIET_PACKAGES
                     FATAL_ON_MISSING_REQUIRED_PACKAGES
                    )
-    RETURN()
-ENDIF()
+    return()
+endif()
 
 # Check LibRaw config header.
-MESSAGE(STATUS "LibRaw version: ${LibRaw_VERSION_STRING}")
+message(STATUS "LibRaw version: ${LibRaw_VERSION_STRING}")
 
-IF(EXISTS "${LibRaw_INCLUDE_DIR}/libraw_config.h")
-    ADD_DEFINITIONS(-DLIBRAW_HAS_CONFIG)
-    MESSAGE(STATUS "LibRaw config file exists: yes")
-ELSE()
-    MESSAGE(STATUS "LibRaw config file exists: no")
-ENDIF()
+if(EXISTS "${LibRaw_INCLUDE_DIR}/libraw_config.h")
+    add_definitions(-DLIBRAW_HAS_CONFIG)
+    message(STATUS "LibRaw config file exists: yes")
+else()
+    message(STATUS "LibRaw config file exists: no")
+endif()
 
-ADD_DEFINITIONS(${QT_DEFINITIONS}
+add_definitions(${QT_DEFINITIONS}
                 ${QT_QTDBUS_DEFINITIONS}
                 ${KDE4_DEFINITIONS}
                 ${LibRaw_r_DEFINITIONS}
                )
 
-INCLUDE_DIRECTORIES(${QDBUS_INCLUDE_DIRS} 
+include_directories(${QDBUS_INCLUDE_DIRS} 
                     ${CMAKE_SOURCE_DIR}
                     ${CMAKE_BINARY_DIR}
                     ${KDE4_INCLUDES}
                     ${LibRaw_INCLUDE_DIR}
                    )
 
-SET(LIBKDCRAW_AREA_CODE_GENERAL 51002)
-ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
+set(LIBKDCRAW_AREA_CODE_GENERAL 51002)
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 
 # ==================================================================================================
 # Information to update before to release this library.
@@ -101,9 +83,9 @@ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=${LIBKDCRAW_AREA_CODE_GENERAL})
 # 2.4.0 => 23.0.2 (Released with KDE 4.12.0 - Drop internal Libraw source code + new methods to get thumb and preview from QBuffer)
 
 # Library API version
-SET(DCRAW_LIB_MAJOR_VERSION "2")
-SET(DCRAW_LIB_MINOR_VERSION "4")
-SET(DCRAW_LIB_PATCH_VERSION "2")
+set(DCRAW_LIB_MAJOR_VERSION "2")
+set(DCRAW_LIB_MINOR_VERSION "4")
+set(DCRAW_LIB_PATCH_VERSION "2")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -112,37 +94,36 @@ SET(DCRAW_LIB_PATCH_VERSION "2")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final relase. Can be used in production.
-SET(DCRAW_LIB_SUFFIX_VERSION "")
+set(DCRAW_LIB_SUFFIX_VERSION "")
 
 # Library ABI version used by linker.
 # For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(DCRAW_LIB_SO_CUR_VERSION "23")
-SET(DCRAW_LIB_SO_REV_VERSION "0")
-SET(DCRAW_LIB_SO_AGE_VERSION "0")
+set(DCRAW_LIB_SO_CUR_VERSION "23")
+set(DCRAW_LIB_SO_REV_VERSION "0")
+set(DCRAW_LIB_SO_AGE_VERSION "0")
 
 # ==================================================================================================
 # Set env. variables accordinly.
 
-SET(DCRAW_LIB_VERSION_STRING "${DCRAW_LIB_MAJOR_VERSION}.${DCRAW_LIB_MINOR_VERSION}.${DCRAW_LIB_PATCH_VERSION}${DCRAW_LIB_SUFFIX_VERSION}")
-SET(DCRAW_LIB_VERSION_ID "0x0${DCRAW_LIB_MAJOR_VERSION}0${DCRAW_LIB_MINOR_VERSION}0${DCRAW_LIB_PATCH_VERSION}")
-
-SET(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_VERSION}.${DCRAW_LIB_SO_AGE_VERSION}")
+set(DCRAW_LIB_VERSION_STRING    "${DCRAW_LIB_MAJOR_VERSION}.${DCRAW_LIB_MINOR_VERSION}.${DCRAW_LIB_PATCH_VERSION}${DCRAW_LIB_SUFFIX_VERSION}")
+set(DCRAW_LIB_VERSION_ID        "0x0${DCRAW_LIB_MAJOR_VERSION}0${DCRAW_LIB_MINOR_VERSION}0${DCRAW_LIB_PATCH_VERSION}")
+set(DCRAW_LIB_SO_VERSION_STRING "${DCRAW_LIB_SO_CUR_VERSION}.${DCRAW_LIB_SO_REV_VERSION}.${DCRAW_LIB_SO_AGE_VERSION}")
 
 # ==================================================================================================
 
-ADD_SUBDIRECTORY(libkdcraw)
-ADD_SUBDIRECTORY(icons)
-ADD_SUBDIRECTORY(profiles)
+add_subdirectory(libkdcraw)
+add_subdirectory(icons)
+add_subdirectory(profiles)
 
-IF(KDE4_BUILD_TESTS)
+if(KDE4_BUILD_TESTS)
     MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
-ENDIF(KDE4_BUILD_TESTS)
-  
-IF(NOT WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
-    INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-ENDIF(NOT WIN32)
+endif()
+
+if(NOT WIN32)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+endif()
 
 FEATURE_SUMMARY(WHAT ALL
                 INCLUDE_QUIET_PACKAGES
