@@ -69,10 +69,12 @@ target_include_directories(KF5KDcraw INTERFACE
 )
 
 target_link_libraries(KF5KDcraw
+                PRIVATE
+                      ${LibRaw_LIBRARIES}
+                PUBLIC
                       KF5::KDELibs4Support
                       KF5::ThreadWeaver
                       Qt5::Core
-                      ${LibRaw_LIBRARIES}
 )
 
 install(TARGETS KF5KDcraw
