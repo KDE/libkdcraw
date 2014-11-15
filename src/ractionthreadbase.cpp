@@ -45,9 +45,9 @@
 #include "ractionthreadbase_p.h"
 #include "jobcollectionz.h"
 
-
 using namespace Solid;
 using namespace ThreadWeaver;
+
 namespace KDcrawIface
 {
 
