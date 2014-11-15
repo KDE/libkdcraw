@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "actionthread.moc"
+#include "actionthread.h"
 
 // Qt includes
 
@@ -35,22 +35,26 @@
 
 #include <kdebug.h>
 #include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/JobCollection.h>
+#include "enhancedjob.h"
+
+//#include <threadweaver/JobCollection.h>
 
 // Local includes
 
 #include "kdcraw.h"
 #include "rawdecodingsettings.h"
+#include "jobcollectionz.h"
 
 using namespace ThreadWeaver;
 
-class ActionThread::Task : public Job
+class ActionThread::Task : public EnhancedJob
 {
 public:
 
     Task(QObject* const parent = 0)
-        :Job(parent)
+        :EnhancedJob()
     {
+        Q_UNUSED(parent);
     }
 
     QString errString;
@@ -58,7 +62,7 @@ public:
 
 protected:
 
-    void run()
+    void run(JobPointer self, Thread *thread)
     {
         // RAW to PNG
         QImage              image;
@@ -101,20 +105,20 @@ ActionThread::~ActionThread()
 
 void ActionThread::convertRAWtoPNG(const KUrl::List& list)
 {
-    JobCollection* const collection = new JobCollection();
+    JobCollectionz* const collection = new JobCollectionz();
 
     for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
     {
         Task* const t = new Task(this);
         t->fileUrl    = *it;
 
-        connect(t, SIGNAL(started(ThreadWeaver::Job*)),
-                this, SLOT(slotJobStarted(ThreadWeaver::Job*)));
+//        connect(t, SIGNAL(started(ThreadWeaver::Job*)),
+//                this, SLOT(slotJobStarted(ThreadWeaver::Job*)));
 
         connect(t, SIGNAL(done(ThreadWeaver::Job*)),
                 this, SLOT(slotJobDone(ThreadWeaver::Job*)));
 
-        collection->addJob(t);
+        collection->addJob((JobPointer)t);
     }
 
     appendJob(collection);

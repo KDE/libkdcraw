@@ -26,12 +26,12 @@
 
 // KDE includes
 
-#include <kdialog.h>
 #include <kurl.h>
+#include <QtWidgets/QDialog>
 
 class QProgressBar;
 
-class ProcessorDlg : public KDialog
+class ProcessorDlg : public QDialog
 {
     Q_OBJECT
 

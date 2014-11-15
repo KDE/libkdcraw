@@ -23,7 +23,7 @@
 
 // Qt includes
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QDebug>
 
 // KDE includes

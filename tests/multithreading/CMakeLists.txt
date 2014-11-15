@@ -4,9 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-include_directories(${KDE4_INCLUDES}
-                    ${QT_INCLUDE_DIR}
-                    ${QT_QTCORE_INCLUDE_DIR}
+include_directories(${KF5_INCLUDE_DIR}
+                    ${Qt5_INCLUDE_DIR}
+                    ${Qt5_QTCORE_INCLUDE_DIR}
+                    ${LibRaw_INCLUDE_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/../../libkdcraw
 )
 
@@ -16,13 +17,12 @@ set(multicorerawtopng_SRCS
     actionthread.cpp
 )
 
-kde4_add_executable(multicorerawtopng ${multicorerawtopng_SRCS})
+add_executable(multicorerawtopng ${multicorerawtopng_SRCS})
 
 target_link_libraries(multicorerawtopng
-                      ${QT_QTGUI_LIBRARY}
-                      ${QT_QTCORE_LIBRARY}
-                      ${KDE4_KDEUI_LIBS}
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_THREADWEAVER_LIBRARIES}
-                      kdcraw
+                      Qt5::Gui
+                      Qt5::Core
+                      KF5::KIOCore
+                      KF5KDcraw
+                      KF5::ThreadWeaver
 )

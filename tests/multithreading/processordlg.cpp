@@ -21,21 +21,21 @@
  *
  * ============================================================ */
 
-#include "processordlg.moc"
+#include "processordlg.h"
 
 // Qt includes
 
 #include <QList>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QProgressBar>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
+#include <QDialog>
 #include <QThreadPool>
 #include <QFileInfo>
 
 // KDE includes
 
 #include <klocale.h>
-#include <kdebug.h>
 #include <kapplication.h>
 #include <kpushbutton.h>
 
@@ -68,18 +68,21 @@ public:
 };
 
 ProcessorDlg::ProcessorDlg(const KUrl::List& list)
-    : KDialog(0), d(new Private)
+    : QDialog(0), d(new Private)
 {
-    setButtons(Apply | Close);
-    setButtonText(Apply, i18n("Start"));
-    setDefaultButton(Close);
+//    setButtons(Apply | Close);
+//    setButtonText(Apply, i18n("Start"));
+//    setDefaultButton(Close);
     setModal(false);
-    setCaption(i18n("Convert RAW files To PNG"));
+//    setCaption(i18n("Convert RAW files To PNG"));
 
     d->list                 = list;
     d->count                = d->list.count()-1;
     d->page                 = new QWidget(this);
-    setMainWidget(d->page);
+//    setMainWidget(d->page);
+    QVBoxLayout* vbx = new QVBoxLayout(this);
+    vbx->addWidget(d->page);
+    QDialog::setLayout(vbx);
 
     d->vlay                 = new QVBoxLayout(d->page);
     QLabel* const pid       = new QLabel(i18n("PID : %1", kapp->applicationPid()), this);
@@ -135,7 +138,7 @@ void ProcessorDlg::slotStart()
 {
     if (d->list.isEmpty()) return;
 
-    button(Apply)->setDisabled(true);
+//    button(Apply)->setDisabled(true);
 
     d->thread->convertRAWtoPNG(d->list);
     d->thread->start();

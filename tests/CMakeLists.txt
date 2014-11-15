@@ -5,7 +5,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # TODO
-#add_subdirectory(multithreading)
+add_subdirectory(multithreading)
 
 set(raw2png_SRCS raw2png.cpp)
 add_executable(raw2png ${raw2png_SRCS})
