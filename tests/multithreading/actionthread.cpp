@@ -61,12 +61,14 @@ public:
     }
 
     QString errString;
-    KUrl    fileUrl;
+    QUrl    fileUrl;
 
 protected:
 
     void run(JobPointer self, Thread *thread)
     {
+        Q_UNUSED(self);
+        Q_UNUSED(thread);
         // RAW to PNG
         QImage              image;
         KDcraw              rawProcessor;
@@ -106,11 +108,11 @@ ActionThread::~ActionThread()
 {
 }
 
-void ActionThread::convertRAWtoPNG(const KUrl::List& list)
+void ActionThread::convertRAWtoPNG(const QList<QUrl> &list)
 {
     JobCollectionz* const collection = new JobCollectionz();
 
-    for (KUrl::List::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+    for (QList<QUrl>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
     {
         Task* const t = new Task(this);
         t->fileUrl    = *it;

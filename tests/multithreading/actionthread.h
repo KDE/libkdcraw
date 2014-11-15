@@ -27,10 +27,7 @@
 // Qt includes
 
 #include <QThread>
-
-// KDE includes
-
-#include <kurl.h>
+#include <QUrl>
 
 // Libkdcraw includes
 
@@ -52,13 +49,13 @@ public:
     ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void convertRAWtoPNG(const KUrl::List& list);
+    void convertRAWtoPNG(const QList<QUrl>& list);
 
 Q_SIGNALS:
 
-    void starting(const KUrl& url);
-    void finished(const KUrl& url);
-    void failed(const KUrl& url, const QString& err);
+    void starting(const QUrl& url);
+    void finished(const QUrl& url);
+    void failed(const QUrl& url, const QString& err);
 
 private Q_SLOTS:
 

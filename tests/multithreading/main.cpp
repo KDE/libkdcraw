@@ -28,7 +28,7 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QUrl>
 
 // Local includes
 
@@ -45,10 +45,10 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
 
-    KUrl::List list;
+    QList<QUrl> list;
 
     for (int i = 0 ; i < argc ; i++)
-        list.append(KUrl(argv[i]));
+        list.append(QUrl::fromLocalFile(argv[i]));
 
     ProcessorDlg* const dlg = new ProcessorDlg(list);
     dlg->show();

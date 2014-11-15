@@ -62,12 +62,12 @@ public:
     QLabel*              items;
     QVBoxLayout*         vlay;
 
-    KUrl::List           list;
+    QList<QUrl>           list;
 
     ActionThread*        thread;
 };
 
-ProcessorDlg::ProcessorDlg(const KUrl::List& list)
+ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     : QDialog(0), d(new Private)
 {
 //    setButtons(Apply | Close);
@@ -111,14 +111,14 @@ ProcessorDlg::ProcessorDlg(const KUrl::List& list)
     connect(this, SIGNAL(applyClicked()),
             this, SLOT(slotStart()));
 
-    connect(d->thread, SIGNAL(starting(KUrl)),
-            this, SLOT(slotStarting(KUrl)));
+    connect(d->thread, SIGNAL(starting(QUrl)),
+            this, SLOT(slotStarting(QUrl)));
 
-    connect(d->thread, SIGNAL(finished(KUrl)),
-            this, SLOT(slotFinished(KUrl)));
+    connect(d->thread, SIGNAL(finished(QUrl)),
+            this, SLOT(slotFinished(QUrl)));
 
-    connect(d->thread, SIGNAL(failed(KUrl,QString)),
-            this, SLOT(slotFailed(KUrl,QString)));
+    connect(d->thread, SIGNAL(failed(QUrl,QString)),
+            this, SLOT(slotFailed(QUrl,QString)));
 
     updateCount();
     resize(500, 400);
@@ -144,7 +144,7 @@ void ProcessorDlg::slotStart()
     d->thread->start();
 }
 
-QProgressBar* ProcessorDlg::findProgressBar(const KUrl& url) const
+QProgressBar* ProcessorDlg::findProgressBar(const QUrl& url) const
 {
     QList<QProgressBar*> bars = findChildren<QProgressBar*>();
 
@@ -159,7 +159,7 @@ QProgressBar* ProcessorDlg::findProgressBar(const KUrl& url) const
     return 0;
 }
 
-void ProcessorDlg::slotStarting(const KUrl& url)
+void ProcessorDlg::slotStarting(const QUrl& url)
 {
     QProgressBar* const b = findProgressBar(url);
 
@@ -171,7 +171,7 @@ void ProcessorDlg::slotStarting(const KUrl& url)
     }
 }
 
-void ProcessorDlg::slotFinished(const KUrl& url)
+void ProcessorDlg::slotFinished(const QUrl& url)
 {
     QProgressBar* const b = findProgressBar(url);
 
@@ -186,7 +186,7 @@ void ProcessorDlg::slotFinished(const KUrl& url)
     }
 }
 
-void ProcessorDlg::slotFailed(const KUrl& url, const QString& err)
+void ProcessorDlg::slotFailed(const QUrl& url, const QString& err)
 {
     QProgressBar* const b = findProgressBar(url);
 

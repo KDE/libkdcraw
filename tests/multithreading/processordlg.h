@@ -26,7 +26,8 @@
 
 // KDE includes
 
-#include <kurl.h>
+#include <QList>
+#include <QUrl>
 #include <QtWidgets/QDialog>
 
 class QProgressBar;
@@ -37,20 +38,20 @@ class ProcessorDlg : public QDialog
 
 public:
 
-    ProcessorDlg(const KUrl::List& list);
+    ProcessorDlg(const QList<QUrl> &list);
     ~ProcessorDlg();
 
 private :
 
-    QProgressBar* findProgressBar(const KUrl& url) const;
+    QProgressBar* findProgressBar(const QUrl& url) const;
     void updateCount();
 
 private Q_SLOTS:
 
     void slotStart();
-    void slotStarting(const KUrl&);
-    void slotFinished(const KUrl&);
-    void slotFailed(const KUrl&, const QString&);
+    void slotStarting(const QUrl&);
+    void slotFinished(const QUrl&);
+    void slotFailed(const QUrl&, const QString&);
 
 private:
 
