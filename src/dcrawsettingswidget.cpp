@@ -39,6 +39,7 @@
 #include <QLabel>
 #include <QWhatsThis>
 #include <QGridLayout>
+
 // KDE includes
 
 #include <kapplication.h>

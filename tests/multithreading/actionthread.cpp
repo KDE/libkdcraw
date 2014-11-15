@@ -34,10 +34,13 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <threadweaver/ThreadWeaver.h>
+#include <ThreadWeaver/ThreadWeaver>
+
+// Local includes
+
 #include "enhancedjob.h"
 
-//#include <threadweaver/JobCollection.h>
+//#include <ThreadWeaver/JobCollection.h>
 
 // Local includes
 
