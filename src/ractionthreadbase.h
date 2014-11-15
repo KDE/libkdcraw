@@ -35,11 +35,12 @@
 // Local includes
 
 #include "kdcraw_export.h"
+#include "jobcollectionz.h"
 
-namespace ThreadWeaver
-{
-    class JobCollection;
-}
+//namespace ThreadWeaver
+//{
+//    class JobCollection;
+//}
 
 using namespace ThreadWeaver;
 
@@ -70,7 +71,7 @@ protected:
 
     /** Append a collection of jobs to process in pending list.
      */
-    void appendJob(JobCollection* const job);
+    void appendJob(JobCollectionz* const job);
 
     /** Return true if list of pending jobs to process is empty.
      */

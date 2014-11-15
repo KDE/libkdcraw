@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <ThreadWeaver/Job>
-#include <ThreadWeaver/WeaverObserver>
 #include <ThreadWeaver/State>
 #include <ThreadWeaver/Thread>
 
@@ -55,26 +54,26 @@ using namespace ThreadWeaver;
 namespace KDcrawIface
 {
 
-/** RWeaverObserver is a simple wrapper to plug on the ActionThread class to
-    prints debug messages when signals are received.
-*/
-class RWeaverObserver : public WeaverObserver
-{
-    Q_OBJECT
+///** RWeaverObserver is a simple wrapper to plug on the ActionThread class to
+//    prints debug messages when signals are received.
+//*/
+//class RWeaverObserver : public WeaverObserver
+//{
+//    Q_OBJECT
 
-public:
+//public:
 
-    RWeaverObserver(QObject* const parent=0);
-    ~RWeaverObserver();
+//    RWeaverObserver(QObject* const parent=0);
+//    ~RWeaverObserver();
 
-protected Q_SLOTS:
+//protected Q_SLOTS:
 
-    void slotWeaverStateChanged(ThreadWeaver::State*);
-    void slotThreadStarted(ThreadWeaver::Thread*);
-    void slotThreadBusy(ThreadWeaver::Thread*, ThreadWeaver::Job*);
-    void slotThreadSuspended(ThreadWeaver::Thread*);
-    void slotThreadExited(ThreadWeaver::Thread*);
-};
+//    void slotWeaverStateChanged(ThreadWeaver::State*);
+//    void slotThreadStarted(ThreadWeaver::Thread*);
+//    void slotThreadBusy(ThreadWeaver::Thread*, ThreadWeaver::Job*);
+//    void slotThreadSuspended(ThreadWeaver::Thread*);
+//    void slotThreadExited(ThreadWeaver::Thread*);
+//};
 
 // ----------------------------------------------------------------------------------
 
@@ -87,7 +86,7 @@ public:
         running       = false;
         weaverRunning = false;
         weaver        = 0;
-        log           = 0;
+//        log           = 0;
     }
 
     volatile bool         running;
@@ -95,10 +94,10 @@ public:
 
     QWaitCondition        condVarJobs;
     QMutex                mutex;
-    QList<JobCollection*> todo;
+    QList<JobCollectionz*> todo;
 
     Weaver*               weaver;
-    RWeaverObserver*      log;
+//    RWeaverObserver*      log;
 };
 
 }  // namespace KDcrawIface

@@ -34,7 +34,6 @@
 // KDE includes
 
 #include <kdebug.h>
-#include <ThreadWeaver/JobCollection>
 #include <ThreadWeaver/Weaver>
 #include <ThreadWeaver/ThreadWeaver>
 #include <ThreadWeaver/Job>
@@ -44,6 +43,8 @@
 // Local includes
 
 #include "ractionthreadbase_p.h"
+#include "jobcollectionz.h"
+
 
 using namespace Solid;
 using namespace ThreadWeaver;
@@ -54,9 +55,9 @@ RActionThreadBase::RActionThreadBase(QObject* const parent)
     : QThread(parent), d(new Private)
 {
     const int maximumNumberOfThreads = qMax(Device::listFromType(DeviceInterface::Processor).count(), 1);
-    d->log                           = new RWeaverObserver(this);
+//    d->log                           = new RWeaverObserver(this);
     d->weaver                        = new Weaver(this);
-    d->weaver->registerObserver(d->log);
+//    d->weaver->registerObserver(d->log);
     d->weaver->setMaximumNumberOfThreads(maximumNumberOfThreads);
     kDebug() << "Starting Main Thread";
 }
@@ -69,7 +70,7 @@ RActionThreadBase::~RActionThreadBase()
     // wait for the thread to finish
     wait();
 
-    delete d->log;
+//    delete d->log;
     delete d->weaver;
     delete d;
 }
@@ -84,7 +85,8 @@ void RActionThreadBase::slotFinished()
     kDebug() << "Finish Main Thread";
     d->weaverRunning = false;
     d->condVarJobs.wakeAll();
-    emit QThread::finished();
+    // You can't emit with QPrivateSignal
+//    emit QThread::finished(QThread::QPrivateSignal());
 }
 
 void RActionThreadBase::cancel()
@@ -109,7 +111,7 @@ bool RActionThreadBase::isEmpty() const
     return d->todo.isEmpty();
 }
 
-void RActionThreadBase::appendJob(JobCollection* const job)
+void RActionThreadBase::appendJob(JobCollectionz * const job)
 {
     QMutexLocker lock(&d->mutex);
     d->todo << job;
@@ -124,7 +126,7 @@ void RActionThreadBase::run()
 
     while (d->running)
     {
-        JobCollection* t = 0;
+        JobCollectionz* t = 0;
         {
             QMutexLocker lock(&d->mutex);
 
@@ -140,12 +142,12 @@ void RActionThreadBase::run()
 
         if (t)
         {
-            connect(t, &JobCollection::done, this, &RActionThreadBase::slotFinished);
+            connect(t, SIGNAL(signalDone()), this, SLOT(slotFinished()));
 
-            connect(t, &JobCollection::done, t, &JobCollection::deleteLater);
+            connect(t, SIGNAL(signalDone()), t, SLOT(deleteLater()));
 
             d->weaverRunning = true;
-            d->weaver->enqueue(t);
+            d->weaver->enqueue(QVector<JobPointer>() << JobPointer(t));
         }
     }
 

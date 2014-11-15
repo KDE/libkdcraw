@@ -22,8 +22,9 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
                     squeezedcombobox.cpp
-#TODO                    ractionthreadbase.cpp
-#TODO                    ractionthreadbase_p.cpp
+                    ractionthreadbase.cpp
+                    jobcollectionz.cpp
+                    enhancedjob.cpp
 )
 
 ecm_generate_headers(kdcraw_CamelCase_HEADERS
@@ -38,6 +39,8 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      RExpanderBox
                      SqueezedComboBox
                      RActionThreadBase
+                     JobCollectionz
+                     EnhancedJob
 
                      PREFIX           KDCRAW
                      REQUIRED_HEADERS kdcraw_HEADERS
@@ -69,11 +72,9 @@ target_include_directories(KF5KDcraw INTERFACE
 )
 
 target_link_libraries(KF5KDcraw
-                PRIVATE
                       ${LibRaw_LIBRARIES}
-                PUBLIC
-                      KF5::KDELibs4Support
                       KF5::ThreadWeaver
+                      KF5::KDELibs4Support
                       Qt5::Core
 )
 

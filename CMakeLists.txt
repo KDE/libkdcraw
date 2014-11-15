@@ -82,8 +82,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 
 find_package(KF5 REQUIRED COMPONENTS
              KDELibs4Support
-             ThreadWeaver
 )
+find_package(KF5ThreadWeaver REQUIRED)
 
 # TODO: port to pure KF5
 #find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
