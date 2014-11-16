@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "jobcollectionz.h"
+#include <QDebug>
 
 namespace KDcrawIface
 {
@@ -43,6 +44,7 @@ void JobCollectionz::defaultEnd(const ThreadWeaver::JobPointer &job,
 {
     Q_UNUSED(job);
     Q_UNUSED(thread);
+    qDebug() << "The collection is finished";
     emit signalDone(this);
 }
 

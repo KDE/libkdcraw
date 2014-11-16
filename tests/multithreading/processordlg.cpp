@@ -26,18 +26,20 @@
 // Qt includes
 
 #include <QList>
+#include <QCoreApplication>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QProgressBar>
 #include <QDialog>
 #include <QThreadPool>
 #include <QFileInfo>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 // KDE includes
-
 #include <klocale.h>
-#include <kapplication.h>
-#include <kpushbutton.h>
+//#include <kapplication.h>
+//#include <kpushbutton.h>
 
 // Local includes
 
@@ -61,6 +63,7 @@ public:
     QWidget*             page;
     QLabel*              items;
     QVBoxLayout*         vlay;
+    QDialogButtonBox*    buttons;
 
     QList<QUrl>           list;
 
@@ -70,6 +73,8 @@ public:
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     : QDialog(0), d(new Private)
 {
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
+//    d->buttons->
 //    setButtons(Apply | Close);
 //    setButtonText(Apply, i18n("Start"));
 //    setDefaultButton(Close);
@@ -82,10 +87,11 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 //    setMainWidget(d->page);
     QVBoxLayout* vbx = new QVBoxLayout(this);
     vbx->addWidget(d->page);
+    vbx->addWidget(d->buttons);
     QDialog::setLayout(vbx);
 
     d->vlay                 = new QVBoxLayout(d->page);
-    QLabel* const pid       = new QLabel(i18n("PID : %1", kapp->applicationPid()), this);
+    QLabel* const pid       = new QLabel(i18n("PID : %1", QCoreApplication::applicationPid()), this);
     QLabel* const core      = new QLabel(i18n("Core : %1", QThreadPool::globalInstance()->maxThreadCount()), this);
     d->items                = new QLabel(this);
     d->vlay->addWidget(pid);
@@ -108,8 +114,13 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     d->thread = new ActionThread(this);
 
-    connect(this, SIGNAL(applyClicked()),
-            this, SLOT(slotStart()));
+//    connect(this, SIGNAL(applyClicked()),
+//            this, SLOT(slotStart()));
+    QPushButton* ok = d->buttons->button(QDialogButtonBox::Apply);
+    connect(ok, SIGNAL(clicked()), this, SLOT(slotStart()));
+
+    QPushButton* cancelb = d->buttons->button(QDialogButtonBox::Close);
+    connect(cancelb, SIGNAL(clicked()), this, SLOT(reject()));
 
     connect(d->thread, SIGNAL(starting(QUrl)),
             this, SLOT(slotStarting(QUrl)));

@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 
     QList<QUrl> list;
 
-    for (int i = 0 ; i < argc ; i++)
+    for (int i = 1 ; i < argc ; i++)
         list.append(QUrl::fromLocalFile(argv[i]));
 
     ProcessorDlg* const dlg = new ProcessorDlg(list);

@@ -40,7 +40,7 @@ protected:
     void defaultEnd(const ThreadWeaver::JobPointer &job,
                     ThreadWeaver::Thread *thread);
 signals:
-    void done(Job*);
+    void signalDone(ThreadWeaver::Job*);
 };
 }
 

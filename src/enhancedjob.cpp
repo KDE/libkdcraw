@@ -23,6 +23,7 @@
  *
  * ============================================================ */
 #include "enhancedjob.h"
+#include <QDebug>
 
 namespace KDcrawIface
 {
@@ -42,7 +43,8 @@ void EnhancedJob::defaultEnd(const ThreadWeaver::JobPointer &job,
 {
     Q_UNUSED(job);
     Q_UNUSED(thread);
-    emit done(this);
+    qDebug() << "++++++++++++++++++++Job ended +++++++++++" ;
+    emit signalDone(this);
 }
 
 

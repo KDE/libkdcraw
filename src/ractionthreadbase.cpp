@@ -30,6 +30,7 @@
 // Qt includes
 
 #include <QMutexLocker>
+#include <QObject>
 
 // KDE includes
 
@@ -48,6 +49,7 @@
 using namespace Solid;
 using namespace ThreadWeaver;
 
+#define Q_QDOC 1
 namespace KDcrawIface
 {
 
@@ -82,11 +84,12 @@ void RActionThreadBase::setMaximumNumberOfThreads(int n)
 
 void RActionThreadBase::slotFinished()
 {
-    kDebug() << "Finish Main Thread";
+    qDebug() << "Finish Main Thread";
     d->weaverRunning = false;
     d->condVarJobs.wakeAll();
     // You can't emit with QPrivateSignal
-//    emit QThread::finished(QThread::QPrivateSignal());
+//    emit QThread::finished();
+    terminate();
 }
 
 void RActionThreadBase::cancel()
@@ -142,9 +145,11 @@ void RActionThreadBase::run()
 
         if (t)
         {
-            connect(t, SIGNAL(signalDone()), this, SLOT(slotFinished()));
+            qDebug() << "t is good";
 
-            connect(t, SIGNAL(signalDone()), t, SLOT(deleteLater()));
+            connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)), this, SLOT(slotFinished()));
+
+            connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)), t, SLOT(deleteLater()));
 
             d->weaverRunning = true;
             d->weaver->enqueue(QVector<JobPointer>() << JobPointer(t));

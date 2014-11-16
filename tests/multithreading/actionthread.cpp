@@ -116,11 +116,12 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl> &list)
     {
         Task* const t = new Task(this);
         t->fileUrl    = *it;
+        qDebug() << "Appending new work " << *it;
 
 //        connect(t, SIGNAL(started(ThreadWeaver::Job*)),
 //                this, SLOT(slotJobStarted(ThreadWeaver::Job*)));
 
-        connect(t, SIGNAL(done(ThreadWeaver::Job*)),
+        connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)),
                 this, SLOT(slotJobDone(ThreadWeaver::Job*)));
 
         collection->addJob((JobPointer)t);
