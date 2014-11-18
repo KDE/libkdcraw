@@ -7,8 +7,10 @@
  * @date   2011-12-28
  * @brief  re-implementation of action thread using threadweaver
  *
- * @author Copyright (C) 2011-2013 by Gilles Caulier
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2014 by Veaceslav Munteanu
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  * @author Copyright (C) 2011-2012 by A Janardhan Reddy
  *         <a href="annapareddyjanardhanreddy at gmail dot com">annapareddyjanardhanreddy at gmail dot com</a>
  *
@@ -35,14 +37,7 @@
 // Local includes
 
 #include "kdcraw_export.h"
-#include "jobcollectionz.h"
-
-//namespace ThreadWeaver
-//{
-//    class JobCollection;
-//}
-
-using namespace ThreadWeaver;
+#include "ractionjob.h"
 
 namespace KDcrawIface
 {
@@ -61,9 +56,9 @@ public:
      *  this value automatically.
      */
     void setMaximumNumberOfThreads(int n);
+    int  maximumNumberOfThreads() const;
 
     void cancel();
-    void finish();
 
 protected:
 
@@ -71,7 +66,7 @@ protected:
 
     /** Append a collection of jobs to process in pending list.
      */
-    void appendJob(JobCollectionz* const job);
+    void appendJobs(const RJobCollection& jobs);
 
     /** Return true if list of pending jobs to process is empty.
      */
@@ -79,7 +74,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotFinished();
+    void slotJobFinished(RActionJob* job);
 
 private:
 

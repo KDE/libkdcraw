@@ -24,5 +24,4 @@ target_link_libraries(multicorerawtopng
                       Qt5::Core
                       KF5::KIOCore
                       KF5KDcraw
-                      KF5::ThreadWeaver
 )

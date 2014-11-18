@@ -1,13 +1,16 @@
 /** ===========================================================
+ * @file
  *
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2014-10-17
- * Description : test for implementation of threadWeaver api
+ * @date  : 2014-10-17
+ * @brief : test for implementation of threadWeaver api
  *
- * Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2014 by Veaceslav Munteanu
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,19 +30,19 @@
 
 #include <QList>
 #include <QCoreApplication>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QProgressBar>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QProgressBar>
 #include <QDialog>
 #include <QThreadPool>
 #include <QFileInfo>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QDebug>
 
 // KDE includes
+
 #include <klocale.h>
-//#include <kapplication.h>
-//#include <kpushbutton.h>
 
 // Local includes
 
@@ -65,7 +68,7 @@ public:
     QVBoxLayout*         vlay;
     QDialogButtonBox*    buttons;
 
-    QList<QUrl>           list;
+    QList<QUrl>          list;
 
     ActionThread*        thread;
 };
@@ -73,36 +76,33 @@ public:
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     : QDialog(0), d(new Private)
 {
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
-//    d->buttons->
-//    setButtons(Apply | Close);
-//    setButtonText(Apply, i18n("Start"));
-//    setDefaultButton(Close);
     setModal(false);
-//    setCaption(i18n("Convert RAW files To PNG"));
+    setWindowTitle(i18n("Convert RAW files To PNG"));
 
+    d->buttons              = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
+    d->thread               = new ActionThread(this);
     d->list                 = list;
-    d->count                = d->list.count()-1;
+    d->count                = d->list.count();
+    qDebug() << d->list;
+
     d->page                 = new QWidget(this);
-//    setMainWidget(d->page);
-    QVBoxLayout* vbx = new QVBoxLayout(this);
+    QVBoxLayout* const vbx  = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
     QDialog::setLayout(vbx);
 
     d->vlay                 = new QVBoxLayout(d->page);
-    QLabel* const pid       = new QLabel(i18n("PID : %1", QCoreApplication::applicationPid()), this);
-    QLabel* const core      = new QLabel(i18n("Core : %1", QThreadPool::globalInstance()->maxThreadCount()), this);
+    QLabel* const pid       = new QLabel(i18n("PID : %1",  QCoreApplication::applicationPid()),  this);
+    QLabel* const core      = new QLabel(i18n("Core : %1", d->thread->maximumNumberOfThreads()), this);
     d->items                = new QLabel(this);
     d->vlay->addWidget(pid);
     d->vlay->addWidget(core);
     d->vlay->addWidget(d->items);
-    d->vlay->addStretch();
 
-    for (int i = 1; i < d->count ; i++)
+    foreach (const QUrl& url, d->list)
     {
         QProgressBar* const bar = new QProgressBar(this);
-        QString file            = d->list[i].toLocalFile();
+        QString file            = url.toLocalFile();
         bar->setMaximum(100);
         bar->setMinimum(0);
         bar->setValue(100);
@@ -112,15 +112,16 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
         d->vlay->addWidget(bar);
     }
 
-    d->thread = new ActionThread(this);
+    d->vlay->addStretch();
 
-//    connect(this, SIGNAL(applyClicked()),
-//            this, SLOT(slotStart()));
-    QPushButton* ok = d->buttons->button(QDialogButtonBox::Apply);
-    connect(ok, SIGNAL(clicked()), this, SLOT(slotStart()));
+    QPushButton* const applyBtn  = d->buttons->button(QDialogButtonBox::Apply);
+    QPushButton* const cancelBtn = d->buttons->button(QDialogButtonBox::Close);
 
-    QPushButton* cancelb = d->buttons->button(QDialogButtonBox::Close);
-    connect(cancelb, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(applyBtn, SIGNAL(clicked()),
+            this, SLOT(slotStart()));
+
+    connect(cancelBtn, SIGNAL(clicked()),
+            this, SLOT(slotStop()));
 
     connect(d->thread, SIGNAL(starting(QUrl)),
             this, SLOT(slotStarting(QUrl)));
@@ -149,12 +150,18 @@ void ProcessorDlg::slotStart()
 {
     if (d->list.isEmpty()) return;
 
-//    button(Apply)->setDisabled(true);
+    d->buttons->button(QDialogButtonBox::Apply)->setDisabled(true);
 
     d->thread->convertRAWtoPNG(d->list);
     d->thread->start();
 }
 
+void ProcessorDlg::slotStop()
+{
+    d->thread->cancel();
+    reject();    
+}
+    
 QProgressBar* ProcessorDlg::findProgressBar(const QUrl& url) const
 {
     QList<QProgressBar*> bars = findChildren<QProgressBar*>();
@@ -167,11 +174,14 @@ QProgressBar* ProcessorDlg::findProgressBar(const QUrl& url) const
         }
     }
 
+    qWarning() << "Cannot found relevant progress bar for " << url.toLocalFile();
     return 0;
 }
 
 void ProcessorDlg::slotStarting(const QUrl& url)
 {
+    qDebug() << "Start to process item " << url.toLocalFile();
+
     QProgressBar* const b = findProgressBar(url);
 
     if (b)
@@ -184,6 +194,8 @@ void ProcessorDlg::slotStarting(const QUrl& url)
 
 void ProcessorDlg::slotFinished(const QUrl& url)
 {
+    qDebug() << "Completed item " << url.toLocalFile();
+
     QProgressBar* const b = findProgressBar(url);
 
     if (b)
@@ -199,6 +211,8 @@ void ProcessorDlg::slotFinished(const QUrl& url)
 
 void ProcessorDlg::slotFailed(const QUrl& url, const QString& err)
 {
+    qDebug() << "Failed to complete item " << url.toLocalFile();
+
     QProgressBar* const b = findProgressBar(url);
 
     if (b)

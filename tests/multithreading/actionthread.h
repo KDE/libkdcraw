@@ -1,13 +1,16 @@
 /** ===========================================================
+ * @file
  *
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2014-10-17
- * Description : a class to manage Raw to Png conversion using threads
+ * @date  : 2014-10-17
+ * @brief : a class to manage Raw to Png conversion using threads
  *
- * Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2014 by Veaceslav Munteanu
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,11 +36,6 @@
 
 #include "ractionthreadbase.h"
 
-namespace ThreadWeaver
-{
-    class Job;
-}
-
 using namespace KDcrawIface;
 
 class ActionThread : public RActionThreadBase
@@ -59,8 +57,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotJobDone(ThreadWeaver::Job*);
-    void slotJobStarted(ThreadWeaver::Job*);
+    void slotJobDone(RActionJob*);
+    void slotJobStarted(RActionJob*);
 
 private:
 

@@ -1,13 +1,16 @@
 /** ===========================================================
+ * @file
  *
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * Date        : 2014-10-17
- * Description : a class to manage Raw to Png conversion using threads
+ * @date  : 2014-10-17
+ * @brief : a class to manage Raw to Png conversion using threads
  *
- * Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2014 by Veaceslav Munteanu
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,32 +33,20 @@
 #include <QWaitCondition>
 #include <QFileInfo>
 #include <QImage>
-
-// KDE includes
-
-#include <kdebug.h>
-#include <ThreadWeaver/ThreadWeaver>
-
-// Local includes
-
-#include "enhancedjob.h"
-
-//#include <ThreadWeaver/JobCollection.h>
+#include <QDebug>
 
 // Local includes
 
 #include "kdcraw.h"
 #include "rawdecodingsettings.h"
-#include "jobcollectionz.h"
+#include "ractionjob.h"
 
-using namespace ThreadWeaver;
-
-class ActionThread::Task : public EnhancedJob
+class ActionThread::Task : public RActionJob
 {
 public:
 
     Task(QObject* const parent = 0)
-        :EnhancedJob()
+        : RActionJob()
     {
         Q_UNUSED(parent);
     }
@@ -65,10 +56,10 @@ public:
 
 protected:
 
-    void run(JobPointer self, Thread *thread)
+    void run()
     {
-        Q_UNUSED(self);
-        Q_UNUSED(thread);
+        emitSignalStarted();
+
         // RAW to PNG
         QImage              image;
         KDcraw              rawProcessor;
@@ -92,8 +83,10 @@ protected:
                  << fullOutput.fileName() << " size ("
                  << image.width() << "x" << image.height()
                  << ")";
+
         image.save(fullFilePath, "PNG");
 
+        emitSignalDone();
     }
 };
 
@@ -108,49 +101,53 @@ ActionThread::~ActionThread()
 {
 }
 
-void ActionThread::convertRAWtoPNG(const QList<QUrl> &list)
+void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
 {
-    JobCollectionz* const collection = new JobCollectionz();
+    RJobCollection collection;
 
-    for (QList<QUrl>::const_iterator it = list.constBegin(); it != list.constEnd(); ++it )
+    foreach (const QUrl& url, list)
     {
-        Task* const t = new Task(this);
-        t->fileUrl    = *it;
-        qDebug() << "Appending new work " << *it;
+        Task* const job = new Task(this);
+        job->fileUrl    = url;
 
-//        connect(t, SIGNAL(started(ThreadWeaver::Job*)),
-//                this, SLOT(slotJobStarted(ThreadWeaver::Job*)));
+        connect(job, SIGNAL(signalStarted(RActionJob*)),
+                this, SLOT(slotJobStarted(RActionJob*)));
 
-        connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)),
-                this, SLOT(slotJobDone(ThreadWeaver::Job*)));
+        connect(job, SIGNAL(signalDone(RActionJob*)),
+                this, SLOT(slotJobDone(RActionJob*)));
 
-        collection->addJob((JobPointer)t);
+        collection.append(job);
+
+        qDebug() << "Appending file to process " << url;
     }
 
-    appendJob(collection);
+    appendJobs(collection);
 }
 
-void ActionThread::slotJobDone(ThreadWeaver::Job* job)
+void ActionThread::slotJobDone(RActionJob* job)
 {
-    Task* const task = static_cast<Task*>(job);
-
+    Task* const task = dynamic_cast<Task*>(job);
+    if (!task) return;
+    
     if (task->errString.isEmpty())
     {
-        kDebug() << "Job done:" << task->fileUrl.toLocalFile();
+        qDebug() << "Job done:" << task->fileUrl.toLocalFile();
         emit finished(task->fileUrl);
     }
     else
     {
-        kDebug() << "Could not complete the job: " << task->fileUrl.toLocalFile() << " Error: " << task->errString;
+        qDebug() << "Could not complete the job: " << task->fileUrl.toLocalFile() << " Error: " << task->errString;
         emit failed(task->fileUrl, task->errString);
     }
 
-    delete job;
+    //delete task;
 }
 
-void ActionThread::slotJobStarted(ThreadWeaver::Job* job)
+void ActionThread::slotJobStarted(RActionJob* job)
 {
-    Task* const task = static_cast<Task*>(job);
-    kDebug() << "Job Started:" << task->fileUrl.toLocalFile();
+    Task* const task = dynamic_cast<Task*>(job);
+    if (!task) return;
+
+    qDebug() << "Job Started:" << task->fileUrl.toLocalFile();
     emit starting(task->fileUrl);
 }

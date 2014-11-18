@@ -7,8 +7,10 @@
  * @date   2011-12-28
  * @brief  re-implementation of action thread using threadweaver
  *
- * @author Copyright (C) 2011-2013 by Gilles Caulier
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * @author Copyright (C) 2014 by Veaceslav Munteanu
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  * @author Copyright (C) 2011-2012 by A Janardhan Reddy
  *         <a href="annapareddyjanardhanreddy at gmail dot com">annapareddyjanardhanreddy at gmail dot com</a>
  *
@@ -31,133 +33,139 @@
 
 #include <QMutexLocker>
 #include <QObject>
+#include <QDebug>
+#include <QWaitCondition>
+#include <QMutex>
+#include <QList>
+#include <QThreadPool>
 
-// KDE includes
-
-#include <kdebug.h>
-#include <ThreadWeaver/Weaver>
-#include <ThreadWeaver/ThreadWeaver>
-#include <ThreadWeaver/Job>
-#include <ThreadWeaver/DebuggingAids>
-#include <solid/device.h>
-
-// Local includes
-
-#include "ractionthreadbase_p.h"
-#include "jobcollectionz.h"
-
-using namespace Solid;
-using namespace ThreadWeaver;
-
-#define Q_QDOC 1
 namespace KDcrawIface
 {
+    
+class RActionThreadBase::Private
+{
+public:
+
+    Private()
+    {
+        running = false;
+        pool    = QThreadPool::globalInstance();
+    }
+
+    volatile bool  running;
+
+    QWaitCondition condVarJobs;
+    QMutex         mutex;
+    RJobCollection todo;
+    RJobCollection pending;
+
+    QThreadPool*   pool;
+};
 
 RActionThreadBase::RActionThreadBase(QObject* const parent)
-    : QThread(parent), d(new Private)
+    : QThread(parent),
+      d(new Private)
 {
-    const int maximumNumberOfThreads = qMax(Device::listFromType(DeviceInterface::Processor).count(), 1);
-//    d->log                           = new RWeaverObserver(this);
-    d->weaver                        = new Weaver(this);
-//    d->weaver->registerObserver(d->log);
-    d->weaver->setMaximumNumberOfThreads(maximumNumberOfThreads);
-    kDebug() << "Starting Main Thread";
+    const int maximumNumberOfThreads = qMax(QThreadPool::globalInstance()->maxThreadCount(), 1);
+    setMaximumNumberOfThreads(maximumNumberOfThreads);
+    qDebug() << "Starting Main Thread";
 }
 
 RActionThreadBase::~RActionThreadBase()
 {
-    kDebug() << "calling action thread destructor";
+    qDebug() << "calling action thread destructor";
+
     // cancel the thread
     cancel();
     // wait for the thread to finish
     wait();
 
-//    delete d->log;
-    delete d->weaver;
     delete d;
 }
 
 void RActionThreadBase::setMaximumNumberOfThreads(int n)
 {
-    d->weaver->setMaximumNumberOfThreads(n);
+    d->pool->setMaxThreadCount(n);
+    qDebug() << "Using " << n << " CPU core to run threads";
 }
 
-void RActionThreadBase::slotFinished()
+int RActionThreadBase::maximumNumberOfThreads() const
 {
-    qDebug() << "Finish Main Thread";
-    d->weaverRunning = false;
+    return d->pool->maxThreadCount();
+}
+
+void RActionThreadBase::slotJobFinished(RActionJob* job)
+{
+    qDebug() << "One job is done";
+
+    QMutexLocker lock(&d->mutex);
+    d->pending.removeOne(job);
     d->condVarJobs.wakeAll();
-    // You can't emit with QPrivateSignal
-//    emit QThread::finished();
-    terminate();
+
+    if (isEmpty())
+    {
+        d->running = false;
+    }
 }
 
 void RActionThreadBase::cancel()
 {
-    kDebug() << "Cancel Main Thread";
+    qDebug() << "Cancel Main Thread";
     QMutexLocker lock(&d->mutex);
-    d->todo.clear();
-    d->running       = false;
-    d->weaverRunning = true;
-    d->weaver->requestAbort();
-    d->weaver->dequeue();
-    d->condVarJobs.wakeAll();
-}
 
-void RActionThreadBase::finish()
-{
-    d->weaver->finish();
+    d->todo.clear();
+
+    foreach(RActionJob* const job, d->pending)
+    {
+        job->cancel();
+    }
+
+    d->pending.clear();
+    d->condVarJobs.wakeAll();
+    d->running = false;
 }
 
 bool RActionThreadBase::isEmpty() const
 {
-    return d->todo.isEmpty();
+    return d->pending.isEmpty();
 }
 
-void RActionThreadBase::appendJob(JobCollectionz * const job)
+void RActionThreadBase::appendJobs(const RJobCollection& jobs)
 {
     QMutexLocker lock(&d->mutex);
-    d->todo << job;
+    d->todo << jobs;
     d->condVarJobs.wakeAll();
 }
 
 void RActionThreadBase::run()
 {
-    d->running       = true;
-    d->weaverRunning = false;
-    kDebug() << "In action thread Run";
+    d->running = true;
 
     while (d->running)
     {
-        JobCollectionz* t = 0;
-        {
-            QMutexLocker lock(&d->mutex);
+        QMutexLocker lock(&d->mutex);
 
-            if (!isEmpty() && !d->weaverRunning)
+        if (!d->todo.isEmpty())
+        {
+            qDebug() << "Action Thread run " << d->todo.count() << " new jobs";
+
+            foreach(RActionJob* const job, d->todo)
             {
-                t = d->todo.takeFirst();
+
+                connect(job, SIGNAL(signalDone(RActionJob*)),
+                        this, SLOT(slotJobFinished(RActionJob*)));
+
+                d->pool->start(job);
+                d->pending << job;
             }
-            else
-            {
-                d->condVarJobs.wait(&d->mutex);
-            }
+            
+            d->todo.clear();
         }
-
-        if (t)
+        else
         {
-            qDebug() << "t is good";
-
-            connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)), this, SLOT(slotFinished()));
-
-            connect(t, SIGNAL(signalDone(ThreadWeaver::Job*)), t, SLOT(deleteLater()));
-
-            d->weaverRunning = true;
-            d->weaver->enqueue(QVector<JobPointer>() << JobPointer(t));
+            d->condVarJobs.wait(&d->mutex);
         }
     }
-
-    d->weaver->finish();
-    kDebug() << "Exiting Action Thread";
 }
 
 }  // namespace KDcrawIface
