@@ -56,8 +56,10 @@ public:
 
     QWaitCondition condVarJobs;
     QMutex         mutex;
+
     RJobCollection todo;
     RJobCollection pending;
+    RJobCollection processed;
 
     QThreadPool*   pool;
 };
@@ -68,17 +70,24 @@ RActionThreadBase::RActionThreadBase(QObject* const parent)
 {
     const int maximumNumberOfThreads = qMax(QThreadPool::globalInstance()->maxThreadCount(), 1);
     setMaximumNumberOfThreads(maximumNumberOfThreads);
-    qDebug() << "Starting Main Thread";
 }
 
 RActionThreadBase::~RActionThreadBase()
 {
-    qDebug() << "calling action thread destructor";
-
     // cancel the thread
     cancel();
     // wait for the thread to finish
     wait();
+    
+    // Cleanup all jobs from memory
+    foreach(RActionJob* const job, d->todo)
+        delete(job);
+
+    foreach(RActionJob* const job, d->pending)
+        delete(job);
+
+    foreach(RActionJob* const job, d->processed)
+        delete(job);
 
     delete d;
 }
@@ -99,6 +108,7 @@ void RActionThreadBase::slotJobFinished(RActionJob* job)
     qDebug() << "One job is done";
 
     QMutexLocker lock(&d->mutex);
+    d->processed << job;
     d->pending.removeOne(job);
     d->condVarJobs.wakeAll();
 
@@ -118,6 +128,7 @@ void RActionThreadBase::cancel()
     foreach(RActionJob* const job, d->pending)
     {
         job->cancel();
+        d->processed << job;
     }
 
     d->pending.clear();

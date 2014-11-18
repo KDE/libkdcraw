@@ -139,8 +139,6 @@ void ActionThread::slotJobDone(RActionJob* job)
         qDebug() << "Could not complete the job: " << task->fileUrl.toLocalFile() << " Error: " << task->errString;
         emit failed(task->fileUrl, task->errString);
     }
-
-    //delete task;
 }
 
 void ActionThread::slotJobStarted(RActionJob* job)
