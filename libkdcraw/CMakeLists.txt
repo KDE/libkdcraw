@@ -34,7 +34,7 @@ set_target_properties(kdcraw PROPERTIES VERSION ${DCRAW_LIB_SO_VERSION_STRING} S
 install(TARGETS kdcraw ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if(NOT DIGIKAMSC_USE_PRIVATE_SHAREDLIBS)
+if(NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
     install(FILES rawdecodingsettings.h
                   kdcraw.h
                   dcrawsettingswidget.h
