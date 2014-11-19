@@ -44,26 +44,30 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      REQUIRED_HEADERS kdcraw_HEADERS
 )
 
-install(FILES       ${kdcraw_CamelCase_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KDCRAW
-        COMPONENT   Devel
-)
-
-install(FILES       ${kdcraw_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
-        COMPONENT   Devel
-)
-
 add_library(KF5KDcraw SHARED ${kdcraw_LIB_SRCS})
+add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
 generate_export_header(KF5KDcraw BASE_NAME kdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
-install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
-        COMPONENT   Devel
-)
+# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
+if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
 
-add_library(KF5::KDcraw ALIAS KF5KDcraw)
+    install(FILES       ${kdcraw_CamelCase_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KDCRAW
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${kdcraw_HEADERS}
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
+            COMPONENT   Devel
+    )
+
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
+            COMPONENT   Devel
+    )
+
+endif()
 
 target_include_directories(KF5KDcraw INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
