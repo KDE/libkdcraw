@@ -41,7 +41,7 @@
 
 namespace KDcrawIface
 {
-    
+
 class RActionThreadBase::Private
 {
 public:
@@ -78,7 +78,7 @@ RActionThreadBase::~RActionThreadBase()
     cancel();
     // wait for the thread to finish
     wait();
-    
+
     // Cleanup all jobs from memory
     foreach(RActionJob* const job, d->todo)
         delete(job);
@@ -162,14 +162,13 @@ void RActionThreadBase::run()
 
             foreach(RActionJob* const job, d->todo)
             {
-
                 connect(job, SIGNAL(signalDone(RActionJob*)),
                         this, SLOT(slotJobFinished(RActionJob*)));
 
                 d->pool->start(job);
                 d->pending << job;
             }
-            
+
             d->todo.clear();
         }
         else
