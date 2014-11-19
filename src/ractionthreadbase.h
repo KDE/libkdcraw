@@ -49,22 +49,32 @@ class LIBKDCRAW_EXPORT RActionThreadBase : public QThread
 public:
 
     RActionThreadBase(QObject* const parent=0);
-    ~RActionThreadBase();
+    virtual ~RActionThreadBase();
 
-    /** Adjust maximum number of thread used to parallelize collection of job processing.
-     *  By default in constructor, KDE::Solid API is used to determine the number of CPU available and adjust
-     *  this value automatically.
+    /** Adjust maximum number of threads used to parallelize collection of job processing.
      */
     void setMaximumNumberOfThreads(int n);
+    
+    /** Return the maximum number of threads used to parallelize collection of job processing.
+     */
     int  maximumNumberOfThreads() const;
+    
+    /** Reset maximum number of threads used to parallelize collection of job processing to max core detected on computer.
+     *  This method is called in contructor.
+     */
+    void defaultMaximumNumberOfThreads();
 
+    /** Cancel processing of current jobs under progress.
+     */
     void cancel();
 
 protected:
 
+    /** Main thread loop used to process jobs in todo list.
+     */
     void run();
 
-    /** Append a collection of jobs to process in pending list.
+    /** Append a collection of jobs to process in todo list.
      */
     void appendJobs(const RJobCollection& jobs);
 

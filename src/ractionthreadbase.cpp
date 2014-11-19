@@ -68,8 +68,7 @@ RActionThreadBase::RActionThreadBase(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
-    const int maximumNumberOfThreads = qMax(QThreadPool::globalInstance()->maxThreadCount(), 1);
-    setMaximumNumberOfThreads(maximumNumberOfThreads);
+    defaultMaximumNumberOfThreads();
 }
 
 RActionThreadBase::~RActionThreadBase()
@@ -101,6 +100,12 @@ void RActionThreadBase::setMaximumNumberOfThreads(int n)
 int RActionThreadBase::maximumNumberOfThreads() const
 {
     return d->pool->maxThreadCount();
+}
+
+void RActionThreadBase::defaultMaximumNumberOfThreads()
+{
+    const int maximumNumberOfThreads = qMax(QThreadPool::globalInstance()->maxThreadCount(), 1);
+    setMaximumNumberOfThreads(maximumNumberOfThreads);
 }
 
 void RActionThreadBase::slotJobFinished(RActionJob* job)
