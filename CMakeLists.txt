@@ -101,8 +101,6 @@ set_package_properties("LibRaw"    PROPERTIES
                        PURPOSE     "Library to decode RAW image"
 )
 
-
-
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
                   VARIABLE_PREFIX      KDCRAW
                   VERSION_HEADER       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
