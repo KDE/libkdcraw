@@ -3,7 +3,7 @@ exec_prefix=${BIN_INSTALL_DIR}
 libdir=${LIB_INSTALL_DIR}
 includedir=${INCLUDE_INSTALL_DIR}
 
-Name: libkdcraw
+Name: ${PROJECT_NAME}
 Description: A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins.
 URL: http://www.digikam.org/sharedlibs
 Requires:

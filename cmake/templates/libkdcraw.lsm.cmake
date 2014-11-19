@@ -1,5 +1,5 @@
 Begin4
-Title:          libkdcraw
+Title:          ${PROJECT_NAME}
 Version:        ${DCRAW_LIB_VERSION_STRING}
 Entered-date:   2007-05-05
 Description:    A C++ wrapper around LibRaw library to decode RAW pictures. This library is used by digiKam and kipi-plugins.
