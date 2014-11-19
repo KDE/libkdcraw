@@ -66,6 +66,11 @@ if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
             DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
             COMPONENT   Devel
     )
+    
+    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
+            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+            COMPONENT   Devel
+    )
 
 endif()
 

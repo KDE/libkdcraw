@@ -87,12 +87,6 @@ find_package(KF5 REQUIRED COMPONENTS
              KDELibs4Support
 )
 
-# TODO: port to pure KF5
-#find_package(KF5 ${KF5_VERSION} REQUIRED COMPONENTS
-#             I18n
-#             Completion
-#)
-
 find_package(LibRaw ${LIBRAW_MIN_VERSION} REQUIRED)
 set_package_properties("LibRaw"    PROPERTIES
                        DESCRIPTION "Required to build libkdcraw"
@@ -136,12 +130,6 @@ install(EXPORT      KF5KDcrawTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         FILE        KF5KDcrawTargets.cmake
         NAMESPACE   KF5::
-)
-
-install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-        COMPONENT   Devel
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
