@@ -132,7 +132,7 @@ install(FILES
 install(EXPORT      KF5KDcrawTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         FILE        KF5KDcrawTargets.cmake
-        NAMESPACE   KF5::
+        NAMESPACE   KDcrawIface::
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
