@@ -48,4 +48,10 @@ if(NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
                   libkdcraw_export.h
                   ${CMAKE_CURRENT_BINARY_DIR}/version.h
             DESTINATION ${INCLUDE_INSTALL_DIR}/libkdcraw COMPONENT Devel)
+
+    if(NOT WIN32)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
+    endif()
 endif()

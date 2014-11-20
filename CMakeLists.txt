@@ -119,12 +119,6 @@ if(KDE4_BUILD_TESTS)
     MACRO_OPTIONAL_ADD_SUBDIRECTORY(tests)
 endif()
 
-if(NOT WIN32)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.pc.cmake.in  ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/libkdcraw.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.lsm)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig)
-endif()
-
 FEATURE_SUMMARY(WHAT ALL
                 INCLUDE_QUIET_PACKAGES
                 FATAL_ON_MISSING_REQUIRED_PACKAGES
