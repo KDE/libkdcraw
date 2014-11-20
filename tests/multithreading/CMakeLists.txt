@@ -8,7 +8,7 @@ include_directories(${KF5_INCLUDE_DIR}
                     ${Qt5_INCLUDE_DIR}
                     ${Qt5_QTCORE_INCLUDE_DIR}
                     ${LibRaw_INCLUDE_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../../libkdcraw
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
 set(multicorerawtopng_SRCS
