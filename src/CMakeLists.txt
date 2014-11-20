@@ -47,7 +47,7 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
 add_library(KF5KDcraw SHARED ${kdcraw_LIB_SRCS})
 add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
-generate_export_header(KF5KDcraw BASE_NAME kdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
+generate_export_header(KF5KDcraw BASE_NAME libkdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
@@ -62,11 +62,11 @@ if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
             COMPONENT   Devel
     )
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/kdcraw_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
+            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
             COMPONENT   Devel
     )
-    
+
     install(FILES       "${CMAKE_BINARY_DIR}/libkdcraw_version.h"
             DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
             COMPONENT   Devel
