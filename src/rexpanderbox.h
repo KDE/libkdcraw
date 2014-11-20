@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "kdcraw_export.h"
+#include "libkdcraw_export.h"
 
 namespace KDcrawIface
 {
