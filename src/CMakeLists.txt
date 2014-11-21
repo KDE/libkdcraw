@@ -24,6 +24,7 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     squeezedcombobox.cpp
                     ractionthreadbase.cpp
                     ractionjob.cpp
+                    libkdcraw_debug.cpp
 )
 
 ecm_generate_headers(kdcraw_CamelCase_HEADERS
