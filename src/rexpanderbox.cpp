@@ -7,7 +7,7 @@
  * @date   2008-03-14
  * @brief  A widget to host settings as expander box
  *
- * @author Copyright (C) 2008-2013 by Gilles Caulier
+ * @author Copyright (C) 2008-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -42,7 +42,6 @@
 // KDE includes
 
 #include <kseparator.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kdialog.h>
 #include <klocale.h>
@@ -455,6 +454,7 @@ void RLabelExpander::setExpanded(bool b)
     if (d->containerWidget)
     {
         d->containerWidget->setVisible(b);
+
         if (b)
            d->arrow->setArrowType(Qt::DownArrow);
         else
@@ -618,6 +618,7 @@ void RExpanderBox::insertItem(int index, QWidget* const w, const QPixmap& pix, c
 void RExpanderBox::slotItemExpanded(bool b)
 {
     RLabelExpander* const exp = dynamic_cast<RLabelExpander*>(sender());
+
     if (exp)
     {
         int index = indexOf(exp);
@@ -628,6 +629,7 @@ void RExpanderBox::slotItemExpanded(bool b)
 void RExpanderBox::slotItemToggled(bool b)
 {
     RLabelExpander* const exp = dynamic_cast<RLabelExpander*>(sender());
+
     if (exp)
     {
         int index = indexOf(exp);

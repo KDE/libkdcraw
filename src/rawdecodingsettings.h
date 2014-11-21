@@ -7,7 +7,7 @@
  * @date   2006-12-09
  * @brief  Raw decoding settings
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -364,7 +364,7 @@ public:
     double expoCorrectionHighlight;
 };
 
-//! kDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
 LIBKDCRAW_EXPORT QDebug operator<<(QDebug dbg, const RawDecodingSettings& s);
 
 }  // namespace KDcrawIface

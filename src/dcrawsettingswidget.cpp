@@ -7,7 +7,7 @@
  * @date   2006-09-13
  * @brief  LibRaw settings widgets
  *
- * @author Copyright (C) 2006-2013 by Gilles Caulier
+ * @author Copyright (C) 2006-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
@@ -48,7 +48,7 @@
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
-#include <KIconLoader>
+#include <kiconloader.h>
 
 // Local includes
 
@@ -56,6 +56,7 @@
 #include "rnuminput.h"
 #include "rcombobox.h"
 #include "rexpanderbox.h"
+#include "libkdcraw_debug.h"
 
 namespace KDcrawIface
 {
@@ -1111,7 +1112,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
             if (q == i)
             {
                 q = RawDecodingSettings::BILINEAR;
-                kDebug() << "Libraw GPL2 pack not avaialble. Raw quality set to Bilinear";
+                qCDebug(LIBKDCRAW_LOG) << "Libraw GPL2 pack not avaialble. Raw quality set to Bilinear";
                 break;
             }
         }
@@ -1121,7 +1122,7 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     if (!KDcraw::librawUseGPL3DemosaicPack() && (q == RawDecodingSettings::AMAZE))
     {
         q = RawDecodingSettings::BILINEAR;
-        kDebug() << "Libraw GPL3 pack not avaialble. Raw quality set to Bilinear";
+        qCDebug(LIBKDCRAW_LOG) << "Libraw GPL3 pack not avaialble. Raw quality set to Bilinear";
     }
     
     d->RAWQualityComboBox->setCurrentIndex(q);

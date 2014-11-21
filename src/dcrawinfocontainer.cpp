@@ -7,7 +7,7 @@
  * @date   2007-05-02
  * @brief  RAW file identification information container
  *
- * @author Copyright (C) 2007-2013 by Gilles Caulier
+ * @author Copyright (C) 2007-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -151,21 +151,21 @@ bool DcrawInfoContainer::isEmpty()
 
 QDebug operator<<(QDebug dbg, const DcrawInfoContainer& c)
 {
-    dbg.nospace() << "DcrawInfoContainer::sensitivity: "      << c.sensitivity   << ", ";
-    dbg.nospace() << "DcrawInfoContainer::exposureTime: "     << c.exposureTime << ", ";
-    dbg.nospace() << "DcrawInfoContainer::aperture: "         << c.aperture << ", ";
-    dbg.nospace() << "DcrawInfoContainer::focalLength: "      << c.focalLength << ", ";
+    dbg.nospace() << "DcrawInfoContainer::sensitivity: "      << c.sensitivity      << ", ";
+    dbg.nospace() << "DcrawInfoContainer::exposureTime: "     << c.exposureTime     << ", ";
+    dbg.nospace() << "DcrawInfoContainer::aperture: "         << c.aperture         << ", ";
+    dbg.nospace() << "DcrawInfoContainer::focalLength: "      << c.focalLength      << ", ";
     dbg.nospace() << "DcrawInfoContainer::pixelAspectRatio: " << c.pixelAspectRatio << ", ";
-    dbg.nospace() << "DcrawInfoContainer::rawColors: "        << c.rawColors << ", ";
-    dbg.nospace() << "DcrawInfoContainer::rawImages: "        << c.rawImages << ", ";
-    dbg.nospace() << "DcrawInfoContainer::hasIccProfile: "    << c.hasIccProfile << ", ";
-    dbg.nospace() << "DcrawInfoContainer::isDecodable: "      << c.isDecodable << ", ";
-    dbg.nospace() << "DcrawInfoContainer::daylightMult: "     << c.daylightMult << ", ";
-    dbg.nospace() << "DcrawInfoContainer::cameraMult: "       << c.cameraMult << ", ";
-    dbg.nospace() << "DcrawInfoContainer::blackPoint: "       << c.blackPoint << ", ";
-    dbg.nospace() << "DcrawInfoContainer::whitePoint: "       << c.whitePoint << ", ";
-    dbg.nospace() << "DcrawInfoContainer::topMargin: "        << c.topMargin << ", ";
-    dbg.nospace() << "DcrawInfoContainer::leftMargin: "       << c.leftMargin << ", ";
+    dbg.nospace() << "DcrawInfoContainer::rawColors: "        << c.rawColors        << ", ";
+    dbg.nospace() << "DcrawInfoContainer::rawImages: "        << c.rawImages        << ", ";
+    dbg.nospace() << "DcrawInfoContainer::hasIccProfile: "    << c.hasIccProfile    << ", ";
+    dbg.nospace() << "DcrawInfoContainer::isDecodable: "      << c.isDecodable      << ", ";
+    dbg.nospace() << "DcrawInfoContainer::daylightMult: "     << c.daylightMult     << ", ";
+    dbg.nospace() << "DcrawInfoContainer::cameraMult: "       << c.cameraMult       << ", ";
+    dbg.nospace() << "DcrawInfoContainer::blackPoint: "       << c.blackPoint       << ", ";
+    dbg.nospace() << "DcrawInfoContainer::whitePoint: "       << c.whitePoint       << ", ";
+    dbg.nospace() << "DcrawInfoContainer::topMargin: "        << c.topMargin        << ", ";
+    dbg.nospace() << "DcrawInfoContainer::leftMargin: "       << c.leftMargin       << ", ";
     dbg.nospace() << "DcrawInfoContainer::orientation: "      << c.orientation;
     return dbg.space();
 }

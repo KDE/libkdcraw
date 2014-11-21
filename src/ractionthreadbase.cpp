@@ -33,11 +33,14 @@
 
 #include <QMutexLocker>
 #include <QObject>
-#include <QDebug>
 #include <QWaitCondition>
 #include <QMutex>
 #include <QList>
 #include <QThreadPool>
+
+// Local includes
+
+#include "libkdcraw_debug.h"
 
 namespace KDcrawIface
 {
@@ -94,7 +97,7 @@ RActionThreadBase::~RActionThreadBase()
 void RActionThreadBase::setMaximumNumberOfThreads(int n)
 {
     d->pool->setMaxThreadCount(n);
-    qDebug() << "Using " << n << " CPU core to run threads";
+    qCDebug(LIBKDCRAW_LOG) << "Using " << n << " CPU core to run threads";
 }
 
 int RActionThreadBase::maximumNumberOfThreads() const
@@ -110,7 +113,7 @@ void RActionThreadBase::defaultMaximumNumberOfThreads()
 
 void RActionThreadBase::slotJobFinished(RActionJob* job)
 {
-    qDebug() << "One job is done";
+    qCDebug(LIBKDCRAW_LOG) << "One job is done";
 
     QMutexLocker lock(&d->mutex);
     d->processed << job;
@@ -125,7 +128,7 @@ void RActionThreadBase::slotJobFinished(RActionJob* job)
 
 void RActionThreadBase::cancel()
 {
-    qDebug() << "Cancel Main Thread";
+    qCDebug(LIBKDCRAW_LOG) << "Cancel Main Thread";
     QMutexLocker lock(&d->mutex);
 
     d->todo.clear();
@@ -163,7 +166,7 @@ void RActionThreadBase::run()
 
         if (!d->todo.isEmpty())
         {
-            qDebug() << "Action Thread run " << d->todo.count() << " new jobs";
+            qCDebug(LIBKDCRAW_LOG) << "Action Thread run " << d->todo.count() << " new jobs";
 
             foreach(RActionJob* const job, d->todo)
             {
