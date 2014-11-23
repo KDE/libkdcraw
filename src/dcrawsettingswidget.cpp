@@ -44,7 +44,7 @@
 
 #include <kapplication.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
 #include <kdebug.h>
