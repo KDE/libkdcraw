@@ -48,19 +48,4 @@ void RActionJob::cancel()
     m_cancel = true;
 }
 
-void RActionJob::emitSignalStarted()
-{
-    emit signalStarted(this);
-}
-
-void RActionJob::emitSignalDone()
-{
-    emit signalDone(this);
-}
-
-void RActionJob::emitSignalProgress(int percent)
-{
-    emit signalProgress(this, percent);
-}
-
 } // namespace KDcrawIface

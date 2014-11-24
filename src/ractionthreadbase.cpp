@@ -111,8 +111,11 @@ void RActionThreadBase::defaultMaximumNumberOfThreads()
     setMaximumNumberOfThreads(maximumNumberOfThreads);
 }
 
-void RActionThreadBase::slotJobFinished(RActionJob* job)
+void RActionThreadBase::slotJobFinished()
 {
+    RActionJob* const job = dynamic_cast<RActionJob*>(sender());
+    if (!job) return;
+
     qCDebug(LIBKDCRAW_LOG) << "One job is done";
 
     QMutexLocker lock(&d->mutex);
@@ -170,8 +173,8 @@ void RActionThreadBase::run()
 
             foreach(RActionJob* const job, d->todo)
             {
-                connect(job, SIGNAL(signalDone(RActionJob*)),
-                        this, SLOT(slotJobFinished(RActionJob*)));
+                connect(job, SIGNAL(signalDone()),
+                        this, SLOT(slotJobFinished()));
 
                 d->pool->start(job);
                 d->pending << job;

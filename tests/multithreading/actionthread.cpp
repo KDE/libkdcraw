@@ -58,20 +58,27 @@ protected:
 
     void run()
     {
-        emitSignalStarted();
+        emit signalStarted();
 
         // RAW to PNG
         QImage              image;
         KDcraw              rawProcessor;
+        
+        emit signalProgress(20);
+        
         RawDecodingSettings settings;
         settings.halfSizeColorImage    = false;
         settings.sixteenBitsImage      = false;
         settings.RGBInterpolate4Colors = false;
         settings.RAWQuality            = RawDecodingSettings::BILINEAR;
-
+        
+        emit signalProgress(30);
+        
         QFileInfo input(fileUrl.toLocalFile());
         QString   fullFilePath(input.baseName() + QString(".full.png"));
         QFileInfo fullOutput(fullFilePath);
+
+        emit signalProgress(40);
 
         if (!rawProcessor.loadFullImage(image, fileUrl.toLocalFile(), settings))
         {
@@ -79,14 +86,18 @@ protected:
             return;
         }
 
+        emit signalProgress(60);
+
         qDebug() << "raw2png: Saving full RAW image to "
                  << fullOutput.fileName() << " size ("
                  << image.width() << "x" << image.height()
                  << ")";
 
+        emit signalProgress(80);
+
         image.save(fullFilePath, "PNG");
 
-        emitSignalDone();
+        emit signalDone();
     }
 };
 
@@ -110,11 +121,14 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
         Task* const job = new Task(this);
         job->fileUrl    = url;
 
-        connect(job, SIGNAL(signalStarted(RActionJob*)),
-                this, SLOT(slotJobStarted(RActionJob*)));
+        connect(job, SIGNAL(signalStarted()),
+                this, SLOT(slotJobStarted()));
 
-        connect(job, SIGNAL(signalDone(RActionJob*)),
-                this, SLOT(slotJobDone(RActionJob*)));
+        connect(job, SIGNAL(signalProgress(int)),
+                this, SLOT(slotJobProgress(int)));
+
+        connect(job, SIGNAL(signalDone()),
+                this, SLOT(slotJobDone()));
 
         collection.append(job);
 
@@ -124,28 +138,33 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
     appendJobs(collection);
 }
 
-void ActionThread::slotJobDone(RActionJob* job)
+void ActionThread::slotJobDone()
 {
-    Task* const task = dynamic_cast<Task*>(job);
+    Task* const task = dynamic_cast<Task*>(sender());
     if (!task) return;
-    
+
     if (task->errString.isEmpty())
     {
-        qDebug() << "Job done:" << task->fileUrl.toLocalFile();
         emit finished(task->fileUrl);
     }
     else
     {
-        qDebug() << "Could not complete the job: " << task->fileUrl.toLocalFile() << " Error: " << task->errString;
         emit failed(task->fileUrl, task->errString);
     }
 }
 
-void ActionThread::slotJobStarted(RActionJob* job)
+void ActionThread::slotJobProgress(int p)
 {
-    Task* const task = dynamic_cast<Task*>(job);
+    Task* const task = dynamic_cast<Task*>(sender());
     if (!task) return;
 
-    qDebug() << "Job Started:" << task->fileUrl.toLocalFile();
+    emit progress(task->fileUrl, p);
+}
+
+void ActionThread::slotJobStarted()
+{
+    Task* const task = dynamic_cast<Task*>(sender());
+    if (!task) return;
+
     emit starting(task->fileUrl);
 }

@@ -49,19 +49,13 @@ public:
 
 Q_SIGNALS:
 
-    void signalStarted(RActionJob*);
-    void signalDone(RActionJob*);
-    void signalProgress(RActionJob*, int);
+    void signalStarted();
+    void signalProgress(int);
+    void signalDone();
 
 public Q_SLOTS:
 
     void cancel();
-
-protected:
-
-    void emitSignalStarted();
-    void emitSignalDone();
-    void emitSignalProgress(int percent);
 
 protected:
 

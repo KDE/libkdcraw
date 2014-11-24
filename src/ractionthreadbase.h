@@ -84,7 +84,7 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotJobFinished(RActionJob* job);
+    void slotJobFinished();
 
 private:
 

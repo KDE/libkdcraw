@@ -149,6 +149,9 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     connect(d->thread, SIGNAL(failed(QUrl,QString)),
             this, SLOT(slotFailed(QUrl,QString)));
 
+    connect(d->thread, SIGNAL(progress(QUrl,int)),
+            this, SLOT(slotProgress(QUrl,int)));
+
     updateCount();
     resize(500, 400);
 }
@@ -205,9 +208,23 @@ void ProcessorDlg::slotStarting(const QUrl& url)
 
     if (b)
     {
-        b->setMaximum(0);
         b->setMinimum(0);
+        b->setMaximum(100);
         b->setValue(0);
+    }
+}
+
+void ProcessorDlg::slotProgress(const QUrl& url,int p)
+{
+    qDebug() << "Processing item " << url.toLocalFile() << " : " << p << " %";;
+
+    QProgressBar* const b = findProgressBar(url);
+
+    if (b)
+    {
+        b->setMinimum(0);
+        b->setMaximum(100);
+        b->setValue(p);
     }
 }
 
@@ -219,8 +236,8 @@ void ProcessorDlg::slotFinished(const QUrl& url)
 
     if (b)
     {
-        b->setMaximum(100);
         b->setMinimum(0);
+        b->setMaximum(100);
         b->setValue(100);
         b->setFormat(i18n("Done"));
         d->count--;
@@ -236,8 +253,8 @@ void ProcessorDlg::slotFailed(const QUrl& url, const QString& err)
 
     if (b)
     {
-        b->setMaximum(100);
         b->setMinimum(0);
+        b->setMaximum(100);
         b->setValue(100);
         b->setFormat(err);
         d->count--;

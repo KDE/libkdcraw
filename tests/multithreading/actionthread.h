@@ -54,11 +54,13 @@ Q_SIGNALS:
     void starting(const QUrl& url);
     void finished(const QUrl& url);
     void failed(const QUrl& url, const QString& err);
+    void progress(const QUrl& url, int percent);
 
 private Q_SLOTS:
 
-    void slotJobDone(RActionJob*);
-    void slotJobStarted(RActionJob*);
+    void slotJobDone();
+    void slotJobProgress(int);
+    void slotJobStarted();
 
 private:
 

@@ -54,6 +54,7 @@ private Q_SLOTS:
     void slotStart();
     void slotStop();
     void slotStarting(const QUrl&);
+    void slotProgress(const QUrl&, int);
     void slotFinished(const QUrl&);
     void slotFailed(const QUrl&, const QString&);
 
