@@ -39,6 +39,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QDebug>
+#include <QHBoxLayout>
 
 // KDE includes
 
@@ -47,6 +48,7 @@
 // Local includes
 
 #include "actionthread.h"
+#include "rnuminput.h"
 
 class ProcessorDlg::Private
 {
@@ -54,11 +56,12 @@ public:
 
     Private()
     {
-        count  = 0;
-        page   = 0;
-        items  = 0;
-        vlay   = 0;
-        thread = 0;
+        count    = 0;
+        page     = 0;
+        items    = 0;
+        vlay     = 0;
+        usedCore = 0;
+        thread   = 0;
     }
 
     int                  count;
@@ -70,6 +73,7 @@ public:
 
     QList<QUrl>          list;
 
+    RIntNumInput*        usedCore;
     ActionThread*        thread;
 };
 
@@ -79,26 +83,39 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     setModal(false);
     setWindowTitle(i18n("Convert RAW files To PNG"));
 
-    d->buttons              = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
-    d->thread               = new ActionThread(this);
-    d->list                 = list;
-    d->count                = d->list.count();
+    d->buttons               = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
+    d->thread                = new ActionThread(this);
+    d->list                  = list;
+    d->count                 = d->list.count();
     qDebug() << d->list;
 
-    d->page                 = new QWidget(this);
-    QVBoxLayout* const vbx  = new QVBoxLayout(this);
+    d->page                  = new QWidget(this);
+    QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
     QDialog::setLayout(vbx);
 
-    d->vlay                 = new QVBoxLayout(d->page);
-    QLabel* const pid       = new QLabel(i18n("PID : %1",  QCoreApplication::applicationPid()),  this);
-    QLabel* const core      = new QLabel(i18n("Core : %1", d->thread->maximumNumberOfThreads()), this);
-    d->items                = new QLabel(this);
+    int cpu                  = d->thread->maximumNumberOfThreads();
+    d->vlay                  = new QVBoxLayout(d->page);
+    QLabel* const pid        = new QLabel(i18n("PID: %1", QCoreApplication::applicationPid()),  this);
+    QLabel* const core       = new QLabel(i18n("CPU Cores: %1", cpu), this);
+    QWidget* const hbox      = new QWidget(this);
+    d->items                 = new QLabel(this);
     d->vlay->addWidget(pid);
     d->vlay->addWidget(core);
+    d->vlay->addWidget(hbox);
     d->vlay->addWidget(d->items);
-
+    
+    QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
+    QLabel* const coresLabel = new QLabel(i18n("Cores to use: "), this);
+    d->usedCore              = new RIntNumInput(this);
+    d->usedCore->setSliderEnabled(true);
+    d->usedCore->setRange(1, cpu, 1);
+    d->usedCore->setDefaultValue(cpu);
+    hlay->addWidget(coresLabel);
+    hlay->addWidget(d->usedCore);
+    hlay->setContentsMargins(QMargins());
+    
     foreach (const QUrl& url, d->list)
     {
         QProgressBar* const bar = new QProgressBar(this);
@@ -151,7 +168,9 @@ void ProcessorDlg::slotStart()
     if (d->list.isEmpty()) return;
 
     d->buttons->button(QDialogButtonBox::Apply)->setDisabled(true);
+    d->usedCore->setDisabled(true);
 
+    d->thread->setMaximumNumberOfThreads(d->usedCore->value());
     d->thread->convertRAWtoPNG(d->list);
     d->thread->start();
 }
