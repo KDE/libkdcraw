@@ -28,9 +28,6 @@
 
 // Qt includes
 
-#include <QMutexLocker>
-#include <QMutex>
-#include <QWaitCondition>
 #include <QFileInfo>
 #include <QImage>
 #include <QDebug>

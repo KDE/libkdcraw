@@ -29,7 +29,6 @@
 
 // Qt includes
 
-#include <QThread>
 #include <QUrl>
 
 // Libkdcraw includes
