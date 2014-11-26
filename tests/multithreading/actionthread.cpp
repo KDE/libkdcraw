@@ -38,7 +38,7 @@
 #include "rawdecodingsettings.h"
 #include "ractionjob.h"
 
-class ActionThread::Task : public RActionJob
+class Task : public RActionJob
 {
 public:
 
@@ -60,17 +60,17 @@ protected:
         // RAW to PNG
         QImage              image;
         KDcraw              rawProcessor;
-        
+
         emit signalProgress(20);
-        
+
         RawDecodingSettings settings;
         settings.halfSizeColorImage    = false;
         settings.sixteenBitsImage      = false;
         settings.RGBInterpolate4Colors = false;
         settings.RAWQuality            = RawDecodingSettings::BILINEAR;
-        
+
         emit signalProgress(30);
-        
+
         QFileInfo input(fileUrl.toLocalFile());
         QString   fullFilePath(input.baseName() + QString(".full.png"));
         QFileInfo fullOutput(fullFilePath);
