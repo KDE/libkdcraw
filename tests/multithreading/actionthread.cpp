@@ -57,9 +57,10 @@ protected:
     {
         emit signalStarted();
 
-        // RAW to PNG
-        QImage              image;
-        KDcraw              rawProcessor;
+        QImage image;
+        KDcraw rawProcessor;
+
+        if (m_cancel) return;
 
         emit signalProgress(20);
 
@@ -69,11 +70,15 @@ protected:
         settings.RGBInterpolate4Colors = false;
         settings.RAWQuality            = RawDecodingSettings::BILINEAR;
 
+        if (m_cancel) return;
+
         emit signalProgress(30);
 
         QFileInfo input(fileUrl.toLocalFile());
         QString   fullFilePath(input.baseName() + QString(".full.png"));
         QFileInfo fullOutput(fullFilePath);
+
+        if (m_cancel) return;
 
         emit signalProgress(40);
 
@@ -83,12 +88,16 @@ protected:
             return;
         }
 
+        if (m_cancel) return;
+
         emit signalProgress(60);
 
         qDebug() << "raw2png: Saving full RAW image to "
                  << fullOutput.fileName() << " size ("
                  << image.width() << "x" << image.height()
                  << ")";
+
+        if (m_cancel) return;
 
         emit signalProgress(80);
 

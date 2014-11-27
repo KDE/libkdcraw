@@ -26,35 +26,52 @@
 
 // Qt includes
 
+#include <QStringList>
 #include <QApplication>
+#include <QStandardPaths>
+#include <QUrl>
 #include <QDebug>
+#include <QFileDialog>
 
 // KDE includes
 
-#include <QUrl>
+#include <KLocalizedString>
 
 // Local includes
 
+#include "rawfiles.h"
 #include "processordlg.h"
 
 int main(int argc, char* argv[])
 {
-    if (argc <= 1)
-    {
-        qDebug() << "multicoreraw2png - RAW Camera Image to PNG Converter using multi-core CPU";
-        qDebug() << "Usage: multicoreraw2png <rawfile> <rawfile> <rawfile> ... <rawfile>";
-        return -1;
-    }
-
     QApplication app(argc, argv);
-
     QList<QUrl> list;
 
-    for (int i = 1 ; i < argc ; i++)
-        list.append(QUrl::fromLocalFile(argv[i]));
+    if (argc <= 1)
+    {
+        QString filter = i18n("Raw Files") + QString(" (%1)").arg(raw_file_extentions);
+        qDebug() << filter;
 
-    ProcessorDlg* const dlg = new ProcessorDlg(list);
-    dlg->show();
-    app.exec();
+        QStringList files = QFileDialog::getOpenFileNames(0, i18n("Select RAW files to process"),
+                                                         QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first(),
+                                                         filter);
+
+        foreach(QString f, files)
+            list.append(QUrl::fromLocalFile(f));
+    }
+    else
+    {
+        for (int i = 1 ; i < argc ; i++)
+            list.append(QUrl::fromLocalFile(argv[i]));
+    }
+
+    if (!list.isEmpty())
+    {
+
+        ProcessorDlg* const dlg = new ProcessorDlg(list);
+        dlg->show();
+        app.exec();
+    }
+
     return 0;
 }

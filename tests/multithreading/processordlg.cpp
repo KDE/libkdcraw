@@ -40,6 +40,7 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QHBoxLayout>
+#include <QScrollArea>
 
 // KDE includes
 
@@ -56,12 +57,14 @@ public:
 
     Private()
     {
-        count    = 0;
-        page     = 0;
-        items    = 0;
-        vlay     = 0;
-        usedCore = 0;
-        thread   = 0;
+        count        = 0;
+        page         = 0;
+        items        = 0;
+        vlay         = 0;
+        buttons      = 0;
+        progressView = 0;
+        usedCore     = 0;
+        thread       = 0;
     }
 
     int                  count;
@@ -70,6 +73,7 @@ public:
     QLabel*              items;
     QVBoxLayout*         vlay;
     QDialogButtonBox*    buttons;
+    QScrollArea*         progressView;
 
     QList<QUrl>          list;
 
@@ -101,10 +105,6 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QLabel* const core       = new QLabel(i18n("CPU Cores: %1", cpu), this);
     QWidget* const hbox      = new QWidget(this);
     d->items                 = new QLabel(this);
-    d->vlay->addWidget(pid);
-    d->vlay->addWidget(core);
-    d->vlay->addWidget(hbox);
-    d->vlay->addWidget(d->items);
 
     QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
     QLabel* const coresLabel = new QLabel(i18n("Cores to use: "), this);
@@ -116,17 +116,29 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     hlay->addWidget(d->usedCore);
     hlay->setContentsMargins(QMargins());
 
+    d->progressView = new QScrollArea(this);
+    QWidget* const progressbox      = new QWidget(d->progressView->viewport());
+    QVBoxLayout* const progressLay  = new QVBoxLayout(progressbox);
+    d->progressView->setWidget(progressbox);
+    d->progressView->setWidgetResizable(true);
+
+    d->vlay->addWidget(pid);
+    d->vlay->addWidget(core);
+    d->vlay->addWidget(hbox);
+    d->vlay->addWidget(d->items);
+    d->vlay->addWidget(d->progressView);
+
     foreach (const QUrl& url, d->list)
     {
-        QProgressBar* const bar = new QProgressBar(this);
+        QProgressBar* const bar = new QProgressBar(progressbox);
         QString file            = url.toLocalFile();
+        QFileInfo fi(file);
         bar->setMaximum(100);
         bar->setMinimum(0);
         bar->setValue(100);
         bar->setObjectName(file);
-        QFileInfo fi(file);
-        bar->setFormat(fi.baseName());
-        d->vlay->addWidget(bar);
+        bar->setFormat(fi.fileName());
+        progressLay->addWidget(bar);
     }
 
     d->vlay->addStretch();
@@ -208,6 +220,7 @@ void ProcessorDlg::slotStarting(const QUrl& url)
 
     if (b)
     {
+        d->progressView->ensureWidgetVisible(b);
         b->setMinimum(0);
         b->setMaximum(100);
         b->setValue(0);
