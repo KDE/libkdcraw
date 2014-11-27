@@ -42,10 +42,9 @@ class Task : public RActionJob
 {
 public:
 
-    Task(QObject* const parent = 0)
+    Task()
         : RActionJob()
     {
-        Q_UNUSED(parent);
     }
 
     QString errString;
@@ -124,7 +123,7 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
 
     foreach (const QUrl& url, list)
     {
-        Task* const job = new Task(this);
+        Task* const job = new Task();
         job->fileUrl    = url;
 
         connect(job, SIGNAL(signalStarted()),
