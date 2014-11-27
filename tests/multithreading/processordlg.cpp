@@ -105,7 +105,7 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     d->vlay->addWidget(core);
     d->vlay->addWidget(hbox);
     d->vlay->addWidget(d->items);
-    
+
     QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
     QLabel* const coresLabel = new QLabel(i18n("Cores to use: "), this);
     d->usedCore              = new RIntNumInput(this);
@@ -115,7 +115,7 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     hlay->addWidget(coresLabel);
     hlay->addWidget(d->usedCore);
     hlay->setContentsMargins(QMargins());
-    
+
     foreach (const QUrl& url, d->list)
     {
         QProgressBar* const bar = new QProgressBar(this);
@@ -181,9 +181,9 @@ void ProcessorDlg::slotStart()
 void ProcessorDlg::slotStop()
 {
     d->thread->cancel();
-    reject();    
+    reject();
 }
-    
+
 QProgressBar* ProcessorDlg::findProgressBar(const QUrl& url) const
 {
     QList<QProgressBar*> bars = findChildren<QProgressBar*>();
