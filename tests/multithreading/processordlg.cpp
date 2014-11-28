@@ -97,7 +97,7 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QVBoxLayout* const vbx   = new QVBoxLayout(this);
     vbx->addWidget(d->page);
     vbx->addWidget(d->buttons);
-    QDialog::setLayout(vbx);
+    setLayout(vbx);
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     d->vlay                  = new QVBoxLayout(d->page);
