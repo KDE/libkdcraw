@@ -32,6 +32,7 @@
 #include <QToolButton>
 #include <QApplication>
 #include <QStyle>
+#include <QHBoxLayout>
 
 // KDE includes
 
@@ -62,24 +63,30 @@ public:
 };
 
 RIntNumInput::RIntNumInput(QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    d->input       = new KIntNumInput(this);
-    d->resetButton = new QToolButton(this);
+    QHBoxLayout* const hlay  = new QHBoxLayout(this);
+    d->input                 = new KIntNumInput(this);
+    d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
-    setStretchFactor(d->input, 10);
-    setMargin(0);
-    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->addWidget(d->input);
+    hlay->addWidget(d->resetButton);
+    hlay->setContentsMargins(QMargins());
+    hlay->setStretchFactor(d->input, 10);
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
-    connect(d->resetButton, &QToolButton::clicked, this, &RIntNumInput::slotReset);
+    connect(d->resetButton, &QToolButton::clicked,
+            this, &RIntNumInput::slotReset);
 
-    connect(d->input, &KIntNumInput::valueChanged, this, &RIntNumInput::slotValueChanged);
+    connect(d->input, &KIntNumInput::valueChanged,
+            this, &RIntNumInput::slotValueChanged);
 }
 
 RIntNumInput::~RIntNumInput()
@@ -154,24 +161,30 @@ public:
 };
 
 RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
-    : KHBox(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
-    d->input       = new KDoubleNumInput(this);
-    d->resetButton = new QToolButton(this);
+    QHBoxLayout* const hlay  = new QHBoxLayout(this);
+    d->input                 = new KDoubleNumInput(this);
+    d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
     d->resetButton->setIcon(SmallIcon("document-revert"));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
-    setStretchFactor(d->input, 10);
-    setMargin(0);
-    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->addWidget(d->input);
+    hlay->addWidget(d->resetButton);
+    hlay->setContentsMargins(QMargins());
+    hlay->setStretchFactor(d->input, 10);
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
-    connect(d->resetButton, &QToolButton::clicked, this, &RDoubleNumInput::slotReset);
+    connect(d->resetButton, &QToolButton::clicked,
+            this, &RDoubleNumInput::slotReset);
 
-    connect(d->input, &KDoubleNumInput::valueChanged, this, &RDoubleNumInput::slotValueChanged);
+    connect(d->input, &KDoubleNumInput::valueChanged,
+            this, &RDoubleNumInput::slotValueChanged);
 }
 
 RDoubleNumInput::~RDoubleNumInput()

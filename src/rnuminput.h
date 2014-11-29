@@ -28,9 +28,9 @@
 #ifndef RNUMINPUT_H
 #define RNUMINPUT_H
 
-// KDE includes
+// Qt includes
 
-#include <khbox.h>
+#include <QWidget>
 
 // Local includes
 
@@ -39,7 +39,7 @@
 namespace KDcrawIface
 {
 
-class LIBKDCRAW_EXPORT RIntNumInput : public KHBox
+class LIBKDCRAW_EXPORT RIntNumInput : public QWidget
 {
     Q_OBJECT
 
@@ -78,7 +78,7 @@ private:
 
 // ---------------------------------------------------------
 
-class LIBKDCRAW_EXPORT RDoubleNumInput : public KHBox
+class LIBKDCRAW_EXPORT RDoubleNumInput : public QWidget
 {
     Q_OBJECT
 
