@@ -7,8 +7,10 @@
  * @date   2014-15-11
  * @brief  QRunnable job extended with QObject features
  *
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
- *         veaceslav dot munteanu90 at gmail dot com
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,10 +27,6 @@
 
 #include "ractionjob.h"
 
-// Qt includes
-
-#include <QDebug>
-
 namespace KDcrawIface
 {
 
@@ -37,6 +35,7 @@ RActionJob::RActionJob()
       QRunnable(),
       m_cancel(false)
 {
+    setAutoDelete(false);
 }
 
 RActionJob::~RActionJob()

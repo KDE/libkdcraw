@@ -7,8 +7,10 @@
  * @date   2014-15-11
  * @brief  QRunnable job extended with QObject features
  *
+ * @author Copyright (C) 2011-2014 by Gilles Caulier
+ *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
- *         veaceslav dot munteanu90 at gmail dot com
+ *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,30 +40,50 @@
 namespace KDcrawIface
 {
 
-class LIBKDCRAW_EXPORT RActionJob : public QObject, public QRunnable
+class LIBKDCRAW_EXPORT RActionJob : public QObject,
+                                    public QRunnable
 {
     Q_OBJECT
 
 public:
 
+    /** Constructor which delegate deletion of QRunnable instance to RActionThreadBase, not QThreadPool.
+     */
     RActionJob();
+
+    /** Re-implement destructor in you implementation. Don't forget to cancel job.
+     */
     virtual ~RActionJob();
 
 Q_SIGNALS:
 
+    /** Use this signal in your implementation to inform RActionThreadBase manager that job is started
+     */
     void signalStarted();
+
+    /** Use this signal in your implementation to inform RActionThreadBase manager the job progress
+     */
     void signalProgress(int);
+
+    /** Use this signal in your implementation to inform RActionThreadBase manager the job is done.
+     */
     void signalDone();
 
 public Q_SLOTS:
 
+    /** Call this method to cancel job.
+     */
     void cancel();
 
 protected:
 
+    /** You can use this boolean in your implementation to know if job must be canceled.
+     */
     bool m_cancel;
 };
 
+/** Define a list of job to process by RActionThreadBase manager.
+ */
 typedef QList<RActionJob*> RJobCollection;
 
 } // namespace KDcrawIface
