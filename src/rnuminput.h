@@ -31,7 +31,6 @@
 // KDE includes
 
 #include <khbox.h>
-#include <knuminput.h>
 
 // Local includes
 
@@ -56,8 +55,6 @@ public:
 
     void setDefaultValue(int d);
     int  defaultValue() const;
-
-    KIntNumInput* input() const;
 
 Q_SIGNALS:
 
@@ -97,8 +94,6 @@ public:
 
     void   setDefaultValue(double d);
     double defaultValue() const;
-
-    KDoubleNumInput* input() const;
 
 Q_SIGNALS:
 

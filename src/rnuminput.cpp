@@ -30,12 +30,14 @@
 // Qt includes
 
 #include <QToolButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kdialog.h>
+#include <knuminput.h>
 
 namespace KDcrawIface
 {
@@ -71,7 +73,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
 
     setStretchFactor(d->input, 10);
     setMargin(0);
-    setSpacing(KDialog::spacingHint());
+    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -83,11 +85,6 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
 RIntNumInput::~RIntNumInput()
 {
     delete d;
-}
-
-KIntNumInput* RIntNumInput::input() const
-{
-    return d->input;
 }
 
 void RIntNumInput::setSliderEnabled(bool b)
@@ -168,7 +165,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
 
     setStretchFactor(d->input, 10);
     setMargin(0);
-    setSpacing(KDialog::spacingHint());
+    setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // -------------------------------------------------------------
 
@@ -180,11 +177,6 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
 RDoubleNumInput::~RDoubleNumInput()
 {
     delete d;
-}
-
-KDoubleNumInput* RDoubleNumInput::input() const
-{
-    return d->input;
 }
 
 void RDoubleNumInput::setDecimals(int p)
