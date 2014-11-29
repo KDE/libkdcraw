@@ -41,6 +41,7 @@ RActionJob::RActionJob()
 
 RActionJob::~RActionJob()
 {
+    cancel();
 }
 
 void RActionJob::cancel()
