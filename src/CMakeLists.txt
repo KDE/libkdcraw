@@ -15,12 +15,13 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
 set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
+                    rsliderspinbox.cpp
+                    rnuminput.cpp
+                    rexpanderbox.cpp
+                    rcombobox.cpp
                     dcrawsettingswidget.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
-                    rcombobox.cpp
-                    rnuminput.cpp
-                    rexpanderbox.cpp
                     squeezedcombobox.cpp
                     ractionthreadbase.cpp
                     ractionjob.cpp

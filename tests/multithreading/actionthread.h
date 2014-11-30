@@ -34,6 +34,7 @@
 // Libkdcraw includes
 
 #include "ractionthreadbase.h"
+#include "rawdecodingsettings.h"
 
 using namespace KDcrawIface;
 
@@ -46,7 +47,7 @@ public:
     ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void convertRAWtoPNG(const QList<QUrl>& list);
+    void convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings);
 
 Q_SIGNALS:
 

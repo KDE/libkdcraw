@@ -50,7 +50,6 @@ public:
 
     int  value() const;
 
-    void setSliderEnabled(bool b);
     void setRange(int min, int max, int step);
 
     void setDefaultValue(int d);
@@ -90,7 +89,7 @@ public:
     double value() const;
 
     void   setDecimals(int p);
-    void   setRange(double min, double max, double step, bool slider=true);
+    void   setRange(double min, double max, double step);
 
     void   setDefaultValue(double d);
     double defaultValue() const;

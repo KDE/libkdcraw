@@ -38,7 +38,10 @@
 
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <knuminput.h>
+
+// Local includes
+
+#include "rsliderspinbox.h"
 
 namespace KDcrawIface
 {
@@ -55,11 +58,11 @@ public:
         input        = 0;
     }
 
-    int           defaultValue;
+    int             defaultValue;
 
-    QToolButton*  resetButton;
+    QToolButton*    resetButton;
 
-    KIntNumInput* input;
+    RSliderSpinBox* input;
 };
 
 RIntNumInput::RIntNumInput(QWidget* const parent)
@@ -67,7 +70,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
       d(new Private)
 {
     QHBoxLayout* const hlay  = new QHBoxLayout(this);
-    d->input                 = new KIntNumInput(this);
+    d->input                 = new RSliderSpinBox(this);
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
@@ -85,7 +88,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
     connect(d->resetButton, &QToolButton::clicked,
             this, &RIntNumInput::slotReset);
 
-    connect(d->input, &KIntNumInput::valueChanged,
+    connect(d->input, &RSliderSpinBox::valueChanged,
             this, &RIntNumInput::slotValueChanged);
 }
 
@@ -94,14 +97,10 @@ RIntNumInput::~RIntNumInput()
     delete d;
 }
 
-void RIntNumInput::setSliderEnabled(bool b)
-{
-    d->input->setSliderEnabled(b);
-}
-
 void RIntNumInput::setRange(int min, int max, int step)
 {
-    d->input->setRange(min, max, step);
+    d->input->setRange(min, max);
+    d->input->setSingleStep(step);
 }
 
 int RIntNumInput::value() const
@@ -153,11 +152,11 @@ public:
         input        = 0;
     }
 
-    double           defaultValue;
+    double                defaultValue;
 
-    QToolButton*     resetButton;
+    QToolButton*          resetButton;
 
-    KDoubleNumInput* input;
+    RDoubleSliderSpinBox* input;
 };
 
 RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
@@ -165,7 +164,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
       d(new Private)
 {
     QHBoxLayout* const hlay  = new QHBoxLayout(this);
-    d->input                 = new KDoubleNumInput(this);
+    d->input                 = new RDoubleSliderSpinBox(this);
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
@@ -183,7 +182,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
     connect(d->resetButton, &QToolButton::clicked,
             this, &RDoubleNumInput::slotReset);
 
-    connect(d->input, &KDoubleNumInput::valueChanged,
+    connect(d->input, &RDoubleSliderSpinBox::valueChanged,
             this, &RDoubleNumInput::slotValueChanged);
 }
 
@@ -194,12 +193,13 @@ RDoubleNumInput::~RDoubleNumInput()
 
 void RDoubleNumInput::setDecimals(int p)
 {
-    d->input->setDecimals(p);
+    d->input->setRange(d->input->minimum(), d->input->maximum(), p);
 }
 
-void RDoubleNumInput::setRange(double min, double max, double step, bool slider)
+void RDoubleNumInput::setRange(double min, double max, double step)
 {
-    d->input->setRange(min, max, step, slider);
+    d->input->setRange(min, max);
+    d->input->setSingleStep(step);
 }
 
 double RDoubleNumInput::value() const

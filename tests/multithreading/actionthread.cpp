@@ -35,7 +35,6 @@
 // Local includes
 
 #include "kdcraw.h"
-#include "rawdecodingsettings.h"
 #include "ractionjob.h"
 
 class Task : public RActionJob
@@ -47,8 +46,9 @@ public:
     {
     }
 
-    QString errString;
-    QUrl    fileUrl;
+    RawDecodingSettings settings;
+    QString             errString;
+    QUrl                fileUrl;
 
 protected:
 
@@ -57,17 +57,12 @@ protected:
         emit signalStarted();
 
         QImage image;
-        KDcraw rawProcessor;
 
         if (m_cancel) return;
 
         emit signalProgress(20);
 
-        RawDecodingSettings settings;
-        settings.halfSizeColorImage    = false;
-        settings.sixteenBitsImage      = false;
-        settings.RGBInterpolate4Colors = false;
-        settings.RAWQuality            = RawDecodingSettings::BILINEAR;
+        KDcraw rawProcessor;
 
         if (m_cancel) return;
 
@@ -117,7 +112,7 @@ ActionThread::~ActionThread()
 {
 }
 
-void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
+void ActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings)
 {
     RJobCollection collection;
 
@@ -125,6 +120,7 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list)
     {
         Task* const job = new Task();
         job->fileUrl    = url;
+        job->settings   = settings;
 
         connect(job, SIGNAL(signalStarted()),
                 this, SLOT(slotJobStarted()));

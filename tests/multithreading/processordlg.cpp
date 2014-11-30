@@ -49,6 +49,7 @@
 // Local includes
 
 #include "actionthread.h"
+#include "dcrawsettingswidget.h"
 #include "rnuminput.h"
 
 class ProcessorDlg::Private
@@ -60,23 +61,23 @@ public:
         count        = 0;
         page         = 0;
         items        = 0;
-        vlay         = 0;
         buttons      = 0;
         progressView = 0;
         usedCore     = 0;
         thread       = 0;
+        settings     = 0;
     }
 
     int                  count;
 
     QWidget*             page;
     QLabel*              items;
-    QVBoxLayout*         vlay;
     QDialogButtonBox*    buttons;
     QScrollArea*         progressView;
 
     QList<QUrl>          list;
 
+    DcrawSettingsWidget* settings;
     RIntNumInput*        usedCore;
     ActionThread*        thread;
 };
@@ -100,7 +101,7 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     setLayout(vbx);
 
     int cpu                  = d->thread->maximumNumberOfThreads();
-    d->vlay                  = new QVBoxLayout(d->page);
+    QGridLayout* const grid  = new QGridLayout(d->page);
     QLabel* const pid        = new QLabel(i18n("PID: %1", QCoreApplication::applicationPid()),  this);
     QLabel* const core       = new QLabel(i18n("CPU Cores: %1", cpu), this);
     QWidget* const hbox      = new QWidget(this);
@@ -109,7 +110,6 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
     QLabel* const coresLabel = new QLabel(i18n("Cores to use: "), this);
     d->usedCore              = new RIntNumInput(this);
-    d->usedCore->setSliderEnabled(true);
     d->usedCore->setRange(1, cpu, 1);
     d->usedCore->setDefaultValue(cpu);
     hlay->addWidget(coresLabel);
@@ -122,11 +122,14 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     d->progressView->setWidget(progressbox);
     d->progressView->setWidgetResizable(true);
 
-    d->vlay->addWidget(pid);
-    d->vlay->addWidget(core);
-    d->vlay->addWidget(hbox);
-    d->vlay->addWidget(d->items);
-    d->vlay->addWidget(d->progressView);
+    d->settings = new DcrawSettingsWidget(this);
+
+    grid->addWidget(pid,             0, 0, 1, 1);
+    grid->addWidget(core,            1, 0, 1, 1);
+    grid->addWidget(hbox,            2, 0, 1, 1);
+    grid->addWidget(d->items,        3, 0, 1, 1);
+    grid->addWidget(d->progressView, 4, 0, 1, 1);
+    grid->addWidget(d->settings,     0, 1, 5, 1);
 
     foreach (const QUrl& url, d->list)
     {
@@ -141,7 +144,7 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
         progressLay->addWidget(bar);
     }
 
-    d->vlay->addStretch();
+    progressLay->addStretch();
 
     QPushButton* const applyBtn  = d->buttons->button(QDialogButtonBox::Apply);
     QPushButton* const cancelBtn = d->buttons->button(QDialogButtonBox::Close);
@@ -184,9 +187,10 @@ void ProcessorDlg::slotStart()
 
     d->buttons->button(QDialogButtonBox::Apply)->setDisabled(true);
     d->usedCore->setDisabled(true);
+    d->settings->setDisabled(true);
 
     d->thread->setMaximumNumberOfThreads(d->usedCore->value());
-    d->thread->convertRAWtoPNG(d->list);
+    d->thread->convertRAWtoPNG(d->list, d->settings->settings());
     d->thread->start();
 }
 

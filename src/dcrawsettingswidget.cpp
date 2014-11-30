@@ -373,7 +373,6 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->medianFilterPassesSpinBox = new RIntNumInput(d->demosaicingSettings);
     d->medianFilterPassesSpinBox->setRange(0, 10, 1);
     d->medianFilterPassesSpinBox->setDefaultValue(0);
-    d->medianFilterPassesSpinBox->setSliderEnabled(true);
     d->medianFilterPassesLabel   = new QLabel(i18nc("@label:slider", "Pass:"), d->whiteBalanceSettings);
     d->medianFilterPassesSpinBox->setWhatsThis( i18nc("@info:whatsthis", "<title>Pass</title>"
                                 "<para>Set here the passes used by the median filter applied after "
@@ -435,7 +434,6 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->customWhiteBalanceSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setRange(2000, 12000, 10);
     d->customWhiteBalanceSpinBox->setDefaultValue(6500);
-    d->customWhiteBalanceSpinBox->setSliderEnabled(true);
     d->customWhiteBalanceLabel   = new QLabel(i18nc("@label:slider", "T(K):"), d->whiteBalanceSettings);
     d->customWhiteBalanceSpinBox->setWhatsThis( i18nc("@info:whatsthis", "<title>Temperature</title>"
                                 "<para>Set here the color temperature in Kelvin.</para>"));
@@ -470,7 +468,6 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->reconstructSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->reconstructSpinBox->setRange(0, 6, 1);
     d->reconstructSpinBox->setDefaultValue(0);
-    d->reconstructSpinBox->setSliderEnabled(true);
     d->reconstructSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Level</title>"
                                 "<para>Specify the reconstruct highlight level. Low values favor "
                                 "whites and high values favor colors.</para>"));
@@ -528,7 +525,6 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->blackPointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->blackPointSpinBox->setRange(0, 1000, 1);
     d->blackPointSpinBox->setDefaultValue(0);
-    d->blackPointSpinBox->setSliderEnabled(true);
     d->blackPointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>Black point value</title>"
                                 "<para>Specify specific black point value of the output image.</para>"));
 
@@ -540,7 +536,6 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->whitePointSpinBox = new RIntNumInput(d->whiteBalanceSettings);
     d->whitePointSpinBox->setRange(0, 20000, 1);
     d->whitePointSpinBox->setDefaultValue(0);
-    d->whitePointSpinBox->setSliderEnabled(true);
     d->whitePointSpinBox->setWhatsThis(i18nc("@info:whatsthis", "<title>White point value</title>"
                                 "<para>Specify specific white point value of the output image.</para>"));
 
@@ -613,13 +608,11 @@ void DcrawSettingsWidget::setup(int advSettings)
     d->NRSpinBox1 = new RIntNumInput(d->correctionsSettings);
     d->NRSpinBox1->setRange(100, 1000, 1);
     d->NRSpinBox1->setDefaultValue(100);
-    d->NRSpinBox1->setSliderEnabled(true);
     d->NRLabel1   = new QLabel(d->correctionsSettings);
 
     d->NRSpinBox2 = new RIntNumInput(d->correctionsSettings);
     d->NRSpinBox2->setRange(100, 1000, 1);
     d->NRSpinBox2->setDefaultValue(100);
-    d->NRSpinBox2->setSliderEnabled(true);
     d->NRLabel2   = new QLabel(d->correctionsSettings);
 
     d->enableCACorrectionBox = new QCheckBox(i18nc("@option:check", "Enable Chromatic Aberration correction"), d->correctionsSettings);
