@@ -84,8 +84,8 @@ target_link_libraries(KF5KDcraw
                       PRIVATE
                       ${LibRaw_LIBRARIES}
                       PUBLIC
-                      KF5::KDELibs4Support
                       Qt5::Core
+                      KF5::KDELibs4Support
 )
 
 install(TARGETS KF5KDcraw
