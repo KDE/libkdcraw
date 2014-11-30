@@ -30,13 +30,11 @@
 
 // Qt includes
 
-#include <QAbstractSpinBox>
+#include <QWidget>
+#include <QString>
+#include <QRect>
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
-
-class QLineEdit;
-class QDoubleValidator;
-class QTimer;
 
 namespace KDcrawIface
 {
@@ -133,14 +131,14 @@ public:
     void setSingleStep(int value);
     void setPageStep(int value);
 
+Q_SIGNALS:
+
+    void valueChanged(int value);
+
 protected:
 
     virtual QString valueString() const;
     virtual void setInternalValue(int value);
-
-Q_SIGNALS:
-
-    void valueChanged(int value);
 };
 
 // ---------------------------------------------------------------------------------
@@ -169,14 +167,14 @@ public:
 
     void   setSingleStep(double value);
 
+Q_SIGNALS:
+
+    void valueChanged(double value);
+
 protected:
 
     virtual QString valueString() const;
     virtual void setInternalValue(int val);
-
-Q_SIGNALS:
-
-    void valueChanged(double value);
 };
 
 }  // namespace KDcrawIface
