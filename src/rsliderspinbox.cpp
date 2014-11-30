@@ -90,9 +90,9 @@ public:
     QSpinBox*         dummySpinBox;
 };
 
-RAbstractSliderSpinBox::RAbstractSliderSpinBox(QWidget* parent, RAbstractSliderSpinBoxPrivate* _d)
+RAbstractSliderSpinBox::RAbstractSliderSpinBox(QWidget* const parent, RAbstractSliderSpinBoxPrivate* const q)
     : QWidget(parent),
-      d_ptr(_d)
+      d_ptr(q)
 {
     Q_D(RAbstractSliderSpinBox);
 
@@ -253,7 +253,8 @@ void RAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     {
         if( !d->shiftMode )
         {
-            d->shiftPercent = pow( double(d->value - d->minimum)/double(d->maximum - d->minimum), 1/double(d->exponentRatio) );
+            d->shiftPercent = pow(double(d->value - d->minimum)/double(d->maximum - d->minimum),
+                                  1/double(d->exponentRatio));
             d->shiftMode = true;
         }
     }
@@ -326,10 +327,9 @@ bool RAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 {
     Q_D(RAbstractSliderSpinBox);
 
-    if (recv == static_cast<QObject*>(d->edit) &&
-        e->type() == QEvent::KeyRelease)
+    if (recv == static_cast<QObject*>(d->edit) && e->type() == QEvent::KeyRelease)
     {
-        QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+        QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(e);
 
         switch (keyEvent->key())
         {
@@ -554,7 +554,8 @@ class RSliderSpinBoxPrivate : public RAbstractSliderSpinBoxPrivate
 {
 };
 
-RSliderSpinBox::RSliderSpinBox(QWidget* parent) : RAbstractSliderSpinBox(parent, new RSliderSpinBoxPrivate)
+RSliderSpinBox::RSliderSpinBox(QWidget* const parent)
+    : RAbstractSliderSpinBox(parent, new RSliderSpinBoxPrivate)
 {
     setRange(0,99);
 }
@@ -651,7 +652,8 @@ class RDoubleSliderSpinBoxPrivate : public RAbstractSliderSpinBoxPrivate
 {
 };
 
-RDoubleSliderSpinBox::RDoubleSliderSpinBox(QWidget* parent) : RAbstractSliderSpinBox(parent, new RDoubleSliderSpinBoxPrivate)
+RDoubleSliderSpinBox::RDoubleSliderSpinBox(QWidget* const parent)
+    : RAbstractSliderSpinBox(parent, new RDoubleSliderSpinBoxPrivate)
 {
 }
 
@@ -667,11 +669,12 @@ void RDoubleSliderSpinBox::setRange(double minimum, double maximum, int decimals
     d->minimum = minimum * d->factor;
     d->maximum = maximum * d->factor;
 
-    //This code auto-compute a new step when pressing control.
-    //A flag defaulting to "do not change the fast step" should be added, but it implies changing every call
+    // This code auto-compute a new step when pressing control.
+    // A flag defaulting to "do not change the fast step" should be added, but it implies changing every call
 
     if (maximum - minimum >= 2.0 || decimals <= 0)
-    {  //Quick step on integers
+    {
+        //Quick step on integers
         d->fastSliderStep = int(pow(10.0, decimals));
     }
     else if(decimals == 1)
@@ -748,10 +751,10 @@ QString RDoubleSliderSpinBox::valueString() const
     return QString::number((double)d->value / d->factor, 'f', d->validator->decimals());
 }
 
-void RDoubleSliderSpinBox::setInternalValue(int _value)
+void RDoubleSliderSpinBox::setInternalValue(int val)
 {
     Q_D(RAbstractSliderSpinBox);
-    d->value = qBound(d->minimum, _value, d->maximum);
+    d->value = qBound(d->minimum, val, d->maximum);
     emit(valueChanged(value()));
 }
 

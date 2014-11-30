@@ -34,10 +34,6 @@
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
 
-// Local includes
-
-#include "libkdcraw_export.h"
-
 class QLineEdit;
 class QDoubleValidator;
 class QTimer;
@@ -52,7 +48,7 @@ class RDoubleSliderSpinBoxPrivate;
 /**
  * TODO: when inactive, also show the progress bar part as inactive!
  */
-class LIBKDCRAW_EXPORT RAbstractSliderSpinBox : public QWidget
+class RAbstractSliderSpinBox : public QWidget
 {
     Q_OBJECT
     Q_DISABLE_COPY(RAbstractSliderSpinBox)
@@ -60,7 +56,7 @@ class LIBKDCRAW_EXPORT RAbstractSliderSpinBox : public QWidget
 
 protected:
 
-    explicit RAbstractSliderSpinBox(QWidget* parent, RAbstractSliderSpinBoxPrivate*);
+    explicit RAbstractSliderSpinBox(QWidget* const parent, RAbstractSliderSpinBoxPrivate* const q);
 
 public:
 
@@ -108,7 +104,9 @@ protected:
     RAbstractSliderSpinBoxPrivate* const d_ptr;
 };
 
-class LIBKDCRAW_EXPORT RSliderSpinBox : public RAbstractSliderSpinBox
+// ---------------------------------------------------------------------------------
+
+class RSliderSpinBox : public RAbstractSliderSpinBox
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(RSliderSpinBox)
@@ -117,7 +115,7 @@ class LIBKDCRAW_EXPORT RSliderSpinBox : public RAbstractSliderSpinBox
 
 public:
 
-    RSliderSpinBox(QWidget* parent = 0);
+    RSliderSpinBox(QWidget* const parent = 0);
     ~RSliderSpinBox();
 
     void setRange(int minimum, int maximum);
@@ -147,14 +145,14 @@ Q_SIGNALS:
 
 // ---------------------------------------------------------------------------------
 
-class LIBKDCRAW_EXPORT RDoubleSliderSpinBox : public RAbstractSliderSpinBox
+class RDoubleSliderSpinBox : public RAbstractSliderSpinBox
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(RDoubleSliderSpinBox)
 
 public:
 
-    RDoubleSliderSpinBox(QWidget* parent = 0);
+    RDoubleSliderSpinBox(QWidget* const parent = 0);
     ~RDoubleSliderSpinBox();
 
     void setRange(double minimum, double maximum, int decimals = 0);
@@ -174,7 +172,7 @@ public:
 protected:
 
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int val);
 
 Q_SIGNALS:
 
