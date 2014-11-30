@@ -71,7 +71,7 @@ void KDcraw::Private::createPPMHeader(QByteArray& imgData, libraw_processed_imag
                                                 .arg(img->width)
                                                 .arg(img->height)
                                                 .arg((1 << img->bits)-1);
-    imgData.append(header.toAscii());
+    imgData.append(header.toLatin1());
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
 }
 

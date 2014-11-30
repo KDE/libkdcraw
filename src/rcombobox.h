@@ -27,9 +27,10 @@
 #ifndef RCOMBOBOX_H
 #define RCOMBOBOX_H
 
+#include <QWidget>
+
 // KDE includes
 
-#include <khbox.h>
 #include <kcombobox.h>
 
 // Local includes
@@ -39,7 +40,7 @@
 namespace KDcrawIface
 {
 
-class LIBKDCRAW_EXPORT RComboBox : public KHBox
+class LIBKDCRAW_EXPORT RComboBox : public QWidget
 {
 
     Q_OBJECT

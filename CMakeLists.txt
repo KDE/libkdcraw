@@ -84,7 +84,12 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 )
 
 find_package(KF5 REQUIRED COMPONENTS
-             KDELibs4Support
+             Config
+             TextWidgets
+             IconThemes
+             WidgetsAddons
+             Completion
+             KIO
 )
 
 find_package(LibRaw ${LIBRAW_MIN_VERSION} REQUIRED)

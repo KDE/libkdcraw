@@ -69,7 +69,7 @@ protected:
         emit signalProgress(30);
 
         QFileInfo input(fileUrl.toLocalFile());
-        QString   fullFilePath(input.baseName() + QString(".full.png"));
+        QString   fullFilePath(input.baseName() + QString::fromLatin1(".full.png"));
         QFileInfo fullOutput(fullFilePath);
 
         if (m_cancel) return;
@@ -78,7 +78,7 @@ protected:
 
         if (!rawProcessor.loadFullImage(image, fileUrl.toLocalFile(), settings))
         {
-            errString = "raw2png: Loading full RAW image failed. Aborted...";
+            errString = QString::fromLatin1("raw2png: Loading full RAW image failed. Aborted...");
             return;
         }
 

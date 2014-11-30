@@ -38,7 +38,7 @@
 
 // KDE includes
 
-#include <klibloader.h>
+//#include <klibloader.h>
 
 // LibRaw includes
 

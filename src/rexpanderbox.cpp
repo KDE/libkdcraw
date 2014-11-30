@@ -31,6 +31,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QStyle>
@@ -42,9 +43,8 @@
 // KDE includes
 
 #include <kseparator.h>
-#include <kglobalsettings.h>
-#include <kdialog.h>
-#include <klocale.h>
+#include <kconfiggroup.h>
+#include <klocalizedstring.h>
 
 namespace KDcrawIface
 {
@@ -348,7 +348,7 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     hlay->addWidget(d->pixmapLabel);
     hlay->addWidget(d->clickLabel, 10);
     hlay->setMargin(0);
-    hlay->setSpacing(KDialog::spacingHint());
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
@@ -359,14 +359,17 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
     d->grid->setColumnStretch(2, 10);
-    d->grid->setMargin(KDialog::spacingHint());
-    d->grid->setSpacing(KDialog::spacingHint());
+    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    connect(d->arrow, &RArrowClickLabel::leftClicked, this, &RLabelExpander::slotToggleContainer);
+    connect(d->arrow, &RArrowClickLabel::leftClicked,
+            this, &RLabelExpander::slotToggleContainer);
 
-    connect(d->clickLabel, &RClickLabel::activated, this, &RLabelExpander::slotToggleContainer);
+    connect(d->clickLabel, &RClickLabel::activated,
+            this, &RLabelExpander::slotToggleContainer);
 
-    connect(d->checkBox, &QCheckBox::toggled, this, &RLabelExpander::signalToggled);
+    connect(d->checkBox, &QCheckBox::toggled,
+            this, &RLabelExpander::signalToggled);
 }
 
 RLabelExpander::~RLabelExpander()
@@ -554,7 +557,7 @@ RExpanderBox::RExpanderBox(QWidget* const parent)
     QWidget* const main = new QWidget(viewport());
     d->vbox             = new QVBoxLayout(main);
     d->vbox->setMargin(0);
-    d->vbox->setSpacing(KDialog::spacingHint());
+    d->vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     setWidget(main);
 
     setAutoFillBackground(false);

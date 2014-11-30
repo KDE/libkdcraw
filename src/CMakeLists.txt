@@ -85,7 +85,14 @@ target_link_libraries(KF5KDcraw
                       ${LibRaw_LIBRARIES}
                       PUBLIC
                       Qt5::Core
-                      KF5::KDELibs4Support
+                      Qt5::Widgets
+                      Qt5::Gui
+                      KF5::ConfigCore
+                      KF5::TextWidgets
+                      KF5::IconThemes
+                      KF5::WidgetsAddons
+                      KF5::Completion
+                      KF5::KIOWidgets
 )
 
 install(TARGETS KF5KDcraw

@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QString>
 #include <QStringList>
 #include <QApplication>
 #include <QStandardPaths>
@@ -35,7 +36,7 @@
 
 // KDE includes
 
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -49,7 +50,7 @@ int main(int argc, char* argv[])
 
     if (argc <= 1)
     {
-        QString filter = i18n("Raw Files") + QString(" (%1)").arg(raw_file_extentions);
+        QString filter = i18n("Raw Files") + QString::fromLatin1(" (%1)").arg(QString::fromLatin1(raw_file_extentions));
         qDebug() << filter;
 
         QStringList files = QFileDialog::getOpenFileNames(0, i18n("Select RAW files to process"),
@@ -62,7 +63,7 @@ int main(int argc, char* argv[])
     else
     {
         for (int i = 1 ; i < argc ; i++)
-            list.append(QUrl::fromLocalFile(argv[i]));
+            list.append(QUrl::fromLocalFile(QString::fromLocal8Bit(argv[i])));
     }
 
     if (!list.isEmpty())

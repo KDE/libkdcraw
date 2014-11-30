@@ -39,15 +39,14 @@
 #include <QLabel>
 #include <QWhatsThis>
 #include <QGridLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
-#include <kapplication.h>
-#include <kdialog.h>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kurllabel.h>
 #include <ktoolinvocation.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 
 // Local includes
@@ -570,8 +569,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     whiteBalanceLayout->addWidget(d->blackPointSpinBox,              11, 1, 1, 2);
     whiteBalanceLayout->addWidget(d->whitePointCheckBox,             12, 0, 1, 1);
     whiteBalanceLayout->addWidget(d->whitePointSpinBox,              12, 1, 1, 2);
-    whiteBalanceLayout->setSpacing(KDialog::spacingHint());
-    whiteBalanceLayout->setMargin(KDialog::spacingHint());
+    whiteBalanceLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    whiteBalanceLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     addItem(d->whiteBalanceSettings, SmallIcon("kdcraw"), i18nc("@label", "White Balance"), QString("whitebalance"), true);
 
@@ -658,8 +657,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     correctionsLayout->addWidget(d->caBlueMultLabel,        6, 0, 1, 1);
     correctionsLayout->addWidget(d->caBlueMultSpinBox,      6, 1, 1, 2);
     correctionsLayout->setRowStretch(7, 10);
-    correctionsLayout->setSpacing(KDialog::spacingHint());
-    correctionsLayout->setMargin(KDialog::spacingHint());
+    correctionsLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    correctionsLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     addItem(d->correctionsSettings, SmallIcon("kdcraw"), i18nc("@label", "Corrections"), QString("corrections"), false);
 
@@ -729,8 +728,8 @@ void DcrawSettingsWidget::setup(int advSettings)
     colormanLayout->addWidget(d->outputColorSpaceComboBox, 2, 1, 1, 2);
     colormanLayout->addWidget(d->outIccUrlEdit,            3, 0, 1, 3);
     colormanLayout->setRowStretch(4, 10);
-    colormanLayout->setSpacing(KDialog::spacingHint());
-    colormanLayout->setMargin(KDialog::spacingHint());
+    colormanLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    colormanLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     addItem(d->colormanSettings, SmallIcon("kdcraw"), i18nc("@label", "Color Management"), QString("colormanagement"), false);
 

@@ -6,7 +6,7 @@
  * @date   2008-15-09
  * @brief  a command line tool to convert RAW file to PNG
  *
- * @author Copyright (C) 2008-2012 by Gilles Caulier
+ * @author Copyright (C) 2008-2014 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -45,13 +45,13 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    QString            filePath(argv[1]);
+    QString            filePath = QString::fromLatin1(argv[1]);
     QFileInfo          input(filePath);
-    QString            previewFilePath(input.baseName() + QString(".preview.png"));
+    QString            previewFilePath(input.baseName() + QString::QString::fromLatin1(".preview.png"));
     QFileInfo          previewOutput(previewFilePath);
-    QString            halfFilePath(input.baseName() + QString(".half.png"));
+    QString            halfFilePath(input.baseName() + QString::fromLatin1(".half.png"));
     QFileInfo          halfOutput(halfFilePath);
-    QString            fullFilePath(input.baseName() + QString(".full.png"));
+    QString            fullFilePath(input.baseName() + QString::fromLatin1(".full.png"));
     QFileInfo          fullOutput(fullFilePath);
     QImage             image;
     DcrawInfoContainer identify;
