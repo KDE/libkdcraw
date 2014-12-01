@@ -47,7 +47,7 @@ public:
     ActionThread(QObject* const parent);
     ~ActionThread();
 
-    void convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings);
+    void convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings, int priority=0);
 
 Q_SIGNALS:
 

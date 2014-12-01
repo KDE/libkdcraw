@@ -112,7 +112,7 @@ ActionThread::~ActionThread()
 {
 }
 
-void ActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings)
+void ActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSettings& settings, int priority)
 {
     RJobCollection collection;
 
@@ -131,7 +131,7 @@ void ActionThread::convertRAWtoPNG(const QList<QUrl>& list, const RawDecodingSet
         connect(job, SIGNAL(signalDone()),
                 this, SLOT(slotJobDone()));
 
-        collection.append(job);
+        collection.insert(job, priority);
 
         qDebug() << "Appending file to process " << url;
     }

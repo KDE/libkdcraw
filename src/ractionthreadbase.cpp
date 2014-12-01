@@ -82,13 +82,13 @@ RActionThreadBase::~RActionThreadBase()
     wait();
 
     // Cleanup all jobs from memory
-    foreach(RActionJob* const job, d->todo)
+    foreach(RActionJob* const job, d->todo.keys())
         delete(job);
 
-    foreach(RActionJob* const job, d->pending)
+    foreach(RActionJob* const job, d->pending.keys())
         delete(job);
 
-    foreach(RActionJob* const job, d->processed)
+    foreach(RActionJob* const job, d->processed.keys())
         delete(job);
 
     delete d;
@@ -119,8 +119,8 @@ void RActionThreadBase::slotJobFinished()
     qCDebug(LIBKDCRAW_LOG) << "One job is done";
 
     QMutexLocker lock(&d->mutex);
-    d->processed << job;
-    d->pending.removeOne(job);
+    d->processed.insert(job, 0);
+    d->pending.remove(job);
     d->condVarJobs.wakeAll();
 
     if (isEmpty())
@@ -136,10 +136,10 @@ void RActionThreadBase::cancel()
 
     d->todo.clear();
 
-    foreach(RActionJob* const job, d->pending)
+    foreach(RActionJob* const job, d->pending.keys())
     {
         job->cancel();
-        d->processed << job;
+        d->processed.insert(job, 0);
     }
 
     d->pending.clear();
@@ -155,7 +155,12 @@ bool RActionThreadBase::isEmpty() const
 void RActionThreadBase::appendJobs(const RJobCollection& jobs)
 {
     QMutexLocker lock(&d->mutex);
-    d->todo << jobs;
+
+    for (RJobCollection::const_iterator it = jobs.begin() ; it != jobs.end(); ++it)
+    {
+        d->todo.insert(it.key(), it.value());
+    }
+
     d->condVarJobs.wakeAll();
 }
 
@@ -171,13 +176,16 @@ void RActionThreadBase::run()
         {
             qCDebug(LIBKDCRAW_LOG) << "Action Thread run " << d->todo.count() << " new jobs";
 
-            foreach(RActionJob* const job, d->todo)
+            for (RJobCollection::iterator it = d->todo.begin() ; it != d->todo.end(); ++it)
             {
+                RActionJob* const job = it.key();
+                int priority          =  it.value();
+
                 connect(job, SIGNAL(signalDone()),
                         this, SLOT(slotJobFinished()));
 
-                d->pool->start(job);
-                d->pending << job;
+                d->pool->start(job, priority);
+                d->pending.insert(job, priority);
             }
 
             d->todo.clear();

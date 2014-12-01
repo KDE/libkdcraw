@@ -82,9 +82,11 @@ protected:
     bool m_cancel;
 };
 
-/** Define a list of job to process by RActionThreadBase manager.
+/** Define a map of job/priority to process by RActionThreadBase manager. 
+ *  Priority value can be used to control the run queue's order of execution.
+ *  Zero priority want mean to process job with higher priority.
  */
-typedef QList<RActionJob*> RJobCollection;
+typedef QMap<RActionJob*, int> RJobCollection;
 
 } // namespace KDcrawIface
 
