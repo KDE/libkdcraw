@@ -51,6 +51,34 @@ add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
 generate_export_header(KF5KDcraw BASE_NAME libkdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
+
+target_include_directories(KF5KDcraw INTERFACE
+                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
+)
+
+target_link_libraries(KF5KDcraw
+                      PRIVATE
+                      ${LibRaw_LIBRARIES}
+                      PUBLIC
+                      Qt5::Core
+                      Qt5::Widgets
+                      Qt5::Gui
+                      KF5::I18n
+                      KF5::ConfigCore
+                      KF5::WidgetsAddons
+                      KF5::KIOWidgets
+)
+
+set_target_properties(KF5KDcraw   PROPERTIES
+                      VERSION     ${KDCRAW_VERSION_STRING}
+                      SOVERSION   ${KDCRAW_SOVERSION}
+                      EXPORT_NAME KDcraw
+)
+
+install(TARGETS KF5KDcraw
+        EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+)
+
 # Check if compilation is done through digiKam SC or not. If yes, do not install header files.
 if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
 
@@ -75,30 +103,3 @@ if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
     )
 
 endif()
-
-target_include_directories(KF5KDcraw INTERFACE
-                           "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
-)
-
-target_link_libraries(KF5KDcraw
-                      PRIVATE
-                      ${LibRaw_LIBRARIES}
-                      PUBLIC
-                      Qt5::Core
-                      Qt5::Widgets
-                      Qt5::Gui
-                      KF5::I18n
-                      KF5::ConfigCore
-                      KF5::WidgetsAddons
-                      KF5::KIOWidgets
-)
-
-install(TARGETS KF5KDcraw
-        EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
-)
-
-set_target_properties(KF5KDcraw   PROPERTIES
-                      VERSION     ${KDCRAW_VERSION_STRING}
-                      SOVERSION   ${KDCRAW_SOVERSION}
-                      EXPORT_NAME KDcraw
-)
