@@ -27,11 +27,10 @@
 #ifndef RCOMBOBOX_H
 #define RCOMBOBOX_H
 
+// Qt includes
+
 #include <QWidget>
-
-// KDE includes
-
-#include <kcombobox.h>
+#include <QComboBox>
 
 // Local includes
 
@@ -56,7 +55,7 @@ public:
     void setDefaultIndex(int d);
     int  defaultIndex() const;
 
-    KComboBox* combo() const;
+    QComboBox* combo() const;
 
     void addItem(const QString& t, int index = -1);
     void insertItem(int index, const QString& t);

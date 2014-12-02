@@ -33,11 +33,11 @@
 #include <QApplication>
 #include <QStyle>
 #include <QHBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 // Local includes
 
@@ -74,7 +74,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16, 16));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     hlay->addWidget(d->input);
@@ -168,7 +168,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
     d->resetButton           = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16, 16));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     hlay->addWidget(d->input);

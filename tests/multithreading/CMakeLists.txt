@@ -22,6 +22,5 @@ add_executable(multicorerawtopng ${multicorerawtopng_SRCS})
 target_link_libraries(multicorerawtopng
                       Qt5::Gui
                       Qt5::Core
-                      KF5::KIOCore
                       KF5KDcraw
 )

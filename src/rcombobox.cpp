@@ -32,11 +32,11 @@
 #include <QStyle>
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QIcon>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 namespace KDcrawIface
 {
@@ -57,18 +57,18 @@ public:
 
     QToolButton* resetButton;
 
-    KComboBox*   combo;
+    QComboBox*   combo;
 };
 
 RComboBox::RComboBox(QWidget* const parent)
          : QWidget(parent), d(new Private)
 {
     QHBoxLayout* const hlay = new QHBoxLayout(this);
-    d->combo                = new KComboBox(this);
+    d->combo                = new QComboBox(this);
     d->resetButton          = new QToolButton(this);
     d->resetButton->setAutoRaise(true);
     d->resetButton->setFocusPolicy(Qt::NoFocus);
-    d->resetButton->setIcon(SmallIcon("document-revert"));
+    d->resetButton->setIcon(QIcon::fromTheme("document-revert").pixmap(16, 16));
     d->resetButton->setToolTip(i18nc("@info:tooltip", "Reset to default value"));
 
     hlay->addWidget(d->combo);
@@ -82,10 +82,10 @@ RComboBox::RComboBox(QWidget* const parent)
     connect(d->resetButton, &QToolButton::clicked,
             this, &RComboBox::slotReset);
 
-    connect(d->combo, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated),
+    connect(d->combo, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
             this, &RComboBox::slotItemActivated);
 
-    connect(d->combo, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(d->combo, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
             this, &RComboBox::slotCurrentIndexChanged);
 }
 
@@ -94,7 +94,7 @@ RComboBox::~RComboBox()
     delete d;
 }
 
-KComboBox* RComboBox::combo() const
+QComboBox* RComboBox::combo() const
 {
     return d->combo;
 }

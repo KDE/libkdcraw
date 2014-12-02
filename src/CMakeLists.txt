@@ -87,11 +87,9 @@ target_link_libraries(KF5KDcraw
                       Qt5::Core
                       Qt5::Widgets
                       Qt5::Gui
+                      KF5::I18n
                       KF5::ConfigCore
-                      KF5::TextWidgets
-                      KF5::IconThemes
                       KF5::WidgetsAddons
-                      KF5::Completion
                       KF5::KIOWidgets
 )
 

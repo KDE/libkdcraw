@@ -37,7 +37,7 @@
 // KDE includes
 
 #include <kurlrequester.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
