@@ -19,6 +19,7 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
                     rcombobox.cpp
+                    rwidgetutils.cpp
                     dcrawsettingswidget.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
