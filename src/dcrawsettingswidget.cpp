@@ -42,12 +42,12 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
+#include <QDesktopServices>
 
 // KDE includes
 
 #include <klocalizedstring.h>
 #include <kurllabel.h>
-#include <ktoolinvocation.h>
 
 // Local includes
 
@@ -845,7 +845,7 @@ void DcrawSettingsWidget::updateMinimumWidth()
 
 void DcrawSettingsWidget::processDcrawUrl(const QString& url)
 {
-    KToolInvocation::self()->invokeBrowser(url);
+    QDesktopServices::openUrl(QUrl(url));
 }
 
 KUrlRequester* DcrawSettingsWidget::inputProfileUrlEdit() const
