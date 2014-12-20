@@ -93,7 +93,7 @@ if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
             COMPONENT   Devel
     )
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h rwidgetutils.h
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h rwidgetutils.h rawfiles.h
             DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
             COMPONENT   Devel
     )
