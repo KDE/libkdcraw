@@ -179,4 +179,4 @@ protected:
 
 }  // namespace KDcrawIface
 
-#endif //kISSLIDERSPINBOX_H
+#endif // RSLIDERSPINBOX_H

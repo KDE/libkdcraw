@@ -255,7 +255,7 @@ void RAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
         {
             d->shiftPercent = pow(double(d->value - d->minimum)/double(d->maximum - d->minimum),
                                   1/double(d->exponentRatio));
-            d->shiftMode = true;
+            d->shiftMode    = true;
         }
     }
     else
@@ -289,7 +289,7 @@ void RAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
             d->shiftPercent = pow( double(d->value - d->minimum)/double(d->maximum - d->minimum), 1/double(d->exponentRatio) );
             d->shiftMode = true;
             break;
-        case Qt::Key_Enter: //Line edit isn't "accepting" key strokes...
+        case Qt::Key_Enter: // Line edit isn't "accepting" key strokes...
         case Qt::Key_Return:
         case Qt::Key_Escape:
         case Qt::Key_Control:
@@ -481,16 +481,15 @@ int RAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
     QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
 
     // Compute the distance of the progress bar, in pixel
-    double leftDbl = correctedProgRect.left();
-    double xDbl = x - leftDbl;
+    double leftDbl  = correctedProgRect.left();
+    double xDbl     = x - leftDbl;
 
     // Compute the ration of the progress bar used, linearly (ignoring the exponent)
     double rightDbl = correctedProgRect.right();
     double minDbl   = d->minimum;
     double maxDbl   = d->maximum;
-
-    double dValues = (maxDbl - minDbl);
-    double percent = (xDbl / (rightDbl - leftDbl));
+    double dValues  = (maxDbl - minDbl);
+    double percent  = (xDbl / (rightDbl - leftDbl));
 
     // If SHIFT is pressed, movement should be slowed.
     if ( modifiers & Qt::ShiftModifier )
@@ -567,8 +566,8 @@ RSliderSpinBox::~RSliderSpinBox()
 void RSliderSpinBox::setRange(int minimum, int maximum)
 {
     Q_D(RSliderSpinBox);
-    d->minimum = minimum;
-    d->maximum = maximum;
+    d->minimum        = minimum;
+    d->maximum        = maximum;
     d->fastSliderStep = (maximum-minimum+1)/20;
     d->validator->setRange(minimum, maximum, 0);
     update();
@@ -720,6 +719,7 @@ double RDoubleSliderSpinBox::fastSliderStep() const
     const Q_D(RAbstractSliderSpinBox);
     return d->fastSliderStep;
 }
+
 void RDoubleSliderSpinBox::setFastSliderStep(double step)
 {
     Q_D(RAbstractSliderSpinBox);
