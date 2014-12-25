@@ -125,6 +125,11 @@ void RIntNumInput::setDefaultValue(int v)
     slotValueChanged(v);
 }
 
+void RIntNumInput::setSuffix(const QString& suffix)
+{
+    d->input->setSuffix(suffix);
+}
+
 void RIntNumInput::slotReset()
 {
     d->input->setValue(d->defaultValue);
@@ -222,6 +227,11 @@ void RDoubleNumInput::setDefaultValue(double v)
     d->defaultValue = v;
     d->input->setValue(d->defaultValue);
     slotValueChanged(v);
+}
+
+void RDoubleNumInput::setSuffix(const QString& suffix)
+{
+    d->input->setSuffix(suffix);
 }
 
 void RDoubleNumInput::slotReset()

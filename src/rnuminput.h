@@ -48,12 +48,13 @@ public:
     RIntNumInput(QWidget* const parent=0);
     ~RIntNumInput();
 
-    int  value() const;
-
     void setRange(int min, int max, int step);
 
     void setDefaultValue(int d);
     int  defaultValue() const;
+    int  value()        const;
+
+    void setSuffix(const QString& suffix);
 
 Q_SIGNALS:
 
@@ -86,13 +87,14 @@ public:
     RDoubleNumInput(QWidget* const parent=0);
     ~RDoubleNumInput();
 
-    double value() const;
-
     void   setDecimals(int p);
     void   setRange(double min, double max, double step);
 
     void   setDefaultValue(double d);
     double defaultValue() const;
+    double value()        const;
+
+    void setSuffix(const QString& suffix);
 
 Q_SIGNALS:
 
