@@ -5,9 +5,9 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 ecm_install_icons( ICONS
-                   128-app-kdcraw.png
-                   32-app-kdcraw.png
-                   48-app-kdcraw.png
-                   64-app-kdcraw.png
+                   128-apps-kdcraw.png
+                   32-apps-kdcraw.png
+                   48-apps-kdcraw.png
+                   64-apps-kdcraw.png
                    DESTINATION ${ICON_INSTALL_DIR}
                    THEME hicolor)
