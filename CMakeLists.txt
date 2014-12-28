@@ -137,5 +137,6 @@ install(EXPORT      KF5KDcrawTargets
         FILE        KF5KDcrawTargets.cmake
         NAMESPACE   KF5::
 )
-
+#install data
+add_subdirectory(data/profiles)
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
