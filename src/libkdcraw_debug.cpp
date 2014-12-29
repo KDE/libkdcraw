@@ -19,4 +19,4 @@
 
 #include "libkdcraw_debug.h"
 
-Q_LOGGING_CATEGORY(LIBKDCRAW_LOG, "log_libkdcraw")
+Q_LOGGING_CATEGORY(LIBKDCRAW_LOG, "libkdcraw")
