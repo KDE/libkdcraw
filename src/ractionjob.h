@@ -7,7 +7,7 @@
  * @date   2014-15-11
  * @brief  QRunnable job extended with QObject features
  *
- * @author Copyright (C) 2011-2014 by Gilles Caulier
+ * @author Copyright (C) 2011-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
  *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
