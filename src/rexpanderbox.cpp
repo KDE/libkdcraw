@@ -423,9 +423,9 @@ void RLabelExpander::setIcon(const QIcon& icon)
     d->pixmapLabel->setPixmap(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
-const QPixmap* RLabelExpander::icon() const
+QIcon RLabelExpander::icon() const
 {
-    return d->pixmapLabel->pixmap();
+    return QIcon(*d->pixmapLabel->pixmap());
 }
 
 void RLabelExpander::setWidget(QWidget* const widget)
@@ -605,8 +605,6 @@ void RExpanderBox::addItem(QWidget* const w, const QIcon& icon, const QString& t
 void RExpanderBox::addItem(QWidget* const w, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-#pragma message("empty qicon..")
-    qDebug() << "deprecated additem called";
     addItem(w, QIcon(), txt, objName, expandBydefault);
 }
 
@@ -646,7 +644,7 @@ void RExpanderBox::slotItemToggled(bool b)
 void RExpanderBox::insertItem(int index, QWidget* const w, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
-    insertItem(index, w, QPixmap(), txt, objName, expandBydefault);
+    insertItem(index, w, QIcon(), txt, objName, expandBydefault);
 }
 
 void RExpanderBox::insertStretch(int index)
@@ -676,13 +674,12 @@ QString RExpanderBox::itemText(int index) const
 void RExpanderBox::setItemIcon(int index, const QIcon& icon)
 {
     if (index > d->wList.count() || index < 0) return;
-
     d->wList[index]->setIcon(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
-const QPixmap* RExpanderBox::itemIcon(int index) const
+QIcon RExpanderBox::itemIcon(int index) const
 {
-    if (index > d->wList.count() || index < 0) return 0;
+    if (index > d->wList.count() || index < 0) return QIcon();
     return d->wList[index]->icon();
 }
 
@@ -718,7 +715,6 @@ bool RExpanderBox::isItemEnabled(int index) const
 RLabelExpander* RExpanderBox::widget(int index) const
 {
     if (index > d->wList.count() || index < 0) return 0;
-
     return d->wList[index];
 }
 

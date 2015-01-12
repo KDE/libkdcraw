@@ -155,7 +155,7 @@ public:
     QString text() const;
 
     void setIcon(const QIcon &icon);
-    const QPixmap* icon() const;
+    QIcon icon() const;
 
     void setWidget(QWidget* const widget);
     QWidget* widget() const;
@@ -232,7 +232,7 @@ public:
     QString itemText (int index) const;
 
     void setItemIcon(int index, const QIcon &icon);
-    const QPixmap* itemIcon(int index) const;
+    QIcon itemIcon(int index) const;
 
     void setItemToolTip(int index, const QString& tip);
     QString itemToolTip(int index) const;
