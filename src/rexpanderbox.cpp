@@ -39,6 +39,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
+#include <QDebug>
 
 // KDE includes
 
@@ -417,9 +418,10 @@ QString RLabelExpander::text() const
     return d->clickLabel->text();
 }
 
-void RLabelExpander::setIcon(const QPixmap& pix)
+void RLabelExpander::setIcon(const QIcon& icon)
 {
-    d->pixmapLabel->setPixmap(pix);
+#pragma message("hardcoded pixmap size..")
+    d->pixmapLabel->setPixmap(icon.pixmap(16));
 }
 
 const QPixmap* RLabelExpander::icon() const
@@ -511,12 +513,13 @@ public:
         vbox   = 0;
     }
 
-    void createItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
+    void createItem(int index, QWidget* const w, const QIcon& icon, const QString& txt,
                     const QString& objName, bool expandBydefault)
     {
+#pragma message("hardcoded pixmap size")
         RLabelExpander* const exp = new RLabelExpander(parent->viewport());
         exp->setText(txt);
-        exp->setIcon(pix);
+        exp->setIcon(icon.pixmap(16));
         exp->setWidget(w);
         exp->setLineVisible(!wList.isEmpty());
         exp->setObjectName(objName);
@@ -595,16 +598,18 @@ bool RExpanderBox::isChecked(int index) const
     return d->wList[index]->isChecked();
 }
 
-void RExpanderBox::addItem(QWidget* const w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::addItem(QWidget* const w, const QIcon& icon, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-    d->createItem(-1, w, pix, txt, objName, expandBydefault);
+    d->createItem(-1, w, icon, txt, objName, expandBydefault);
 }
 
 void RExpanderBox::addItem(QWidget* const w, const QString& txt,
                            const QString& objName, bool expandBydefault)
 {
-    addItem(w, QPixmap(), txt, objName, expandBydefault);
+#pragma message("empty qicon..")
+    qDebug() << "deprecated additem called";
+    addItem(w, QIcon(), txt, objName, expandBydefault);
 }
 
 void RExpanderBox::addStretch()
@@ -612,10 +617,10 @@ void RExpanderBox::addStretch()
     d->vbox->addStretch(10);
 }
 
-void RExpanderBox::insertItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
+void RExpanderBox::insertItem(int index, QWidget* const w, const QIcon& icon, const QString& txt,
                               const QString& objName, bool expandBydefault)
 {
-    d->createItem(index, w, pix, txt, objName, expandBydefault);
+    d->createItem(index, w, icon, txt, objName, expandBydefault);
 }
 
 void RExpanderBox::slotItemExpanded(bool b)
@@ -670,10 +675,11 @@ QString RExpanderBox::itemText(int index) const
     return d->wList[index]->text();
 }
 
-void RExpanderBox::setItemIcon(int index, const QPixmap& pix)
+void RExpanderBox::setItemIcon(int index, const QIcon& icon)
 {
     if (index > d->wList.count() || index < 0) return;
-    d->wList[index]->setIcon(pix);
+#pragma message("hardcoded pixmap size")
+    d->wList[index]->setIcon(icon.pixmap(16));
 }
 
 const QPixmap* RExpanderBox::itemIcon(int index) const

@@ -154,7 +154,7 @@ public:
     void setText(const QString& txt);
     QString text() const;
 
-    void setIcon(const QPixmap& pix);
+    void setIcon(const QIcon &icon);
     const QPixmap* icon() const;
 
     void setWidget(QWidget* const widget);
@@ -203,7 +203,7 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void addItem(QWidget* const w, const QPixmap& pix, const QString& txt,
+    void addItem(QWidget* const w, const QIcon &icon, const QString& txt,
                  const QString& objName, bool expandBydefault);
     void addItem(QWidget* const w, const QString& txt,
                  const QString& objName, bool expandBydefault);
@@ -215,7 +215,7 @@ public:
         'objName'         : item object name used to read/save expanded settings to rc file.
         'expandBydefault' : item state by default (expanded or not).
      */
-    void insertItem(int index, QWidget* const w, const QPixmap& pix, const QString& txt,
+    void insertItem(int index, QWidget* const w, const QIcon &icon, const QString& txt,
                     const QString& objName, bool expandBydefault);
     void insertItem(int index, QWidget* const w, const QString& txt,
                     const QString& objName, bool expandBydefault);
@@ -231,7 +231,7 @@ public:
     void setItemText(int index, const QString& txt);
     QString itemText (int index) const;
 
-    void setItemIcon(int index, const QPixmap& pix);
+    void setItemIcon(int index, const QIcon &icon);
     const QPixmap* itemIcon(int index) const;
 
     void setItemToolTip(int index, const QString& tip);
