@@ -420,8 +420,7 @@ QString RLabelExpander::text() const
 
 void RLabelExpander::setIcon(const QIcon& icon)
 {
-#pragma message("hardcoded pixmap size..")
-    d->pixmapLabel->setPixmap(icon.pixmap(16));
+    d->pixmapLabel->setPixmap(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
 const QPixmap* RLabelExpander::icon() const
@@ -516,10 +515,9 @@ public:
     void createItem(int index, QWidget* const w, const QIcon& icon, const QString& txt,
                     const QString& objName, bool expandBydefault)
     {
-#pragma message("hardcoded pixmap size")
         RLabelExpander* const exp = new RLabelExpander(parent->viewport());
         exp->setText(txt);
-        exp->setIcon(icon.pixmap(16));
+        exp->setIcon(icon.pixmap(QApplication::style()->pixelMetric(QStyle::PM_SmallIconSize)));
         exp->setWidget(w);
         exp->setLineVisible(!wList.isEmpty());
         exp->setObjectName(objName);
@@ -678,8 +676,8 @@ QString RExpanderBox::itemText(int index) const
 void RExpanderBox::setItemIcon(int index, const QIcon& icon)
 {
     if (index > d->wList.count() || index < 0) return;
-#pragma message("hardcoded pixmap size")
-    d->wList[index]->setIcon(icon.pixmap(16));
+
+    d->wList[index]->setIcon(icon.pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
 }
 
 const QPixmap* RExpanderBox::itemIcon(int index) const
