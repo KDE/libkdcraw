@@ -7,7 +7,7 @@
 kde_enable_exceptions()
 
 include_directories(${LibRaw_INCLUDE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..) # required for the _version.h
 
 add_definitions(${LibRaw_DEFINITIONS})
 
@@ -55,6 +55,7 @@ generate_export_header(KF5KDcraw BASE_NAME libkdcraw EXPORT_MACRO_NAME LIBKDCRAW
 
 target_include_directories(KF5KDcraw INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
+                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../>"
 )
 
 target_link_libraries(KF5KDcraw
