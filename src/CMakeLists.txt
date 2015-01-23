@@ -7,7 +7,6 @@
 kde_enable_exceptions()
 
 include_directories(${LibRaw_INCLUDE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/..) # required for the _version.h
 
 add_definitions(${LibRaw_DEFINITIONS})
 
@@ -42,6 +41,8 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      SqueezedComboBox
                      RActionThreadBase
                      RActionJob
+                     RawFiles
+                     RWidgetUtils
 
                      PREFIX           KDCRAW
                      REQUIRED_HEADERS kdcraw_HEADERS
@@ -52,10 +53,11 @@ add_library(KF5::KDcraw ALIAS KF5KDcraw)
 
 generate_export_header(KF5KDcraw BASE_NAME libkdcraw EXPORT_MACRO_NAME LIBKDCRAW_EXPORT)
 
+set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE OFF)
 
 target_include_directories(KF5KDcraw INTERFACE
                            "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KDCRAW;${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw>"
-                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/../>"
+                           "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
 
 target_link_libraries(KF5KDcraw
@@ -94,12 +96,12 @@ if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
             COMPONENT   Devel
     )
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h rwidgetutils.h rawfiles.h
+    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
             DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
             COMPONENT   Devel
     )
 
-    install(FILES       "${CMAKE_BINARY_DIR}/libkdcraw_version.h"
+    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
             DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
             COMPONENT   Devel
     )

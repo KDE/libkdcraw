@@ -101,8 +101,8 @@ set_package_properties("LibRaw"    PROPERTIES
 
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
                   VARIABLE_PREFIX      KDCRAW
-                  VERSION_HEADER       "libkdcraw_version.h"
-                  PACKAGE_VERSION_FILE "KF5KDcrawConfigVersion.cmake"
+                  VERSION_HEADER       "src/libkdcraw_version.h"
+                  PACKAGE_VERSION_FILE "src/KF5KDcrawConfigVersion.cmake"
                   SOVERSION            ${LIBKDCRAW_SO_VERSION})
 
 ############## Targets #########################
