@@ -7,6 +7,7 @@
 kde_enable_exceptions()
 
 include_directories(${LibRaw_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
 add_definitions(${LibRaw_DEFINITIONS})
 
