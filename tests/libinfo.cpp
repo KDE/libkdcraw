@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "kdcraw.h"
+#include <KDCRAW/KDcraw>
 
 using namespace KDcrawIface;
 

@@ -31,8 +31,8 @@
 
 // Local includes
 
-#include "kdcraw.h"
-#include "rawdecodingsettings.h"
+#include <KDCRAW/KDcraw>
+#include <KDCRAW/RawDecodingSettings>
 
 using namespace KDcrawIface;
 
