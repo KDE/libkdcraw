@@ -42,7 +42,8 @@ RActiveLabel::RActiveLabel(const QUrl& url, const QString& imgPath, QWidget* con
     : QLabel(parent)
 {
     setTextFormat(Qt::RichText);
-    setTextInteractionFlags(Qt::TextBrowserInteraction);
+    setFocusPolicy(Qt::NoFocus);
+    setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     setOpenExternalLinks(true);
     QByteArray byteArray;
     QBuffer    buffer(&byteArray);
