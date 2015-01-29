@@ -7,7 +7,7 @@
  * @date   2014-09-12
  * @brief  Simple widgets collection
  *
- * @author Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2014-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -56,6 +56,34 @@ RActiveLabel::RActiveLabel(const QUrl& url, const QString& imgPath, QWidget* con
 }
 
 RActiveLabel::~RActiveLabel()
+{
+}
+
+// ------------------------------------------------------------------------------------
+
+RLineWidget::RLineWidget(Qt::Orientation orientation, QWidget* const parent)
+    : QFrame(parent)
+{
+    setLineWidth(1);
+    setMidLineWidth(0);
+    
+    if (orientation == Qt::Vertical)
+    {
+        setFrameShape(QFrame::VLine);
+        setFrameShadow(QFrame::Sunken);
+        setMinimumSize(2, 0);
+    }
+    else
+    {
+        setFrameShape(QFrame::HLine);
+        setFrameShadow(QFrame::Sunken);
+        setMinimumSize(0, 2);
+    }
+   
+    updateGeometry();
+}
+
+RLineWidget::~RLineWidget()
 {
 }
 

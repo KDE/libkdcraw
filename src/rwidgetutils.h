@@ -7,7 +7,7 @@
  * @date   2014-09-12
  * @brief  Simple widgets collection
  *
- * @author Copyright (C) 2014 by Gilles Caulier
+ * @author Copyright (C) 2014-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -51,6 +51,21 @@ public:
 
     explicit RActiveLabel(const QUrl& url, const QString& imgPath, QWidget* const parent=0);
     virtual ~RActiveLabel();
+};
+
+// ------------------------------------------------------------------------------------
+
+/**
+ * A widget to show an horizontal or vertical line separator 
+ **/
+class LIBKDCRAW_EXPORT RLineWidget : public QFrame
+{
+    Q_OBJECT
+
+public:
+
+    explicit RLineWidget(Qt::Orientation orientation, QWidget* const parent=0);
+    virtual ~RLineWidget();
 };
 
 // ------------------------------------------------------------------------------------
