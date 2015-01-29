@@ -49,8 +49,10 @@ class LIBKDCRAW_EXPORT RActiveLabel : public QLabel
 
 public:
 
-    explicit RActiveLabel(const QUrl& url, const QString& imgPath, QWidget* const parent=0);
+    explicit RActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=0);
     virtual ~RActiveLabel();
+    
+    void updateData(const QUrl& url, const QImage& img);
 };
 
 // ------------------------------------------------------------------------------------
