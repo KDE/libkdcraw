@@ -113,6 +113,48 @@ class LIBKDCRAW_EXPORT RVBox : public RHBox
     virtual ~RVBox();
 };
 
+// ------------------------------------------------------------------------------------
+
+/** A label to show text adjusted to widget size
+ */
+class LIBKDCRAW_EXPORT RAdjustableLabel : public QLabel
+{
+    Q_OBJECT
+
+public:
+
+    explicit RAdjustableLabel(QWidget* const parent=0);
+    virtual ~RAdjustableLabel();
+
+    QSize minimumSizeHint() const;
+    QSize sizeHint()        const;
+
+    void setAlignment(Qt::Alignment align);
+    void setElideMode(Qt::TextElideMode mode);
+
+    QString adjustedText() const;
+
+public Q_SLOTS:
+
+    void setAdjustedText(const QString& text=QString());
+
+private:
+
+    void resizeEvent(QResizeEvent*);
+    void adjustTextToLabel();
+
+    // Disabled methods from QLabel
+    QString text() const { return QString(); }; // Use adjustedText() instead.
+    void setText(const QString&) {};            // Use setAdjustedText(text) instead.
+    void clear() {};                            // Use setdjustedText(QString()) instead.
+
+private:
+
+    class Private;
+    Private* const d;
+};
+
+
 } // namespace KDcrawIface
 
 #endif // RWIDGETUTILS_h

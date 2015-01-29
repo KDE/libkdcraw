@@ -46,10 +46,6 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// Local includes
-
-#include "rwidgetutils.h"
-
 namespace KDcrawIface
 {
 
@@ -114,14 +110,15 @@ void RClickLabel::keyPressEvent(QKeyEvent* e)
 // ------------------------------------------------------------------------
 
 RSqueezedClickLabel::RSqueezedClickLabel(QWidget* const parent)
-    : KSqueezedTextLabel(parent)
+    : RAdjustableLabel(parent)
 {
     setCursor(Qt::PointingHandCursor);
 }
 
 RSqueezedClickLabel::RSqueezedClickLabel(const QString& text, QWidget* const parent)
-    : KSqueezedTextLabel(text, parent)
+    : RAdjustableLabel(parent)
 {
+    setAdjustedText(text);
     setCursor(Qt::PointingHandCursor);
 }
 
@@ -131,7 +128,7 @@ RSqueezedClickLabel::~RSqueezedClickLabel()
 
 void RSqueezedClickLabel::mouseReleaseEvent(QMouseEvent* event)
 {
-    KSqueezedTextLabel::mouseReleaseEvent(event);
+    QLabel::mouseReleaseEvent(event);
 
     if (event->button() == Qt::LeftButton)
     {

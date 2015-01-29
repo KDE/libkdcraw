@@ -34,6 +34,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QDesktopWidget>
 
 namespace KDcrawIface
 {
@@ -198,6 +199,112 @@ RVBox::RVBox(QWidget* const parent)
 
 RVBox::~RVBox()
 {
+}
+
+// ------------------------------------------------------------------------------------
+
+class RAdjustableLabel::Private
+{
+public:
+
+    QString           ajdText;
+    Qt::TextElideMode emode;
+};
+
+RAdjustableLabel::RAdjustableLabel(QWidget* const parent)
+    : QLabel (parent),
+      d(new Private)
+{
+    setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+    d->emode = Qt::ElideMiddle;
+}
+
+RAdjustableLabel::~RAdjustableLabel()
+{
+    delete d;
+}
+
+void RAdjustableLabel::resizeEvent(QResizeEvent*)
+{
+    adjustTextToLabel();
+}
+
+QSize RAdjustableLabel::minimumSizeHint() const
+{
+    QSize sh = QLabel::minimumSizeHint();
+    sh.setWidth(-1);
+    return sh;
+}
+
+QSize RAdjustableLabel::sizeHint() const
+{
+    QFontMetrics fm(fontMetrics());    
+    int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
+    int currentW = fm.width(d->ajdText);
+
+    return (QSize(currentW > maxW ? maxW : currentW, QLabel::sizeHint().height()));
+}
+
+void RAdjustableLabel::setAdjustedText(const QString& text)
+{
+    d->ajdText = text;
+    
+    if (d->ajdText.isNull())
+        QLabel::clear();
+
+    adjustTextToLabel();
+}
+
+QString RAdjustableLabel::adjustedText() const
+{
+    return d->ajdText;
+}
+
+void RAdjustableLabel::setAlignment(Qt::Alignment alignment)
+{
+    QString tmp(d->ajdText);
+    QLabel::setAlignment(alignment);
+    d->ajdText = tmp;
+}
+
+void RAdjustableLabel::setElideMode(Qt::TextElideMode mode)
+{
+    d->emode = mode;
+    adjustTextToLabel();
+}
+
+void RAdjustableLabel::adjustTextToLabel()
+{
+    QFontMetrics fm(fontMetrics());
+    QStringList adjustedLines;
+    int lblW = size().width();
+    bool adjusted  = false;
+
+    Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
+    {
+        int lineW = fm.width(line);
+    
+        if (lineW > lblW)
+        {
+            adjusted = true;
+            adjustedLines << fm.elidedText(line, d->emode, lblW);
+        }
+        else
+        {
+            adjustedLines << line;
+        }
+    }
+
+    if (adjusted)
+    {
+        QLabel::setText(adjustedLines.join(QStringLiteral("\n")));
+        setToolTip(d->ajdText);
+    }
+    else
+    {
+        QLabel::setText(d->ajdText);
+        setToolTip(QString());
+    }
 }
 
 } // namespace KDcrawIface

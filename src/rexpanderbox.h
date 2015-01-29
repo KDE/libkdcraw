@@ -40,12 +40,12 @@
 
 // KDE includes
 
-#include <ksqueezedtextlabel.h>
 #include <kconfiggroup.h>
 
 // Local includes
 
 #include "libkdcraw_export.h"
+#include "rwidgetutils.h"
 
 namespace KDcrawIface
 {
@@ -76,7 +76,7 @@ protected:
 
 // -------------------------------------------------------------------------
 
-class LIBKDCRAW_EXPORT RSqueezedClickLabel : public KSqueezedTextLabel
+class LIBKDCRAW_EXPORT RSqueezedClickLabel : public RAdjustableLabel
 {
     Q_OBJECT
 
