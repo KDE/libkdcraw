@@ -43,9 +43,12 @@
 
 // KDE includes
 
-#include <kseparator.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
+
+// Local includes
+
+#include "rwidgetutils.h"
 
 namespace KDcrawIface
 {
@@ -325,7 +328,7 @@ public:
     QWidget*          containerWidget;
     QGridLayout*      grid;
 
-    KSeparator*       line;
+    RLineWidget*      line;
     QWidget*          hbox;
 
     RArrowClickLabel* arrow;
@@ -336,7 +339,7 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     d->grid        = new QGridLayout(this);
-    d->line        = new KSeparator(Qt::Horizontal, this);
+    d->line        = new RLineWidget(Qt::Horizontal, this);
     d->hbox        = new QWidget(this);
     d->arrow       = new RArrowClickLabel(d->hbox);
     d->checkBox    = new QCheckBox(d->hbox);
