@@ -158,6 +158,9 @@ private:
 
 // ------------------------------------------------------------------------------------
 
+/** A widget to chosse a single local file or path.
+ *  Use line edit and file dialog properties to customize operation modes.
+ */
 class LIBKDCRAW_EXPORT RFileSelector : public RHBox
 {
     Q_OBJECT
