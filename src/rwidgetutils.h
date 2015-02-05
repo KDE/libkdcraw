@@ -173,6 +173,10 @@ public:
     QLineEdit*   lineEdit()   const;
     QFileDialog* fileDialog() const;
 
+Q_SIGNALS:
+
+    void signalOpenFileDialog();
+    
 private Q_SLOTS:
 
     void slotBtnClicked();

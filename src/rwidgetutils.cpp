@@ -377,6 +377,8 @@ void RFileSelector::slotBtnClicked()
     
     d->fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
     
+    emit signalOpenFileDialog();
+
     if (d->fileDlg->exec() == QDialog::Accepted)
     {
         QStringList sel = d->fileDlg->selectedFiles();
