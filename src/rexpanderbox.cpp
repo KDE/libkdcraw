@@ -39,7 +39,6 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QCheckBox>
-#include <QDebug>
 
 // KDE includes
 

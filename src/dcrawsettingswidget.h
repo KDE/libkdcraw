@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kurlrequester.h>
 #include <kconfiggroup.h>
 
 // Local includes
@@ -44,6 +43,7 @@
 #include "libkdcraw_export.h"
 #include "rawdecodingsettings.h"
 #include "rexpanderbox.h"
+#include "rwidgetutils.h"
 
 namespace KDcrawIface
 {
@@ -78,8 +78,8 @@ public:
     explicit DcrawSettingsWidget(QWidget* const parent, int advSettings = COLORSPACE);
     virtual ~DcrawSettingsWidget();
 
-    KUrlRequester* inputProfileUrlEdit()  const;
-    KUrlRequester* outputProfileUrlEdit() const;
+    RFileSelector* inputProfileUrlEdit()  const;
+    RFileSelector* outputProfileUrlEdit() const;
 
     void setup(int advSettings);
 

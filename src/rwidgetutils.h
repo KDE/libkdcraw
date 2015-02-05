@@ -32,6 +32,8 @@
 #include <QUrl>
 #include <QString>
 #include <QFrame>
+#include <QLineEdit>
+#include <QFileDialog>
 
 // Local includes
 
@@ -154,6 +156,29 @@ private:
     Private* const d;
 };
 
+// ------------------------------------------------------------------------------------
+
+class LIBKDCRAW_EXPORT RFileSelector : public RHBox
+{
+    Q_OBJECT
+
+public:
+
+    explicit RFileSelector(QWidget* const parent=0);
+    virtual ~RFileSelector();
+
+    QLineEdit*   lineEdit()   const;
+    QFileDialog* fileDialog() const;
+
+private Q_SLOTS:
+
+    void slotBtnClicked();
+    
+private:
+
+    class Private;
+    Private* const d;
+};
 
 } // namespace KDcrawIface
 

@@ -175,8 +175,8 @@ public:
     QCheckBox*       refineInterpolationBox;
     QCheckBox*       expoCorrectionBox;
 
-    KUrlRequester*   inIccUrlEdit;
-    KUrlRequester*   outIccUrlEdit;
+    RFileSelector*   inIccUrlEdit;
+    RFileSelector*   outIccUrlEdit;
 
     RComboBox*       noiseReductionComboBox;
     RComboBox*       whiteBalanceComboBox;
@@ -688,9 +688,9 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
                                 "input color space profile.</item></list></para>"));
 
-    d->inIccUrlEdit = new KUrlRequester(d->colormanSettings);
-    d->inIccUrlEdit->setMode(KFile::LocalOnly | KFile::ExistingOnly | KFile::File);
-    d->inIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
+    d->inIccUrlEdit = new RFileSelector(d->colormanSettings);
+    d->inIccUrlEdit->fileDialog()->setFileMode(QFileDialog::ExistingFile);
+    d->inIccUrlEdit->fileDialog()->setNameFilter(i18n("ICC Files (*.icc; *.icm)"));
 
     d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
@@ -722,10 +722,10 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "<item><emphasis strong='true'>Custom</emphasis>: use a custom "
                                 "output color space profile.</item></list></para>"));
 
-    d->outIccUrlEdit = new KUrlRequester(d->colormanSettings);
-    d->outIccUrlEdit->setMode(KFile::LocalOnly | KFile::File | KFile::ExistingOnly);
-    d->outIccUrlEdit->setFilter("*.icc *.icm|"+i18n("ICC Files (*.icc; *.icm)"));
-
+    d->outIccUrlEdit = new RFileSelector(d->colormanSettings);
+    d->outIccUrlEdit->fileDialog()->setFileMode(QFileDialog::ExistingFile);
+    d->outIccUrlEdit->fileDialog()->setNameFilter(i18n("ICC Files (*.icc; *.icm)"));
+    
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);
     colormanLayout->addWidget(d->inputColorSpaceComboBox,  0, 1, 1, 2);
     colormanLayout->addWidget(d->inIccUrlEdit,             1, 0, 1, 3);
@@ -783,10 +783,10 @@ void DcrawSettingsWidget::setup(int advSettings)
 
     // Wrapper to emit signal when something is changed in settings.
 
-    connect(d->inIccUrlEdit, &KUrlRequester::urlSelected,
+    connect(d->inIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
-    connect(d->outIccUrlEdit, &KUrlRequester::urlSelected,
+    connect(d->outIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
 
     connect(d->whiteBalanceComboBox, static_cast<void (RComboBox::*)(int)>(&RComboBox::activated),
@@ -883,12 +883,12 @@ void DcrawSettingsWidget::updateMinimumWidth()
     setMinimumWidth(width);
 }
 
-KUrlRequester* DcrawSettingsWidget::inputProfileUrlEdit() const
+RFileSelector* DcrawSettingsWidget::inputProfileUrlEdit() const
 {
     return d->inIccUrlEdit;
 }
 
-KUrlRequester* DcrawSettingsWidget::outputProfileUrlEdit() const
+RFileSelector* DcrawSettingsWidget::outputProfileUrlEdit() const
 {
     return d->outIccUrlEdit;
 }
@@ -1193,8 +1193,8 @@ void DcrawSettingsWidget::setSettings(const RawDecodingSettings& settings)
     d->expoCorrectionShiftSpinBox->setValue(d->shiftExpoFromLinearToEv(settings.expoCorrectionShift));
     d->expoCorrectionHighlightSpinBox->setValue(settings.expoCorrectionHighlight);
 
-    d->inIccUrlEdit->setUrl(QUrl(settings.inputProfile));
-    d->outIccUrlEdit->setUrl(QUrl(settings.outputProfile));
+    d->inIccUrlEdit->lineEdit()->setText(settings.inputProfile);
+    d->outIccUrlEdit->lineEdit()->setText(settings.outputProfile);
 }
 
 RawDecodingSettings DcrawSettingsWidget::settings() const
@@ -1298,8 +1298,8 @@ RawDecodingSettings DcrawSettingsWidget::settings() const
 
     prm.inputColorSpace         = (RawDecodingSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
     prm.outputColorSpace        = (RawDecodingSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
-    prm.inputProfile            = d->inIccUrlEdit->url().toLocalFile();
-    prm.outputProfile           = d->outIccUrlEdit->url().toLocalFile();
+    prm.inputProfile            = d->inIccUrlEdit->lineEdit()->text();
+    prm.outputProfile           = d->outIccUrlEdit->lineEdit()->text();
 
     return prm;
 }

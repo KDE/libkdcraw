@@ -35,6 +35,16 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QPushButton>
+#include <QFileInfo>
+
+// KDE includes
+
+#include <klocalizedstring.h>
+
+// Local includes
+
+#include "libkdcraw_debug.h"
 
 namespace KDcrawIface
 {
@@ -107,7 +117,6 @@ RHBox::RHBox(QWidget* const parent)
     layout->setMargin(0);
     setLayout(layout);
 }
-
 
 RHBox::RHBox(bool /*vertical*/, QWidget* const parent)
     : QFrame(parent)
@@ -207,16 +216,20 @@ class RAdjustableLabel::Private
 {
 public:
 
+    Private()
+    {
+        emode = Qt::ElideMiddle;
+    }
+
     QString           ajdText;
     Qt::TextElideMode emode;
 };
 
 RAdjustableLabel::RAdjustableLabel(QWidget* const parent)
-    : QLabel (parent),
+    : QLabel(parent),
       d(new Private)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    d->emode = Qt::ElideMiddle;
 }
 
 RAdjustableLabel::~RAdjustableLabel()
@@ -277,8 +290,8 @@ void RAdjustableLabel::adjustTextToLabel()
 {
     QFontMetrics fm(fontMetrics());
     QStringList adjustedLines;
-    int lblW = size().width();
-    bool adjusted  = false;
+    int lblW      = size().width();
+    bool adjusted = false;
 
     Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
     {
@@ -304,6 +317,72 @@ void RAdjustableLabel::adjustTextToLabel()
     {
         QLabel::setText(d->ajdText);
         setToolTip(QString());
+    }
+}
+
+// ------------------------------------------------------------------------------------
+
+class RFileSelector::Private
+{
+public:
+
+    Private()
+    {
+        edit    = 0;
+        btn     = 0;
+        fileDlg = 0;
+    }
+  
+    QLineEdit*   edit;
+    QPushButton* btn;
+    QFileDialog* fileDlg;
+};
+
+RFileSelector::RFileSelector(QWidget* const parent)
+    : RHBox(parent),
+      d(new Private)
+{
+    d->edit    = new QLineEdit(this);
+    d->btn     = new QPushButton(i18n("Browse..."), this);
+    d->fileDlg = new QFileDialog(this);
+    d->fileDlg->setFileMode(QFileDialog::ExistingFile);
+    setStretchFactor(d->edit, 10);
+    
+    connect(d->btn, SIGNAL(clicked()),
+            this, SLOT(slotBtnClicked()));
+}
+
+RFileSelector::~RFileSelector()
+{
+    delete d;
+}
+
+QLineEdit* RFileSelector::lineEdit() const
+{
+    return d->edit;
+}
+
+QFileDialog* RFileSelector::fileDialog() const
+{
+    return d->fileDlg;
+}
+
+void RFileSelector::slotBtnClicked()
+{
+    if (d->fileDlg->fileMode() == QFileDialog::ExistingFiles)
+    {
+        qCDebug(LIBKDCRAW_LOG) << "Multiple selection is not supported";
+        return;
+    }
+    
+    d->fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
+    
+    if (d->fileDlg->exec() == QDialog::Accepted)
+    {
+        QStringList sel = d->fileDlg->selectedFiles();
+        
+        if (!sel.isEmpty())
+            d->edit->setText(sel.first());
     }
 }
 

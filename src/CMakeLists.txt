@@ -70,8 +70,6 @@ target_link_libraries(KF5KDcraw
                       Qt5::Gui
                       KF5::I18n
                       KF5::ConfigCore
-                      KF5::WidgetsAddons
-                      KF5::KIOWidgets
 )
 
 set_target_properties(KF5KDcraw   PROPERTIES
