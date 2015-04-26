@@ -13,7 +13,10 @@
 
 @PACKAGE_INIT@
 
-find_dependency(Qt5Core Qt5Widgets Qt5Gui @REQUIRED_QT_VERSION@)
-find_dependency(KF5I18n KF5Config)
+find_dependency(Qt5Core @REQUIRED_QT_VERSION@)
+find_dependency(Qt5Widgets @REQUIRED_QT_VERSION@)
+find_dependency(Qt5Gui @REQUIRED_QT_VERSION@)
+find_dependency(KF5I18n)
+find_dependency(KF5Config)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5KDcrawTargets.cmake")
