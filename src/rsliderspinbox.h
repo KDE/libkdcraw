@@ -83,7 +83,8 @@ protected:
     QStyleOptionSpinBox spinBoxOptions()         const;
     QStyleOptionProgressBar progressBarOptions() const;
 
-    QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions)   const;
+    QRect editRect(const QStyleOptionSpinBox& spinBoxOptions)   const;
+    QRect progressRect(const QStyleOptionProgressBar& progressBarOptions)   const;
     QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions)   const;
     QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
 

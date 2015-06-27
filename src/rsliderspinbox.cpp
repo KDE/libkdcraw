@@ -137,7 +137,7 @@ void RAbstractSliderSpinBox::showEdit()
 
     if (d->edit->isVisible()) return;
 
-    d->edit->setGeometry(progressRect(spinBoxOptions()));
+    d->edit->setGeometry(editRect(spinBoxOptions()));
     d->edit->setText(valueString());
     d->edit->selectAll();
     d->edit->show();
@@ -167,7 +167,7 @@ void RAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     painter.save();
     painter.setClipping(true);
     QRect eraseRect(QPoint(rect().x(), rect().y()),
-                    QPoint(progressRect(spinOpts).right(), rect().bottom()));
+                    QPoint(editRect(spinOpts).right(), rect().bottom()));
     painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
     style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
     painter.setClipping(false);
@@ -232,7 +232,7 @@ void RAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     {
         setInternalValue(d->value - d->singleStep);
     }
-    else if (progressRect(spinOpts).contains(e->pos()) &&
+    else if (editRect(spinOpts).contains(e->pos()) &&
              !(d->edit->isVisible())                   &&
              !(d->upButtonDown || d->downButtonDown))
     {
@@ -310,13 +310,19 @@ void RAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
 
     Q_D(RAbstractSliderSpinBox);
 
+    int step = d->fastSliderStep;
+    if( e->modifiers() & Qt::ShiftModifier )
+    {
+        step = d->singleStep;
+    }
+
     if ( e->delta() > 0)
     {
-        setInternalValue(d->value + d->singleStep);
+        setInternalValue(d->value + step);
     }
     else
     {
-        setInternalValue(d->value - d->singleStep);
+        setInternalValue(d->value - step);
     }
 
     update();
@@ -335,7 +341,7 @@ bool RAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
         {
             case Qt::Key_Enter:
             case Qt::Key_Return:
-                setInternalValue(d->edit->text().toDouble()*d->factor);
+                setInternalValue(QLocale::system().toDouble(d->edit->text()) * d->factor);
                 hideEdit();
                 return true;
             case Qt::Key_Escape:
@@ -448,15 +454,20 @@ QStyleOptionProgressBar RAbstractSliderSpinBox::progressBarOptions() const
     progressOpts.textVisible   = !(d->edit->isVisible());
 
     // Change opts rect to be only the ComboBox's text area
-    progressOpts.rect          = progressRect(spinOpts);
+    progressOpts.rect          = editRect(spinOpts);
 
     return progressOpts;
 }
 
-QRect RAbstractSliderSpinBox::progressRect(const QStyleOptionSpinBox& spinBoxOptions) const
+QRect RAbstractSliderSpinBox::editRect(const QStyleOptionSpinBox& spinBoxOptions) const
 {
     return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                    QStyle::SC_SpinBoxEditField);
+}
+
+QRect RAbstractSliderSpinBox::progressRect(const QStyleOptionProgressBar& progressBarOptions) const
+{
+    return style()->subElementRect(QStyle::SE_ProgressBarGroove, &progressBarOptions);
 }
 
 QRect RAbstractSliderSpinBox::upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const
@@ -476,9 +487,10 @@ int RAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
     const Q_D(RAbstractSliderSpinBox);
 
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
 
     // Adjust for magic number in style code (margins)
-    QRect correctedProgRect = progressRect(spinOpts).adjusted(2, 2, -2, -2);
+    QRect correctedProgRect = progressRect(progressOpts).adjusted(2, 2, -2, -2);
 
     // Compute the distance of the progress bar, in pixel
     double leftDbl  = correctedProgRect.left();
@@ -494,7 +506,7 @@ int RAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
     // If SHIFT is pressed, movement should be slowed.
     if ( modifiers & Qt::ShiftModifier )
     {
-        percent = d->shiftPercent + ( percent - d->shiftPercent ) * d->slowFactor;
+        percent = d->shiftPercent + (percent - d->shiftPercent) * d->slowFactor;
     }
 
     // Final value
@@ -508,10 +520,10 @@ int RAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
 
         if( modifiers & Qt::ShiftModifier )
         {
-            fstep*=d->slowFactor;
+            fstep *= d->slowFactor;
         }
 
-        realvalue = floor( (realvalue+fstep/2) / fstep ) * fstep;
+        realvalue = floor((realvalue + fstep / 2) / fstep) * fstep;
     }
 
     // Return the value
@@ -624,7 +636,7 @@ void RSliderSpinBox::setValue(int value)
 QString RSliderSpinBox::valueString() const
 {
     const Q_D(RSliderSpinBox);
-    return QString::number(d->value, 'f', d->validator->decimals());
+    return QLocale::system().toString(d->value);
 }
 
 void RSliderSpinBox::setSingleStep(int value)
@@ -723,7 +735,7 @@ double RDoubleSliderSpinBox::fastSliderStep() const
 void RDoubleSliderSpinBox::setFastSliderStep(double step)
 {
     Q_D(RAbstractSliderSpinBox);
-    d->fastSliderStep = step;
+    d->fastSliderStep = step * d->factor;
 }
 
 double RDoubleSliderSpinBox::value() const
@@ -748,7 +760,7 @@ void RDoubleSliderSpinBox::setSingleStep(double value)
 QString RDoubleSliderSpinBox::valueString() const
 {
     const Q_D(RAbstractSliderSpinBox);
-    return QString::number((double)d->value / d->factor, 'f', d->validator->decimals());
+    return QLocale::system().toString((double)d->value / d->factor, 'f', d->validator->decimals());
 }
 
 void RDoubleSliderSpinBox::setInternalValue(int val)

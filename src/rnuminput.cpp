@@ -27,6 +27,10 @@
 
 #include "rnuminput.h"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QToolButton>
@@ -203,7 +207,8 @@ void RDoubleNumInput::setDecimals(int p)
 
 void RDoubleNumInput::setRange(double min, double max, double step)
 {
-    d->input->setRange(min, max);
+    d->input->setRange(min, max, (int) -floor(log10(step)));
+    d->input->setFastSliderStep(5 * step);
     d->input->setSingleStep(step);
 }
 
