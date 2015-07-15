@@ -119,14 +119,16 @@ void RActionThreadBase::slotJobFinished()
     qCDebug(LIBKDCRAW_LOG) << "One job is done";
 
     QMutexLocker lock(&d->mutex);
+
     d->processed.insert(job, 0);
     d->pending.remove(job);
-    d->condVarJobs.wakeAll();
 
     if (isEmpty())
     {
         d->running = false;
     }
+
+    d->condVarJobs.wakeAll();
 }
 
 void RActionThreadBase::cancel()
