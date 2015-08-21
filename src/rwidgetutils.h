@@ -34,6 +34,8 @@
 #include <QFrame>
 #include <QLineEdit>
 #include <QFileDialog>
+#include <QSize>
+#include <QPixmap>
 
 // Local includes
 
@@ -185,6 +187,25 @@ private:
 
     class Private;
     Private* const d;
+};
+
+// --------------------------------------------------------------------------------------
+
+class LIBKDCRAW_EXPORT WorkingPixmap
+{
+public:
+
+    explicit WorkingPixmap();
+    ~WorkingPixmap();
+
+    bool    isEmpty()          const;
+    QSize   frameSize()        const;
+    int     frameCount()       const;
+    QPixmap frameAt(int index) const;
+
+private:
+
+    QVector<QPixmap> m_frames;
 };
 
 } // namespace KDcrawIface

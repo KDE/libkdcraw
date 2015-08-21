@@ -37,6 +37,10 @@
 #include <QDesktopWidget>
 #include <QPushButton>
 #include <QFileInfo>
+#include <QPainter>
+#include <QStandardPaths>
+#include <QVector>
+
 
 // KDE includes
 
@@ -386,6 +390,81 @@ void RFileSelector::slotBtnClicked()
         if (!sel.isEmpty())
             d->edit->setText(sel.first());
     }
+}
+
+// ---------------------------------------------------------------------------------------
+
+WorkingPixmap::WorkingPixmap()
+{
+    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("libkdcraw/pics/process-working.png")));
+    QSize   size(22, 22);
+    
+    if (pix.isNull())
+    {
+        qCWarning(LIBKDCRAW_LOG) << "Invalid pixmap specified.";
+        return;
+    }
+    if (!size.isValid())
+    {
+        size = QSize(pix.width(), pix.width());
+    }
+
+    if (pix.width() % size.width() || pix.height() % size.height())
+    {
+        qCWarning(LIBKDCRAW_LOG) << "Invalid framesize.";
+        return;
+    }
+
+    const int rowCount = pix.height() / size.height();
+    const int colCount = pix.width()  / size.width();
+    m_frames.resize(rowCount * colCount);
+
+    int pos = 0;
+    
+    for (int row = 0; row < rowCount; ++row)
+    {
+        for (int col = 0; col < colCount; ++col)
+        {
+            QPixmap frm     = pix.copy(col * size.width(), row * size.height(), size.width(), size.height());
+            m_frames[pos++] = frm;
+        }
+    }
+}
+
+WorkingPixmap::~WorkingPixmap()
+{
+}
+
+bool WorkingPixmap::isEmpty() const
+{
+    return m_frames.isEmpty();
+}
+
+QSize WorkingPixmap::frameSize() const
+{
+    if (isEmpty())
+    {
+        qCWarning(LIBKDCRAW_LOG) << "No frame loaded.";
+        return QSize();
+    }
+
+    return m_frames[0].size();
+}
+
+int WorkingPixmap::frameCount() const
+{
+    return m_frames.size();
+}
+
+QPixmap WorkingPixmap::frameAt(int index) const
+{
+    if (isEmpty())
+    {
+        qCWarning(LIBKDCRAW_LOG) << "No frame loaded.";
+        return QPixmap();
+    }
+
+    return m_frames.at(index);
 }
 
 } // namespace KDcrawIface
