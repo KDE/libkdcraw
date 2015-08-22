@@ -404,6 +404,7 @@ WorkingPixmap::WorkingPixmap()
         qCWarning(LIBKDCRAW_LOG) << "Invalid pixmap specified.";
         return;
     }
+
     if (!size.isValid())
     {
         size = QSize(pix.width(), pix.width());

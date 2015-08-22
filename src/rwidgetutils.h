@@ -191,6 +191,8 @@ private:
 
 // --------------------------------------------------------------------------------------
 
+/** A widget to draw progress wheel indicator over thumbnails.
+ */
 class LIBKDCRAW_EXPORT WorkingPixmap
 {
 public:
