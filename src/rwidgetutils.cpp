@@ -216,7 +216,7 @@ RVBox::~RVBox()
 
 // ------------------------------------------------------------------------------------
 
-class RAdjustableLabel::Private
+class Q_DECL_HIDDEN RAdjustableLabel::Private
 {
 public:
 
@@ -326,7 +326,7 @@ void RAdjustableLabel::adjustTextToLabel()
 
 // ------------------------------------------------------------------------------------
 
-class RFileSelector::Private
+class Q_DECL_HIDDEN RFileSelector::Private
 {
 public:
 

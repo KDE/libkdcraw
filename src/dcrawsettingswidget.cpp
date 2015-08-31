@@ -59,7 +59,7 @@
 namespace KDcrawIface
 {
 
-class DcrawSettingsWidget::Private
+class Q_DECL_HIDDEN DcrawSettingsWidget::Private
 {
 public:
 

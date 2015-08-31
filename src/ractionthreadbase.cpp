@@ -45,7 +45,7 @@
 namespace KDcrawIface
 {
 
-class RActionThreadBase::Private
+class Q_DECL_HIDDEN RActionThreadBase::Private
 {
 public:
 

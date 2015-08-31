@@ -41,7 +41,7 @@
 namespace KDcrawIface
 {
 
-class RComboBox::Private
+class Q_DECL_HIDDEN RComboBox::Private
 {
 
 public:

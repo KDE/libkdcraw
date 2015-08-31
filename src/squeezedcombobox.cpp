@@ -41,7 +41,7 @@
 namespace KDcrawIface
 {
 
-class SqueezedComboBox::Private
+class Q_DECL_HIDDEN SqueezedComboBox::Private
 {
 public:
 

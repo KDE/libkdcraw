@@ -299,7 +299,7 @@ QSize RArrowClickLabel::sizeHint() const
 
 // ------------------------------------------------------------------------
 
-class RLabelExpander::Private
+class Q_DECL_HIDDEN RLabelExpander::Private
 {
 
 public:
@@ -501,7 +501,7 @@ bool RLabelExpander::eventFilter(QObject* obj, QEvent* ev)
 
 // ------------------------------------------------------------------------
 
-class RExpanderBox::Private
+class Q_DECL_HIDDEN RExpanderBox::Private
 {
 public:
 
