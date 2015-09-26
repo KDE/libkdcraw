@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2014-09-12
- * @brief  Simple widgets collection
+ * @brief  Simple helper widgets collection
  *
  * @author Copyright (C) 2014-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -90,7 +90,7 @@ RLineWidget::RLineWidget(Qt::Orientation orientation, QWidget* const parent)
 {
     setLineWidth(1);
     setMidLineWidth(0);
-    
+
     if (orientation == Qt::Vertical)
     {
         setFrameShape(QFrame::VLine);
@@ -103,7 +103,7 @@ RLineWidget::RLineWidget(Qt::Orientation orientation, QWidget* const parent)
         setFrameShadow(QFrame::Sunken);
         setMinimumSize(0, 2);
     }
-   
+
     updateGeometry();
 }
 
@@ -265,7 +265,7 @@ QSize RAdjustableLabel::sizeHint() const
 void RAdjustableLabel::setAdjustedText(const QString& text)
 {
     d->ajdText = text;
-    
+
     if (d->ajdText.isNull())
         QLabel::clear();
 
@@ -300,7 +300,7 @@ void RAdjustableLabel::adjustTextToLabel()
     Q_FOREACH(const QString& line, d->ajdText.split(QLatin1Char('\n')))
     {
         int lineW = fm.width(line);
-    
+
         if (lineW > lblW)
         {
             adjusted = true;
@@ -336,7 +336,7 @@ public:
         btn     = 0;
         fileDlg = 0;
     }
-  
+ 
     QLineEdit*   edit;
     QPushButton* btn;
     QFileDialog* fileDlg;
@@ -378,15 +378,15 @@ void RFileSelector::slotBtnClicked()
         qCDebug(LIBKDCRAW_LOG) << "Multiple selection is not supported";
         return;
     }
-    
+
     d->fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
-    
+
     emit signalOpenFileDialog();
 
     if (d->fileDlg->exec() == QDialog::Accepted)
     {
         QStringList sel = d->fileDlg->selectedFiles();
-        
+
         if (!sel.isEmpty())
             d->edit->setText(sel.first());
     }
@@ -398,7 +398,7 @@ WorkingPixmap::WorkingPixmap()
 {
     QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("libkdcraw/pics/process-working.png")));
     QSize   size(22, 22);
-    
+
     if (pix.isNull())
     {
         qCWarning(LIBKDCRAW_LOG) << "Invalid pixmap specified.";
@@ -421,7 +421,7 @@ WorkingPixmap::WorkingPixmap()
     m_frames.resize(rowCount * colCount);
 
     int pos = 0;
-    
+
     for (int row = 0; row < rowCount; ++row)
     {
         for (int col = 0; col < colCount; ++col)

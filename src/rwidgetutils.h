@@ -5,7 +5,7 @@
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * @date   2014-09-12
- * @brief  Simple widgets collection
+ * @brief  Simple helpher widgets collection
  *
  * @author Copyright (C) 2014-2015 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
@@ -55,7 +55,7 @@ public:
 
     explicit RActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=0);
     virtual ~RActiveLabel();
-    
+
     void updateData(const QUrl& url, const QImage& img);
 };
 
@@ -178,11 +178,11 @@ public:
 Q_SIGNALS:
 
     void signalOpenFileDialog();
-    
+
 private Q_SLOTS:
 
     void slotBtnClicked();
-    
+
 private:
 
     class Private;
