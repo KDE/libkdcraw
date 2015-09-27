@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2014, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -82,27 +82,22 @@ install(TARGETS KF5KDcraw
         EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
-# Check if compilation is done through digiKam SC or not. If yes, do not install header files.
-if (NOT DIGIKAMSC_COMPILE_LIBKDCRAW)
+install(FILES       ${kdcraw_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KDCRAW
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kdcraw_CamelCase_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/KDCRAW
-            COMPONENT   Devel
-    )
+install(FILES       ${kdcraw_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
+        COMPONENT   Devel
+)
 
-    install(FILES       ${kdcraw_HEADERS}
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
-            COMPONENT   Devel
-    )
+install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
+        COMPONENT   Devel
+)
 
-    install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
-            DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDCRAW/kdcraw
-            COMPONENT   Devel
-    )
-
-    install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-            DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
-            COMPONENT   Devel
-    )
-
-endif()
+install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
+        DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
+        COMPONENT   Devel
+)
