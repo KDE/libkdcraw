@@ -178,6 +178,7 @@ public:
 Q_SIGNALS:
 
     void signalOpenFileDialog();
+    void signalPathSelected();
 
 private Q_SLOTS:
 

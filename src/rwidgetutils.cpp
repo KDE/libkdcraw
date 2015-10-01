@@ -388,7 +388,10 @@ void RFileSelector::slotBtnClicked()
         QStringList sel = d->fileDlg->selectedFiles();
 
         if (!sel.isEmpty())
+        {
             d->edit->setText(sel.first());
+            emit signalPathSelected();
+        }
     }
 }
 
