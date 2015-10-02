@@ -689,8 +689,8 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "input color space profile.</item></list></para>"));
 
     d->inIccUrlEdit = new RFileSelector(d->colormanSettings);
-    d->inIccUrlEdit->fileDialog()->setFileMode(QFileDialog::ExistingFile);
-    d->inIccUrlEdit->fileDialog()->setNameFilter(i18n("ICC Files (*.icc; *.icm)"));
+    d->inIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
+    d->inIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
 
     d->outputColorSpaceLabel    = new QLabel(i18nc("@label:listbox", "Workspace:"), d->colormanSettings);
     d->outputColorSpaceComboBox = new RComboBox( d->colormanSettings );
@@ -723,8 +723,8 @@ void DcrawSettingsWidget::setup(int advSettings)
                                 "output color space profile.</item></list></para>"));
 
     d->outIccUrlEdit = new RFileSelector(d->colormanSettings);
-    d->outIccUrlEdit->fileDialog()->setFileMode(QFileDialog::ExistingFile);
-    d->outIccUrlEdit->fileDialog()->setNameFilter(i18n("ICC Files (*.icc; *.icm)"));
+    d->outIccUrlEdit->setFileDlgMode(QFileDialog::ExistingFile);
+    d->outIccUrlEdit->setFileDlgFilter(i18n("ICC Files (*.icc; *.icm)"));
     
     colormanLayout->addWidget(d->inputColorSpaceLabel,     0, 0, 1, 1);
     colormanLayout->addWidget(d->inputColorSpaceComboBox,  0, 1, 1, 2);

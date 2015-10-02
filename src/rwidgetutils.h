@@ -33,9 +33,9 @@
 #include <QString>
 #include <QFrame>
 #include <QLineEdit>
-#include <QFileDialog>
 #include <QSize>
 #include <QPixmap>
+#include <QFileDialog>
 
 // Local includes
 
@@ -172,13 +172,16 @@ public:
     explicit RFileSelector(QWidget* const parent=0);
     virtual ~RFileSelector();
 
-    QLineEdit*   lineEdit()   const;
-    QFileDialog* fileDialog() const;
+    QLineEdit* lineEdit()   const;
+    
+    void setFileDlgMode(QFileDialog::FileMode mode);
+    void setFileDlgFilter(const QString& filter);
+    void setFileDlgTitle(const QString& title);
 
 Q_SIGNALS:
 
     void signalOpenFileDialog();
-    void signalPathSelected();
+    void signalUrlSelected(const QUrl&);
 
 private Q_SLOTS:
 

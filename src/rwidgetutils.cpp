@@ -41,7 +41,6 @@
 #include <QStandardPaths>
 #include <QVector>
 
-
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -334,12 +333,15 @@ public:
     {
         edit    = 0;
         btn     = 0;
-        fileDlg = 0;
+        fdMode  = QFileDialog::ExistingFile;
     }
  
-    QLineEdit*   edit;
-    QPushButton* btn;
-    QFileDialog* fileDlg;
+    QLineEdit*            edit;
+    QPushButton*          btn;
+    
+    QFileDialog::FileMode fdMode;
+    QString               fdFilter;
+    QString               fdTitle;
 };
 
 RFileSelector::RFileSelector(QWidget* const parent)
@@ -348,8 +350,6 @@ RFileSelector::RFileSelector(QWidget* const parent)
 {
     d->edit    = new QLineEdit(this);
     d->btn     = new QPushButton(i18n("Browse..."), this);
-    d->fileDlg = new QFileDialog(this);
-    d->fileDlg->setFileMode(QFileDialog::ExistingFile);
     setStretchFactor(d->edit, 10);
     
     connect(d->btn, SIGNAL(clicked()),
@@ -366,33 +366,56 @@ QLineEdit* RFileSelector::lineEdit() const
     return d->edit;
 }
 
-QFileDialog* RFileSelector::fileDialog() const
+void RFileSelector::setFileDlgMode(QFileDialog::FileMode mode)
 {
-    return d->fileDlg;
+    d->fdMode = mode;
+}
+
+void RFileSelector::setFileDlgFilter(const QString& filter)
+{
+    d->fdFilter = filter;
+}
+
+void RFileSelector::setFileDlgTitle(const QString& title)
+{
+    d->fdTitle = title;
 }
 
 void RFileSelector::slotBtnClicked()
 {
-    if (d->fileDlg->fileMode() == QFileDialog::ExistingFiles)
+    if (d->fdMode == QFileDialog::ExistingFiles)
     {
         qCDebug(LIBKDCRAW_LOG) << "Multiple selection is not supported";
         return;
     }
 
-    d->fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
+    QFileDialog* const fileDlg = new QFileDialog(this);
+    fileDlg->setOption(QFileDialog::DontUseNativeDialog, true);
+    fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
+    fileDlg->setFileMode(d->fdMode);
+
+    if (!d->fdFilter.isNull())
+        fileDlg->setNameFilter(d->fdFilter);
+
+    if (!d->fdTitle.isNull())
+        fileDlg->setWindowTitle(d->fdTitle);
+
+    connect(fileDlg, SIGNAL(urlSelected(QUrl)),
+            this, SIGNAL(signalUrlSelected(QUrl)));
 
     emit signalOpenFileDialog();
 
-    if (d->fileDlg->exec() == QDialog::Accepted)
+    if (fileDlg->exec() == QDialog::Accepted)
     {
-        QStringList sel = d->fileDlg->selectedFiles();
+        QStringList sel = fileDlg->selectedFiles();
 
         if (!sel.isEmpty())
         {
             d->edit->setText(sel.first());
-            emit signalPathSelected();
         }
     }
+    
+    delete fileDlg;
 }
 
 // ---------------------------------------------------------------------------------------
