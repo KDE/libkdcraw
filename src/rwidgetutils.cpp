@@ -331,9 +331,10 @@ public:
 
     Private()
     {
-        edit    = 0;
-        btn     = 0;
-        fdMode  = QFileDialog::ExistingFile;
+        edit      = 0;
+        btn       = 0;
+        fdMode    = QFileDialog::ExistingFile;
+        fdOptions = QFileDialog::DontUseNativeDialog;
     }
  
     QLineEdit*            edit;
@@ -342,6 +343,7 @@ public:
     QFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
+    QFileDialog::Options  fdOptions;
 };
 
 RFileSelector::RFileSelector(QWidget* const parent)
@@ -381,6 +383,11 @@ void RFileSelector::setFileDlgTitle(const QString& title)
     d->fdTitle = title;
 }
 
+void RFileSelector::setFileDlgOptions(QFileDialog::Options opts)
+{
+    d->fdOptions = opts;
+}
+
 void RFileSelector::slotBtnClicked()
 {
     if (d->fdMode == QFileDialog::ExistingFiles)
@@ -390,7 +397,7 @@ void RFileSelector::slotBtnClicked()
     }
 
     QFileDialog* const fileDlg = new QFileDialog(this);
-    fileDlg->setOption(QFileDialog::DontUseNativeDialog, true);
+    fileDlg->setOptions(d->fdOptions);
     fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
     fileDlg->setFileMode(d->fdMode);
 
