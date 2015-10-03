@@ -243,6 +243,10 @@ private Q_SLOTS:
 
 private:
 
+    void paintEvent(QPaintEvent*);
+    
+private:
+
     class Private;
     Private* const d;
 };
