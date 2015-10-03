@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef RWIDGETUTILS_h
-#define RWIDGETUTILS_h
+#ifndef RWIDGETUTILS_H
+#define RWIDGETUTILS_H
 
 // Qt includes
 
@@ -36,6 +36,8 @@
 #include <QSize>
 #include <QPixmap>
 #include <QFileDialog>
+#include <QColor>
+#include <QPushButton>
 
 // Local includes
 
@@ -215,6 +217,36 @@ private:
     QVector<QPixmap> m_frames;
 };
 
+// ------------------------------------------------------------------------------------
+
+/** A widget to chosse a color from a palette.
+ */
+class LIBKDCRAW_EXPORT RColorSelector : public QPushButton
+{
+    Q_OBJECT
+
+public:
+
+    explicit RColorSelector(QWidget* const parent=0);
+    virtual ~RColorSelector();
+    
+    void setColor(const QColor& color);
+    QColor color() const;
+
+Q_SIGNALS:
+
+    void signalColorSelected(const QColor&);
+
+private Q_SLOTS:
+
+    void slotBtnClicked();
+
+private:
+
+    class Private;
+    Private* const d;
+};
+
 } // namespace KDcrawIface
 
-#endif // RWIDGETUTILS_h
+#endif // RWIDGETUTILS_H

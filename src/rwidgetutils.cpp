@@ -40,6 +40,7 @@
 #include <QPainter>
 #include <QStandardPaths>
 #include <QVector>
+#include <QColorDialog>
 
 // KDE includes
 
@@ -499,6 +500,60 @@ QPixmap WorkingPixmap::frameAt(int index) const
     }
 
     return m_frames.at(index);
+}
+
+// ------------------------------------------------------------------------------------
+
+class Q_DECL_HIDDEN RColorSelector::Private
+{
+public:
+
+    Private()
+    {
+    }
+ 
+    QColor color;
+};
+
+RColorSelector::RColorSelector(QWidget* const parent)
+    : QPushButton(parent),
+      d(new Private)
+{
+    setText(QString());
+    
+    connect(this, SIGNAL(clicked()),
+            this, SLOT(slotBtnClicked()));
+}
+
+RColorSelector::~RColorSelector()
+{
+    delete d;
+}
+
+void RColorSelector::setColor(const QColor& color)
+{
+    if (color.isValid())
+    {
+        d->color = color;
+        setStyleSheet(QString::fromLatin1("background-color: rgb(%1, %2, %3); color: rgb(255, 255, 255)")
+                                          .arg(d->color.red()).arg(d->color.green()).arg(d->color.blue()));
+    }
+}    
+
+QColor RColorSelector::color() const
+{
+    return d->color;
+}    
+
+void RColorSelector::slotBtnClicked()
+{
+    QColor color = QColorDialog::getColor(d->color);
+
+    if (color.isValid())
+    {
+        setColor(color);
+        emit signalColorSelected(color);
+    }
 }
 
 } // namespace KDcrawIface
