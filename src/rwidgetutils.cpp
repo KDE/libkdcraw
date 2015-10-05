@@ -401,7 +401,7 @@ void RFileSelector::slotBtnClicked()
 
     QFileDialog* const fileDlg = new QFileDialog(this);
     fileDlg->setOptions(d->fdOptions);
-    fileDlg->setDirectory(QFileInfo(d->edit->text()).dir());
+    fileDlg->setDirectory(QFileInfo(d->edit->text()).filePath());
     fileDlg->setFileMode(d->fdMode);
 
     if (!d->fdFilter.isNull())
