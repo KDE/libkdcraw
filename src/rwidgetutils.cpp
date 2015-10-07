@@ -378,9 +378,6 @@ void RFileSelector::slotBtnClicked()
     if (!d->fdTitle.isNull())
         fileDlg->setWindowTitle(d->fdTitle);
 
-    connect(fileDlg, SIGNAL(urlSelected(QUrl)),
-            this, SIGNAL(signalUrlSelected(QUrl)));
-
     emit signalOpenFileDialog();
 
     if (fileDlg->exec() == QDialog::Accepted)
@@ -390,6 +387,7 @@ void RFileSelector::slotBtnClicked()
         if (!sel.isEmpty())
         {
             d->edit->setText(sel.first());
+            emit signalUrlSelected(QUrl::fromLocalFile(sel.first()));
         }
     }
     
