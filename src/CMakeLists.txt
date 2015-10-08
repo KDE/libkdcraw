@@ -19,7 +19,6 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     rwidgetutils.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
-                    squeezedcombobox.cpp
                     ractionthreadbase.cpp
                     ractionjob.cpp
                     libkdcraw_debug.cpp
@@ -32,7 +31,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      DcrawInfoContainer
                      RawDecodingSettings
                      RExpanderBox
-                     SqueezedComboBox
                      RActionThreadBase
                      RActionJob
                      RawFiles
