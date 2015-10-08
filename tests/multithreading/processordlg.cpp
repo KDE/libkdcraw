@@ -96,8 +96,8 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);
-    QLabel* const pid        = new QLabel(QString::fromUtf8("PID: %1", QCoreApplication::applicationPid()),  this);
-    QLabel* const core       = new QLabel(QString::fromUtf8("CPU Cores: %1", cpu), this);
+    QLabel* const pid        = new QLabel(QString::fromUtf8("PID: %1").arg(QCoreApplication::applicationPid()),  this);
+    QLabel* const core       = new QLabel(QString::fromUtf8("CPU Cores: %1").arg(cpu), this);
     QWidget* const hbox      = new QWidget(this);
     d->items                 = new QLabel(this);
 
@@ -169,7 +169,7 @@ ProcessorDlg::~ProcessorDlg()
 
 void ProcessorDlg::updateCount()
 {
-    d->items->setText(QString::fromUtf8("Files to process : %1", d->count));
+    d->items->setText(QString::fromUtf8("Files to process : %1").arg(d->count));
 }
 
 void ProcessorDlg::slotStart()
