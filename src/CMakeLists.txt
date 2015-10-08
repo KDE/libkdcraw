@@ -18,7 +18,6 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     rsliderspinbox.cpp
                     rnuminput.cpp
                     rexpanderbox.cpp
-                    rcombobox.cpp
                     rwidgetutils.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
@@ -34,7 +33,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      KDcraw
                      DcrawInfoContainer
                      RawDecodingSettings
-                     RComboBox
                      RNumInput
                      RExpanderBox
                      SqueezedComboBox
