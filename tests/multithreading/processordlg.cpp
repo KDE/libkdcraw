@@ -42,14 +42,9 @@
 #include <QHBoxLayout>
 #include <QScrollArea>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "actionthread.h"
-#include "dcrawsettingswidget.h"
 #include "rnuminput.h"
 
 class ProcessorDlg::Private
@@ -65,7 +60,6 @@ public:
         progressView = 0;
         usedCore     = 0;
         thread       = 0;
-        settings     = 0;
     }
 
     int                  count;
@@ -77,16 +71,16 @@ public:
 
     QList<QUrl>          list;
 
-    DcrawSettingsWidget* settings;
     RIntNumInput*        usedCore;
     ActionThread*        thread;
 };
 
 ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
-    : QDialog(0), d(new Private)
+    : QDialog(0),
+      d(new Private)
 {
     setModal(false);
-    setWindowTitle(i18n("Convert RAW files To PNG"));
+    setWindowTitle(QString::fromUtf8("Convert RAW files To PNG"));
 
     d->buttons               = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, this);
     d->thread                = new ActionThread(this);
@@ -102,13 +96,13 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);
-    QLabel* const pid        = new QLabel(i18n("PID: %1", QCoreApplication::applicationPid()),  this);
-    QLabel* const core       = new QLabel(i18n("CPU Cores: %1", cpu), this);
+    QLabel* const pid        = new QLabel(QString::fromUtf8("PID: %1", QCoreApplication::applicationPid()),  this);
+    QLabel* const core       = new QLabel(QString::fromUtf8("CPU Cores: %1", cpu), this);
     QWidget* const hbox      = new QWidget(this);
     d->items                 = new QLabel(this);
 
     QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
-    QLabel* const coresLabel = new QLabel(i18n("Cores to use: "), this);
+    QLabel* const coresLabel = new QLabel(QString::fromUtf8("Cores to use: "), this);
     d->usedCore              = new RIntNumInput(this);
     d->usedCore->setRange(1, cpu, 1);
     d->usedCore->setDefaultValue(cpu);
@@ -122,14 +116,11 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
     d->progressView->setWidget(progressbox);
     d->progressView->setWidgetResizable(true);
 
-    d->settings = new DcrawSettingsWidget(this);
-
     grid->addWidget(pid,             0, 0, 1, 1);
     grid->addWidget(core,            1, 0, 1, 1);
     grid->addWidget(hbox,            2, 0, 1, 1);
     grid->addWidget(d->items,        3, 0, 1, 1);
     grid->addWidget(d->progressView, 4, 0, 1, 1);
-    grid->addWidget(d->settings,     0, 1, 5, 1);
 
     foreach (const QUrl& url, d->list)
     {
@@ -178,7 +169,7 @@ ProcessorDlg::~ProcessorDlg()
 
 void ProcessorDlg::updateCount()
 {
-    d->items->setText(i18n("Files to process : %1", d->count));
+    d->items->setText(QString::fromUtf8("Files to process : %1", d->count));
 }
 
 void ProcessorDlg::slotStart()
@@ -187,10 +178,9 @@ void ProcessorDlg::slotStart()
 
     d->buttons->button(QDialogButtonBox::Apply)->setDisabled(true);
     d->usedCore->setDisabled(true);
-    d->settings->setDisabled(true);
 
     d->thread->setMaximumNumberOfThreads(d->usedCore->value());
-    d->thread->convertRAWtoPNG(d->list, d->settings->settings());
+    d->thread->convertRAWtoPNG(d->list, RawDecodingSettings());
     d->thread->start();
 }
 
@@ -256,7 +246,7 @@ void ProcessorDlg::slotFinished(const QUrl& url)
         b->setMinimum(0);
         b->setMaximum(100);
         b->setValue(100);
-        b->setFormat(i18n("Done"));
+        b->setFormat(QString::fromUtf8("Done"));
         d->count--;
         updateCount();
     }

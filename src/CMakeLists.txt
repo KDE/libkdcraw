@@ -20,7 +20,6 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     rexpanderbox.cpp
                     rcombobox.cpp
                     rwidgetutils.cpp
-                    dcrawsettingswidget.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
                     squeezedcombobox.cpp
@@ -33,7 +32,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
 
                      HEADER_NAMES
                      KDcraw
-                     DcrawSettingsWidget
                      DcrawInfoContainer
                      RawDecodingSettings
                      RComboBox
