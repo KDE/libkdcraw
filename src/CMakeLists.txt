@@ -15,8 +15,6 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
 set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
-                    rsliderspinbox.cpp
-                    rnuminput.cpp
                     rexpanderbox.cpp
                     rwidgetutils.cpp
                     dcrawinfocontainer.cpp
@@ -33,7 +31,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      KDcraw
                      DcrawInfoContainer
                      RawDecodingSettings
-                     RNumInput
                      RExpanderBox
                      SqueezedComboBox
                      RActionThreadBase

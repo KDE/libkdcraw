@@ -41,11 +41,11 @@
 #include <QDebug>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QSpinBox>
 
 // Local includes
 
 #include "actionthread.h"
-#include "rnuminput.h"
 
 class ProcessorDlg::Private
 {
@@ -71,7 +71,7 @@ public:
 
     QList<QUrl>          list;
 
-    RIntNumInput*        usedCore;
+    QSpinBox*            usedCore;
     ActionThread*        thread;
 };
 
@@ -103,9 +103,10 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     QHBoxLayout* const hlay  = new QHBoxLayout(hbox);
     QLabel* const coresLabel = new QLabel(QString::fromUtf8("Cores to use: "), this);
-    d->usedCore              = new RIntNumInput(this);
-    d->usedCore->setRange(1, cpu, 1);
-    d->usedCore->setDefaultValue(cpu);
+    d->usedCore              = new QSpinBox(this);
+    d->usedCore->setRange(1, cpu);
+    d->usedCore->setSingleStep(1);
+    d->usedCore->setValue(cpu);
     hlay->addWidget(coresLabel);
     hlay->addWidget(d->usedCore);
     hlay->setContentsMargins(QMargins());
