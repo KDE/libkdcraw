@@ -46,23 +46,6 @@
 namespace KDcrawIface
 {
 
-/** A widget to host an image into a label with an active url which can be 
- *  open to default web browser using simple mouse click.
- */
-class LIBKDCRAW_EXPORT RActiveLabel : public QLabel
-{
-    Q_OBJECT
-
-public:
-
-    explicit RActiveLabel(const QUrl& url=QUrl(), const QString& imgPath=QString(), QWidget* const parent=0);
-    virtual ~RActiveLabel();
-
-    void updateData(const QUrl& url, const QImage& img);
-};
-
-// ------------------------------------------------------------------------------------
-
 /**
  * A widget to show an horizontal or vertical line separator 
  **/
