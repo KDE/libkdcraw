@@ -54,34 +54,6 @@
 namespace KDcrawIface
 {
 
-RLineWidget::RLineWidget(Qt::Orientation orientation, QWidget* const parent)
-    : QFrame(parent)
-{
-    setLineWidth(1);
-    setMidLineWidth(0);
-
-    if (orientation == Qt::Vertical)
-    {
-        setFrameShape(QFrame::VLine);
-        setFrameShadow(QFrame::Sunken);
-        setMinimumSize(2, 0);
-    }
-    else
-    {
-        setFrameShape(QFrame::HLine);
-        setFrameShadow(QFrame::Sunken);
-        setMinimumSize(0, 2);
-    }
-
-    updateGeometry();
-}
-
-RLineWidget::~RLineWidget()
-{
-}
-
-// ------------------------------------------------------------------------------------
-
 RHBox::RHBox(QWidget* const parent)
     : QFrame(parent)
 {

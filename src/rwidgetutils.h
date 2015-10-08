@@ -46,21 +46,6 @@
 namespace KDcrawIface
 {
 
-/**
- * A widget to show an horizontal or vertical line separator 
- **/
-class LIBKDCRAW_EXPORT RLineWidget : public QFrame
-{
-    Q_OBJECT
-
-public:
-
-    explicit RLineWidget(Qt::Orientation orientation, QWidget* const parent=0);
-    virtual ~RLineWidget();
-};
-
-// ------------------------------------------------------------------------------------
-
 /** An Horizontal widget to host children widgets
  */
 class LIBKDCRAW_EXPORT RHBox : public QFrame
