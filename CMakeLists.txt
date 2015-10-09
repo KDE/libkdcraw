@@ -131,7 +131,4 @@ install(EXPORT      KF5KDcrawTargets
         NAMESPACE   KF5::
 )
 
-# Install data
-add_subdirectory(data)
-
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
