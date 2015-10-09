@@ -11,7 +11,6 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.1.0")
-set(KF5_VERSION         "5.1.0")
 set(REQUIRED_QT_VERSION "5.2.0")
 set(LIBRAW_MIN_VERSION  "0.16")
 
@@ -82,11 +81,6 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Widgets
              Gui
-)
-
-find_package(KF5 REQUIRED COMPONENTS
-             I18n
-             Config
 )
 
 find_package(LibRaw ${LIBRAW_MIN_VERSION} REQUIRED)

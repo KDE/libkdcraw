@@ -15,7 +15,6 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
 
 set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
-                    rwidgetutils.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
                     ractionthreadbase.cpp
@@ -32,7 +31,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      RActionThreadBase
                      RActionJob
                      RawFiles
-                     RWidgetUtils
 
                      PREFIX           KDCRAW
                      REQUIRED_HEADERS kdcraw_HEADERS
@@ -57,8 +55,6 @@ target_link_libraries(KF5KDcraw
                       Qt5::Core
                       Qt5::Widgets
                       Qt5::Gui
-                      KF5::I18n
-                      KF5::ConfigCore
 )
 
 set_target_properties(KF5KDcraw   PROPERTIES

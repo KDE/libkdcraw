@@ -36,10 +36,6 @@
 #include <QtCore/QString>
 #include <QtCore/QDebug>
 
-// KDE includes
-
-#include <kconfiggroup.h>
-
 // Local includes
 
 #include "libkdcraw_export.h"
@@ -185,11 +181,6 @@ public:
     /** Method to use a settings to optimize time loading, for exemple to compute image histogram
      */
     void optimizeTimeLoading();
-
-    /** Methods to read/write settings from/to a config file
-     */
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
 
 public:
 
