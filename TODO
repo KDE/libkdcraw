@@ -1,5 +1,3 @@
-- Add DNG writting mode support using Adobe DNG sdk
-
 - Libraw 0.13.0 features to support :
 
 1) Green channel local averaging. All interpolation methods, but may conflict with green_matching option, so it is safer to use only one green averaging.
