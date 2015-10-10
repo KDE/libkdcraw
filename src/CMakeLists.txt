@@ -11,8 +11,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
 
 add_definitions(${LibRaw_DEFINITIONS})
 
-remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII)
-
 set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawinfocontainer.cpp
@@ -53,7 +51,6 @@ target_link_libraries(KF5KDcraw
                       ${LibRaw_LIBRARIES}
                       PUBLIC
                       Qt5::Core
-                      Qt5::Widgets
                       Qt5::Gui
 )
 

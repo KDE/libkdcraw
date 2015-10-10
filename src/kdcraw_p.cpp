@@ -67,10 +67,10 @@ KDcraw::Private::~Private()
 
 void KDcraw::Private::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img)
 {
-    QString header = QString("P%1\n%2 %3\n%4\n").arg(img->colors == 3 ? "6" : "5")
-                                                .arg(img->width)
-                                                .arg(img->height)
-                                                .arg((1 << img->bits)-1);
+    QString header = QString::fromUtf8("P%1\n%2 %3\n%4\n").arg(img->colors == 3 ? QLatin1String("6") : QLatin1String("5"))
+                                                          .arg(img->width)
+                                                          .arg(img->height)
+                                                          .arg((1 << img->bits)-1);
     imgData.append(header.toLatin1());
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
 }
@@ -110,9 +110,9 @@ double KDcraw::Private::progressValue() const
 void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify)
 {
     identify.dateTime.setTime_t(raw->imgdata.other.timestamp);
-    identify.make             = QString(raw->imgdata.idata.make);
-    identify.model            = QString(raw->imgdata.idata.model);
-    identify.owner            = QString(raw->imgdata.other.artist);
+    identify.make             = QString::fromUtf8(raw->imgdata.idata.make);
+    identify.model            = QString::fromUtf8(raw->imgdata.idata.model);
+    identify.owner            = QString::fromUtf8(raw->imgdata.other.artist);
     identify.DNGVersion       = QString::number(raw->imgdata.idata.dng_version);
     identify.sensitivity      = raw->imgdata.other.iso_speed;
     identify.exposureTime     = raw->imgdata.other.shutter;
@@ -152,10 +152,10 @@ void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& i
 
         for (int i=0; i < 16; i++)
         {
-            identify.filterPattern.append(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1,i & 1)]);
+            identify.filterPattern.append(QChar::fromLatin1(raw->imgdata.idata.cdesc[raw->COLOR(i >> 1, i & 1)]));
         }
 
-        identify.colorKeys = raw->imgdata.idata.cdesc;
+        identify.colorKeys = QString::fromLatin1(raw->imgdata.idata.cdesc);
     }
 
     for(int c = 0 ; c < raw->imgdata.idata.colors ; c++)

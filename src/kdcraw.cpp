@@ -71,7 +71,7 @@ KDcraw::~KDcraw()
 
 QString KDcraw::version()
 {
-    return QString(KDCRAW_VERSION_STRING);
+    return QString::fromLatin1(KDCRAW_VERSION_STRING);
 }
 
 void KDcraw::cancel()
@@ -113,8 +113,8 @@ bool KDcraw::loadEmbeddedPreview(QImage& image, const QString& path)
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
-    QString   ext = fileInfo.suffix().toUpper();
+    QString   rawFilesExt = QString::fromUtf8(rawFiles());
+    QString   ext         = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
@@ -135,7 +135,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
 
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
 {
-    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+    QString rawFilesExt = QString::fromUtf8(rawFiles());
     LibRaw  raw;
 
     QByteArray inData = buffer.data();
@@ -154,7 +154,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
+    QString   rawFilesExt = QString::fromUtf8(rawFiles());
     QString   ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
@@ -191,7 +191,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
 bool KDcraw::loadHalfPreview(QByteArray& imgData, const QString& path)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
+    QString   rawFilesExt = QString::fromUtf8(rawFiles());
     QString   ext = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
@@ -226,7 +226,7 @@ bool KDcraw::loadHalfPreview(QByteArray& imgData, const QString& path)
 
 bool KDcraw::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 {
-    QString rawFilesExt(KDcrawIface::KDcraw::rawFiles());
+    QString rawFilesExt = QString::fromUtf8(rawFiles());
     LibRaw  raw;
 
     QByteArray inData = inBuffer.data();
@@ -257,8 +257,8 @@ bool KDcraw::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecodingSettings& settings)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
-    QString   ext = fileInfo.suffix().toUpper();
+    QString   rawFilesExt = QString::fromUtf8(rawFiles());
+    QString   ext         = fileInfo.suffix().toUpper();
 
     if (!fileInfo.exists() || ext.isEmpty() || !rawFilesExt.toUpper().contains(ext))
         return false;
@@ -312,7 +312,7 @@ bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecoding
 bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 {
     QFileInfo fileInfo(path);
-    QString   rawFilesExt(rawFiles());
+    QString rawFilesExt  = QString::fromUtf8(rawFiles());
     QString ext          = fileInfo.suffix().toUpper();
     identify.isDecodable = false;
 
@@ -349,7 +349,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
 bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawInfoContainer& identify, unsigned int shotSelect)
 {
     QFileInfo fileInfo(filePath);
-    QString   rawFilesExt(rawFiles());
+    QString rawFilesExt  = QString::fromUtf8(rawFiles());
     QString ext          = fileInfo.suffix().toUpper();
     identify.isDecodable = false;
 
@@ -502,7 +502,7 @@ const char* KDcraw::rawFiles()
 QStringList KDcraw::rawFilesList()
 {
     QString string = QString::fromLatin1(rawFiles());
-    return string.remove("*.").split(' ');
+    return string.remove(QLatin1String("*.")).split(QLatin1Char(' '));
 }
 
 int KDcraw::rawFilesVersion()
@@ -516,14 +516,14 @@ QStringList KDcraw::supportedCamera()
     const char** const list = LibRaw::cameraList();
 
     for (int i = 0; i < LibRaw::cameraCount(); i++)
-        camera.append(list[i]);
+        camera.append(QString::fromUtf8(list[i]));
 
     return camera;
 }
 
 QString KDcraw::librawVersion()
 {
-    return QString(LIBRAW_VERSION_STR).remove("-Release");
+    return QString::fromLatin1(LIBRAW_VERSION_STR).remove(QLatin1String("-Release"));
 }
 
 int KDcraw::librawUseGomp()
