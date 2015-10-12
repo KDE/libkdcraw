@@ -15,8 +15,6 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
-                    ractionthreadbase.cpp
-                    ractionjob.cpp
                     libkdcraw_debug.cpp
 )
 
@@ -26,8 +24,6 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
                      KDcraw
                      DcrawInfoContainer
                      RawDecodingSettings
-                     RActionThreadBase
-                     RActionJob
                      RawFiles
 
                      PREFIX           KDCRAW
