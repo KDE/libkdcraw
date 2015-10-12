@@ -36,10 +36,6 @@
 #include <QFileInfo>
 #include <QStringList>
 
-// KDE includes
-
-//#include <klibloader.h>
-
 // LibRaw includes
 
 #include <libraw_version.h>
