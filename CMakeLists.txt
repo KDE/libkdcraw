@@ -98,8 +98,6 @@ ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
 
 ############## Targets #########################
 
-add_definitions(-DTRANSLATION_DOMAIN=\"libkdcraw\")
-
 add_subdirectory(src)
 
 if (BUILD_TESTING)
