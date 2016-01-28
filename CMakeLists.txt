@@ -71,7 +71,7 @@ include(ECMMarkNonGuiExecutable)
 include(KDEInstallDirs)
 include(ECMInstallIcons)
 include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings)
+include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
