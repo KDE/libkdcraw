@@ -18,9 +18,6 @@ ECM        >= 1.1.0                    https://projects.kde.org/projects/kdesupp
 libqt      >= 5.2.0                    http://qt-project.org
 libraw     >= 0.16.x                   http://www.libraw.org
 
-Note: all library dependencies require development and binary packages installed on your
-computer to compile digiKam.
-
 -- INSTALL ------------------------------------------------------------
 
 Usual CMake options:
