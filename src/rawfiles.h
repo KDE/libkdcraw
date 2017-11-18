@@ -27,6 +27,7 @@
 #define RAW_FILES_H
 
 // NOTE: extension list Version 1 and 2 are taken from http://www.cybercom.net/~dcoffin/dcraw/rawphoto.c
+// NOTE: extension list Version 5 is taken from https://github.com/MrKepzie/Natron/issues/408#issuecomment-84959815
 
 //                                           Ext    Descriptions From
 //                                                  www.file-extensions.org
@@ -82,18 +83,17 @@ static const char raw_file_extentions[] =
 
 // NOTE: VERSION 4
 
-                                          "*.srw "; // Samnsung Raw Image Format.
+                                          "*.srw " // Samnsung Raw Image Format.
 
-/* TODO: check if these format are supported
+// NOTE: VERSION 5
                                           "*.drf "  // Kodak Digital Camera Raw Image Format.
                                           "*.dsc "  // Kodak Digital Camera Raw Image Format.
                                           "*.ptx "  // Pentax Digital Camera Raw Image Format.
                                           "*.cap "  // Phase One Digital Camera Raw Image Format.
                                           "*.iiq "  // Phase One Digital Camera Raw Image Format.
-                                          "*.rwz "  // Rawzor Digital Camera Raw Image Format.
-*/
+                                          "*.rwz "; // Rawzor Digital Camera Raw Image Format.
 
 // increment this number whenever you change the above string
-static const int raw_file_extensions_version = 4;
+static const int raw_file_extensions_version = 5;
 
 #endif // RAW_FILES_H
