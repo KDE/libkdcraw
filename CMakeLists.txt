@@ -42,21 +42,15 @@ cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 # 2.3.0 => 22.1.0 (Released with KDE 4.11.0 - Including Coverity Report fixes)
 # 2.3.1 => 22.1.1 (Released with KDE 4.11.2 - Including settings widget fixes)
 # 2.4.0 => 23.0.2 (Released with KDE 4.12.0 - Drop internal Libraw source code + new methods to get thumb and preview from QBuffer)
-# 5.0.0 => 30.0.0 (Released with KDE 5.x)
+# 5.0.0 => 5      (Released with KDE Applications)
 
 # Library API version
 SET(KDCRAW_LIB_MAJOR_VERSION "5")
 SET(KDCRAW_LIB_MINOR_VERSION "0")
 SET(KDCRAW_LIB_PATCH_VERSION "0")
 
-# Library ABI version used by linker.
-# For details : http://www.gnu.org/software/libtool/manual/libtool.html#Updating-version-info
-SET(KDCRAW_LIB_SO_CUR_VERSION "30")
-SET(KDCRAW_LIB_SO_REV_VERSION "0")
-SET(KDCRAW_LIB_SO_AGE_VERSION "0")
-
 SET(LIBKDCRAW_LIB_VERSION "${KDCRAW_LIB_MAJOR_VERSION}.${KDCRAW_LIB_MINOR_VERSION}.${KDCRAW_LIB_PATCH_VERSION}")
-SET(LIBDCRAW_SO_VERSION   "${KDCRAW_LIB_SO_CUR_VERSION}.${KDCRAW_LIB_SO_REV_VERSION}.${KDCRAW_LIB_SO_AGE_VERSION}")
+SET(LIBKDCRAW_SO_VERSION   5)
 
 ############## ECM setup ######################
 
