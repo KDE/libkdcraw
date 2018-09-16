@@ -80,7 +80,7 @@ public:
      * NOTE: for libraw>=0.19 only
      * 
      *  DHT:      DHT interpolation.
-     *  AAHD:     Enhanced Adaptative AHD interpolation.
+     *  AAHD:     Enhanced Adaptive AHD interpolation.
      */
     enum DecodingQuality
     {
@@ -103,8 +103,8 @@ public:
      *  NONE:     no white balance used : reverts to standard daylight D65 WB.
      *  CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
      *  AUTO:     Averages an auto WB on the entire image.
-     *  CUSTOM:   Let use set it's own temperature and green factor (later converted to RGBG factors).
-     *  AERA:     Let use an aera from image to average white balance (see whiteBalanceArea for details).
+     *  CUSTOM:   Let use set its own temperature and green factor (later converted to RGBG factors).
+     *  AERA:     Let use an area from image to average white balance (see whiteBalanceArea for details).
      */
     enum WhiteBalance
     {
@@ -177,14 +177,14 @@ public:
      */
     virtual ~RawDecodingSettings();
 
-    /** Method to use a settings to optimize time loading, for exemple to compute image histogram
+    /** Method to use a settings to optimize time loading, for example to compute image histogram
      */
     void optimizeTimeLoading();
 
 public:
 
     /** If true, images with overblown channels are processed much more accurate,
-     *  without 'pink clouds' (and blue highlights under tungsteen lamps).
+     *  without 'pink clouds' (and blue highlights under tungsten lamps).
      */
     bool fixColorsHighlights;
 
@@ -330,7 +330,7 @@ public:
      */
     bool eeciRefine;
 
-    /** Use edge-sensitive median filtering for artifact supression after VCD demosaicing.
+    /** Use edge-sensitive median filtering for artifact suppression after VCD demosaicing.
      * 0   : disable (default)
      * 1-10 : median filter passes.
      * @deprecated does not work with libraw>=0.19

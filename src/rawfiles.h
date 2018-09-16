@@ -83,7 +83,7 @@ static const char raw_file_extentions[] =
 
 // NOTE: VERSION 4
 
-                                          "*.srw " // Samnsung Raw Image Format.
+                                          "*.srw " // Samsung Raw Image Format.
 
 // NOTE: VERSION 5
                                           "*.drf "  // Kodak Digital Camera Raw Image Format.

@@ -271,7 +271,7 @@ bool KDcraw::loadFullImage(QImage& image, const QString& path, const RawDecoding
 
     if (!ret)
     {
-        qCDebug(LIBKDCRAW_LOG) << "Failled to load full RAW picture";
+        qCDebug(LIBKDCRAW_LOG) << "Failed to load full RAW picture";
         return false;
     }
 

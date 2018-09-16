@@ -239,7 +239,7 @@ protected:
 protected:
 
     /** Re-implement this method to control the cancelisation of loop witch wait data
-        from RAW decoding process with your propers envirronement.
+        from RAW decoding process with your proper environment.
         By default, this method check if m_cancel is true.
      */
     virtual bool checkToCancelWaitingData();

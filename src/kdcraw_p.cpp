@@ -86,7 +86,7 @@ int KDcraw::Private::progressCallback(enum LibRaw_progress p, int iteration, int
     // Clean processing termination by user...
     if (m_parent->checkToCancelWaitingData())
     {
-        qCDebug(LIBKDCRAW_LOG) << "LibRaw process terminaison invoked...";
+        qCDebug(LIBKDCRAW_LOG) << "LibRaw process termination invoked...";
         m_parent->m_cancel = true;
         m_progress         = 0.0;
         return 1;
