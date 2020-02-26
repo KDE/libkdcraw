@@ -228,47 +228,47 @@ void RawDecodingSettings::optimizeTimeLoading()
 
 QDebug operator<<(QDebug dbg, const RawDecodingSettings& s)
 {
-    dbg.nospace() << endl;
-    dbg.nospace() << "-- RAW DECODING SETTINGS --------------------------------" << endl;
-    dbg.nospace() << "-- autoBrightness:          " << s.autoBrightness          << endl;
-    dbg.nospace() << "-- sixteenBitsImage:        " << s.sixteenBitsImage        << endl;
-    dbg.nospace() << "-- brightness:              " << s.brightness              << endl;
-    dbg.nospace() << "-- RAWQuality:              " << s.RAWQuality              << endl;
-    dbg.nospace() << "-- inputColorSpace:         " << s.inputColorSpace         << endl;
-    dbg.nospace() << "-- outputColorSpace:        " << s.outputColorSpace        << endl;
-    dbg.nospace() << "-- RGBInterpolate4Colors:   " << s.RGBInterpolate4Colors   << endl;
-    dbg.nospace() << "-- DontStretchPixels:       " << s.DontStretchPixels       << endl;
-    dbg.nospace() << "-- unclipColors:            " << s.unclipColors            << endl;
-    dbg.nospace() << "-- whiteBalance:            " << s.whiteBalance            << endl;
-    dbg.nospace() << "-- customWhiteBalance:      " << s.customWhiteBalance      << endl;
-    dbg.nospace() << "-- customWhiteBalanceGreen: " << s.customWhiteBalanceGreen << endl;
-    dbg.nospace() << "-- halfSizeColorImage:      " << s.halfSizeColorImage      << endl;
-    dbg.nospace() << "-- enableBlackPoint:        " << s.enableBlackPoint        << endl;
-    dbg.nospace() << "-- blackPoint:              " << s.blackPoint              << endl;
-    dbg.nospace() << "-- enableWhitePoint:        " << s.enableWhitePoint        << endl;
-    dbg.nospace() << "-- whitePoint:              " << s.whitePoint              << endl;
-    dbg.nospace() << "-- NoiseReductionType:      " << s.NRType                  << endl;
-    dbg.nospace() << "-- NoiseReductionThreshold: " << s.NRThreshold             << endl;
-    dbg.nospace() << "-- enableCACorrection:      " << s.enableCACorrection      << endl;
+    dbg.nospace() << '\n';
+    dbg.nospace() << "-- RAW DECODING SETTINGS --------------------------------" << '\n';
+    dbg.nospace() << "-- autoBrightness:          " << s.autoBrightness          << '\n';
+    dbg.nospace() << "-- sixteenBitsImage:        " << s.sixteenBitsImage        << '\n';
+    dbg.nospace() << "-- brightness:              " << s.brightness              << '\n';
+    dbg.nospace() << "-- RAWQuality:              " << s.RAWQuality              << '\n';
+    dbg.nospace() << "-- inputColorSpace:         " << s.inputColorSpace         << '\n';
+    dbg.nospace() << "-- outputColorSpace:        " << s.outputColorSpace        << '\n';
+    dbg.nospace() << "-- RGBInterpolate4Colors:   " << s.RGBInterpolate4Colors   << '\n';
+    dbg.nospace() << "-- DontStretchPixels:       " << s.DontStretchPixels       << '\n';
+    dbg.nospace() << "-- unclipColors:            " << s.unclipColors            << '\n';
+    dbg.nospace() << "-- whiteBalance:            " << s.whiteBalance            << '\n';
+    dbg.nospace() << "-- customWhiteBalance:      " << s.customWhiteBalance      << '\n';
+    dbg.nospace() << "-- customWhiteBalanceGreen: " << s.customWhiteBalanceGreen << '\n';
+    dbg.nospace() << "-- halfSizeColorImage:      " << s.halfSizeColorImage      << '\n';
+    dbg.nospace() << "-- enableBlackPoint:        " << s.enableBlackPoint        << '\n';
+    dbg.nospace() << "-- blackPoint:              " << s.blackPoint              << '\n';
+    dbg.nospace() << "-- enableWhitePoint:        " << s.enableWhitePoint        << '\n';
+    dbg.nospace() << "-- whitePoint:              " << s.whitePoint              << '\n';
+    dbg.nospace() << "-- NoiseReductionType:      " << s.NRType                  << '\n';
+    dbg.nospace() << "-- NoiseReductionThreshold: " << s.NRThreshold             << '\n';
+    dbg.nospace() << "-- enableCACorrection:      " << s.enableCACorrection      << '\n';
     dbg.nospace() << "-- caMultiplier:            " << s.caMultiplier[0]
-                  << ", "                           << s.caMultiplier[1]         << endl;
-    dbg.nospace() << "-- medianFilterPasses:      " << s.medianFilterPasses      << endl;
-    dbg.nospace() << "-- inputProfile:            " << s.inputProfile            << endl;
-    dbg.nospace() << "-- outputProfile:           " << s.outputProfile           << endl;
-    dbg.nospace() << "-- deadPixelMap:            " << s.deadPixelMap            << endl;
-    dbg.nospace() << "-- whiteBalanceArea:        " << s.whiteBalanceArea        << endl;
+                  << ", "                           << s.caMultiplier[1]         << '\n';
+    dbg.nospace() << "-- medianFilterPasses:      " << s.medianFilterPasses      << '\n';
+    dbg.nospace() << "-- inputProfile:            " << s.inputProfile            << '\n';
+    dbg.nospace() << "-- outputProfile:           " << s.outputProfile           << '\n';
+    dbg.nospace() << "-- deadPixelMap:            " << s.deadPixelMap            << '\n';
+    dbg.nospace() << "-- whiteBalanceArea:        " << s.whiteBalanceArea        << '\n';
 
     //-- Extended demosaicing settings ----------------------------------------------------------
 
-    dbg.nospace() << "-- dcbIterations:           " << s.dcbIterations           << endl;
-    dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << endl;
-    dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << endl;
-    dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << endl;
-    dbg.nospace() << "-- NRChrominanceThreshold:  " << s.NRChroThreshold         << endl;
-    dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << endl;
-    dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << endl;
-    dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << endl;
-    dbg.nospace() << "---------------------------------------------------------" << endl;
+    dbg.nospace() << "-- dcbIterations:           " << s.dcbIterations           << '\n';
+    dbg.nospace() << "-- dcbEnhanceFl:            " << s.dcbEnhanceFl            << '\n';
+    dbg.nospace() << "-- eeciRefine:              " << s.eeciRefine              << '\n';
+    dbg.nospace() << "-- esMedPasses:             " << s.esMedPasses             << '\n';
+    dbg.nospace() << "-- NRChrominanceThreshold:  " << s.NRChroThreshold         << '\n';
+    dbg.nospace() << "-- expoCorrection:          " << s.expoCorrection          << '\n';
+    dbg.nospace() << "-- expoCorrectionShift:     " << s.expoCorrectionShift     << '\n';
+    dbg.nospace() << "-- expoCorrectionHighlight: " << s.expoCorrectionHighlight << '\n';
+    dbg.nospace() << "---------------------------------------------------------" << '\n';
 
     return dbg.space();
 }
