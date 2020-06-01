@@ -43,6 +43,8 @@
 namespace KDcrawIface
 {
 
+/** Settings for raw decoding
+ */
 class LIBKDCRAW_EXPORT RawDecodingSettings
 {
 

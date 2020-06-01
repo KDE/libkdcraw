@@ -40,6 +40,8 @@
 namespace KDcrawIface
 {
 
+/** A container for RAW image information
+ */
 class LIBKDCRAW_EXPORT DcrawInfoContainer
 {
 

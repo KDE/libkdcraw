@@ -52,6 +52,8 @@
 namespace KDcrawIface
 {
 
+/** The wrapper class.
+ */
 class LIBKDCRAW_EXPORT KDcraw : public QObject
 {
     Q_OBJECT
