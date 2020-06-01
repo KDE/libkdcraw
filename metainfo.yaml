@@ -1,9 +1,11 @@
-maintainer: agateau
+maintainer: gateau
+fancyname: KDcraw
 description: A thread-safe wrapper around libraw
-tier: 4
-type: integration
+type: functional
+public_lib: true
 platforms:
     - name: All
-portingAid: false
-deprecated: false
-release: false
+release: true
+libraries:
+    - cmake: "KF5::KDcraw"
+cmakename: KF5KDcraw
