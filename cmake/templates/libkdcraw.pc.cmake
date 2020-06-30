@@ -5,7 +5,7 @@ includedir=${INCLUDE_INSTALL_DIR}
 
 Name: ${PROJECT_NAME}
 Description: A C++ wrapper around LibRaw library to decode RAW pictures.
-URL: https://cgit.kde.org/libkdcraw.git/
+URL: https://commits.kde.org/libkdcraw
 Requires:
 Version: ${DCRAW_LIB_VERSION_STRING}
 Libs: -L${LIB_INSTALL_DIR} -lkdcraw

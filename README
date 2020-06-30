@@ -7,16 +7,16 @@ See AUTHORS file for details.
 -- ABOUT -------------------------------------------------------------
 
 Libkdcraw is a C++ interface around LibRaw library used to decode RAW
-picture files. More information about LibRaw can be found at http://www.libraw.org.
+picture files. More information about LibRaw can be found at https://www.libraw.org.
 
 The library documentation is available on header files.
 
 -- DEPENDENCIES -------------------------------------------------------
 
-CMake      >= 2.8.12                   http://www.cmake.org
-ECM        >= 1.1.0                    https://projects.kde.org/projects/kdesupport/extra-cmake-modules
-libqt      >= 5.2.0                    http://qt-project.org
-libraw     >= 0.16.x                   http://www.libraw.org
+CMake      >= 2.8.12                   https://www.cmake.org
+ECM        >= 1.1.0                    https://commits.kde.org/extra-cmake-modules
+libqt      >= 5.2.0                    https://qt.io
+libraw     >= 0.16.x                   https://www.libraw.org
 
 -- INSTALL ------------------------------------------------------------
 

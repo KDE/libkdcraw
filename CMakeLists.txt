@@ -79,7 +79,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
 find_package(LibRaw ${LIBRAW_MIN_VERSION} REQUIRED)
 set_package_properties("LibRaw"    PROPERTIES
                        DESCRIPTION "Required to build libkdcraw"
-                       URL         "http://www.libraw.org"
+                       URL         "https://www.libraw.org"
                        TYPE        RECOMMENDED
                        PURPOSE     "Library to decode RAW image"
 )
