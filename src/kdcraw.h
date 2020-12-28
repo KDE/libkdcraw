@@ -15,10 +15,10 @@
 
 // Qt includes
 
-#include <QtCore/QBuffer>
-#include <QtCore/QString>
-#include <QtCore/QObject>
-#include <QtGui/QImage>
+#include <QBuffer>
+#include <QString>
+#include <QObject>
+#include <QImage>
 
 // Local includes
 

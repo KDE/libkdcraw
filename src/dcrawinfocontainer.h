@@ -9,10 +9,10 @@
 
 // Qt includes
 
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QSize>
-#include <QtCore/QDebug>
+#include <QString>
+#include <QDateTime>
+#include <QSize>
+#include <QDebug>
 
 // Local includes
 

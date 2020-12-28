@@ -11,9 +11,9 @@
 
 // Qt includes
 
-#include <QtCore/QRect>
-#include <QtCore/QString>
-#include <QtCore/QDebug>
+#include <QRect>
+#include <QString>
+#include <QDebug>
 
 // Local includes
 
