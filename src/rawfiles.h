@@ -1,30 +1,16 @@
-/** ===========================================================
- * @file
- *
- * This file is a part of KDE project
- *
- *
- * @date   2005-11-06
- * @brief  list of RAW file extensions supported by libraw
- *
- * @author Copyright (C) 2005-2015 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+/*
+    SPDX-FileCopyrightText: 2005-2015 Gilles Caulier <caulier dot gilles at gmail dot com>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef RAW_FILES_H
 #define RAW_FILES_H
+
+/**
+ * @file
+ * @brief  list of RAW file extensions supported by libraw
+ */
 
 // NOTE: extension list Version 1 and 2 are taken from http://www.cybercom.net/~dcoffin/dcraw/rawphoto.c
 // NOTE: extension list Version 5 is taken from https://github.com/MrKepzie/Natron/issues/408#issuecomment-84959815

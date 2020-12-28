@@ -1,27 +1,8 @@
-/** ===========================================================
- * @file
- *
- * This file is a part of KDE project
- *
- *
- * @date   2007-05-02
- * @brief  RAW file identification information container
- *
- * @author Copyright (C) 2007-2015 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- *
- * This program is free software; you can redistribute it
- * and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * ============================================================ */
+/*
+    SPDX-FileCopyrightText: 2007-2015 Gilles Caulier <caulier dot gilles at gmail dot com>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef DCRAW_INFO_CONTAINER_H
 #define DCRAW_INFO_CONTAINER_H
