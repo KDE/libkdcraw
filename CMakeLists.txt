@@ -71,24 +71,26 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
-             Core
-             Gui
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE
+    COMPONENTS
+        Core
+        Gui
 )
 
 find_package(LibRaw ${LIBRAW_MIN_VERSION} REQUIRED)
 set_package_properties("LibRaw"    PROPERTIES
-                       DESCRIPTION "Required to build libkdcraw"
-                       URL         "https://www.libraw.org"
-                       TYPE        RECOMMENDED
-                       PURPOSE     "Library to decode RAW image"
+    DESCRIPTION "Required to build libkdcraw"
+    URL         "https://www.libraw.org"
+    TYPE        RECOMMENDED
+    PURPOSE     "Library to decode RAW image"
 )
 
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
-                  VARIABLE_PREFIX      KDCRAW
-                  VERSION_HEADER       "src/libkdcraw_version.h"
-                  PACKAGE_VERSION_FILE "KF5KDcrawConfigVersion.cmake"
-                  SOVERSION            ${LIBKDCRAW_SO_VERSION})
+    VARIABLE_PREFIX      KDCRAW
+    VERSION_HEADER       "src/libkdcraw_version.h"
+    PACKAGE_VERSION_FILE "KF5KDcrawConfigVersion.cmake"
+    SOVERSION            ${LIBKDCRAW_SO_VERSION}
+)
 
 ############## Targets #########################
 
@@ -110,16 +112,16 @@ configure_package_config_file(
 )
 
 install(FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        COMPONENT   Devel
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    COMPONENT   Devel
 )
 
-install(EXPORT      KF5KDcrawTargets
-        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE        KF5KDcrawTargets.cmake
-        NAMESPACE   KF5::
+install(EXPORT KF5KDcrawTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    FILE        KF5KDcrawTargets.cmake
+    NAMESPACE   KF5::
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
