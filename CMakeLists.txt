@@ -11,7 +11,7 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 set(CMAKE_MIN_VERSION   "2.8.12")
 set(ECM_MIN_VERSION     "1.1.0")
-set(REQUIRED_QT_VERSION "5.2.0")
+set(QT_MIN_VERSION      "5.2.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -72,7 +72,7 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
              Core
              Gui
 )
