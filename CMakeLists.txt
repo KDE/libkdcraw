@@ -4,17 +4,17 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+set(CMAKE_MIN_VERSION   "3.5.0")
+set(ECM_MIN_VERSION     "5.68.0")
+set(QT_MIN_VERSION      "5.12.0")
+set(LIBRAW_MIN_VERSION  "0.18")
+
+cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
+
 project(libkdcraw)
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
-
-set(CMAKE_MIN_VERSION   "2.8.12")
-set(ECM_MIN_VERSION     "1.1.0")
-set(QT_MIN_VERSION      "5.2.0")
-set(LIBRAW_MIN_VERSION  "0.18")
-
-cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
 # ==================================================================================================
 # Information to update before to release this library.
