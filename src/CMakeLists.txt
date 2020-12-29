@@ -15,7 +15,14 @@ set(kdcraw_LIB_SRCS kdcraw.cpp
                     kdcraw_p.cpp
                     dcrawinfocontainer.cpp
                     rawdecodingsettings.cpp
-                    libkdcraw_debug.cpp
+)
+
+ecm_qt_declare_logging_category(kdcraw_LIB_SRCS
+    HEADER libkdcraw_debug.h
+    IDENTIFIER LIBKDCRAW_LOG
+    CATEGORY_NAME "libkdcraw"
+    DESCRIPTION "libkdcraw"
+    EXPORT KDCRAW
 )
 
 ecm_generate_headers(kdcraw_CamelCase_HEADERS
@@ -78,4 +85,10 @@ install(FILES       ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
 install(FILES       "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
         DESTINATION "${KF5_INCLUDE_INSTALL_DIR}"
         COMPONENT   Devel
+)
+
+ecm_qt_install_logging_categories(
+    EXPORT KDCRAW
+    FILE libkdcraw.categories
+    DESTINATION "${KDE_INSTALL_LOGGINGCATEGORIESDIR}"
 )
