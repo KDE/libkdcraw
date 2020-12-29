@@ -94,6 +94,13 @@ ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
 
 ############## Targets #########################
 
+add_definitions(
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050B00
+    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
+    -DQT_NO_KEYWORDS
+    -DQT_NO_FOREACH
+)
+
 add_subdirectory(src)
 
 if (BUILD_TESTING)
