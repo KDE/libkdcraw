@@ -231,16 +231,10 @@ protected:
      */
     virtual void setWaitingDataProgress(double value);
 
-public:
-
-    // Declared public to be called externally by callbackForLibRaw() static method.
-    class Private;
-
 private:
+    std::unique_ptr<class KDcrawPrivate> const d;
 
-    Private* const d;
-
-    friend class Private;
+    friend class KDcrawPrivate;
 };
 
 }  // namespace KDcrawIface

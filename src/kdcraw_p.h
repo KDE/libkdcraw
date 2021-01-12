@@ -48,13 +48,13 @@ extern "C"
     int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int expected);
 }
 
-class Q_DECL_HIDDEN KDcraw::Private
+class KDcrawPrivate
 {
 
 public:
 
-    Private(KDcraw* const p);
-    ~Private();
+    explicit KDcrawPrivate(KDcraw* const p);
+    ~KDcrawPrivate();
 
 public:
 

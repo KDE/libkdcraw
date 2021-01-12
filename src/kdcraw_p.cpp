@@ -23,7 +23,7 @@ int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int exp
 {
     if (data)
     {
-        KDcraw::Private* const d = static_cast<KDcraw::Private*>(data);
+        KDcrawPrivate* const d = static_cast<KDcrawPrivate*>(data);
 
         if (d)
         {
@@ -36,17 +36,15 @@ int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int exp
 
 // --------------------------------------------------------------------------------------------------
 
-KDcraw::Private::Private(KDcraw* const p)
+KDcrawPrivate::KDcrawPrivate(KDcraw* const p)
 {
     m_progress = 0.0;
     m_parent   = p;
 }
 
-KDcraw::Private::~Private()
-{
-}
+KDcrawPrivate::~KDcrawPrivate() = default;
 
-void KDcraw::Private::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img)
+void KDcrawPrivate::createPPMHeader(QByteArray& imgData, libraw_processed_image_t* const img)
 {
     QString header = QString::fromUtf8("P%1\n%2 %3\n%4\n").arg(img->colors == 3 ? QLatin1String("6") : QLatin1String("5"))
                                                           .arg(img->width)
@@ -56,7 +54,7 @@ void KDcraw::Private::createPPMHeader(QByteArray& imgData, libraw_processed_imag
     imgData.append(QByteArray((const char*)img->data, (int)img->data_size));
 }
 
-int KDcraw::Private::progressCallback(enum LibRaw_progress p, int iteration, int expected)
+int KDcrawPrivate::progressCallback(enum LibRaw_progress p, int iteration, int expected)
 {
     qCDebug(LIBKDCRAW_LOG) << "LibRaw progress: " << libraw_strprogress(p) << " pass "
                            << iteration << " of " << expected;
@@ -77,18 +75,18 @@ int KDcraw::Private::progressCallback(enum LibRaw_progress p, int iteration, int
     return 0;
 }
 
-void KDcraw::Private::setProgress(double value)
+void KDcrawPrivate::setProgress(double value)
 {
     m_progress = value;
     m_parent->setWaitingDataProgress(m_progress);
 }
 
-double KDcraw::Private::progressValue() const
+double KDcrawPrivate::progressValue() const
 {
     return m_progress;
 }
 
-void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify)
+void KDcrawPrivate::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& identify)
 {
     identify.dateTime.setMSecsSinceEpoch(raw->imgdata.other.timestamp * 1000);
     identify.make             = QString::fromUtf8(raw->imgdata.idata.make);
@@ -153,7 +151,7 @@ void KDcraw::Private::fillIndentifyInfo(LibRaw* const raw, DcrawInfoContainer& i
     }
 }
 
-bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageData,
+bool KDcrawPrivate::loadFromLibraw(const QString& filePath, QByteArray& imageData,
                                      int& width, int& height, int& rgbmax)
 {
     m_parent->m_cancel = false;
@@ -303,7 +301,7 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
                DSLR will have a high dominant of color that will lead to
                a completely wrong WB
             */
-            if (rawFileIdentify(identify, filePath))
+            if (KDcraw::rawFileIdentify(identify, filePath))
             {
                 RGB[0] = identify.daylightMult[0] / RGB[0];
                 RGB[1] = identify.daylightMult[1] / RGB[1];
@@ -579,7 +577,7 @@ bool KDcraw::Private::loadFromLibraw(const QString& filePath, QByteArray& imageD
     return true;
 }
 
-bool KDcraw::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
+bool KDcrawPrivate::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
 {
     int ret = raw.unpack_thumb();
 
@@ -622,7 +620,7 @@ bool KDcraw::Private::loadEmbeddedPreview(QByteArray& imgData, LibRaw& raw)
     return true;
 }
 
-bool KDcraw::Private::loadHalfPreview(QImage& image, LibRaw& raw)
+bool KDcrawPrivate::loadHalfPreview(QImage& image, LibRaw& raw)
 {
     raw.imgdata.params.use_auto_wb   = 1;         // Use automatic white balance.
     raw.imgdata.params.use_camera_wb = 1;         // Use camera white balance, if possible.
@@ -656,7 +654,7 @@ bool KDcraw::Private::loadHalfPreview(QImage& image, LibRaw& raw)
         return false;
     }
 
-    Private::createPPMHeader(imgData, halfImg);
+    KDcrawPrivate::createPPMHeader(imgData, halfImg);
     // Clear memory allocation. Introduced with LibRaw 0.11.0
     raw.dcraw_clear_mem(halfImg);
     raw.recycle();

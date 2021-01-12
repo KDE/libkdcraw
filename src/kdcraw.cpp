@@ -33,7 +33,7 @@ namespace KDcrawIface
 {
 
 KDcraw::KDcraw()
-    : d(new Private(this))
+    : d(new KDcrawPrivate(this))
 {
     m_cancel = false;
 }
@@ -41,7 +41,6 @@ KDcraw::KDcraw()
 KDcraw::~KDcraw()
 {
     cancel();
-    delete d;
 }
 
 QString KDcraw::version()
@@ -105,7 +104,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QString& path)
         return false;
     }
 
-    return (Private::loadEmbeddedPreview(imgData, raw));
+    return (KDcrawPrivate::loadEmbeddedPreview(imgData, raw));
 }
 
 bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
@@ -123,7 +122,7 @@ bool KDcraw::loadEmbeddedPreview(QByteArray& imgData, const QBuffer& buffer)
         return false;
     }
 
-    return (Private::loadEmbeddedPreview(imgData, raw));
+    return (KDcrawPrivate::loadEmbeddedPreview(imgData, raw));
 }
 
 bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
@@ -152,7 +151,7 @@ bool KDcraw::loadHalfPreview(QImage& image, const QString& path)
     }
 
 
-    if(!Private::loadHalfPreview(image, raw))
+    if(!KDcrawPrivate::loadHalfPreview(image, raw))
     {
         qCDebug(LIBKDCRAW_LOG) << "Failed to get half preview from LibRaw!";
         return false;
@@ -186,7 +185,7 @@ bool KDcraw::loadHalfPreview(QByteArray& imgData, const QString& path)
 
     QImage image;
 
-    if (!Private::loadHalfPreview(image, raw))
+    if (!KDcrawPrivate::loadHalfPreview(image, raw))
     {
         qCDebug(LIBKDCRAW_LOG) << "KDcraw: failed to get half preview: " << libraw_strerror(ret);
         return false;
@@ -216,7 +215,7 @@ bool KDcraw::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 
     QImage image;
 
-    if (!Private::loadHalfPreview(image, raw))
+    if (!KDcrawPrivate::loadHalfPreview(image, raw))
     {
         qCDebug(LIBKDCRAW_LOG) << "KDcraw: failed to get half preview: " << libraw_strerror(ret);
         return false;
@@ -314,7 +313,7 @@ bool KDcraw::rawFileIdentify(DcrawInfoContainer& identify, const QString& path)
         return false;
     }
 
-    Private::fillIndentifyInfo(&raw, identify);
+    KDcrawPrivate::fillIndentifyInfo(&raw, identify);
     raw.recycle();
     return true;
 }
@@ -338,7 +337,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 
     LibRaw raw;
     // Set progress call back function.
-    raw.set_progress_handler(callbackForLibRaw, d);
+    raw.set_progress_handler(callbackForLibRaw, d.get());
 
     int ret = raw.open_file((const char*)(QFile::encodeName(filePath)).constData());
 
@@ -393,7 +392,7 @@ bool KDcraw::extractRAWData(const QString& filePath, QByteArray& rawData, DcrawI
 
     d->setProgress(0.6);
 
-    Private::fillIndentifyInfo(&raw, identify);
+    KDcrawPrivate::fillIndentifyInfo(&raw, identify);
 
     if (m_cancel)
     {
