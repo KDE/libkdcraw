@@ -80,7 +80,7 @@ private:
 
     double  m_progress;
 
-    KDcraw* m_parent;
+    KDcraw* const m_parent;
 
     friend class KDcraw;
 };

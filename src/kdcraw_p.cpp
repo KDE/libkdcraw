@@ -37,9 +37,9 @@ int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int exp
 // --------------------------------------------------------------------------------------------------
 
 KDcrawPrivate::KDcrawPrivate(KDcraw* const p)
+    : m_parent(p)
 {
     m_progress = 0.0;
-    m_parent   = p;
 }
 
 KDcrawPrivate::~KDcrawPrivate() = default;
