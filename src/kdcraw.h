@@ -12,6 +12,7 @@
 // C++ includes
 
 #include <cmath>
+#include <memory>
 
 // Qt includes
 
