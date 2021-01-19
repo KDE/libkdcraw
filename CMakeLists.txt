@@ -59,7 +59,7 @@ set(CMAKE_MODULE_PATH ${libkdcraw_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(ECMGenerateHeaders)
 include(ECMSetupVersion)
@@ -99,6 +99,12 @@ add_definitions(
     -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_NO_KEYWORDS
     -DQT_NO_FOREACH
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_NO_CAST_FROM_BYTEARRAY
+    -DQT_USE_QSTRINGBUILDER
+    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 )
 
 add_subdirectory(src)
