@@ -60,7 +60,7 @@ target_link_libraries(KF5KDcraw
 )
 
 set_target_properties(KF5KDcraw PROPERTIES
-    VERSION     ${KDCRAW_VERSION_STRING}
+    VERSION     ${KDCRAW_VERSION}
     SOVERSION   ${KDCRAW_SOVERSION}
     EXPORT_NAME KDcraw
 )
