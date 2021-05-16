@@ -76,3 +76,12 @@ MARK_AS_ADVANCED(LibRaw_VERSION
                  LibRaw_DEFINITIONS
                  LibRaw_r_DEFINITIONS
                  )
+
+if(LibRaw_FOUND AND NOT TARGET LibRaw::LibRaw)
+    add_library(LibRaw::LibRaw UNKNOWN IMPORTED)
+    set_target_properties(LibRaw::LibRaw PROPERTIES
+        IMPORTED_LOCATION "${LibRaw_LIBRARIES}"
+        INTERFACE_COMPILE_OPTIONS "${LibRaw_DEFINITIONS}"
+        INTERFACE_INCLUDE_DIRECTORIES "${LibRaw_INCLUDE_DIR}"
+    )
+endif()

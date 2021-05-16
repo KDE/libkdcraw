@@ -5,8 +5,8 @@
 #
 
 set(CMAKE_MIN_VERSION   "3.5.0")
-set(ECM_MIN_VERSION     "5.68.0")
-set(QT_MIN_VERSION      "5.12.0")
+set(ECM_MIN_VERSION     "5.80.0")
+set(QT_MIN_VERSION      "5.15.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -63,7 +63,6 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(ECMGenerateHeaders)
 include(ECMSetupVersion)
-include(ECMMarkNonGuiExecutable)
 include(CMakePackageConfigHelpers)
 include(ECMQtDeclareLoggingCategory)
 include(GenerateExportHeader)
@@ -85,17 +84,10 @@ set_package_properties("LibRaw"    PROPERTIES
     PURPOSE     "Library to decode RAW image"
 )
 
-ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
-    VARIABLE_PREFIX      KDCRAW
-    VERSION_HEADER       "src/libkdcraw_version.h"
-    PACKAGE_VERSION_FILE "KF5KDcrawConfigVersion.cmake"
-    SOVERSION            ${LIBKDCRAW_SO_VERSION}
-)
-
 ############## Targets #########################
 
 add_definitions(
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050B00
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050F00
     -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_NO_KEYWORDS
     -DQT_NO_FOREACH
@@ -112,29 +104,5 @@ add_subdirectory(src)
 if (BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
-############## CMake Config Files ##############
-
-message("${CMAKECONFIG_INSTALL_DIR}")
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5KDcraw")
-
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/KF5KDcrawConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
-    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
-)
-
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5KDcrawConfigVersion.cmake"
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    COMPONENT   Devel
-)
-
-install(EXPORT KF5KDcrawTargets
-    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-    FILE        KF5KDcrawTargets.cmake
-    NAMESPACE   KF5::
-)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

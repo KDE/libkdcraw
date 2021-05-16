@@ -4,21 +4,28 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW")
+set(KDCRAW_CMAKECONFIG_NAME "KF5KDcraw")
+
+ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
+    VARIABLE_PREFIX      KDCRAW
+    VERSION_HEADER       "libkdcraw_version.h"
+    PACKAGE_VERSION_FILE "${KDCRAW_CMAKECONFIG_NAME}ConfigVersion.cmake"
+    SOVERSION            ${LIBKDCRAW_SO_VERSION}
+)
+
 kde_enable_exceptions()
 
-include_directories(SYSTEM ${LibRaw_INCLUDE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+add_library(KDcraw SHARED)
 
-add_definitions(${LibRaw_DEFINITIONS})
-
-set(kdcraw_LIB_SRCS
+target_sources(KDcraw PRIVATE
     kdcraw.cpp
     kdcraw_p.cpp
     dcrawinfocontainer.cpp
     rawdecodingsettings.cpp
 )
 
-ecm_qt_declare_logging_category(kdcraw_LIB_SRCS
+ecm_qt_declare_logging_category(KDcraw
     HEADER libkdcraw_debug.h
     IDENTIFIER LIBKDCRAW_LOG
     CATEGORY_NAME "libkdcraw"
@@ -36,49 +43,43 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
     REQUIRED_HEADERS kdcraw_HEADERS
 )
 
-add_library(KF5KDcraw SHARED ${kdcraw_LIB_SRCS})
-add_library(KF5::KDcraw ALIAS KF5KDcraw)
-
-generate_export_header(KF5KDcraw
+generate_export_header(KDcraw
     BASE_NAME libkdcraw
 )
 
-set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE OFF)
-
-target_include_directories(KF5KDcraw
+target_include_directories(KDcraw
     INTERFACE
-        "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW;${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW/kdcraw>"
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+        "$<INSTALL_INTERFACE:${KDCRAW_INSTALL_INCLUDEDIR};${KDCRAW_INSTALL_INCLUDEDIR}/kdcraw>"
 )
 
-target_link_libraries(KF5KDcraw
+target_link_libraries(KDcraw
     PUBLIC
         Qt5::Core
         Qt5::Gui
     PRIVATE
-        ${LibRaw_LIBRARIES}
+        LibRaw::LibRaw
 )
 
-set_target_properties(KF5KDcraw PROPERTIES
+set_target_properties(KDcraw PROPERTIES
+    OUTPUT_NAME KF5KDcraw
     VERSION     ${KDCRAW_VERSION}
     SOVERSION   ${KDCRAW_SOVERSION}
-    EXPORT_NAME KDcraw
 )
 
-install(TARGETS KF5KDcraw
-    EXPORT  KF5KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+install(TARGETS KDcraw
+    EXPORT KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES 
     ${kdcraw_CamelCase_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW/KDCRAW
+    DESTINATION ${KDCRAW_INSTALL_INCLUDEDIR}/KDCRAW
     COMPONENT   Devel
 )
 
 install(FILES
     ${kdcraw_HEADERS}
     ${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_export.h
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW/kdcraw
+    DESTINATION ${KDCRAW_INSTALL_INCLUDEDIR}/kdcraw
     COMPONENT   Devel
 )
 
@@ -92,4 +93,28 @@ ecm_qt_install_logging_categories(
     EXPORT KDCRAW
     FILE libkdcraw.categories
     DESTINATION "${KDE_INSTALL_LOGGINGCATEGORIESDIR}"
+)
+
+############## CMake Config Files ##############
+
+message("${CMAKECONFIG_INSTALL_DIR}")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/${KDCRAW_CMAKECONFIG_NAME}")
+
+configure_package_config_file(
+    "${CMAKE_SOURCE_DIR}/cmake/templates/${KDCRAW_CMAKECONFIG_NAME}Config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${KDCRAW_CMAKECONFIG_NAME}Config.cmake"
+    INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/${KDCRAW_CMAKECONFIG_NAME}Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${KDCRAW_CMAKECONFIG_NAME}ConfigVersion.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    COMPONENT   Devel
+)
+
+install(EXPORT KDcrawTargets
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+    FILE        ${KDCRAW_CMAKECONFIG_NAME}Targets.cmake
+    NAMESPACE   KF5::
 )
