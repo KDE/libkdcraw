@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF5}/KDCRAW")
+set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/KDCRAW")
 set(KDCRAW_CMAKECONFIG_NAME "KF5KDcraw")
 
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
@@ -54,8 +54,8 @@ target_include_directories(KDcraw
 
 target_link_libraries(KDcraw
     PUBLIC
-        Qt5::Core
-        Qt5::Gui
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Gui
     PRIVATE
         LibRaw::LibRaw
 )
@@ -67,7 +67,7 @@ set_target_properties(KDcraw PROPERTIES
 )
 
 install(TARGETS KDcraw
-    EXPORT KDcrawTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT KDcrawTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES 
@@ -85,7 +85,7 @@ install(FILES
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-    DESTINATION "${KDE_INSTALL_INCLUDEDIR_KF5}"
+    DESTINATION "${KDE_INSTALL_INCLUDEDIR_KF}"
     COMPONENT   Devel
 )
 
