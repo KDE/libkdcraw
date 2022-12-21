@@ -66,50 +66,9 @@ RawDecodingSettings::~RawDecodingSettings()
 {
 }
 
-RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o)
-{
-    fixColorsHighlights     = o.fixColorsHighlights;
-    autoBrightness          = o.autoBrightness;
-    sixteenBitsImage        = o.sixteenBitsImage;
-    brightness              = o.brightness;
-    RAWQuality              = o.RAWQuality;
-    inputColorSpace         = o.inputColorSpace;
-    outputColorSpace        = o.outputColorSpace;
-    RGBInterpolate4Colors   = o.RGBInterpolate4Colors;
-    DontStretchPixels       = o.DontStretchPixels;
-    unclipColors            = o.unclipColors;
-    whiteBalance            = o.whiteBalance;
-    customWhiteBalance      = o.customWhiteBalance;
-    customWhiteBalanceGreen = o.customWhiteBalanceGreen;
-    halfSizeColorImage      = o.halfSizeColorImage;
-    enableBlackPoint        = o.enableBlackPoint;
-    blackPoint              = o.blackPoint;
-    enableWhitePoint        = o.enableWhitePoint;
-    whitePoint              = o.whitePoint;
-    NRType                  = o.NRType;
-    NRThreshold             = o.NRThreshold;
-    enableCACorrection      = o.enableCACorrection;
-    caMultiplier[0]         = o.caMultiplier[0];
-    caMultiplier[1]         = o.caMultiplier[1];
-    medianFilterPasses      = o.medianFilterPasses;
-    inputProfile            = o.inputProfile;
-    outputProfile           = o.outputProfile;
-    deadPixelMap            = o.deadPixelMap;
-    whiteBalanceArea        = o.whiteBalanceArea;
+RawDecodingSettings::RawDecodingSettings(const RawDecodingSettings& o) = default;
 
-    //-- Extended demosaicing settings ----------------------------------------------------------
-
-    dcbIterations           = o.dcbIterations;
-    dcbEnhanceFl            = o.dcbEnhanceFl;
-    eeciRefine              = o.eeciRefine;
-    esMedPasses             = o.esMedPasses;
-    NRChroThreshold         = o.NRChroThreshold;
-    expoCorrection          = o.expoCorrection;
-    expoCorrectionShift     = o.expoCorrectionShift;
-    expoCorrectionHighlight = o.expoCorrectionHighlight;
-
-    return *this;
-}
+RawDecodingSettings& RawDecodingSettings::operator=(const RawDecodingSettings& o) = default;
 
 bool RawDecodingSettings::operator==(const RawDecodingSettings& o) const
 {

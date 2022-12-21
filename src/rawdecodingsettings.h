@@ -146,6 +146,7 @@ public:
      */
     RawDecodingSettings();
 
+    RawDecodingSettings(const RawDecodingSettings& prm);
     /** Equivalent to the copy constructor
      */
     RawDecodingSettings& operator=(const RawDecodingSettings& prm);
