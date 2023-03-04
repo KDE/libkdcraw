@@ -9,12 +9,12 @@
 #
 # Additionally, the following imported library targets are created, which may be used directly
 # with target_link_libraries():
-#   KF5::KDcraw - the kdcraw library
+#   KF6::KDcraw - the kdcraw library
 
 @PACKAGE_INIT@
 
 include(CMakeFindDependencyMacro)
-find_dependency(Qt5Core @QT_MIN_VERSION@)
-find_dependency(Qt5Gui @QT_MIN_VERSION@)
+find_dependency(Qt6Core @QT_MIN_VERSION@)
+find_dependency(Qt6Gui @QT_MIN_VERSION@)
 
-include("${CMAKE_CURRENT_LIST_DIR}/KF5KDcrawTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KF6KDcrawTargets.cmake")
