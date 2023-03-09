@@ -43,8 +43,22 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
     REQUIRED_HEADERS kdcraw_HEADERS
 )
 
-generate_export_header(KDcraw
+if (QT_MAJOR_VERSION STREQUAL "5")
+    set(_generate_export_header_version_args)
+else()
+    # For Qt6/KF6 world transitively include the version header
+    if(ECM_VERSION VERSION_LESS "5.105")
+        set(include_version_header_code "#include <libkdcraw_version.h>\n")
+        set(_generate_export_header_version_args CUSTOM_CONTENT_FROM_VARIABLE include_version_header_code)
+    else()
+        set(_generate_export_header_version_args USE_VERSION_HEADER)
+    endif()
+endif()
+ecm_generate_export_header(KDcraw
     BASE_NAME libkdcraw
+    VERSION ${LIBKDCRAW_LIB_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    ${_generate_export_header_version_args}
 )
 
 target_include_directories(KDcraw
