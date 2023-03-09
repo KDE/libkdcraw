@@ -85,7 +85,7 @@ install(FILES
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/libkdcraw_version.h"
-    DESTINATION "${KDE_INSTALL_INCLUDEDIR_KF}"
+    DESTINATION "${KDCRAW_INSTALL_INCLUDEDIR}"
     COMPONENT   Devel
 )
 
