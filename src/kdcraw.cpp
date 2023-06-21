@@ -557,3 +557,5 @@ int KDcraw::librawUseGPL3DemosaicPack()
 }
 
 }  // namespace KDcrawIface
+
+#include "moc_kdcraw.cpp"
