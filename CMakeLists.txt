@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(CMAKE_MIN_VERSION   "3.5.0")
-set(ECM_MIN_VERSION     "5.80.0")
+set(CMAKE_MIN_VERSION   "3.16.0")
+set(ECM_MIN_VERSION     "5.91.0")
 set(QT_MIN_VERSION      "5.15.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
@@ -66,6 +66,7 @@ include(ECMSetupVersion)
 include(CMakePackageConfigHelpers)
 include(ECMQtDeclareLoggingCategory)
 include(ECMGenerateExportHeader)
+include(ECMDeprecationSettings)
 include(FeatureSummary)
 
 ############## Find Packages ###################
@@ -86,9 +87,11 @@ set_package_properties("LibRaw"    PROPERTIES
 
 ############## Targets #########################
 
+ecm_set_disabled_deprecation_versions(
+    QT 5.15
+)
+
 add_definitions(
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050F00
-    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
     -DQT_NO_KEYWORDS
     -DQT_NO_FOREACH
     -DQT_NO_CAST_TO_ASCII
