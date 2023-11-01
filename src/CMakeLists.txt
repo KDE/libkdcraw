@@ -18,6 +18,12 @@ kde_enable_exceptions()
 
 add_library(KDcraw SHARED)
 
+set_target_properties(KDcraw PROPERTIES
+    OUTPUT_NAME KF${QT_MAJOR_VERSION}KDcraw
+    VERSION     ${KDCRAW_VERSION}
+    SOVERSION   ${KDCRAW_SOVERSION}
+)
+
 target_sources(KDcraw PRIVATE
     kdcraw.cpp
     kdcraw_p.cpp
@@ -72,12 +78,6 @@ target_link_libraries(KDcraw
         Qt${QT_MAJOR_VERSION}::Gui
     PRIVATE
         LibRaw::LibRaw
-)
-
-set_target_properties(KDcraw PROPERTIES
-    OUTPUT_NAME KF${QT_MAJOR_VERSION}KDcraw
-    VERSION     ${KDCRAW_VERSION}
-    SOVERSION   ${KDCRAW_SOVERSION}
 )
 
 install(TARGETS KDcraw
