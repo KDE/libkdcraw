@@ -30,7 +30,6 @@ kde_enable_exceptions()
 add_library(KDcraw SHARED)
 
 set_target_properties(KDcraw PROPERTIES
-    OUTPUT_NAME KF${QT_MAJOR_VERSION}KDcraw
     VERSION     ${KDCRAW_VERSION}
     SOVERSION   ${KDCRAW_SOVERSION}
     OUTPUT_NAME ${LIBRARYFILE_NAME}
