@@ -27,7 +27,7 @@ ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
 
 kde_enable_exceptions()
 
-add_library(KDcraw SHARED)
+add_library(KDcraw)
 
 set_target_properties(KDcraw PROPERTIES
     VERSION     ${KDCRAW_VERSION}
