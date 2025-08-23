@@ -4,4 +4,15 @@ include(CMakeFindDependencyMacro)
 find_dependency(Qt@QT_MAJOR_VERSION@Core @QT_MIN_VERSION@)
 find_dependency(Qt@QT_MAJOR_VERSION@Gui @QT_MIN_VERSION@)
 
+if (NOT @BUILD_SHARED_LIBS@)
+    find_package(LibRaw ${LIBRAW_MIN_VERSION} QUIET)
+    if (NOT LibRaw_FOUND)
+        message(FATAL_ERROR
+            "Static build of KDcraw requires LibRaw."
+            "Please provide a FindLibRaw.cmake file on CMAKE_MODULE_PATH "
+            "or add libkdcraw/cmake/modules to CMAKE_MODULE_PATH."
+        )
+    endif()
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/@KDCRAW_CMAKECONFIG_NAME@Targets.cmake")
