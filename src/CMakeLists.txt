@@ -4,19 +4,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-if (QT_MAJOR_VERSION STREQUAL "5")
-    set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/KDCRAW")
-    set(KDCRAW_CMAKECONFIG_NAME "KF5KDcraw")
-    set(LIBRARYFILE_NAME "KF5KDcraw")
-    set(TARGET_EXPORT_NAME "KDcraw")
-    set(NAMESPACE_NAME "KF5::")
-else()
-    set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KDcrawQt6")
-    set(KDCRAW_CMAKECONFIG_NAME "KDcrawQt6")
-    set(LIBRARYFILE_NAME "KDcrawQt6")
-    set(TARGET_EXPORT_NAME "KDcrawQt6")
-    set(NAMESPACE_NAME "")
-endif()
+set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KDcrawQt6")
+set(KDCRAW_CMAKECONFIG_NAME "KDcrawQt6")
+set(LIBRARYFILE_NAME "KDcrawQt6")
+set(TARGET_EXPORT_NAME "KDcrawQt6")
+set(NAMESPACE_NAME "")
 
 ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
     VARIABLE_PREFIX      KDCRAW
@@ -61,22 +53,11 @@ ecm_generate_headers(kdcraw_CamelCase_HEADERS
     REQUIRED_HEADERS kdcraw_HEADERS
 )
 
-if (QT_MAJOR_VERSION STREQUAL "5")
-    set(_generate_export_header_version_args)
-else()
-    # For Qt6/KF6 world transitively include the version header
-    if(ECM_VERSION VERSION_LESS "5.105")
-        set(include_version_header_code "#include <libkdcraw_version.h>\n")
-        set(_generate_export_header_version_args CUSTOM_CONTENT_FROM_VARIABLE include_version_header_code)
-    else()
-        set(_generate_export_header_version_args USE_VERSION_HEADER)
-    endif()
-endif()
 ecm_generate_export_header(KDcraw
     BASE_NAME libkdcraw
     VERSION ${LIBKDCRAW_LIB_VERSION}
     DEPRECATED_BASE_VERSION 0
-    ${_generate_export_header_version_args}
+    USE_VERSION_HEADER
 )
 
 target_include_directories(KDcraw
@@ -86,8 +67,8 @@ target_include_directories(KDcraw
 
 target_link_libraries(KDcraw
     PUBLIC
-        Qt${QT_MAJOR_VERSION}::Core
-        Qt${QT_MAJOR_VERSION}::Gui
+        Qt6::Core
+        Qt6::Gui
     PRIVATE
         LibRaw::LibRaw
 )

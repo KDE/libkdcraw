@@ -5,8 +5,8 @@
 #
 
 set(CMAKE_MIN_VERSION   "3.16.0")
-set(ECM_MIN_VERSION     "5.91.0")
-set(QT_MIN_VERSION      "5.15.0")
+set(ECM_MIN_VERSION     "6.0.0")
+set(QT_MIN_VERSION      "6.5.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
@@ -71,11 +71,7 @@ include(FeatureSummary)
 
 ############## Find Packages ###################
 
-if (QT_MAJOR_VERSION STREQUAL "6")
-    set(QT_MIN_VERSION "6.5.0")
-endif()
-
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED NO_MODULE
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE
     COMPONENTS
         Core
         Gui
@@ -91,15 +87,9 @@ set_package_properties("LibRaw"    PROPERTIES
 
 ############## Targets #########################
 
-if (QT_MAJOR_VERSION STREQUAL "6")
-    ecm_set_disabled_deprecation_versions(
-        QT 6.5
-    )
-else()
-    ecm_set_disabled_deprecation_versions(
-        QT 5.15
-    )
-endif()
+ecm_set_disabled_deprecation_versions(
+    QT 6.5
+)
 
 add_subdirectory(src)
 
