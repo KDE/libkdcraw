@@ -71,7 +71,7 @@ target_link_libraries(KDcraw
 )
 
 install(TARGETS KDcraw
-    EXPORT KDcrawTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT KDcrawTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES 
