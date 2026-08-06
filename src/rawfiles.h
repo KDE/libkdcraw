@@ -78,6 +78,8 @@ static const char raw_file_extentions[] =
                                           "*.cap "  // Phase One Digital Camera Raw Image Format.
                                           "*.iiq "  // Phase One Digital Camera Raw Image Format.
                                           "*.rwz "; // Rawzor Digital Camera Raw Image Format.
+// NOTE: VERSION 6
+                                          "*.cr3 "  // Canon Digital Camera RAW Image Format version 3.0.
 
 // increment this number whenever you change the above string
 static const int raw_file_extensions_version = 5;
