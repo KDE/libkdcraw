@@ -7,6 +7,10 @@
 #ifndef RAW_FILES_H
 #define RAW_FILES_H
 
+// Include version header explicitly because the export header
+// (which usually takes care of that) isn't used here
+#include <libkdcraw_version.h> // IWYU pragma: export
+
 /**
  * @file
  * @brief  list of RAW file extensions supported by libraw
