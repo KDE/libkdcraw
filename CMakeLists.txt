@@ -9,9 +9,17 @@ set(ECM_MIN_VERSION     "6.0.0")
 set(QT_MIN_VERSION      "6.5.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
+# Library API version
+SET(KDCRAW_LIB_MAJOR_VERSION "5")
+SET(KDCRAW_LIB_MINOR_VERSION "0")
+SET(KDCRAW_LIB_PATCH_VERSION "0")
+
+SET(LIBKDCRAW_LIB_VERSION "${KDCRAW_LIB_MAJOR_VERSION}.${KDCRAW_LIB_MINOR_VERSION}.${KDCRAW_LIB_PATCH_VERSION}")
+SET(LIBKDCRAW_SO_VERSION   5)
+
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
-project(libkdcraw)
+project(libkdcraw VERSION ${LIBKDCRAW_LIB_VERSION})
 
 message(STATUS "----------------------------------------------------------------------------------")
 message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
@@ -43,14 +51,6 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 # 2.3.1 => 22.1.1 (Released with KDE 4.11.2 - Including settings widget fixes)
 # 2.4.0 => 23.0.2 (Released with KDE 4.12.0 - Drop internal Libraw source code + new methods to get thumb and preview from QBuffer)
 # 5.0.0 => 5      (Released with KDE Applications)
-
-# Library API version
-SET(KDCRAW_LIB_MAJOR_VERSION "5")
-SET(KDCRAW_LIB_MINOR_VERSION "0")
-SET(KDCRAW_LIB_PATCH_VERSION "0")
-
-SET(LIBKDCRAW_LIB_VERSION "${KDCRAW_LIB_MAJOR_VERSION}.${KDCRAW_LIB_MINOR_VERSION}.${KDCRAW_LIB_PATCH_VERSION}")
-SET(LIBKDCRAW_SO_VERSION   5)
 
 ############## ECM setup ######################
 
