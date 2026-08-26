@@ -127,3 +127,19 @@ install(EXPORT KDcrawTargets
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     FILE        ${KDCRAW_CMAKECONFIG_NAME}Targets.cmake
 )
+
+if(${ECM_VERSION} VERSION_GREATER_EQUAL 6.30)
+include(ECMInstalledLibraryCheck)
+
+ecm_add_installed_library_check(KDcraw
+    PACKAGE_NAME "${KDCRAW_CMAKECONFIG_NAME}"
+    NO_PACKAGE_TARGET_NAMESPACE
+)
+
+ecm_installed_library_check_include_strings(KDcraw
+    HEADERS ${kdcraw_CamelCase_HEADERS}
+    PREFIX KDCRAW
+)
+
+ecm_installed_library_check_version_preprocessor_macros(KDcraw)
+endif()
