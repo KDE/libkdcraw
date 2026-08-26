@@ -110,9 +110,15 @@ configure_package_config_file(
     INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
 
+set(_private_find_modules)
+if (NOT BUILD_SHARED_LIBS)
+    list(APPEND _private_find_modules "${CMAKE_SOURCE_DIR}/cmake/modules/FindLibRaw.cmake")
+endif()
+
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/${KDCRAW_CMAKECONFIG_NAME}Config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/${KDCRAW_CMAKECONFIG_NAME}ConfigVersion.cmake"
+    ${_private_find_modules}
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
     COMPONENT   Devel
 )
