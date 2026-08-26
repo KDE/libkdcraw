@@ -7,7 +7,7 @@
 set(KDCRAW_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/KDcrawQt6")
 set(KDCRAW_CMAKECONFIG_NAME "KDcrawQt6")
 
-ecm_setup_version(${LIBKDCRAW_LIB_VERSION}
+ecm_setup_version(PROJECT
     VARIABLE_PREFIX      KDCRAW
     VERSION_HEADER       "libkdcraw_version.h"
     PACKAGE_VERSION_FILE "${KDCRAW_CMAKECONFIG_NAME}ConfigVersion.cmake"
