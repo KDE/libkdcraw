@@ -22,46 +22,63 @@
 namespace KDcrawIface
 {
 
-/** Settings for raw decoding
+/*!
+ * \class KDcrawIface::RawDecodingSettings
+ * \inmodule libKDcraw
+ * \brief Settings for raw decoding
  */
 class LIBKDCRAW_EXPORT RawDecodingSettings
 {
 
 public:
 
-    /** RAW decoding Interpolation methods
+    /*! RAW decoding Interpolation methods
+     * \enum KDcrawIface::RawDecodingSettings::DecodingQuality
      *
-     *  Bilinear: use high-speed but low-quality bilinear
-     *            interpolation (default - for slow computer). In this method,
-     *            the red value of a non-red pixel is computed as the average of
-     *            the adjacent red pixels, and similar for blue and green.
-     *  VNG:      use Variable Number of Gradients interpolation.
-     *            This method computes gradients near the pixel of interest and uses
-     *            the lower gradients (representing smoother and more similar parts
-     *            of the image) to make an estimate.
-     *  PPG:      use Patterned Pixel Grouping interpolation.
-     *            Pixel Grouping uses assumptions about natural scenery in making estimates.
-     *            It has fewer color artifacts on natural images than the Variable Number of
-     *            Gradients method.
-     *  AHD:      use Adaptive Homogeneity-Directed interpolation.
-     *            This method selects the direction of interpolation so as to
-     *            maximize a homogeneity metric, thus typically minimizing color artifacts.
-     *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
+     *  \value BILINEAR
+     *         use high-speed but low-quality bilinear
+     *         interpolation (default - for slow computer). In this method,
+     *         the red value of a non-red pixel is computed as the average of
+     *         the adjacent red pixels, and similar for blue and green.
+     *  \value VNG
+     *         use Variable Number of Gradients interpolation.
+     *         This method computes gradients near the pixel of interest and uses
+     *         the lower gradients (representing smoother and more similar parts
+     *         of the image) to make an estimate.
+     *  \value PPG
+     *         use Patterned Pixel Grouping interpolation.
+     *         Pixel Grouping uses assumptions about natural scenery in making estimates.
+     *         It has fewer color artifacts on natural images than the Variable Number of
+     *         Gradients method.
+     *  \value AHD
+     *         use Adaptive Homogeneity-Directed interpolation.
+     *         This method selects the direction of interpolation so as to
+     *         maximize a homogeneity metric, thus typically minimizing color artifacts.
+     *  \value DCB
+     *         DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
      * 
-     * NOTE: from GPL2/GPL3 demosaic packs - will not work with libraw>=0.19
+     * \note from GPL2/GPL3 demosaic packs - will not work with libraw>=0.19
      * 
-     *  PL_AHD:   modified AHD interpolation (see https://sites.google.com/site/demosaicalgorithms/modified-dcraw
-     *            for details).
-     *  AFD:      demosaicing through 5 pass median filter from PerfectRaw project.
-     *  VCD:      VCD interpolation.
-     *  VCD_AHD:  mixed demosaicing between VCD and AHD.
-     *  LMMSE:    LMMSE interpolation from PerfectRaw.
-     *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
+     *  \value PL_AHD
+     *        modified AHD interpolation (see https://sites.google.com/site/demosaicalgorithms/modified-dcraw
+     *         for details).
+     *  \value AFD
+     *         demosaicing through 5 pass median filter from PerfectRaw project.
+     *  \value VCD
+     *         VCD interpolation.
+     *  \value VCD_AHD
+     *         mixed demosaicing between VCD and AHD.
+     *  \value LMMSE
+     *         LMMSE interpolation from PerfectRaw.
+     *  \value AMAZE
+     *         AMaZE interpolation and color aberration removal from RawTherapee project.
      *
-     * NOTE: for libraw>=0.19 only
+     * \note for libraw>=0.19 only
      * 
-     *  DHT:      DHT interpolation.
-     *  AAHD:     Enhanced Adaptive AHD interpolation.
+     *  \value DHT
+     *         DHT interpolation.
+     *  \value AAHD
+     *         Enhanced Adaptive AHD interpolation.
      */
     enum DecodingQuality
     {
@@ -80,12 +97,18 @@ public:
         AAHD     = 12
     };
 
-    /** White balances alternatives
-     *  NONE:     no white balance used : reverts to standard daylight D65 WB.
-     *  CAMERA:   Use the camera embedded WB if available. Reverts to NONE if not.
-     *  AUTO:     Averages an auto WB on the entire image.
-     *  CUSTOM:   Let use set its own temperature and green factor (later converted to RGBG factors).
-     *  AERA:     Let use an area from image to average white balance (see whiteBalanceArea for details).
+    /*! White balances alternatives
+     * \enum KDcrawIface::RawDecodingSettings::WhiteBalance
+     *  \value NONE
+     *         no white balance used : reverts to standard daylight D65 WB.
+     *  \value CAMERA
+     *         Use the camera embedded WB if available. Reverts to NONE if not.
+     *  \value AUTO
+     *         Averages an auto WB on the entire image.
+     *  \value CUSTOM
+     *         Let use set its own temperature and green factor (later converted to RGBG factors).
+     *  \value AERA
+     *         Let use an area from image to average white balance (see whiteBalanceArea for details).
      */
     enum WhiteBalance
     {
@@ -96,12 +119,18 @@ public:
         AERA    = 4
     };
 
-    /** Noise Reduction method to apply before demosaicing
-     *  NONR:       No noise reduction.
-     *  WAVELETSNR: wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
-     *  FBDDNR:     Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
-     *  LINENR:     CFA Line Denoise. It's applied after interpolation.
-     *  IMPULSENR:  Impulse Denoise. It's applied after interpolation.
+    /*! Noise Reduction method to apply before demosaicing
+     * \enum KDcrawIface::RawDecodingSettings::NoiseReduction
+     *  \value NONR
+     *         No noise reduction.
+     *  \value WAVELETSNR
+     *         wavelets correction to erase noise while preserving real detail. It's applied after interpolation.
+     *  \value FBDDNR
+     *         Fake Before Demosaicing Denoising noise reduction. It's applied before interpolation.
+     *  \value LINENR
+     *         CFA Line Denoise. It's applied after interpolation.
+     *  \value IMPULSENR
+     *         Impulse Denoise. It's applied after interpolation.
      */
     enum NoiseReduction
     {
@@ -112,10 +141,14 @@ public:
         IMPULSENR
     };
 
-    /** Input color profile used to decoded image
-     *  NOINPUTCS:     No input color profile.
-     *  EMBEDDED:      Use the camera profile embedded in RAW file if exist.
-     *  CUSTOMINPUTCS: Use a custom input color space profile.
+    /*! Input color profile used to decoded image
+     * \enum KDcrawIface::RawDecodingSettings::InputColorSpace
+     *  \value NOINPUTCS
+     *         No input color profile.
+     *  \value EMBEDDED
+     *         Use the camera profile embedded in RAW file if exist.
+     *  \value CUSTOMINPUTCS
+     *         Use a custom input color space profile.
      */
     enum InputColorSpace
     {
@@ -124,13 +157,20 @@ public:
         CUSTOMINPUTCS
     };
 
-    /** Output RGB color space used to decoded image
-     *  RAWCOLOR:       No output color profile (Linear RAW).
-     *  SRGB:           Use standard sRGB color space.
-     *  ADOBERGB:       Use standard Adobe RGB color space.
-     *  WIDEGAMMUT:     Use standard RGB Wide Gamut color space.
-     *  PROPHOTO:       Use standard RGB Pro Photo color space.
-     *  CUSTOMOUTPUTCS: Use a custom workspace color profile.
+    /*! Output RGB color space used to decoded image
+     * \enum KDcrawIface::RawDecodingSettings::OutputColorSpace
+     *  \value RAWCOLOR
+     *         No output color profile (Linear RAW).
+     *  \value SRGB
+     *         Use standard sRGB color space.
+     *  \value ADOBERGB
+     *         Use standard Adobe RGB color space.
+     *  \value WIDEGAMMUT
+     *         Use standard RGB Wide Gamut color space.
+     *  \value PROPHOTO
+     *         Use standard RGB Pro Photo color space.
+     *  \value CUSTOMOUTPUTCS
+     *         Use a custom workspace color profile.
      */
     enum OutputColorSpace
     {
@@ -142,152 +182,160 @@ public:
         CUSTOMOUTPUTCS
     };
 
-    /** Standard constructor with default settings
+    /*! Standard constructor
      */
     RawDecodingSettings();
 
+    /*! Standard constructor with default settings
+     */
     RawDecodingSettings(const RawDecodingSettings& prm);
-    /** Equivalent to the copy constructor
+
+    /*! Equivalent to the copy constructor
      */
     RawDecodingSettings& operator=(const RawDecodingSettings& prm);
 
-    /** Compare for equality
+    /*! Compare for equality
      */
     bool operator==(const RawDecodingSettings& o) const;
 
-    /** Standard destructor
+    /*! Standard destructor
      */
     virtual ~RawDecodingSettings();
 
-    /** Method to use a settings to optimize time loading, for example to compute image histogram
+    /*! Method to use a settings to optimize time loading, for example to compute image histogram
      */
     void optimizeTimeLoading();
 
 public:
 
-    /** If true, images with overblown channels are processed much more accurate,
+    /*! If true, images with overblown channels are processed much more accurately,
      *  without 'pink clouds' (and blue highlights under tungsten lamps).
      */
     bool fixColorsHighlights;
 
-    /** If false, use a fixed white level, ignoring the image histogram.
+    /*! If false, use a fixed white level, ignoring the image histogram.
      */
     bool autoBrightness;
 
-    /** Turn on RAW file decoding in 16 bits per color per pixel instead 8 bits.
+    /*! Turn on RAW file decoding in 16 bits per color per pixel instead 8 bits.
      */
     bool sixteenBitsImage;
 
-    /** Half-size color image decoding (twice as fast as "enableRAWQuality").
+    /*! Half-size color image decoding (twice as fast as "enableRAWQuality").
      *  Turn on this option to reduce time loading to render histogram for example,
      *  no to render an image to screen.
      */
     bool halfSizeColorImage;
 
-    /** White balance type to use. See WhiteBalance values for detail
+    /*! White balance type to use.
+     * \sa WhiteBalance
      */
     WhiteBalance whiteBalance;
 
-    /** The temperature and the green multiplier of the custom white balance
+    /*! The temperature and the green multiplier of the custom white balance
      */
     int    customWhiteBalance;
     double customWhiteBalanceGreen;
 
-    /** Turn on RAW file decoding using RGB interpolation as four colors.
+    /*! Turn on RAW file decoding using RGB interpolation as four colors.
      */
     bool RGBInterpolate4Colors;
 
-    /** For cameras with non-square pixels, do not stretch the image to its
+    /*! For cameras with non-square pixels, do not stretch the image to its
      *  correct aspect ratio. In any case, this option guarantees that each
      *  output pixel corresponds to one RAW pixel.
      */
     bool DontStretchPixels;
 
-    /** Unclip Highlight color level:
-     *  0   = Clip all highlights to solid white.
-     *  1   = Leave highlights unclipped in various shades of pink.
-     *  2   = Blend clipped and unclipped values together for a gradual
-     *        fade to white.
-     *  3-9 = Reconstruct highlights. Low numbers favor whites; high numbers
-     *        favor colors.
+    /*! Unclip Highlight color level:
+     * \list
+     *  \li 0   = Clip all highlights to solid white.
+     *  \li 1   = Leave highlights unclipped in various shades of pink.
+     *  \li 2   = Blend clipped and unclipped values together for a gradual
+     *            fade to white.
+     *  \li 3-9 = Reconstruct highlights. Low numbers favor whites; high numbers
+     *            favor colors.
+     * \endlist
      */
     int unclipColors;
 
-    /** RAW quality decoding factor value. See DecodingQuality values
-     *  for details.
+    /*! RAW quality decoding factor value.
+     * \sa DecodingQuality
      */
     DecodingQuality RAWQuality;
 
-    /** After interpolation, clean up color artifacts by repeatedly applying
+    /*! After interpolation, clean up color artifacts by repeatedly applying
      *  a 3x3 median filter to the R-G and B-G channels.
      */
     int medianFilterPasses;
 
-    /** Noise reduction method to apply before demosaicing.
+    /*! Noise reduction method to apply before demosaicing.
      */
     NoiseReduction NRType;
 
-    /** Noise reduction threshold value. Null value disable NR. Range is between 100 and 1000.
+    /*! Noise reduction threshold value. Null value disable NR. Range is between 100 and 1000.
      *  For IMPULSENR : set the amount of Luminance impulse denoise.
      */
     int NRThreshold;
 
-    /** Turn on chromatic aberrations correction
-     *  @deprecated does not work with libraw>=0.19
+    /*! Turn on chromatic aberrations correction.
+     *  \deprecated [0.19] does not work with libraw>=0.19
      */
     bool enableCACorrection;
 
-    /** Magnification factor for Red and Blue layers
-     *  - caMultiplier[0] = amount of correction on red-green axis.
-     *  - caMultiplier[1] = amount of correction on blue-yellow axis.
-     *  - Both values set to 0.0 = automatic CA correction.
-     *  @deprecated does not work with libraw>=0.19
+    /*! Magnification factor for Red and Blue layers
+     * \list
+     *  \li caMultiplier[0] = amount of correction on red-green axis.
+     *  \li caMultiplier[1] = amount of correction on blue-yellow axis.
+     *  \li Both values set to 0.0 = automatic CA correction.
+     * \endlist
+     *  \deprecated [0.19] does not work with libraw>=0.19
      */
     double caMultiplier[2];
 
-    /** Brightness of output image.
+    /*! Brightness of output image.
      */
     double brightness;
 
-    /** Turn on the black point setting to decode RAW image.
+    /*! Turn on the black point setting to decode RAW image.
      */
     bool enableBlackPoint;
 
-    /** Black Point value of output image.
+    /*! Black Point value of output image.
      */
     int blackPoint;
 
-    /** Turn on the white point setting to decode RAW image.
+    /*! Turn on the white point setting to decode RAW image.
      */
     bool enableWhitePoint;
 
-    /** White Point value of output image.
+    /*! White Point value of output image.
      */
     int whitePoint;
 
-    /** The input color profile used to decoded RAW data. See OutputColorProfile
-     *  values for details.
+    /*! The input color profile used to decoded RAW data.
+     * \sa InputColorSpace
      */
     InputColorSpace inputColorSpace;
 
-    /** Path to custom input ICC profile to define the camera's raw colorspace.
+    /*! Path to custom input ICC profile to define the camera's raw colorspace.
      */
     QString inputProfile;
 
-    /** The output color profile used to decoded RAW data. See OutputColorProfile
-     *  values for details.
+    /*! The output color profile used to decoded RAW data.
+     * \sa OutputColorSpace
      */
     OutputColorSpace outputColorSpace;
 
-    /** Path to custom output ICC profile to define the color workspace.
+    /*! Path to custom output ICC profile to define the color workspace.
      */
     QString outputProfile;
 
-    /** Path to text file including dead pixel list.
+    /*! Path to text file including dead pixel list.
      */
     QString deadPixelMap;
 
-    /** Rectangle used to calculate the white balance by averaging the region of image.
+    /*! Rectangle used to calculate the white balance by averaging the region of image.
      */
     QRect whiteBalanceArea;
 
@@ -295,46 +343,50 @@ public:
 
     /// For DCB interpolation.
 
-    /** Number of DCB median filtering correction passes.
-     * -1   : disable (default)
-     * 1-10 : DCB correction passes
+    /*! Number of DCB median filtering correction passes.
+     * \list
+     * \li -1   : disable (default)
+     * \li 1-10 : DCB correction passes
+     * \endlist
      */
     int dcbIterations;
 
-    /** Turn on the DCB interpolation with enhance interpolated colors.
+    /*! Turn on the DCB interpolation with enhance interpolated colors.
      */
     bool dcbEnhanceFl;
 
     /// For VCD_AHD interpolation.
 
-    /** Turn on the EECI refine for VCD Demosaicing.
-     *  @deprecated does not work with libraw>=0.19
+    /*! Turn on the EECI refine for VCD Demosaicing.
+     *  \deprecated [0.19] does not work with libraw>=0.19
      */
     bool eeciRefine;
 
-    /** Use edge-sensitive median filtering for artifact suppression after VCD demosaicing.
-     * 0   : disable (default)
-     * 1-10 : median filter passes.
-     * @deprecated does not work with libraw>=0.19
+    /*! Use edge-sensitive median filtering for artifact suppression after VCD demosaicing.
+     * \list
+     * \li 0   : disable (default)
+     * \li 1-10 : median filter passes.
+     * \endlist
+     * \deprecated [0.19] does not work with libraw>=0.19
      */
     int esMedPasses;
 
-    /** For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
+    /*! For IMPULSENR Noise reduction. Set the amount of Chrominance impulse denoise.
      *  Null value disable NR. Range is between 100 and 1000.
-     *  @deprecated does not work with libraw>=0.19
+     *  \deprecated [0.19] does not work with libraw>=0.19
      */
     int NRChroThreshold;
 
-    /** Turn on the Exposure Correction before interpolation.
+    /*! Turn on the Exposure Correction before interpolation.
      */
     bool expoCorrection;
 
-    /** Shift of Exposure Correction before interpolation in linear scale.
+    /*! Shift of Exposure Correction before interpolation in linear scale.
      *  Usable range is from 0.25 (darken image 1 stop : -2EV) to 8.0 (lighten ~1.5 photographic stops : +3EV).
      */
     double expoCorrectionShift;
 
-    /** Amount of highlight preservation for exposure correction before interpolation in E.V.
+    /*! Amount of highlight preservation for exposure correction before interpolation in E.V.
      *  Usable range is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation)
      *  This settings can only take effect if expoCorrectionShift > 1.0. 
      */

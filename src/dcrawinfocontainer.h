@@ -21,14 +21,24 @@
 namespace KDcrawIface
 {
 
-/** A container for RAW image information
+/*!
+ * \class KDcrawIface::DcrawInfoContainer
+ * \inmodule libKDcraw
+ * \brief A container for RAW image information
  */
 class LIBKDCRAW_EXPORT DcrawInfoContainer
 {
 
 public:
 
-    /** The RAW image orientation values
+    /*!
+     * \enum KDcrawIface::DcrawInfoContainer::ImageOrientation
+     * The RAW image orientation values
+     * \value ORIENTATION_NONE
+     * \value ORIENTATION_180
+     * \value ORIENTATION_Mirror90CCW
+     * \value ORIENTATION_90CCW
+     * \value ORIENTATION_90CW
      */
     enum ImageOrientation
     {
@@ -41,95 +51,97 @@ public:
 
 public:
 
-    /** Standard constructor */
+    /*! Standard constructor */
     DcrawInfoContainer();
 
-    /** Standard destructor */
+    /*! Standard destructor */
     virtual ~DcrawInfoContainer();
 
-    /** Return 'true' if container is empty, else 'false' */
+    /*! Return \c true if container is empty, else \c false */
     bool isEmpty();
 
 public:
 
-    /** True if RAW file include an ICC color profile. */
+    /*! True if RAW file include an ICC color profile. */
     bool             hasIccProfile;
-    /** True is RAW file is decodable by dcraw. */
+    /*! True if RAW file is decodable by dcraw. */
     bool             isDecodable;
 
-    /** The number of RAW colors. */
+    /*! The number of RAW colors. */
     int              rawColors;
 
-    /** The number of RAW images. */
+    /*! The number of RAW images. */
     int              rawImages;
 
-    /** Black level from Raw histogram. */
+    /*! Black level from Raw histogram. */
     unsigned int     blackPoint;
 
-    /** Channel black levels from Raw histogram. */
+    /*! Channel black levels from Raw histogram. */
     unsigned int     blackPointCh[4];
 
-    /** White level from Raw histogram. */
+    /*! White level from Raw histogram. */
     unsigned int     whitePoint;
 
-    /** Top margin of raw image. */
+    /*! Top margin of raw image. */
     unsigned int     topMargin;
 
-    /** Left margin of raw image. */
+    /*! Left margin of raw image. */
     unsigned int     leftMargin;
 
-    /** The raw image orientation */
+    /*! The raw image orientation */
     ImageOrientation orientation;
 
-    /** The sensitivity in ISO used by camera to take the picture. */
+    /*! The sensitivity in ISO used by camera to take the picture. */
     float            sensitivity;
 
-    /** ==> 1/exposureTime = exposure time in seconds. */
+    /*! ==> 1/exposureTime = exposure time in seconds. */
     float            exposureTime;
-    /** ==> Aperture value in APEX. */
+    /*! ==> Aperture value in APEX. */
     float            aperture;
-    /** ==> Focal Length value in mm. */
+    /*! ==> Focal Length value in mm. */
     float            focalLength;
-    /** The pixel Aspect Ratio if != 1.0. NOTE: if == 1.0, dcraw do not show this value. */
+    /*! The pixel Aspect Ratio if != 1.0. \note if == 1.0, dcraw do not show this value. */
     float            pixelAspectRatio;
 
-    /** White color balance settings. */
+    /*! White color balance settings. */
     double           daylightMult[3];
-    /** Camera multipliers used for White Balance adjustments */
+    /*! Camera multipliers used for White Balance adjustments */
     double           cameraMult[4];
 
-    /** Camera Color Matrix */
+    /*! Camera Color Matrix */
     float            cameraColorMatrix1[3][4];
+    /*! Camera Color Matrix */
     float            cameraColorMatrix2[3][4];
+    /*! Camera Color Matrix */
     float            cameraXYZMatrix[4][3];
 
-    /** The used Color Keys */
+    /*! The used Color Keys */
     QString          colorKeys;
 
-    /** The camera maker. */
+    /*! The camera maker. */
     QString          make;
-    /** The camera model. */
+    /*! The camera model. */
     QString          model;
-    /** The artist name who have picture owner. */
+    /*! The artist name who have picture owner. */
     QString          owner;
-    /** The demosaising filter pattern. */
+    /*! The demosaising filter pattern. */
     QString          filterPattern;
-    /** The DNG version. NOTE: it is only shown with DNG RAW files. */
+    /*! The DNG version. \note it is only shown with DNG RAW files. */
     QString          DNGVersion;
 
-    /** Date & time when the picture has been taken. */
+    /*! Date & time when the picture has been taken. */
     QDateTime        dateTime;
 
-    /** The image dimensions in pixels. */
+    /*! The image dimensions in pixels. */
     QSize            imageSize;
 
-    /** The thumb dimensions in pixels. */
+    /*! The thumb dimensions in pixels. */
     QSize            thumbSize;
 
-    /** The full RAW image dimensions in pixels. */
+    /*! The full RAW image dimensions in pixels. */
     QSize            fullSize;
 
-    /** The output dimensions in pixels. */
+    /*! The output dimensions in pixels. */
     QSize            outputSize;
 };
 

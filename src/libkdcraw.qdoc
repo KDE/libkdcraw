@@ -1,0 +1,5 @@
+/*!
+   \module libKDcraw
+   \title libKDcraw Classes
+   \brief libKDcraw is a thread-safe wrapper around \l {https://www.libraw.org}{libraw}.
+ */

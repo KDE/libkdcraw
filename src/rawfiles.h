@@ -11,9 +11,7 @@
 // (which usually takes care of that) isn't used here
 #include <libkdcraw_version.h> // IWYU pragma: export
 
-/**
- * @file
- * @brief  list of RAW file extensions supported by libraw
+/* list of RAW file extensions supported by libraw
  */
 
 // NOTE: extension list Version 1 and 2 are taken from http://www.cybercom.net/~dcoffin/dcraw/rawphoto.c

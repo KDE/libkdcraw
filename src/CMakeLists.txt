@@ -57,6 +57,8 @@ ecm_generate_export_header(KDcraw
     USE_VERSION_HEADER
 )
 
+ecm_generate_qdoc(KDcraw libkdcraw.qdocconf)
+
 target_include_directories(KDcraw
     INTERFACE
         "$<INSTALL_INTERFACE:${KDCRAW_INSTALL_INCLUDEDIR};${KDCRAW_INSTALL_INCLUDEDIR}/kdcraw>"

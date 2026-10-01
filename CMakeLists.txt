@@ -5,7 +5,7 @@
 #
 
 set(CMAKE_MIN_VERSION   "3.16.0")
-set(ECM_MIN_VERSION     "6.0.0")
+set(ECM_MIN_VERSION     "6.11.0")
 set(QT_MIN_VERSION      "6.5.0")
 set(LIBRAW_MIN_VERSION  "0.18")
 
@@ -68,6 +68,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMGenerateExportHeader)
 include(ECMDeprecationSettings)
 include(FeatureSummary)
+include(ECMGenerateQDoc)
 
 ############## Find Packages ###################
 

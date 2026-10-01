@@ -1,0 +1,29 @@
+include($KDE_DOCS/global/qt-module-defaults.qdocconf)
+
+project = libKDcraw
+description = libKDcraw is a thread-safe wrapper around \l {https://www.libraw.org}{libraw}.
+
+documentationinheaders = true
+
+headerdirs += .
+sourcedirs += .
+
+outputformats = HTML
+
+depends += kde qtcore qtgui
+
+qhp.projects = libKDcraw
+
+qhp.libKDcraw.file          = libkdcraw.qhp
+qhp.libKDcraw.namespace     = org.kde.libkdcraw.$QT_VERSION_TAG
+qhp.libKDcraw.virtualFolder = libkdcraw
+qhp.libKDcraw.indexTitle    = libKDcraw
+qhp.libKDcraw.indexRoot     =
+
+qhp.libKDcraw.subprojects = classes
+qhp.libKDcraw.subprojects.classes.title = Classes
+qhp.libKDcraw.subprojects.classes.indexTitle = libKDcraw Classes
+qhp.libKDcraw.subprojects.classes.selectors = class fake:headerfile
+qhp.libKDcraw.subprojects.classes.sortPages = true
+
+tagfile = libkdcraw.tags
